@@ -14,9 +14,9 @@ Each extracted record is traceable through source metadata stored in SQLite and 
 
 - source URL
 - source filename
-- document SHA-256
-- discovered/fetched timestamp
+- document SHA-256 and file size
 - parser version
+- extraction timestamp
 
 By default this repository does not redistribute original PDF files. Local PDF caches under `raw/*.pdf` are ignored by git.
 
@@ -27,7 +27,7 @@ By default this repository does not redistribute original PDF files. Local PDF c
 - `manifests/sources.json` - source document manifest
 - `examples/*.sql` - reusable SQL examples
 - `notebooks/*.ipynb` - notebook-style demo examples
-- GitHub Pages demo generated from the latest SQLite database
+- GitHub Pages demo generated from the latest SQLite database: https://apue.github.io/football-data/
 
 ## Quick Start
 
@@ -63,4 +63,3 @@ Failures are reported in `manifests/latest-run.json` and GitHub Actions logs. A 
 ## Limitations
 
 PMSR PDFs are presentation reports, not complete event or tracking feeds. The first implementation focuses on reliable text/table extraction: match metadata, team key stats, shots, and player physical data. Some pitch maps can be enriched later using PDF text objects and vector drawing objects.
-
