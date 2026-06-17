@@ -7,3 +7,4 @@ __pycache__/
 
 # Original FIFA PMSR PDFs are kept as a local cache and are not redistributed.
 raw/*.pdf
+raw/**/*.pdf

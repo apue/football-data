@@ -8,7 +8,9 @@ from pathlib import Path
 import fitz
 
 from football_data import __version__
+from football_data.discovery import source_from_filename
 from football_data.model import (
+    DiscoveredSource,
     ExtractedMatch,
     Match,
     PlayerPhysicalStat,
@@ -17,15 +19,6 @@ from football_data.model import (
     TeamMatchStat,
 )
 
-
-TEAM_CODES = {
-    "Brazil": "BRA",
-    "Morocco": "MAR",
-    "Mexico": "MEX",
-    "South Africa": "RSA",
-    "Korea Republic": "KOR",
-    "Czechia": "CZE",
-}
 
 MONTHS = {
     "January": "01",
@@ -42,31 +35,41 @@ MONTHS = {
     "December": "12",
 }
 
-SOURCE_URLS = {
-    "PMSR-M01 MEX V RSA.pdf": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M01%20MEX%20V%20RSA.pdf",
-    "PMSR-M02 KOR V CZE .pdf": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M02%20KOR%20V%20CZE%20.pdf",
-    "PMSR-M07-BRA-V-MAR.pdf": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M07-BRA-V-MAR.pdf",
-}
-
-
-def extract_pdf(path: str | Path) -> ExtractedMatch:
+def extract_pdf(path: str | Path, source: DiscoveredSource | None = None) -> ExtractedMatch:
     pdf_path = Path(path)
     doc = fitz.open(pdf_path)
     pages = [_clean_lines(page.get_text()) for page in doc]
-    match = _parse_match(pages[0])
+    source_hint = source or source_from_filename(
+        pdf_path.name,
+        source_url=None,
+        discovered_at=None,
+    )
+    match = _parse_match(pages[0], source_hint)
+    source_document = _source_document_for_pdf(pdf_path, match, source_hint)
     source = SourceDocument(
-        source_url=SOURCE_URLS.get(pdf_path.name),
-        file_name=pdf_path.name,
+        source_id=source_document.source_id,
+        competition=source_document.competition,
+        report_type=source_document.report_type,
+        match_no=source_document.match_no,
+        home_code=source_document.home_code,
+        away_code=source_document.away_code,
+        version=source_document.version,
+        source_url=source_document.source_url or None,
+        file_name=source_document.file_name,
         sha256=_sha256(pdf_path),
         file_size=pdf_path.stat().st_size,
+        discovered_at=source_document.discovered_at,
+        fetched_at=extraction_timestamp(),
+        active=source_document.active,
+        status=source_document.status,
     )
     return ExtractedMatch(
         pdf_path=pdf_path,
         source=source,
         match=match,
-        team_stats=_parse_team_stats(match, pages[2]),
-        shots=_parse_shots(match, pages[14], pages[16]),
-        player_physical=_parse_physical(match, pages[49], pages[50]),
+        team_stats=_parse_team_stats(match, source.source_id, pages[2]),
+        shots=_parse_shots(match, source.source_id, *pages),
+        player_physical=_parse_physical(match, source.source_id, pages[49], pages[50]),
     )
 
 
@@ -90,7 +93,30 @@ def _sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
-def _parse_match(lines: list[str]) -> Match:
+def _source_document_for_pdf(
+    pdf_path: Path,
+    match: Match,
+    source_hint: DiscoveredSource | None,
+) -> DiscoveredSource:
+    if source_hint is not None:
+        return source_hint
+    home_code = _fallback_team_code(match.home_team)
+    away_code = _fallback_team_code(match.away_team)
+    return DiscoveredSource(
+        source_id=f"fifa-world-cup-2026-pmsr-m{match.match_no:02d}-{home_code.lower()}-{away_code.lower()}-v1",
+        competition="fifa-world-cup-2026",
+        report_type="PMSR",
+        match_no=match.match_no,
+        home_code=home_code,
+        away_code=away_code,
+        version=1,
+        source_url="",
+        file_name=pdf_path.name,
+        discovered_at=extraction_timestamp(),
+    )
+
+
+def _parse_match(lines: list[str], source: DiscoveredSource | None = None) -> Match:
     score_line = lines[0]
     score_match = re.match(r"(.+?)\s+(\d+)\s+-\s+(\d+)\s+(.+)", score_line)
     if not score_match:
@@ -105,8 +131,8 @@ def _parse_match(lines: list[str]) -> Match:
     match_date = _parse_date(lines[2])
     kickoff_time = lines[3].replace(" Kick Off", "")
     stadium = lines[4]
-    home_code = TEAM_CODES.get(home_team, _fallback_team_code(home_team))
-    away_code = TEAM_CODES.get(away_team, _fallback_team_code(away_team))
+    home_code = source.home_code if source else _fallback_team_code(home_team)
+    away_code = source.away_code if source else _fallback_team_code(away_team)
     match_key = f"FIFA-2026-M{int(match_no):02d}-{home_code}-{away_code}"
 
     return Match(
@@ -135,7 +161,7 @@ def _fallback_team_code(name: str) -> str:
     return "".join(word[0] for word in words)[:3]
 
 
-def _parse_team_stats(match: Match, lines: list[str]) -> list[TeamMatchStat]:
+def _parse_team_stats(match: Match, source_id: str, lines: list[str]) -> list[TeamMatchStat]:
     home_values: dict[str, object] = {"goals": match.home_score}
     away_values: dict[str, object] = {"goals": match.away_score}
 
@@ -189,22 +215,26 @@ def _parse_team_stats(match: Match, lines: list[str]) -> list[TeamMatchStat]:
             match_key=match.match_key,
             team=match.home_team,
             opponent=match.away_team,
+            source_id=source_id,
             **home_values,
         ),
         TeamMatchStat(
             match_key=match.match_key,
             team=match.away_team,
             opponent=match.home_team,
+            source_id=source_id,
             **away_values,
         ),
     ]
 
 
-def _parse_shots(match: Match, *pages: list[str]) -> list[Shot]:
+def _parse_shots(match: Match, source_id: str, *pages: list[str]) -> list[Shot]:
     shots: list[Shot] = []
     shot_no_by_team: dict[str, int] = {}
     for lines in pages:
         if len(lines) < 8 or lines[0] != "Attempts at Goal":
+            continue
+        if "Delivery Type" not in lines:
             continue
         team = lines[1]
         idx = lines.index("Delivery Type") + 1
@@ -234,6 +264,7 @@ def _parse_shots(match: Match, *pages: list[str]) -> list[Shot]:
                     delivery_type=delivery_type,
                     is_goal="Goal" in outcome,
                     is_on_target=("On Target" in outcome) or ("Goal" in outcome),
+                    source_id=source_id,
                 )
             )
             idx += 5
@@ -241,7 +272,7 @@ def _parse_shots(match: Match, *pages: list[str]) -> list[Shot]:
     return shots
 
 
-def _parse_physical(match: Match, *pages: list[str]) -> list[PlayerPhysicalStat]:
+def _parse_physical(match: Match, source_id: str, *pages: list[str]) -> list[PlayerPhysicalStat]:
     rows: list[PlayerPhysicalStat] = []
     for lines in pages:
         if not lines or lines[0] != "Physical Data":
@@ -276,6 +307,7 @@ def _parse_physical(match: Match, *pages: list[str]) -> list[PlayerPhysicalStat]
                     team=team,
                     player_no=player_no,
                     player_name=player_name,
+                    source_id=source_id,
                     total_distance_m=padded[0],
                     zone1_m=padded[1],
                     zone2_m=padded[2],
@@ -323,4 +355,3 @@ def _is_number(value: str) -> bool:
 
 def _is_int(value: str) -> bool:
     return bool(re.fullmatch(r"\d+", value))
-

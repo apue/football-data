@@ -8,23 +8,27 @@ This project turns FIFA Training Centre PMSR reports into a structured SQLite da
 
 ## Data Source and Attribution
 
-Original PMSR reports are publicly available from FIFA Training Centre. The source documents remain the property of FIFA and the relevant rights holders. This repository provides extracted, attributed, structured data for research and analysis.
+Original PMSR reports are publicly linked from the FIFA Training Centre Match Report Hub. The source documents remain the property of FIFA and the relevant rights holders. This repository provides extracted, attributed, structured data for research and analysis.
 
 Each extracted record is traceable through source metadata stored in SQLite and in `manifests/`:
 
 - source URL
 - source filename
+- PMSR version, including `V2`/`V3` updates when present
 - document SHA-256 and file size
+- discovered/fetched timestamps
 - parser version
 - extraction timestamp
 
-By default this repository does not redistribute original PDF files. Local PDF caches under `raw/*.pdf` are ignored by git.
+By default this repository does not redistribute original PDF files. Local PDF caches under `raw/**/*.pdf` are ignored by git.
 
 ## Outputs
 
 - `data/latest.sqlite` - latest generated SQLite database
 - `manifests/latest-run.json` - latest update status
 - `manifests/sources.json` - source document manifest
+- `manifests/discovered-sources.json` - current FIFA hub discovery result
+- `manifests/update-events.json` - new matches, version updates, downloads, and failures
 - `examples/*.sql` - reusable SQL examples
 - `notebooks/*.ipynb` - notebook-style demo examples
 - GitHub Pages demo generated from the latest SQLite database: https://apue.github.io/football-data/
@@ -37,20 +41,23 @@ source .venv/bin/activate
 python -m pip install -e ".[dev]"
 python scripts/update_dataset.py
 sqlite3 data/latest.sqlite < examples/top_fastest_players.sql
+python scripts/check_status.py
 ```
 
 ## Update Policy
 
 The intended automated update schedule is daily around 12:00 Asia/Shanghai. The update pipeline:
 
-1. discovers known/public PMSR source documents,
-2. downloads only missing or changed documents,
-3. extracts structured records,
-4. rebuilds `data/latest.sqlite`,
-5. validates outputs,
-6. regenerates demo pages and update status.
+1. fetches the FIFA Match Report Hub,
+2. discovers all PMSR PDF links and resolves the active highest version per match,
+3. blocks suspicious discovery regressions,
+4. downloads only missing active documents,
+5. extracts structured records,
+6. rebuilds `data/latest.sqlite`,
+7. validates outputs,
+8. regenerates demo pages and update status.
 
-Failures are reported in `manifests/latest-run.json` and GitHub Actions logs. A Codex/agent-assisted recovery flow can inspect failures, update source manifests or parsers, and push a corrective change.
+Failures are reported in `manifests/latest-run.json`, `manifests/update-events.json`, and GitHub Actions logs. A Codex/agent-assisted recovery flow can inspect failures, use browser diagnostics when static discovery breaks, update discovery/parser code, and push a corrective change.
 
 ## Example Questions
 

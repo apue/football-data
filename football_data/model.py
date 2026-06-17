@@ -5,11 +5,38 @@ from pathlib import Path
 
 
 @dataclass(frozen=True)
+class DiscoveredSource:
+    source_id: str
+    competition: str
+    report_type: str
+    match_no: int
+    home_code: str
+    away_code: str
+    version: int
+    source_url: str
+    file_name: str
+    discovered_at: str
+    active: bool = True
+    status: str = "active"
+
+
+@dataclass(frozen=True)
 class SourceDocument:
+    source_id: str
+    competition: str
+    report_type: str
+    match_no: int
+    home_code: str
+    away_code: str
+    version: int
     source_url: str | None
     file_name: str
     sha256: str
     file_size: int
+    discovered_at: str | None = None
+    fetched_at: str | None = None
+    active: bool = True
+    status: str = "active"
 
 
 @dataclass(frozen=True)
@@ -31,6 +58,7 @@ class TeamMatchStat:
     match_key: str
     team: str
     opponent: str
+    source_id: str | None = None
     possession_pct: float | None = None
     goals: int | None = None
     xg: float | None = None
@@ -64,6 +92,7 @@ class Shot:
     delivery_type: str
     is_goal: bool
     is_on_target: bool
+    source_id: str | None = None
 
 
 @dataclass(frozen=True)
@@ -72,6 +101,7 @@ class PlayerPhysicalStat:
     team: str
     player_no: int
     player_name: str
+    source_id: str | None = None
     total_distance_m: float | None = None
     zone1_m: float | None = None
     zone2_m: float | None = None
@@ -91,4 +121,3 @@ class ExtractedMatch:
     team_stats: list[TeamMatchStat] = field(default_factory=list)
     shots: list[Shot] = field(default_factory=list)
     player_physical: list[PlayerPhysicalStat] = field(default_factory=list)
-

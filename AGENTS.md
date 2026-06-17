@@ -33,26 +33,40 @@ Expected generated outputs:
 - `data/latest.sqlite`
 - `manifests/latest-run.json`
 - `manifests/sources.json`
+- `manifests/discovered-sources.json`
+- `manifests/update-events.json`
 - `site/index.html`
 
 ## Source Policy
 
-- Do not commit `raw/*.pdf`.
+- Do not commit `raw/*.pdf` or `raw/**/*.pdf`.
 - Do keep source URLs, hashes, filenames, and timestamps in manifests and SQLite.
 - Do not bypass login, CAPTCHA, rate limits, or access controls.
 - If GitHub Actions fetching fails with 403/429, record the failure and use local assisted recovery instead of aggressive retrying.
 
 ## Recovery Workflow
 
+When asked to check the project, start with:
+
+```bash
+python scripts/check_status.py
+```
+
 When a scheduled update fails:
 
-1. Read `manifests/latest-run.json`.
-2. Inspect failed URLs or parser warnings.
-3. If a source URL changed, update the source manifest or discovery logic.
-4. If PDF layout changed, add or update a parser test using local fixtures.
-5. Run `python scripts/update_dataset.py`.
-6. Run `python -m pytest`.
-7. Commit the fix and push.
+1. Inspect recent GitHub Actions state with `gh run list --workflow update.yml --limit 5`.
+2. Inspect the failing run with `gh run view <run-id> --log-failed`.
+3. Download update artifacts if needed with `gh run download <run-id> --name update-status`.
+4. Read `manifests/latest-run.json` and classify `failure_code`.
+5. For `hub_fetch_failed`, `hub_parse_failed`, or dynamic page changes, inspect the FIFA hub with agent-browser and convert the finding into deterministic discovery code.
+6. For `pdf_download_failed`, verify URL encoding, headers, and whether the source is temporarily unavailable.
+7. For `pdf_parse_failed`, reproduce locally with the failed PDF, add or update a parser test, then patch the parser.
+8. For `discovery_regression`, compare `manifests/discovered-sources.json` with the previous committed manifest before allowing data overwrite.
+9. Run `python scripts/update_dataset.py`.
+10. Run `python -m pytest`.
+11. Commit the fix, push, and watch the replacement workflow run.
+
+Agent-browser is a diagnostic fallback, not the normal CI path. The normal path should remain static HTTP discovery plus deterministic parsing.
 
 ## Testing
 

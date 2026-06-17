@@ -64,6 +64,8 @@ jobs:
           path: |
             manifests/latest-run.json
             manifests/sources.json
+            manifests/discovered-sources.json
+            manifests/update-events.json
             data/latest.sqlite
           if-no-files-found: ignore
 
@@ -71,7 +73,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/latest.sqlite manifests/sources.json manifests/latest-run.json site/index.html
+          git add data/latest.sqlite manifests/sources.json manifests/discovered-sources.json manifests/update-events.json manifests/latest-run.json site/index.html
           if git diff --cached --quiet; then
             echo "No generated changes to commit."
           else
