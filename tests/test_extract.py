@@ -6,8 +6,14 @@ from football_data.extract import extract_pdf
 RAW_DIR = Path(__file__).resolve().parents[1] / "raw"
 
 
+def _pdf(pattern: str) -> Path:
+    matches = sorted(RAW_DIR.glob(f"**/{pattern}"))
+    assert matches, f"No PDF fixture found for {pattern}"
+    return matches[-1]
+
+
 def test_extract_match_metadata_from_brazil_morocco_pdf():
-    record = extract_pdf(RAW_DIR / "PMSR-M07-BRA-V-MAR.pdf")
+    record = extract_pdf(_pdf("PMSR-M07*.pdf"))
 
     assert record.match.match_key == "FIFA-2026-M07-BRA-MAR"
     assert record.match.home_team == "Brazil"
@@ -22,7 +28,7 @@ def test_extract_match_metadata_from_brazil_morocco_pdf():
 
 
 def test_extract_brazil_shots_from_detail_page():
-    record = extract_pdf(RAW_DIR / "PMSR-M07-BRA-V-MAR.pdf")
+    record = extract_pdf(_pdf("PMSR-M07*.pdf"))
     brazil_shots = [shot for shot in record.shots if shot.team == "Brazil"]
 
     assert len(brazil_shots) == 12
@@ -39,7 +45,7 @@ def test_extract_brazil_shots_from_detail_page():
 
 
 def test_extract_physical_data_for_fastest_player():
-    record = extract_pdf(RAW_DIR / "PMSR-M07-BRA-V-MAR.pdf")
+    record = extract_pdf(_pdf("PMSR-M07*.pdf"))
 
     vinicius = next(
         row
@@ -57,4 +63,3 @@ def test_extract_physical_data_for_fastest_player():
     )
     assert saibari.total_distance_m == 10124.4
     assert saibari.top_speed_kmh == 33.7
-

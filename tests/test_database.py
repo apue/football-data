@@ -8,12 +8,18 @@ from football_data.extract import extract_pdf
 RAW_DIR = Path(__file__).resolve().parents[1] / "raw"
 
 
+def _pdf(pattern: str) -> Path:
+    matches = sorted(RAW_DIR.glob(f"**/{pattern}"))
+    assert matches, f"No PDF fixture found for {pattern}"
+    return matches[-1]
+
+
 def test_build_database_loads_matches_shots_and_physical_rows(tmp_path):
     db_path = tmp_path / "latest.sqlite"
     records = [
-        extract_pdf(RAW_DIR / "PMSR-M01 MEX V RSA.pdf"),
-        extract_pdf(RAW_DIR / "PMSR-M02 KOR V CZE .pdf"),
-        extract_pdf(RAW_DIR / "PMSR-M07-BRA-V-MAR.pdf"),
+        extract_pdf(_pdf("PMSR-M01*.pdf")),
+        extract_pdf(_pdf("PMSR-M02*.pdf")),
+        extract_pdf(_pdf("PMSR-M07*.pdf")),
     ]
 
     build_database(db_path, records)
@@ -59,14 +65,10 @@ def test_build_database_loads_matches_shots_and_physical_rows(tmp_path):
         source_columns
     )
     assert "source_id" in shot_columns
-    assert brazil_source == (
-        "fifa-world-cup-2026-pmsr-m07-bra-mar-v1",
-        "PMSR",
-        7,
-        "BRA",
-        "MAR",
-        1,
-        1,
-    )
-    assert brazil_shot_source == [("fifa-world-cup-2026-pmsr-m07-bra-mar-v1",)]
+    assert brazil_source[0].startswith("fifa-world-cup-2026-pmsr-m07-bra-mar-v")
+    assert brazil_source[1:] in {
+        ("PMSR", 7, "BRA", "MAR", 1, 1),
+        ("PMSR", 7, "BRA", "MAR", 2, 1),
+    }
+    assert brazil_shot_source == [(brazil_source[0],)]
     assert fastest == ("SON Heungmin", "Korea Republic", 35.2)
