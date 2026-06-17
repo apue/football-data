@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-17T08:04:45+00:00",
+  "generated_at": "2026-06-17T08:43:16+00:00",
   "sources": [
     {
       "match": {
@@ -15,10 +15,21 @@
         "away_score": 0
       },
       "source": {
+        "source_id": "fifa-world-cup-2026-pmsr-m01-mex-rsa-v1",
+        "competition": "fifa-world-cup-2026",
+        "report_type": "PMSR",
+        "match_no": 1,
+        "home_code": "MEX",
+        "away_code": "RSA",
+        "version": 1,
         "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M01%20MEX%20V%20RSA.pdf",
         "file_name": "PMSR-M01 MEX V RSA.pdf",
         "sha256": "0f56ac3c6c8b5b9cd0ce3f2ff1bd45def775401e126706c4f2b5db3257c4fbf7",
-        "file_size": 5690377
+        "file_size": 5690377,
+        "discovered_at": "2026-06-17T08:43:16+00:00",
+        "fetched_at": "2026-06-17T08:43:18+00:00",
+        "active": true,
+        "status": "active"
       }
     },
     {
@@ -35,10 +46,145 @@
         "away_score": 1
       },
       "source": {
+        "source_id": "fifa-world-cup-2026-pmsr-m02-kor-cze-v1",
+        "competition": "fifa-world-cup-2026",
+        "report_type": "PMSR",
+        "match_no": 2,
+        "home_code": "KOR",
+        "away_code": "CZE",
+        "version": 1,
         "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M02%20KOR%20V%20CZE%20.pdf",
         "file_name": "PMSR-M02 KOR V CZE .pdf",
         "sha256": "5849fff9425cd6a797405787f7a723e216af5b74c1d6b94279d81557b6ccbc3a",
-        "file_size": 5668508
+        "file_size": 5668508,
+        "discovered_at": "2026-06-17T08:43:16+00:00",
+        "fetched_at": "2026-06-17T08:43:18+00:00",
+        "active": true,
+        "status": "active"
+      }
+    },
+    {
+      "match": {
+        "match_key": "FIFA-2026-M03-CAN-BIH",
+        "match_no": 3,
+        "group_name": "Group B",
+        "match_date": "2026-06-12",
+        "kickoff_time": "15:00",
+        "stadium": "Toronto Stadium",
+        "home_team": "Canada",
+        "away_team": "Bosnia and Herzegovina",
+        "home_score": 1,
+        "away_score": 1
+      },
+      "source": {
+        "source_id": "fifa-world-cup-2026-pmsr-m03-can-bih-v2",
+        "competition": "fifa-world-cup-2026",
+        "report_type": "PMSR",
+        "match_no": 3,
+        "home_code": "CAN",
+        "away_code": "BIH",
+        "version": 2,
+        "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M03-CAN-V-BIH-V2.pdf",
+        "file_name": "PMSR-M03-CAN-V-BIH-V2.pdf",
+        "sha256": "742bf05848b6cdaee5480d5708d893a66ddf6f9b1a4f66f2074573e563f66d29",
+        "file_size": 5848182,
+        "discovered_at": "2026-06-17T08:43:16+00:00",
+        "fetched_at": "2026-06-17T08:43:19+00:00",
+        "active": true,
+        "status": "active"
+      }
+    },
+    {
+      "match": {
+        "match_key": "FIFA-2026-M04-USA-PAR",
+        "match_no": 4,
+        "group_name": "Group D",
+        "match_date": "2026-06-12",
+        "kickoff_time": "18:00",
+        "stadium": "Los Angeles Stadium",
+        "home_team": "USA",
+        "away_team": "Paraguay",
+        "home_score": 4,
+        "away_score": 1
+      },
+      "source": {
+        "source_id": "fifa-world-cup-2026-pmsr-m04-usa-par-v1",
+        "competition": "fifa-world-cup-2026",
+        "report_type": "PMSR",
+        "match_no": 4,
+        "home_code": "USA",
+        "away_code": "PAR",
+        "version": 1,
+        "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M04-USA-V-PAR.pdf",
+        "file_name": "PMSR-M04-USA-V-PAR.pdf",
+        "sha256": "4ea51b7fd475efd225578b862bb09abbe791de72c96183fccaf124bd4b6b1085",
+        "file_size": 5729044,
+        "discovered_at": "2026-06-17T08:43:16+00:00",
+        "fetched_at": "2026-06-17T08:43:19+00:00",
+        "active": true,
+        "status": "active"
+      }
+    },
+    {
+      "match": {
+        "match_key": "FIFA-2026-M05-HAI-SCO",
+        "match_no": 5,
+        "group_name": "Group C",
+        "match_date": "2026-06-13",
+        "kickoff_time": "21:00",
+        "stadium": "Boston Stadium",
+        "home_team": "Haiti",
+        "away_team": "Scotland",
+        "home_score": 0,
+        "away_score": 1
+      },
+      "source": {
+        "source_id": "fifa-world-cup-2026-pmsr-m05-hai-sco-v1",
+        "competition": "fifa-world-cup-2026",
+        "report_type": "PMSR",
+        "match_no": 5,
+        "home_code": "HAI",
+        "away_code": "SCO",
+        "version": 1,
+        "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M05-HAI-V-SCO.pdf",
+        "file_name": "PMSR-M05-HAI-V-SCO.pdf",
+        "sha256": "116a4af71e1a68c9f264599176ef6ce07b26c382ce16ca858a7ff31aaff16307",
+        "file_size": 5627541,
+        "discovered_at": "2026-06-17T08:43:16+00:00",
+        "fetched_at": "2026-06-17T08:43:20+00:00",
+        "active": true,
+        "status": "active"
+      }
+    },
+    {
+      "match": {
+        "match_key": "FIFA-2026-M06-AUS-TUR",
+        "match_no": 6,
+        "group_name": "Group D",
+        "match_date": "2026-06-13",
+        "kickoff_time": "21:00",
+        "stadium": "BC Place Vancouver",
+        "home_team": "Australia",
+        "away_team": "T\u00fcrkiye",
+        "home_score": 2,
+        "away_score": 0
+      },
+      "source": {
+        "source_id": "fifa-world-cup-2026-pmsr-m06-aus-tur-v1",
+        "competition": "fifa-world-cup-2026",
+        "report_type": "PMSR",
+        "match_no": 6,
+        "home_code": "AUS",
+        "away_code": "TUR",
+        "version": 1,
+        "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M06-AUS-V-TUR.pdf",
+        "file_name": "PMSR-M06-AUS-V-TUR.pdf",
+        "sha256": "572c9314a930a03edb03cf2f73c3c51b197075f9cc5a060f6e37d6e9aac12a30",
+        "file_size": 5896379,
+        "discovered_at": "2026-06-17T08:43:16+00:00",
+        "fetched_at": "2026-06-17T08:43:20+00:00",
+        "active": true,
+        "status": "active"
       }
     },
     {
@@ -55,10 +201,300 @@
         "away_score": 1
       },
       "source": {
-        "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M07-BRA-V-MAR.pdf",
-        "file_name": "PMSR-M07-BRA-V-MAR.pdf",
-        "sha256": "9eecf6ac406cdf38836a855d3d0ef2885afe5ec7cf9d140a5f5c60d229adc42f",
-        "file_size": 5841350
+        "source_id": "fifa-world-cup-2026-pmsr-m07-bra-mar-v2",
+        "competition": "fifa-world-cup-2026",
+        "report_type": "PMSR",
+        "match_no": 7,
+        "home_code": "BRA",
+        "away_code": "MAR",
+        "version": 2,
+        "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M07-BRA-V-MAR%20POST-V2.pdf",
+        "file_name": "PMSR-M07-BRA-V-MAR POST-V2.pdf",
+        "sha256": "bcc41c89dbd371b28d7037ba59ae820dd00aa7610ab9908e0128c4b0b1fbfa31",
+        "file_size": 5881447,
+        "discovered_at": "2026-06-17T08:43:16+00:00",
+        "fetched_at": "2026-06-17T08:43:21+00:00",
+        "active": true,
+        "status": "active"
+      }
+    },
+    {
+      "match": {
+        "match_key": "FIFA-2026-M08-QAT-SUI",
+        "match_no": 8,
+        "group_name": "Group B",
+        "match_date": "2026-06-13",
+        "kickoff_time": "12:00",
+        "stadium": "San Francisco Bay Area Stadium",
+        "home_team": "Qatar",
+        "away_team": "Switzerland",
+        "home_score": 1,
+        "away_score": 1
+      },
+      "source": {
+        "source_id": "fifa-world-cup-2026-pmsr-m08-qat-sui-v1",
+        "competition": "fifa-world-cup-2026",
+        "report_type": "PMSR",
+        "match_no": 8,
+        "home_code": "QAT",
+        "away_code": "SUI",
+        "version": 1,
+        "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M08-QAT-V-SUI.pdf",
+        "file_name": "PMSR-M08-QAT-V-SUI.pdf",
+        "sha256": "550a64c9b5f87ec4fd9761ae3b429467d013fbc488800299730f996dbf666d99",
+        "file_size": 5779073,
+        "discovered_at": "2026-06-17T08:43:16+00:00",
+        "fetched_at": "2026-06-17T08:43:21+00:00",
+        "active": true,
+        "status": "active"
+      }
+    },
+    {
+      "match": {
+        "match_key": "FIFA-2026-M09-CIV-ECU",
+        "match_no": 9,
+        "group_name": "Group E",
+        "match_date": "2026-06-14",
+        "kickoff_time": "19:00",
+        "stadium": "Philadelphia Stadium",
+        "home_team": "C\u00f4te d'Ivoire",
+        "away_team": "Ecuador",
+        "home_score": 1,
+        "away_score": 0
+      },
+      "source": {
+        "source_id": "fifa-world-cup-2026-pmsr-m09-civ-ecu-v1",
+        "competition": "fifa-world-cup-2026",
+        "report_type": "PMSR",
+        "match_no": 9,
+        "home_code": "CIV",
+        "away_code": "ECU",
+        "version": 1,
+        "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M09-CIV-V-ECU.pdf",
+        "file_name": "PMSR-M09-CIV-V-ECU.pdf",
+        "sha256": "da3653a93f68d5e463ecb65a318e5ae4d36e17717baf9f6d499aac4d57c4745b",
+        "file_size": 5769360,
+        "discovered_at": "2026-06-17T08:43:16+00:00",
+        "fetched_at": "2026-06-17T08:43:22+00:00",
+        "active": true,
+        "status": "active"
+      }
+    },
+    {
+      "match": {
+        "match_key": "FIFA-2026-M10-GER-CUW",
+        "match_no": 10,
+        "group_name": "Group E",
+        "match_date": "2026-06-14",
+        "kickoff_time": "12:00",
+        "stadium": "Houston Stadium",
+        "home_team": "Germany",
+        "away_team": "Cura\u00e7ao",
+        "home_score": 7,
+        "away_score": 1
+      },
+      "source": {
+        "source_id": "fifa-world-cup-2026-pmsr-m10-ger-cuw-v2",
+        "competition": "fifa-world-cup-2026",
+        "report_type": "PMSR",
+        "match_no": 10,
+        "home_code": "GER",
+        "away_code": "CUW",
+        "version": 2,
+        "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M10-GER-V-CUW-V2.pdf",
+        "file_name": "PMSR-M10-GER-V-CUW-V2.pdf",
+        "sha256": "f82717a0dd1373b12000c7bff2d033c1f96cbc9d6a57efaf18c682638201e792",
+        "file_size": 5614795,
+        "discovered_at": "2026-06-17T08:43:16+00:00",
+        "fetched_at": "2026-06-17T08:43:22+00:00",
+        "active": true,
+        "status": "active"
+      }
+    },
+    {
+      "match": {
+        "match_key": "FIFA-2026-M11-NED-JPN",
+        "match_no": 11,
+        "group_name": "Group F",
+        "match_date": "2026-06-14",
+        "kickoff_time": "15:00",
+        "stadium": "Dallas Stadium",
+        "home_team": "Netherlands",
+        "away_team": "Japan",
+        "home_score": 2,
+        "away_score": 2
+      },
+      "source": {
+        "source_id": "fifa-world-cup-2026-pmsr-m11-ned-jpn-v1",
+        "competition": "fifa-world-cup-2026",
+        "report_type": "PMSR",
+        "match_no": 11,
+        "home_code": "NED",
+        "away_code": "JPN",
+        "version": 1,
+        "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M11-NED-V-JPN.pdf",
+        "file_name": "PMSR-M11-NED-V-JPN.pdf",
+        "sha256": "d485e6956019f57b78db7b6a4b8cd9ae727e7b902cabb96213472f31376a4d6d",
+        "file_size": 5738229,
+        "discovered_at": "2026-06-17T08:43:16+00:00",
+        "fetched_at": "2026-06-17T08:43:23+00:00",
+        "active": true,
+        "status": "active"
+      }
+    },
+    {
+      "match": {
+        "match_key": "FIFA-2026-M12-SWE-TUN",
+        "match_no": 12,
+        "group_name": "Group F",
+        "match_date": "2026-06-14",
+        "kickoff_time": "20:00",
+        "stadium": "Monterrey Stadium",
+        "home_team": "Sweden",
+        "away_team": "Tunisia",
+        "home_score": 5,
+        "away_score": 1
+      },
+      "source": {
+        "source_id": "fifa-world-cup-2026-pmsr-m12-swe-tun-v1",
+        "competition": "fifa-world-cup-2026",
+        "report_type": "PMSR",
+        "match_no": 12,
+        "home_code": "SWE",
+        "away_code": "TUN",
+        "version": 1,
+        "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M12-SWE-V-TUN.pdf",
+        "file_name": "PMSR-M12-SWE-V-TUN.pdf",
+        "sha256": "c7df69fd2b01b6da7f506d68b76e8877e4d8e168beca9406a8335c9e219301f6",
+        "file_size": 5746574,
+        "discovered_at": "2026-06-17T08:43:16+00:00",
+        "fetched_at": "2026-06-17T08:43:23+00:00",
+        "active": true,
+        "status": "active"
+      }
+    },
+    {
+      "match": {
+        "match_key": "FIFA-2026-M13-KSA-URU",
+        "match_no": 13,
+        "group_name": "Group H",
+        "match_date": "2026-06-15",
+        "kickoff_time": "18:00",
+        "stadium": "Miami Stadium",
+        "home_team": "Saudi Arabia",
+        "away_team": "Uruguay",
+        "home_score": 1,
+        "away_score": 1
+      },
+      "source": {
+        "source_id": "fifa-world-cup-2026-pmsr-m13-ksa-uru-v1",
+        "competition": "fifa-world-cup-2026",
+        "report_type": "PMSR",
+        "match_no": 13,
+        "home_code": "KSA",
+        "away_code": "URU",
+        "version": 1,
+        "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M13-KSA-V-URU.pdf",
+        "file_name": "PMSR-M13-KSA-V-URU.pdf",
+        "sha256": "a58f676edb1460327344c549a9d4b5c65175f6a46308313ada37fb44ba0ad0d2",
+        "file_size": 5900093,
+        "discovered_at": "2026-06-17T08:43:16+00:00",
+        "fetched_at": "2026-06-17T08:43:24+00:00",
+        "active": true,
+        "status": "active"
+      }
+    },
+    {
+      "match": {
+        "match_key": "FIFA-2026-M14-ESP-CPV",
+        "match_no": 14,
+        "group_name": "Group H",
+        "match_date": "2026-06-15",
+        "kickoff_time": "12:00",
+        "stadium": "Atlanta Stadium",
+        "home_team": "Spain",
+        "away_team": "Cabo Verde",
+        "home_score": 0,
+        "away_score": 0
+      },
+      "source": {
+        "source_id": "fifa-world-cup-2026-pmsr-m14-esp-cpv-v1",
+        "competition": "fifa-world-cup-2026",
+        "report_type": "PMSR",
+        "match_no": 14,
+        "home_code": "ESP",
+        "away_code": "CPV",
+        "version": 1,
+        "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M14-ESP-V-CPV.pdf",
+        "file_name": "PMSR-M14-ESP-V-CPV.pdf",
+        "sha256": "058506bfa1f40a4b856d8b30606577e475b790c16c808e4353df525d34399288",
+        "file_size": 5780870,
+        "discovered_at": "2026-06-17T08:43:16+00:00",
+        "fetched_at": "2026-06-17T08:43:24+00:00",
+        "active": true,
+        "status": "active"
+      }
+    },
+    {
+      "match": {
+        "match_key": "FIFA-2026-M15-IRN-NZL",
+        "match_no": 15,
+        "group_name": "Group G",
+        "match_date": "2026-06-15",
+        "kickoff_time": "18:00",
+        "stadium": "Los Angeles Stadium",
+        "home_team": "IR Iran",
+        "away_team": "New Zealand",
+        "home_score": 2,
+        "away_score": 2
+      },
+      "source": {
+        "source_id": "fifa-world-cup-2026-pmsr-m15-irn-nzl-v1",
+        "competition": "fifa-world-cup-2026",
+        "report_type": "PMSR",
+        "match_no": 15,
+        "home_code": "IRN",
+        "away_code": "NZL",
+        "version": 1,
+        "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M15-IRN-V-NZL.pdf",
+        "file_name": "PMSR-M15-IRN-V-NZL.pdf",
+        "sha256": "0badcf1b7a99158840574738455dbd9fe65ef3cb5efcbc528d8c787003d6bb67",
+        "file_size": 5793374,
+        "discovered_at": "2026-06-17T08:43:16+00:00",
+        "fetched_at": "2026-06-17T08:43:25+00:00",
+        "active": true,
+        "status": "active"
+      }
+    },
+    {
+      "match": {
+        "match_key": "FIFA-2026-M16-BEL-EGY",
+        "match_no": 16,
+        "group_name": "Group G",
+        "match_date": "2026-06-15",
+        "kickoff_time": "12:00",
+        "stadium": "Seattle Stadium",
+        "home_team": "Belgium",
+        "away_team": "Egypt",
+        "home_score": 1,
+        "away_score": 1
+      },
+      "source": {
+        "source_id": "fifa-world-cup-2026-pmsr-m16-bel-egy-v1",
+        "competition": "fifa-world-cup-2026",
+        "report_type": "PMSR",
+        "match_no": 16,
+        "home_code": "BEL",
+        "away_code": "EGY",
+        "version": 1,
+        "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M16-BEL-V-EGY.pdf",
+        "file_name": "PMSR-M16-BEL-V-EGY.pdf",
+        "sha256": "7f6ff9a1345e11aaf7b8488220e4955efb2626534700358c6266f95eee208897",
+        "file_size": 5796662,
+        "discovered_at": "2026-06-17T08:43:16+00:00",
+        "fetched_at": "2026-06-17T08:43:25+00:00",
+        "active": true,
+        "status": "active"
       }
     }
   ]
