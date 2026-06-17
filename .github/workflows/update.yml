@@ -12,6 +12,7 @@ on:
       - "scripts/**"
       - "examples/**"
       - "notebooks/**"
+      - "tests/**"
   schedule:
     # GitHub cron schedules use UTC. This is 12:23 Asia/Shanghai.
     - cron: "23 4 * * *"
