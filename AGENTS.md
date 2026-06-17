@@ -19,6 +19,10 @@ Breaking schema changes are allowed when they improve correctness or analysis qu
 
 Prefer stable query surfaces, but do not preserve a poor schema at the cost of correctness.
 
+Player-level tables should join primarily on `match_key`, `team`, and `player_no`. Keep `player_name` for readability and fallback matching, but do not treat names as stable primary keys across documents, languages, or report versions.
+
+When parsing wide PMSR tables, prefer PDF text object coordinates over plain extracted line text. Plain text can omit zero-valued table cells and shift values into the wrong columns.
+
 ## Daily Pipeline
 
 Run:

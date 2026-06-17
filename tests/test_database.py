@@ -29,6 +29,9 @@ def test_build_database_loads_matches_shots_and_physical_rows(tmp_path):
         match_count = conn.execute("select count(*) from matches").fetchone()[0]
         shot_count = conn.execute("select count(*) from shots").fetchone()[0]
         physical_count = conn.execute("select count(*) from player_physical_stats").fetchone()[0]
+        appearance_count = conn.execute("select count(*) from player_appearances").fetchone()[0]
+        offer_count = conn.execute("select count(*) from player_offers_receptions").fetchone()[0]
+        defensive_count = conn.execute("select count(*) from player_defensive_actions").fetchone()[0]
         source_columns = {
             row[1] for row in conn.execute("pragma table_info(source_documents)").fetchall()
         }
@@ -55,12 +58,42 @@ def test_build_database_loads_matches_shots_and_physical_rows(tmp_path):
             limit 1
             """
         ).fetchone()
+        vinicius = conn.execute(
+            """
+            select a.position, a.roster_status, o.total_offers, o.offers_received,
+                   d.line_breaks_completed, d.ball_progressions
+            from player_appearances a
+            join player_offers_receptions o
+              on o.match_key = a.match_key
+             and o.team = a.team
+             and o.player_no = a.player_no
+            join player_in_possession_distributions d
+              on d.match_key = a.match_key
+             and d.team = a.team
+             and d.player_no = a.player_no
+            where a.match_key = 'FIFA-2026-M07-BRA-MAR'
+              and a.team = 'Brazil'
+              and a.player_name = 'VINICIUS JUNIOR'
+            """
+        ).fetchone()
+        douglas = conn.execute(
+            """
+            select tackles_made, tackles_won, pressing_direct, possession_regains
+            from player_defensive_actions
+            where match_key = 'FIFA-2026-M07-BRA-MAR'
+              and team = 'Brazil'
+              and player_name = 'DOUGLAS SANTOS'
+            """
+        ).fetchone()
     finally:
         conn.close()
 
     assert match_count == 3
     assert shot_count == 67
     assert physical_count >= 90
+    assert appearance_count >= 150
+    assert offer_count >= 90
+    assert defensive_count >= 90
     assert {"source_id", "report_type", "version", "home_code", "away_code"}.issubset(
         source_columns
     )
@@ -72,3 +105,5 @@ def test_build_database_loads_matches_shots_and_physical_rows(tmp_path):
     }
     assert brazil_shot_source == [(brazil_source[0],)]
     assert fastest == ("SON Heungmin", "Korea Republic", 35.2)
+    assert vinicius == ("FW", "starting", 61, 26, 5, 11)
+    assert douglas == (12, 4, 14, 8)

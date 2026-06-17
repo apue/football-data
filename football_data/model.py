@@ -114,6 +114,99 @@ class PlayerPhysicalStat:
 
 
 @dataclass(frozen=True)
+class PlayerAppearance:
+    match_key: str
+    team: str
+    opponent: str
+    player_no: int
+    player_name: str
+    position: str
+    roster_status: str
+    started: bool
+    source_id: str | None = None
+
+
+@dataclass(frozen=True)
+class PlayerEventMarker:
+    match_key: str
+    team: str
+    player_no: int
+    player_name: str
+    marker_index: int
+    raw_marker: str
+    minute: int | None
+    source_id: str | None = None
+    page_number: int | None = None
+
+
+@dataclass(frozen=True)
+class PlayerDistributionStat:
+    match_key: str
+    team: str
+    player_no: int
+    player_name: str
+    source_id: str | None = None
+    page_number: int | None = None
+    passes_attempted: int | None = None
+    passes_completed: int | None = None
+    pass_completion_pct: float | None = None
+    switches_of_play: int | None = None
+    crosses_attempted: int | None = None
+    crosses_completed: int | None = None
+    line_breaks_attempted: int | None = None
+    line_breaks_completed: int | None = None
+    line_break_completion_pct: float | None = None
+    ball_progressions: int | None = None
+    take_ons: int | None = None
+    step_ins: int | None = None
+    attempts_at_goal: int | None = None
+    goals: int | None = None
+
+
+@dataclass(frozen=True)
+class PlayerOffersReceptions:
+    match_key: str
+    team: str
+    player_no: int
+    player_name: str
+    source_id: str | None = None
+    page_number: int | None = None
+    total_offers: int | None = None
+    in_front: int | None = None
+    in_between: int | None = None
+    out_to_in: int | None = None
+    in_to_out: int | None = None
+    in_behind: int | None = None
+    no_movement: int | None = None
+    offers_received: int | None = None
+
+
+@dataclass(frozen=True)
+class PlayerDefensiveActionStat:
+    match_key: str
+    team: str
+    player_no: int
+    player_name: str
+    source_id: str | None = None
+    page_number: int | None = None
+    tackles_made: int | None = None
+    tackles_won: int | None = None
+    blocks: int | None = None
+    interceptions: int | None = None
+    pressing_direct: int | None = None
+    pressing_indirect: int | None = None
+    duels_won_aerial: int | None = None
+    duels_won_physical: int | None = None
+    possession_contests_won: int | None = None
+    clearances: int | None = None
+    loose_ball_receptions: int | None = None
+    pushing_on: int | None = None
+    pushing_on_into_pressing: int | None = None
+    possession_regains: int | None = None
+    possession_interrupted: int | None = None
+
+
+@dataclass(frozen=True)
 class ExtractedMatch:
     pdf_path: Path
     source: SourceDocument
@@ -121,3 +214,8 @@ class ExtractedMatch:
     team_stats: list[TeamMatchStat] = field(default_factory=list)
     shots: list[Shot] = field(default_factory=list)
     player_physical: list[PlayerPhysicalStat] = field(default_factory=list)
+    player_appearances: list[PlayerAppearance] = field(default_factory=list)
+    player_event_markers: list[PlayerEventMarker] = field(default_factory=list)
+    player_distributions: list[PlayerDistributionStat] = field(default_factory=list)
+    player_offers: list[PlayerOffersReceptions] = field(default_factory=list)
+    player_defensive_actions: list[PlayerDefensiveActionStat] = field(default_factory=list)

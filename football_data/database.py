@@ -7,7 +7,7 @@ from football_data.extract import extraction_timestamp, parser_version
 from football_data.model import ExtractedMatch
 
 
-SCHEMA_VERSION = 2
+SCHEMA_VERSION = 3
 
 
 def build_database(path: str | Path, records: list[ExtractedMatch]) -> None:
@@ -145,6 +145,115 @@ def _create_schema(conn: sqlite3.Connection) -> None:
           foreign key(match_key) references matches(match_key),
           foreign key(source_id) references source_documents(source_id)
         );
+
+        create table player_appearances (
+          match_key text not null,
+          source_id text not null,
+          team text not null,
+          opponent text not null,
+          player_no integer not null,
+          player_name text not null,
+          position text not null,
+          roster_status text not null,
+          started integer not null,
+          primary key(match_key, team, player_no),
+          foreign key(match_key) references matches(match_key),
+          foreign key(source_id) references source_documents(source_id)
+        );
+
+        create table player_event_markers (
+          match_key text not null,
+          source_id text not null,
+          team text not null,
+          player_no integer not null,
+          player_name text not null,
+          marker_index integer not null,
+          raw_marker text not null,
+          minute integer,
+          page_number integer,
+          primary key(match_key, team, player_no, marker_index),
+          foreign key(match_key) references matches(match_key),
+          foreign key(source_id) references source_documents(source_id)
+        );
+
+        create table player_in_possession_distributions (
+          match_key text not null,
+          source_id text not null,
+          team text not null,
+          player_no integer not null,
+          player_name text not null,
+          page_number integer,
+          passes_attempted integer,
+          passes_completed integer,
+          pass_completion_pct real,
+          switches_of_play integer,
+          crosses_attempted integer,
+          crosses_completed integer,
+          line_breaks_attempted integer,
+          line_breaks_completed integer,
+          line_break_completion_pct real,
+          ball_progressions integer,
+          take_ons integer,
+          step_ins integer,
+          attempts_at_goal integer,
+          goals integer,
+          primary key(match_key, team, player_no),
+          foreign key(match_key) references matches(match_key),
+          foreign key(source_id) references source_documents(source_id)
+        );
+
+        create table player_offers_receptions (
+          match_key text not null,
+          source_id text not null,
+          team text not null,
+          player_no integer not null,
+          player_name text not null,
+          page_number integer,
+          total_offers integer,
+          in_front integer,
+          in_between integer,
+          out_to_in integer,
+          in_to_out integer,
+          in_behind integer,
+          no_movement integer,
+          offers_received integer,
+          primary key(match_key, team, player_no),
+          foreign key(match_key) references matches(match_key),
+          foreign key(source_id) references source_documents(source_id)
+        );
+
+        create table player_defensive_actions (
+          match_key text not null,
+          source_id text not null,
+          team text not null,
+          player_no integer not null,
+          player_name text not null,
+          page_number integer,
+          tackles_made integer,
+          tackles_won integer,
+          blocks integer,
+          interceptions integer,
+          pressing_direct integer,
+          pressing_indirect integer,
+          duels_won_aerial integer,
+          duels_won_physical integer,
+          possession_contests_won integer,
+          clearances integer,
+          loose_ball_receptions integer,
+          pushing_on integer,
+          pushing_on_into_pressing integer,
+          possession_regains integer,
+          possession_interrupted integer,
+          primary key(match_key, team, player_no),
+          foreign key(match_key) references matches(match_key),
+          foreign key(source_id) references source_documents(source_id)
+        );
+
+        create index idx_player_appearances_name
+          on player_appearances(player_name, team);
+
+        create index idx_player_physical_identity
+          on player_physical_stats(match_key, team, player_no);
         """
     )
     conn.executemany(
@@ -268,4 +377,86 @@ def _insert_record(conn: sqlite3.Connection, record: ExtractedMatch) -> None:
         )
         """,
         [row.__dict__ for row in record.player_physical],
+    )
+    conn.executemany(
+        """
+        insert into player_appearances(
+          match_key, source_id, team, opponent, player_no, player_name, position,
+          roster_status, started
+        ) values(
+          :match_key, :source_id, :team, :opponent, :player_no, :player_name,
+          :position, :roster_status, :started
+        )
+        """,
+        [
+            {
+                **row.__dict__,
+                "started": int(row.started),
+            }
+            for row in record.player_appearances
+        ],
+    )
+    conn.executemany(
+        """
+        insert into player_event_markers(
+          match_key, source_id, team, player_no, player_name, marker_index,
+          raw_marker, minute, page_number
+        ) values(
+          :match_key, :source_id, :team, :player_no, :player_name, :marker_index,
+          :raw_marker, :minute, :page_number
+        )
+        """,
+        [row.__dict__ for row in record.player_event_markers],
+    )
+    conn.executemany(
+        """
+        insert into player_in_possession_distributions(
+          match_key, source_id, team, player_no, player_name, page_number,
+          passes_attempted, passes_completed, pass_completion_pct, switches_of_play,
+          crosses_attempted, crosses_completed, line_breaks_attempted,
+          line_breaks_completed, line_break_completion_pct, ball_progressions,
+          take_ons, step_ins, attempts_at_goal, goals
+        ) values(
+          :match_key, :source_id, :team, :player_no, :player_name, :page_number,
+          :passes_attempted, :passes_completed, :pass_completion_pct,
+          :switches_of_play, :crosses_attempted, :crosses_completed,
+          :line_breaks_attempted, :line_breaks_completed,
+          :line_break_completion_pct, :ball_progressions, :take_ons, :step_ins,
+          :attempts_at_goal, :goals
+        )
+        """,
+        [row.__dict__ for row in record.player_distributions],
+    )
+    conn.executemany(
+        """
+        insert into player_offers_receptions(
+          match_key, source_id, team, player_no, player_name, page_number,
+          total_offers, in_front, in_between, out_to_in, in_to_out, in_behind,
+          no_movement, offers_received
+        ) values(
+          :match_key, :source_id, :team, :player_no, :player_name, :page_number,
+          :total_offers, :in_front, :in_between, :out_to_in, :in_to_out,
+          :in_behind, :no_movement, :offers_received
+        )
+        """,
+        [row.__dict__ for row in record.player_offers],
+    )
+    conn.executemany(
+        """
+        insert into player_defensive_actions(
+          match_key, source_id, team, player_no, player_name, page_number,
+          tackles_made, tackles_won, blocks, interceptions, pressing_direct,
+          pressing_indirect, duels_won_aerial, duels_won_physical,
+          possession_contests_won, clearances, loose_ball_receptions, pushing_on,
+          pushing_on_into_pressing, possession_regains, possession_interrupted
+        ) values(
+          :match_key, :source_id, :team, :player_no, :player_name, :page_number,
+          :tackles_made, :tackles_won, :blocks, :interceptions, :pressing_direct,
+          :pressing_indirect, :duels_won_aerial, :duels_won_physical,
+          :possession_contests_won, :clearances, :loose_ball_receptions,
+          :pushing_on, :pushing_on_into_pressing, :possession_regains,
+          :possession_interrupted
+        )
+        """,
+        [row.__dict__ for row in record.player_defensive_actions],
     )

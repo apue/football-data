@@ -63,3 +63,98 @@ def test_extract_physical_data_for_fastest_player():
     )
     assert saibari.total_distance_m == 10124.4
     assert saibari.top_speed_kmh == 33.7
+
+
+def test_extract_player_appearances_from_lineup_page():
+    record = extract_pdf(_pdf("PMSR-M07*.pdf"))
+
+    vinicius = next(
+        row
+        for row in record.player_appearances
+        if row.team == "Brazil" and row.player_name == "VINICIUS JUNIOR"
+    )
+    assert vinicius.player_no == 7
+    assert vinicius.position == "FW"
+    assert vinicius.roster_status == "starting"
+    assert vinicius.started is True
+
+    neymar = next(
+        row
+        for row in record.player_appearances
+        if row.team == "Brazil" and row.player_name == "NEYMAR JR"
+    )
+    assert neymar.player_no == 10
+    assert neymar.position == "FW"
+    assert neymar.roster_status == "substitute"
+    assert neymar.started is False
+
+    hakimi = next(
+        row
+        for row in record.player_appearances
+        if row.team == "Morocco" and row.player_name == "Achraf HAKIMI"
+    )
+    assert hakimi.player_no == 2
+    assert hakimi.position == "DF"
+    assert hakimi.started is True
+
+    vinicius_markers = [
+        row.raw_marker
+        for row in record.player_event_markers
+        if row.team == "Brazil" and row.player_name == "VINICIUS JUNIOR"
+    ]
+    assert "32'" in vinicius_markers
+
+
+def test_extract_individual_in_possession_tables():
+    record = extract_pdf(_pdf("PMSR-M07*.pdf"))
+
+    vinicius_distribution = next(
+        row
+        for row in record.player_distributions
+        if row.team == "Brazil" and row.player_name == "VINICIUS JUNIOR"
+    )
+    assert vinicius_distribution.passes_attempted == 32
+    assert vinicius_distribution.line_breaks_completed == 5
+    assert vinicius_distribution.ball_progressions == 11
+    assert vinicius_distribution.take_ons == 10
+    assert vinicius_distribution.attempts_at_goal == 1
+    assert vinicius_distribution.goals == 1
+
+    vinicius_offers = next(
+        row
+        for row in record.player_offers
+        if row.team == "Brazil" and row.player_name == "VINICIUS JUNIOR"
+    )
+    assert vinicius_offers.total_offers == 61
+    assert vinicius_offers.in_behind == 15
+    assert vinicius_offers.no_movement == 28
+    assert vinicius_offers.offers_received == 26
+
+
+def test_extract_individual_out_of_possession_table():
+    record = extract_pdf(_pdf("PMSR-M07*.pdf"))
+
+    douglas = next(
+        row
+        for row in record.player_defensive_actions
+        if row.team == "Brazil" and row.player_name == "DOUGLAS SANTOS"
+    )
+    assert douglas.tackles_made == 12
+    assert douglas.tackles_won == 4
+    assert douglas.pressing_direct == 14
+    assert douglas.pressing_indirect == 17
+    assert douglas.possession_regains == 8
+    assert douglas.possession_interrupted == 6
+
+
+def test_extract_lineup_name_continuation_rows():
+    record = extract_pdf(_pdf("PMSR-M11*.pdf"))
+
+    summerville = next(
+        row
+        for row in record.player_appearances
+        if row.team == "Netherlands" and row.player_no == 24
+    )
+    assert summerville.player_name == "Crysencio SUMMERVILLE"
+    assert summerville.position == "FW"
+    assert len(record.player_appearances) == 52

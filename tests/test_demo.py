@@ -10,6 +10,10 @@ def test_demo_uses_collapsed_long_sections_and_insight_tables(tmp_path):
     assert "<summary><h2>New Matches</h2>" in html
     assert "<summary><h2>Loaded Matches</h2>" in html
     assert '<div class="grid equal-height">' in html
-    assert "Top 5 Completed Line Breaks" in html
-    assert "Top 5 Final Third Receptions" in html
+    assert "Top 5 Attacking Threats" in html
+    assert "Top 5 Progressors" in html
+    assert "Top 5 Off-Ball Receivers" in html
+    assert "Top 5 Defensive Contributors" in html
+    assert "Top 5 Completed Line Breaks" not in html
+    assert "Top 5 Final Third Receptions" not in html
     assert "Goals and On-Target Shots" not in html

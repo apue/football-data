@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-06-17 - Player Insight Tables
+
+Expanded the player-level dataset:
+
+- Bumped SQLite schema to version 3.
+- Added lineup-derived `player_appearances` and raw `player_event_markers`.
+- Added individual in-possession distributions, offers/receptions, and out-of-possession action tables.
+- Switched wide player-table extraction to PDF text object coordinates so zero-valued cells stay aligned.
+- Added role-style demo leaderboards for attacking threats, progressors, off-ball receivers, and defensive contributors.
+- Expanded the current generated dataset to 20 active PMSR sources from the FIFA hub.
+
 ## 2026-06-17 - Hub Discovery
 
 Hub-driven dataset update:

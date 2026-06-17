@@ -4,7 +4,7 @@ Daily-refreshable SQLite data and reproducible examples extracted from publicly 
 
 ## What This Is
 
-This project turns FIFA Training Centre PMSR reports into a structured SQLite database for football analysis. The goal is to make cross-game analysis easy: fastest players, longest-running players, shot lists, team comparison funnels, and hidden contribution candidates.
+This project turns FIFA Training Centre PMSR reports into a structured SQLite database for football analysis. The goal is to make cross-game analysis easy: fastest players, longest-running players, shot lists, team comparison funnels, and hidden contribution candidates such as off-ball receivers, line-breaking progressors, attacking threats, and defensive contributors.
 
 ## Data Source and Attribution
 
@@ -33,6 +33,20 @@ By default this repository does not redistribute original PDF files. Local PDF c
 - `notebooks/*.ipynb` - notebook-style demo examples
 - GitHub Pages demo generated from the latest SQLite database: https://apue.github.io/football-data/
 
+## Current SQLite Coverage
+
+The generated database currently includes:
+
+- match metadata, source provenance, and extraction runs
+- team-level key statistics
+- shot detail tables
+- player physical data
+- player lineup appearances from the match summary page
+- raw minute markers associated with lineup rows
+- player in-possession distributions, including passes, line breaks, ball progressions, take-ons, step-ins, attempts, and goals
+- player offers and receptions, including offer movement types
+- player out-of-possession actions, including tackles, blocks, interceptions, pressing, duels, regains, and interruptions
+
 ## Quick Start
 
 ```bash
@@ -41,6 +55,7 @@ source .venv/bin/activate
 python -m pip install -e ".[dev]"
 python scripts/update_dataset.py
 sqlite3 data/latest.sqlite < examples/top_fastest_players.sql
+sqlite3 data/latest.sqlite < examples/top_attacking_threats.sql
 python scripts/check_status.py
 ```
 
@@ -65,8 +80,11 @@ Failures are reported in `manifests/latest-run.json`, `manifests/update-events.j
 - Who covered the most total distance?
 - Which teams generated the most xG?
 - Which shots were goals or on target?
-- Which players may be hidden progression or workload candidates as more matches are added?
+- Which players created the strongest combined attacking threat?
+- Which players were the best line-breaking progressors?
+- Which players were the most active off-ball receivers?
+- Which players made the strongest defensive contribution?
 
 ## Limitations
 
-PMSR PDFs are presentation reports, not complete event or tracking feeds. The first implementation focuses on reliable text/table extraction: match metadata, team key stats, shots, and player physical data. Some pitch maps can be enriched later using PDF text objects and vector drawing objects.
+PMSR PDFs are presentation reports, not complete event or tracking feeds. The parser focuses on reliable text/table extraction and uses PDF text object coordinates for wide player tables where plain text loses zero-valued cells. Raw minute markers from the match summary page are preserved, but icon semantics such as whether a marker is a goal, card, or substitution are not inferred unless a table makes that explicit.

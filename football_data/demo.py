@@ -27,7 +27,8 @@ def build_demo_site(
               count(*) as matches,
               (select count(*) from source_documents where active = 1) as active_sources,
               (select count(*) from shots) as shots,
-              (select count(*) from player_physical_stats) as player_rows
+              (select count(*) from player_appearances) as appearances,
+              (select count(*) from player_physical_stats) as physical_rows
             from matches
             """,
         )
@@ -52,32 +53,136 @@ def build_demo_site(
         distance = _query(
             conn,
             """
-            select player_name, team, total_distance_m
+            select player_name as Player, team as Team, total_distance_m as "Distance (m)"
             from player_physical_stats
             where total_distance_m is not null
             order by total_distance_m desc
             limit 5
             """,
         )
-        line_breaks = _query(
+        attacking_threats = _query(
             conn,
             """
-            select m.match_no, t.team, t.opponent, t.completed_line_breaks
-            from team_match_stats t
+            with shot_totals as (
+              select match_key, team, upper(player_name) as player_name,
+                     count(*) as shots,
+                     sum(is_on_target) as on_target,
+                     sum(is_goal) as goals
+              from shots
+              group by match_key, team, upper(player_name)
+            )
+            select
+              m.match_no as Match,
+              a.player_name as Player,
+              a.team as Team,
+              a.position as Pos,
+              round(
+                coalesce(s.goals, 0) * 6.0
+                + coalesce(s.on_target, 0) * 2.0
+                + coalesce(d.attempts_at_goal, 0) * 1.0
+                + coalesce(o.offers_received, 0) * 0.20
+                + coalesce(o.in_behind, 0) * 0.25,
+                1
+              ) as Score,
+              coalesce(s.shots, d.attempts_at_goal, 0) as Shots,
+              coalesce(s.on_target, 0) as "On Target",
+              coalesce(o.offers_received, 0) as Received,
+              coalesce(o.in_behind, 0) as "In Behind"
+            from player_appearances a
             join matches m using(match_key)
-            where t.completed_line_breaks is not null
-            order by t.completed_line_breaks desc
+            left join player_in_possession_distributions d
+              on d.match_key = a.match_key
+             and d.team = a.team
+             and d.player_no = a.player_no
+            left join player_offers_receptions o
+              on o.match_key = a.match_key
+             and o.team = a.team
+             and o.player_no = a.player_no
+            left join shot_totals s
+              on s.match_key = a.match_key
+             and s.team = a.team
+             and s.player_name = upper(a.player_name)
+            where Score > 0
+            order by Score desc, Shots desc
             limit 5
             """,
         )
-        final_third = _query(
+        progressors = _query(
             conn,
             """
-            select m.match_no, t.team, t.opponent, t.receptions_final_third
-            from team_match_stats t
+            select
+              m.match_no as Match,
+              d.player_name as Player,
+              d.team as Team,
+              round(
+                coalesce(d.line_breaks_completed, 0) * 2.0
+                + coalesce(d.ball_progressions, 0) * 1.0
+                + coalesce(d.take_ons, 0) * 0.5
+                + coalesce(d.step_ins, 0) * 0.5
+                + coalesce(d.passes_completed, 0) * 0.02,
+                1
+              ) as Score,
+              d.line_breaks_completed as "Line Breaks",
+              d.ball_progressions as Progressions,
+              d.take_ons as "Take Ons"
+            from player_in_possession_distributions d
             join matches m using(match_key)
-            where t.receptions_final_third is not null
-            order by t.receptions_final_third desc
+            where Score > 0
+            order by Score desc, "Line Breaks" desc
+            limit 5
+            """,
+        )
+        off_ball_receivers = _query(
+            conn,
+            """
+            select
+              m.match_no as Match,
+              o.player_name as Player,
+              o.team as Team,
+              round(
+                coalesce(o.offers_received, 0) * 1.0
+                + coalesce(o.in_behind, 0) * 0.6
+                + coalesce(o.in_between, 0) * 0.4
+                + coalesce(o.total_offers, 0) * 0.1,
+                1
+              ) as Score,
+              o.total_offers as Offers,
+              o.offers_received as Received,
+              o.in_behind as "In Behind",
+              o.in_between as "Between Lines"
+            from player_offers_receptions o
+            join matches m using(match_key)
+            where Score > 0
+            order by Score desc, Received desc
+            limit 5
+            """,
+        )
+        defensive_contributors = _query(
+            conn,
+            """
+            select
+              m.match_no as Match,
+              d.player_name as Player,
+              d.team as Team,
+              round(
+                coalesce(d.tackles_won, 0) * 1.5
+                + coalesce(d.interceptions, 0) * 1.5
+                + coalesce(d.blocks, 0) * 1.0
+                + coalesce(d.possession_regains, 0) * 1.3
+                + coalesce(d.possession_interrupted, 0) * 1.0
+                + coalesce(d.pressing_direct, 0) * 0.3
+                + coalesce(d.pressing_indirect, 0) * 0.05
+                + coalesce(d.clearances, 0) * 0.5,
+                1
+              ) as Score,
+              d.tackles_won as "Tackles Won",
+              d.interceptions as Interceptions,
+              d.possession_regains as Regains,
+              d.possession_interrupted as Interrupted
+            from player_defensive_actions d
+            join matches m using(match_key)
+            where Score > 0
+            order by Score desc, Regains desc
             limit 5
             """,
         )
@@ -92,8 +197,10 @@ def build_demo_site(
             matches=matches,
             fastest=fastest,
             distance=distance,
-            line_breaks=line_breaks,
-            final_third=final_third,
+            attacking_threats=attacking_threats,
+            progressors=progressors,
+            off_ball_receivers=off_ball_receivers,
+            defensive_contributors=defensive_contributors,
         ),
         encoding="utf-8",
     )
@@ -111,8 +218,10 @@ def _page(
     matches: list[sqlite3.Row],
     fastest: list[sqlite3.Row],
     distance: list[sqlite3.Row],
-    line_breaks: list[sqlite3.Row],
-    final_third: list[sqlite3.Row],
+    attacking_threats: list[sqlite3.Row],
+    progressors: list[sqlite3.Row],
+    off_ball_receivers: list[sqlite3.Row],
+    defensive_contributors: list[sqlite3.Row],
 ) -> str:
     return f"""<!doctype html>
 <html lang="en">
@@ -200,12 +309,22 @@ def _page(
     </div>
     <div class="grid equal-height">
       <section class="panel">
-        <h2>Top 5 Completed Line Breaks</h2>
-        {_table(line_breaks)}
+        <h2>Top 5 Attacking Threats</h2>
+        {_table(attacking_threats)}
       </section>
       <section class="panel">
-        <h2>Top 5 Final Third Receptions</h2>
-        {_table(final_third)}
+        <h2>Top 5 Progressors</h2>
+        {_table(progressors)}
+      </section>
+    </div>
+    <div class="grid equal-height">
+      <section class="panel">
+        <h2>Top 5 Off-Ball Receivers</h2>
+        {_table(off_ball_receivers)}
+      </section>
+      <section class="panel">
+        <h2>Top 5 Defensive Contributors</h2>
+        {_table(defensive_contributors)}
       </section>
     </div>
   </main>
@@ -220,7 +339,8 @@ def _coverage_metrics(rows: list[sqlite3.Row], latest_run: dict[str, object]) ->
         ("Matches", _value(row, "matches")),
         ("Active PMSR", _value(row, "active_sources")),
         ("Shots", _value(row, "shots")),
-        ("Player Rows", _value(row, "player_rows")),
+        ("Appearances", _value(row, "appearances")),
+        ("Physical Rows", _value(row, "physical_rows")),
         ("Run Status", latest_run.get("status", "")),
         ("Generated At", latest_run.get("generated_at", "")),
     ]

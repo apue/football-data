@@ -1,24 +1,7 @@
 {
-  "generated_at": "2026-06-17T09:15:11+00:00",
+  "generated_at": "2026-06-17T13:02:16+00:00",
   "new_matches": [],
   "version_updates": [],
-  "downloaded": [
-    "fifa-world-cup-2026-pmsr-m01-mex-rsa-v1",
-    "fifa-world-cup-2026-pmsr-m02-kor-cze-v1",
-    "fifa-world-cup-2026-pmsr-m03-can-bih-v2",
-    "fifa-world-cup-2026-pmsr-m04-usa-par-v1",
-    "fifa-world-cup-2026-pmsr-m05-hai-sco-v1",
-    "fifa-world-cup-2026-pmsr-m06-aus-tur-v1",
-    "fifa-world-cup-2026-pmsr-m07-bra-mar-v2",
-    "fifa-world-cup-2026-pmsr-m08-qat-sui-v1",
-    "fifa-world-cup-2026-pmsr-m09-civ-ecu-v1",
-    "fifa-world-cup-2026-pmsr-m10-ger-cuw-v2",
-    "fifa-world-cup-2026-pmsr-m11-ned-jpn-v1",
-    "fifa-world-cup-2026-pmsr-m12-swe-tun-v1",
-    "fifa-world-cup-2026-pmsr-m13-ksa-uru-v1",
-    "fifa-world-cup-2026-pmsr-m14-esp-cpv-v1",
-    "fifa-world-cup-2026-pmsr-m15-irn-nzl-v1",
-    "fifa-world-cup-2026-pmsr-m16-bel-egy-v1"
-  ],
+  "downloaded": [],
   "failures": []
 }
