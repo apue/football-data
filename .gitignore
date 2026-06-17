@@ -1,0 +1,9 @@
+.DS_Store
+.venv/
+__pycache__/
+.pytest_cache/
+*.pyc
+*.egg-info/
+
+# Original FIFA PMSR PDFs are kept as a local cache and are not redistributed.
+raw/*.pdf

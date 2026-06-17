@@ -1,0 +1,20 @@
+[project]
+name = "fifa-pmsr-data"
+version = "0.1.0"
+description = "Extracted SQLite dataset and demos from publicly available FIFA Training Centre PMSR reports."
+requires-python = ">=3.11"
+dependencies = [
+  "pymupdf>=1.26.0",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+
+[tool.setuptools.packages.find]
+include = ["football_data*"]
