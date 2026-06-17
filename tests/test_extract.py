@@ -1,5 +1,7 @@
 from pathlib import Path
 
+import pytest
+
 from football_data.extract import extract_pdf
 
 
@@ -148,7 +150,10 @@ def test_extract_individual_out_of_possession_table():
 
 
 def test_extract_lineup_name_continuation_rows():
-    record = extract_pdf(_pdf("PMSR-M11*.pdf"))
+    matches = sorted(RAW_DIR.glob("**/PMSR-M11*.pdf"))
+    if not matches:
+        pytest.skip("M11 PDF is downloaded by the update pipeline")
+    record = extract_pdf(matches[-1])
 
     summerville = next(
         row
