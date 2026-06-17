@@ -59,15 +59,26 @@ def build_demo_site(
             limit 5
             """,
         )
-        shots = _query(
+        line_breaks = _query(
             conn,
             """
-            select m.match_no, s.team, s.minute, s.player_name, s.outcome, s.delivery_type
-            from shots s
+            select m.match_no, t.team, t.opponent, t.completed_line_breaks
+            from team_match_stats t
             join matches m using(match_key)
-            where s.is_goal = 1 or s.is_on_target = 1
-            order by m.match_no, s.minute
-            limit 20
+            where t.completed_line_breaks is not null
+            order by t.completed_line_breaks desc
+            limit 5
+            """,
+        )
+        final_third = _query(
+            conn,
+            """
+            select m.match_no, t.team, t.opponent, t.receptions_final_third
+            from team_match_stats t
+            join matches m using(match_key)
+            where t.receptions_final_third is not null
+            order by t.receptions_final_third desc
+            limit 5
             """,
         )
     finally:
@@ -81,7 +92,8 @@ def build_demo_site(
             matches=matches,
             fastest=fastest,
             distance=distance,
-            shots=shots,
+            line_breaks=line_breaks,
+            final_third=final_third,
         ),
         encoding="utf-8",
     )
@@ -99,13 +111,15 @@ def _page(
     matches: list[sqlite3.Row],
     fastest: list[sqlite3.Row],
     distance: list[sqlite3.Row],
-    shots: list[sqlite3.Row],
+    line_breaks: list[sqlite3.Row],
+    final_third: list[sqlite3.Row],
 ) -> str:
     return f"""<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="data:,">
   <title>FIFA PMSR Data Demo</title>
   <style>
     :root {{
@@ -122,17 +136,28 @@ def _page(
     h3 {{ margin: 0 0 8px; font-size: 15px; }}
     p {{ margin: 0; color: #4b5b70; line-height: 1.5; }}
     .grid {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 16px; margin-top: 18px; }}
+    .equal-height {{ align-items: stretch; }}
+    .equal-height > .panel {{ display: flex; flex-direction: column; min-height: 100%; }}
     .metrics {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 18px; }}
     .metric {{ border: 1px solid #e2e8f3; border-radius: 8px; padding: 12px; background: #f9fbfe; }}
     .metric .value {{ display: block; color: #162334; font-size: 24px; font-weight: 700; }}
     .metric .label {{ display: block; color: #526277; font-size: 12px; text-transform: uppercase; }}
-    section {{ background: #ffffff; border: 1px solid #dde3ee; border-radius: 8px; padding: 18px; }}
-    section + section {{ margin-top: 16px; }}
+    .summary {{ margin-bottom: 16px; }}
+    .panel {{ background: #ffffff; border: 1px solid #dde3ee; border-radius: 8px; padding: 18px; overflow-x: auto; }}
+    .summary + .panel {{ margin-top: 16px; }}
+    details.panel summary {{ cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 12px; }}
+    details.panel summary h2 {{ margin: 0; }}
+    details.panel summary span {{ color: #526277; font-size: 13px; }}
+    details.panel[open] summary {{ margin-bottom: 14px; }}
     table {{ width: 100%; border-collapse: collapse; font-size: 14px; }}
     th, td {{ border-bottom: 1px solid #e8edf5; padding: 8px 6px; text-align: left; vertical-align: top; }}
     th {{ color: #516178; font-size: 12px; text-transform: uppercase; letter-spacing: 0; }}
     tr:last-child td {{ border-bottom: 0; }}
     code {{ background: #edf2fa; padding: 2px 5px; border-radius: 4px; }}
+    @media (max-width: 640px) {{
+      table {{ font-size: 12px; }}
+      th, td {{ padding: 7px 5px; }}
+    }}
   </style>
 </head>
 <body>
@@ -141,42 +166,48 @@ def _page(
     <p>Generated from <code>data/latest.sqlite</code>. Original PMSR reports are attributed to FIFA Training Centre.</p>
   </header>
   <main>
-    <section>
+    <section class="summary">
       <h2>Update Summary</h2>
       {_coverage_metrics(coverage, latest_run)}
       <div class="grid">
-        <div>
-          <h3>New Matches</h3>
+        <details class="panel collapsible">
+          <summary><h2>New Matches</h2><span>{_row_count(update_events.get("new_matches", []))} rows</span></summary>
           {_table(update_events.get("new_matches", []))}
-        </div>
-        <div>
+        </details>
+        <section class="panel">
           <h3>Version Updates</h3>
           {_table(update_events.get("version_updates", []))}
-        </div>
-        <div>
+        </section>
+        <section class="panel">
           <h3>Failures</h3>
           {_table(latest_run.get("failures", []))}
-        </div>
+        </section>
       </div>
     </section>
-    <section>
-      <h2>Loaded Matches</h2>
+    <details class="panel collapsible">
+      <summary><h2>Loaded Matches</h2><span>{len(matches)} rows</span></summary>
       {_table(matches)}
-    </section>
-    <div class="grid">
-      <section>
+    </details>
+    <div class="grid equal-height">
+      <section class="panel">
         <h2>Top 5 Fastest Players</h2>
         {_table(fastest)}
       </section>
-      <section>
+      <section class="panel">
         <h2>Top 5 Total Distance</h2>
         {_table(distance)}
       </section>
     </div>
-    <section>
-      <h2>Goals and On-Target Shots</h2>
-      {_table(shots)}
-    </section>
+    <div class="grid equal-height">
+      <section class="panel">
+        <h2>Top 5 Completed Line Breaks</h2>
+        {_table(line_breaks)}
+      </section>
+      <section class="panel">
+        <h2>Top 5 Final Third Receptions</h2>
+        {_table(final_third)}
+      </section>
+    </div>
   </main>
 </body>
 </html>
@@ -222,6 +253,12 @@ def _table(rows: object) -> str:
             + "</tr>"
         )
     return f"<table><thead><tr>{head}</tr></thead><tbody>{''.join(body)}</tbody></table>"
+
+
+def _row_count(rows: object) -> int:
+    if not rows:
+        return 0
+    return len(list(rows))  # type: ignore[arg-type]
 
 
 def _value(row: object, key: str) -> object:
