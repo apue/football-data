@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-06-17T13:02:16+00:00",
+  "generated_at": "2026-06-17T13:10:25+00:00",
   "status": "success",
   "failure_code": null,
   "hub_url": "https://www.fifatrainingcentre.com/en/fifa-world-cup-2026/match-report-hub.php",
   "discovered": 20,
   "active_sources": 20,
-  "downloaded": 0,
+  "downloaded": 20,
   "parsed": 20,
   "matches": 20,
   "source_documents": 20,
