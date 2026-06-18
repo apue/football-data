@@ -60,6 +60,12 @@ python scripts/calibrate_potm.py --date YYYY-MM-DD
 python scripts/calibrate_potm.py --date YYYY-MM-DD --json
 ```
 
+Before changing labels or scoring weights, run the evaluation workflow:
+
+```bash
+python scripts/evaluate_potm_workflow.py --date YYYY-MM-DD
+```
+
 The report compares each POTM with same-match model ranking:
 
 - `model_rank`: where the POTM appears in our per-match model list.

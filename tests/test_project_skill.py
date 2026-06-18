@@ -69,3 +69,28 @@ def test_publish_skill_mentions_potm_calibration_gate():
 
     assert "calibrate-potm-labels" in text
     assert "POTM calibration" in text
+
+
+def test_evaluate_potm_workflow_skill_is_repo_scoped():
+    skill = ROOT / ".agents" / "skills" / "evaluate-potm-workflow" / "SKILL.md"
+
+    assert skill.exists()
+    text = skill.read_text(encoding="utf-8")
+    references = "\n".join(
+        path.read_text(encoding="utf-8")
+        for path in (ROOT / ".agents" / "skills" / "evaluate-potm-workflow" / "references").glob(
+            "*.md"
+        )
+    )
+
+    assert text.startswith("---\n")
+    assert "name: evaluate-potm-workflow" in text
+    assert "description: Use when" in text
+    assert "Firecrawl" in text
+    assert "Keypool" in text
+    assert "scripts/evaluate_potm_workflow.py" in references
+    assert "calibration/evaluation" in references
+    assert "source_quality" in references
+    assert "noise_ratio" in references
+    assert "POTM is a weak label" in references
+    assert "Do not change scoring weights from one evaluation" in references

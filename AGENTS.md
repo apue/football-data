@@ -55,6 +55,8 @@ When the user asks to calibrate weights, inspect Player of the Match alignment, 
 
 Treat POTM as a weak label. Use `scripts/discover_potm_evidence.py --date YYYY-MM-DD` for match-day candidate discovery, `scripts/search_potm_evidence.py` for targeted follow-up searches, write only confirmed labels to `calibration/potm-labels.json`, and run `scripts/calibrate_potm.py --date YYYY-MM-DD` to produce rank-diff reports. Do not feed POTM directly into Editor's Choices scoring; use repeated misses as prompts for scoring experiments.
 
+When the user asks to evaluate the POTM workflow, Firecrawl evidence quality, source quality, noise ratio, or calibration readiness, use the repo-scoped skill at `.agents/skills/evaluate-potm-workflow/SKILL.md`. Run `scripts/evaluate_potm_workflow.py --date YYYY-MM-DD`; pass `--discover` only when candidate evidence needs to be fetched first.
+
 ## Source Policy
 
 - Do not commit `raw/*.pdf` or `raw/**/*.pdf`.

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Evaluate POTM Workflow"
+  short_description: "Evaluate POTM evidence quality"
+  default_prompt: "Run the POTM workflow evaluation for the latest match day."

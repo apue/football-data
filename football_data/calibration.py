@@ -154,8 +154,10 @@ def _potm_search_queries(match: dict[str, Any]) -> list[str]:
     away = match["away_team"]
     match_no = int(match["match_no"])
     return [
-        f"FIFA World Cup 2026 Match {match_no} {home} {away} Player of the Match",
-        f"{home} {away} FIFA 2026 player of the match POTM",
+        f'site:fifa.com "Player of the Match" "{home}" "{away}" "Match {match_no}"',
+        f'"{home} {away}" "Player of the Match" "FIFA World Cup 2026"',
+        f'"{home}" "{away}" "Player of the Match" "FIFA World Cup 2026"',
+        f'"{home}" "{away}" POTM "FIFA World Cup 2026"',
     ]
 
 

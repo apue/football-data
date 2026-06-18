@@ -34,11 +34,13 @@ By default this repository does not redistribute original PDF files. Local PDF c
 - `reports/editorial/*.md` - human-readable Editor's Choices reports when published
 - `calibration/potm-labels.json` - optional weak labels for Player of the Match calibration
 - `calibration/reports/*.md` - POTM/model rank-diff reports when calibration is run
+- `calibration/evaluation/*.md` - POTM evidence quality and calibration-readiness reports
 - `site/editorial/` - rendered Editor's Choices JSON/HTML for the demo site
 - `site/editorial/*/fact_bank.zh.json` - raw Chinese fact bank for from-scratch Chinese sports-editor copy
 - `site/editorial/*/brief.zh.json` and `brief.en.json` - legacy Chinese draft brief plus English editorial input
 - `.agents/skills/publish-editors-choices/` - repo-scoped Codex skill for the editorial publishing workflow
 - `.agents/skills/calibrate-potm-labels/` - repo-scoped Codex skill for Firecrawl-assisted scoring calibration
+- `.agents/skills/evaluate-potm-workflow/` - repo-scoped Codex skill for POTM workflow evaluation
 - GitHub Pages demo generated from the latest SQLite database: https://apue.github.io/football-data/
 
 ## Current SQLite Coverage
@@ -97,6 +99,7 @@ Optional Firecrawl search is supported through Keypool for evidence discovery:
 
 ```bash
 python scripts/discover_potm_evidence.py --date YYYY-MM-DD
+python scripts/evaluate_potm_workflow.py --date YYYY-MM-DD
 python scripts/search_potm_evidence.py "FIFA 2026 Match 21 Ghana Panama Player of the Match" --limit 5
 python scripts/calibrate_potm.py --date YYYY-MM-DD
 ```
