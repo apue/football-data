@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import html
 import json
+import re
 import sqlite3
 from datetime import datetime, timezone
 from pathlib import Path
@@ -58,15 +59,99 @@ def write_editorial_artifacts(
     dated_path.mkdir(parents=True, exist_ok=True)
     reports_path.mkdir(parents=True, exist_ok=True)
 
-    json_text = json.dumps(report, ensure_ascii=False, indent=2) + "\n"
-    (editorial_path / "latest.json").write_text(json_text, encoding="utf-8")
-    (dated_path / "choices.json").write_text(json_text, encoding="utf-8")
-    (dated_path / "index.html").write_text(_render_editorial_page(report), encoding="utf-8")
-    (editorial_path / "index.html").write_text(_render_editorial_index(report), encoding="utf-8")
-    (reports_path / f"{report['match_date']}.md").write_text(
-        _render_markdown_report(report),
+    source_markdown_path = f"reports/editorial/{report['match_date']}.md"
+    markdown_text = _render_markdown_report(report)
+    evidence = _evidence_payload(report)
+    compiled = compile_editorial_markdown(
+        evidence,
+        markdown_text,
+        source_markdown_path=source_markdown_path,
+    )
+
+    (reports_path / f"{report['match_date']}.md").write_text(markdown_text, encoding="utf-8")
+    (dated_path / "evidence.json").write_text(
+        json.dumps(evidence, ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
     )
+    write_compiled_editorial_artifacts(compiled, site_dir=site_path)
+
+
+def render_editorial_markdown_file(
+    *,
+    match_date: str,
+    site_dir: str | Path = "site",
+    reports_dir: str | Path = "reports",
+) -> dict[str, Any]:
+    site_path = Path(site_dir)
+    report_path = Path(reports_dir) / "editorial" / f"{match_date}.md"
+    evidence_path = site_path / "editorial" / match_date / "evidence.json"
+    if not report_path.exists():
+        raise FileNotFoundError(f"Missing editorial Markdown: {report_path}")
+    if not evidence_path.exists():
+        raise FileNotFoundError(f"Missing editorial evidence: {evidence_path}")
+    evidence = json.loads(evidence_path.read_text(encoding="utf-8"))
+    markdown_text = report_path.read_text(encoding="utf-8")
+    compiled = compile_editorial_markdown(
+        evidence,
+        markdown_text,
+        source_markdown_path=f"reports/editorial/{match_date}.md",
+    )
+    write_compiled_editorial_artifacts(compiled, site_dir=site_path)
+    return compiled
+
+
+def write_compiled_editorial_artifacts(
+    compiled: dict[str, Any],
+    site_dir: str | Path = "site",
+) -> None:
+    site_path = Path(site_dir)
+    editorial_path = site_path / "editorial"
+    dated_path = editorial_path / compiled["match_date"]
+    dated_path.mkdir(parents=True, exist_ok=True)
+    editorial_path.mkdir(parents=True, exist_ok=True)
+
+    json_text = json.dumps(compiled, ensure_ascii=False, indent=2) + "\n"
+    (editorial_path / "latest.json").write_text(json_text, encoding="utf-8")
+    (dated_path / "choices.json").write_text(json_text, encoding="utf-8")
+    (dated_path / "index.html").write_text(_render_editorial_page(compiled), encoding="utf-8")
+    (editorial_path / "index.html").write_text(_render_editorial_index(compiled), encoding="utf-8")
+
+
+def compile_editorial_markdown(
+    evidence: dict[str, Any],
+    markdown_text: str,
+    *,
+    source_markdown_path: str,
+) -> dict[str, Any]:
+    choice_sections = _parse_choice_sections(markdown_text)
+    evidence_choices = evidence.get("choices", [])
+    if len(choice_sections) != len(evidence_choices):
+        raise ValueError(
+            "Markdown choice count does not match evidence: "
+            f"{len(choice_sections)} markdown sections vs {len(evidence_choices)} evidence choices"
+        )
+
+    compiled_choices = []
+    for choice, section in zip(evidence_choices, choice_sections, strict=True):
+        compiled_choice = dict(choice)
+        compiled_choice.pop("narrative", None)
+        compiled_choice["content"] = {
+            "en": _compile_language_content(section["en"]),
+            "zh": _compile_language_content(section["zh"]),
+        }
+        compiled_choices.append(compiled_choice)
+
+    return {
+        "schema_version": 2,
+        "generated_at": evidence["generated_at"],
+        "compiled_at": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
+        "match_date": evidence["match_date"],
+        "scoring_version": evidence["scoring_version"],
+        "source_markdown_path": source_markdown_path,
+        "matches": evidence["matches"],
+        "choices": compiled_choices,
+        "audit": evidence["audit"],
+    }
 
 
 def _load_scoring_config(path: str | Path) -> dict[str, Any]:
@@ -526,6 +611,99 @@ def _build_audit(
     return alerts
 
 
+def _evidence_payload(report: dict[str, Any]) -> dict[str, Any]:
+    evidence = json.loads(json.dumps(report, ensure_ascii=False))
+    for choice in evidence["choices"]:
+        choice.pop("narrative", None)
+    return evidence
+
+
+def _parse_choice_sections(markdown_text: str) -> list[dict[str, list[str]]]:
+    sections: list[dict[str, list[str]]] = []
+    current: list[str] | None = None
+    for line in markdown_text.splitlines():
+        if line.startswith("### "):
+            if current is not None:
+                sections.append(_parse_choice_block(current))
+            current = []
+            continue
+        if current is not None:
+            current.append(line)
+    if current is not None:
+        sections.append(_parse_choice_block(current))
+    return sections
+
+
+def _parse_choice_block(lines: list[str]) -> dict[str, list[str]]:
+    en: list[str] = []
+    zh: list[str] = []
+    current: list[str] | None = None
+    for line in lines:
+        if line == "#### English":
+            current = en
+            continue
+        if line == "#### 中文":
+            current = zh
+            continue
+        if line.startswith("Evidence:") or line.startswith("依据："):
+            current = None
+            continue
+        if current is not None:
+            current.append(line)
+    if not en or not zh:
+        raise ValueError("Each editorial choice must include English and 中文 sections")
+    return {"en": en, "zh": zh}
+
+
+def _compile_language_content(lines: list[str]) -> dict[str, str]:
+    content_lines = _trim_blank_lines(lines)
+    if not content_lines:
+        raise ValueError("Editorial language section is empty")
+    title = _extract_markdown_title(content_lines[0])
+    body_lines = content_lines[1:] if title else content_lines
+    if not title:
+        title = content_lines[0]
+    return {
+        "title": title,
+        "html": _markdown_blocks_to_html(body_lines),
+    }
+
+
+def _extract_markdown_title(line: str) -> str:
+    match = re.fullmatch(r"\*\*(.+)\*\*", line.strip())
+    return match.group(1).strip() if match else ""
+
+
+def _markdown_blocks_to_html(lines: list[str]) -> str:
+    blocks: list[str] = []
+    current: list[str] = []
+    for line in lines:
+        if line.strip():
+            current.append(line.strip())
+            continue
+        if current:
+            blocks.append(" ".join(current))
+            current = []
+    if current:
+        blocks.append(" ".join(current))
+    return "".join(f"<p>{_render_inline_markdown(block)}</p>" for block in blocks)
+
+
+def _render_inline_markdown(text: str) -> str:
+    escaped = html.escape(text, quote=False)
+    return re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", escaped)
+
+
+def _trim_blank_lines(lines: list[str]) -> list[str]:
+    start = 0
+    end = len(lines)
+    while start < end and not lines[start].strip():
+        start += 1
+    while end > start and not lines[end - 1].strip():
+        end -= 1
+    return lines[start:end]
+
+
 def _render_editorial_page(report: dict[str, Any]) -> str:
     return f"""<!doctype html>
 <html lang="en">
@@ -574,6 +752,8 @@ def _render_editorial_index(report: dict[str, Any]) -> str:
 def _choices_html(choices: list[dict[str, Any]]) -> str:
     cards = []
     for choice in choices:
+        en = choice["content"]["en"]
+        zh = choice["content"]["zh"]
         chips = "".join(
             f"<span>{html.escape(chip, quote=False)}</span>"
             for chip in choice["evidence_chips"]["en"]
@@ -585,10 +765,10 @@ def _choices_html(choices: list[dict[str, Any]]) -> str:
         <p class="award">{html.escape(choice["award_label"]["en"], quote=False)}</p>
         <h2>{html.escape(choice["player_name"], quote=False)}</h2>
         <p class="meta">{html.escape(choice["team"], quote=False)} vs {html.escape(choice["opponent"], quote=False)} · Match {choice["match_no"]}</p>
-        <h3>{html.escape(choice["narrative"]["en"]["title"], quote=False)}</h3>
-        <p>{html.escape(choice["narrative"]["en"]["body"], quote=False)}</p>
-        <h3>{html.escape(choice["narrative"]["zh"]["title"], quote=False)}</h3>
-        <p>{html.escape(choice["narrative"]["zh"]["body"], quote=False)}</p>
+        <h3>{html.escape(en["title"], quote=False)}</h3>
+        {en["html"]}
+        <h3>{html.escape(zh["title"], quote=False)}</h3>
+        {zh["html"]}
       </div>
       <aside>
         <strong>{choice["score"]:.1f}</strong>
@@ -607,31 +787,37 @@ def _render_markdown_report(report: dict[str, Any]) -> str:
         "",
         f"Scoring version: `{report['scoring_version']}`",
         "",
-        "## English",
+        "Data-informed selections from the structured PMSR dataset. These are not official FIFA awards.",
+        "",
+        "## Matches Covered",
         "",
     ]
+    for match in report["matches"]:
+        lines.append(
+            f"- Match {match['match_no']}: {match['home_team']} {match['home_score']}-"
+            f"{match['away_score']} {match['away_team']}"
+        )
+    lines.extend(["", "## Choices", ""])
     for choice in report["choices"]:
         lines.extend(
             [
                 f"### {choice['award_label']['en']}: {choice['player_name']}",
                 "",
+                f"_{choice['team']} vs {choice['opponent']} · Match {choice['match_no']}_",
+                "",
+                "#### English",
+                "",
                 f"**{choice['narrative']['en']['title']}**",
                 "",
                 choice["narrative"]["en"]["body"],
                 "",
-                "Evidence: " + ", ".join(choice["evidence_chips"]["en"]),
-                "",
-            ]
-        )
-    lines.extend(["## 中文", ""])
-    for choice in report["choices"]:
-        lines.extend(
-            [
-                f"### {choice['award_label']['zh']}：{choice['player_name']}",
+                "#### 中文",
                 "",
                 f"**{choice['narrative']['zh']['title']}**",
                 "",
                 choice["narrative"]["zh"]["body"],
+                "",
+                "Evidence: " + ", ".join(choice["evidence_chips"]["en"]),
                 "",
                 "依据：" + "，".join(choice["evidence_chips"]["zh"]),
                 "",

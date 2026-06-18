@@ -18,7 +18,9 @@ Read these before acting:
 ## Core Rules
 
 - Treat `scripts/generate_editorial.py` as the deterministic evidence generator.
-- Let Codex revise the narrative from the generated evidence; do not invent facts outside the JSON/SQLite evidence.
+- Treat `reports/editorial/YYYY-MM-DD.md` as the human-readable editorial source.
+- Let Codex revise Markdown from generated evidence; do not invent facts outside `evidence.json`/SQLite.
+- Run `scripts/render_editorial.py` after Markdown edits to compile frontend JSON/HTML.
 - Use local match dates from `matches.match_date`, not Beijing date or workflow run time.
 - Generate both English and Chinese copy. They should express the same judgment but do not need to be literal translations.
 - Prefer a short, human editorial note over metric dumping.

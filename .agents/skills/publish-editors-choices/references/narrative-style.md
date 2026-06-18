@@ -2,6 +2,8 @@
 
 Editor’s Choices are not dashboard prose. Write like a data-aware football editor.
 
+Markdown is the human-readable source. Write and review copy in `reports/editorial/YYYY-MM-DD.md`; never make editorial wording changes directly in compiled frontend JSON.
+
 ## Principles
 
 - Lead with the judgment, then give the reason.
@@ -12,7 +14,7 @@ Editor’s Choices are not dashboard prose. Write like a data-aware football edi
   - `offers_received`, `in_between`, `in_behind`: finding pockets, receiving between lines / 在防线之间接应、身后接应
   - `possession_regains`, `possession_interrupted`: disrupting rhythm, winning the ball back / 打断节奏、夺回球权
 - Do not pretend to have watched video. Say “PMSR profile”, “data profile”, or “数据画像” when the claim comes from data.
-- Do not list every metric. Keep detailed components in JSON for audit.
+- Do not list every metric. Keep detailed components in `evidence.json` for audit.
 - Hidden Gem is optional. If the evidence is not strong, do not force one.
 
 ## English Tone
@@ -43,7 +45,8 @@ Bad:
 
 Before publishing, check:
 
-- Every claim is supported by `choices.json` or SQLite.
+- Every claim is supported by `evidence.json` or SQLite.
 - The English and Chinese versions make the same selection argument.
 - The copy does not sound like a metric table.
 - No external match observation is implied unless an external source was actually checked.
+- After Markdown edits, run `scripts/render_editorial.py --date YYYY-MM-DD`.

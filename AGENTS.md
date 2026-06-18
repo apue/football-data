@@ -45,6 +45,8 @@ Expected generated outputs:
 
 When the user asks to publish or check Editor's Choices, daily picks, 每日精选, Player of the Day, or hidden gems, use the repo-scoped skill at `.agents/skills/publish-editors-choices/SKILL.md`.
 
+Use `reports/editorial/YYYY-MM-DD.md` as the human review surface. Do not ask the user to review compiled JSON; regenerate frontend JSON/HTML with `scripts/render_editorial.py` after Markdown edits.
+
 The editorial workflow generates opinionated content, so prefer a PR branch over direct pushes to `main` unless the user explicitly asks for direct publication.
 
 ## Source Policy

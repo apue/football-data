@@ -21,9 +21,9 @@ def test_demo_uses_collapsed_long_sections_and_insight_tables(tmp_path):
                 "en": ["hat-trick profile", "high shot quality"],
                 "zh": ["帽子戏法级别的进攻画像", "射门质量突出"]
               },
-              "narrative": {
-                "en": {"title": "The clearest attacking case", "body": "Messi gave the data a simple story to tell."},
-                "zh": {"title": "最清楚的进攻答案", "body": "梅西让这一天的数据故事变得很直接。"}
+              "content": {
+                "en": {"title": "The clearest attacking case", "html": "<p>Messi gave the data a simple story to tell.</p>"},
+                "zh": {"title": "最清楚的进攻答案", "html": "<p>梅西让这一天的数据故事变得很直接。</p>"}
               }
             }
           ]

@@ -7,6 +7,7 @@ Added the first editorial publishing workflow:
 - Added repo-scoped Codex skill `.agents/skills/publish-editors-choices`.
 - Added configurable scoring weights in `config/scoring/v0.1.json`.
 - Added `scripts/generate_editorial.py` to generate JSON, HTML, Markdown, and homepage cards.
+- Added `scripts/render_editorial.py` so human-readable Markdown can be compiled into frontend JSON/HTML.
 - Added bilingual English/Chinese editorial narratives based on structured PMSR evidence.
 - Added tests for editorial report generation, artifacts, homepage integration, and project skill presence.
 

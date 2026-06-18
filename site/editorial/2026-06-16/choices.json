@@ -1,8 +1,10 @@
 {
-  "schema_version": 1,
-  "generated_at": "2026-06-18T02:58:17+00:00",
+  "schema_version": 2,
+  "generated_at": "2026-06-18T03:24:25+00:00",
+  "compiled_at": "2026-06-18T03:24:25+00:00",
   "match_date": "2026-06-16",
   "scoring_version": "v0.1",
+  "source_markdown_path": "reports/editorial/2026-06-16.md",
   "matches": [
     {
       "match_key": "FIFA-2026-M17-FRA-SEN",
@@ -127,14 +129,14 @@
           "射门质量突出"
         ]
       },
-      "narrative": {
+      "content": {
         "en": {
           "title": "The clearest case of the day",
-          "body": "Lionel MESSI made the headline and the data agree. A hat-trick is already the story, but the PMSR profile also shows a player connecting the finish with repeated line-breaking involvement against Algeria."
+          "html": "<p>Lionel MESSI made the headline and the data agree. A hat-trick is already the story, but the PMSR profile also shows a player connecting the finish with repeated line-breaking involvement against Algeria.</p>"
         },
         "zh": {
           "title": "今天最清楚的答案",
-          "body": "Lionel MESSI 这场不用复杂包装：帽子戏法本身就是最直接的比赛叙事。更重要的是，PMSR 的进攻画像也支持这个判断，他不只是完成终结，还持续参与打穿防线的过程。"
+          "html": "<p>Lionel MESSI 这场不用复杂包装：帽子戏法本身就是最直接的比赛叙事。更重要的是，PMSR 的进攻画像也支持这个判断，他不只是完成终结，还持续参与打穿防线的过程。</p>"
         }
       }
     },
@@ -215,14 +217,14 @@
           "射门质量突出"
         ]
       },
-      "narrative": {
+      "content": {
         "en": {
           "title": "The clearest case of the day",
-          "body": "Kylian MBAPPE gave the day a direct attacking answer. The brace is the obvious part; the more interesting signal is how often the movement kept pulling the defence toward its own goal."
+          "html": "<p>Kylian MBAPPE gave the day a direct attacking answer. The brace is the obvious part; the more interesting signal is how often the movement kept pulling the defence toward its own goal.</p>"
         },
         "zh": {
           "title": "今天最清楚的答案",
-          "body": "Kylian MBAPPE 给了这一天一个很直接的进攻答案。梅开二度是最醒目的部分，但更有意思的是，他的跑动和接应一直在把防线往身后拉。"
+          "html": "<p>Kylian MBAPPE 给了这一天一个很直接的进攻答案。梅开二度是最醒目的部分，但更有意思的是，他的跑动和接应一直在把防线往身后拉。</p>"
         }
       }
     },
@@ -305,14 +307,14 @@
           "在防线之间活跃"
         ]
       },
-      "narrative": {
+      "content": {
         "en": {
           "title": "The clearest case of the day",
-          "body": "Nicolas SEIWALD is the non-scorer who forced his way into the top tier. The PMSR profile reads like midfield control: constant availability, repeated line breaks, and enough defensive work to keep the game tilted."
+          "html": "<p>Nicolas SEIWALD is the non-scorer who forced his way into the top tier. The PMSR profile reads like midfield control: constant availability, repeated line breaks, and enough defensive work to keep the game tilted.</p>"
         },
         "zh": {
           "title": "今天最清楚的答案",
-          "body": "Nicolas SEIWALD 是那种没有靠进球也挤进主选的人。PMSR 里的画像更像是中场控制：持续接应、反复打穿防线，也有足够的防守参与把比赛留在自己一侧。"
+          "html": "<p>Nicolas SEIWALD 是那种没有靠进球也挤进主选的人。PMSR 里的画像更像是中场控制：持续接应、反复打穿防线，也有足够的防守参与把比赛留在自己一侧。</p>"
         }
       }
     },
@@ -381,14 +383,14 @@
           "推进很活跃"
         ]
       },
-      "narrative": {
+      "content": {
         "en": {
           "title": "A progression profile worth separating from the scoreline",
-          "body": "Rayan AIT-NOURI is the kind of player this dataset is built to surface. The value is not just one highlight; it is the repeated work of moving the game through line breaks and carries."
+          "html": "<p>Rayan AIT-NOURI is the kind of player this dataset is built to surface. The value is not just one highlight; it is the repeated work of moving the game through line breaks and carries.</p>"
         },
         "zh": {
           "title": "不只看比分时，他的推进会被看见",
-          "body": "Rayan AIT-NOURI 是这类数据最应该挖出来的人。亮点不在某一次镜头，而在反复把球带过压力区、打穿防线的过程里。"
+          "html": "<p>Rayan AIT-NOURI 是这类数据最应该挖出来的人。亮点不在某一次镜头，而在反复把球带过压力区、打穿防线的过程里。</p>"
         }
       }
     },
@@ -463,14 +465,14 @@
           "持续破坏进攻"
         ]
       },
-      "narrative": {
+      "content": {
         "en": {
           "title": "The day’s most disruptive defensive profile",
-          "body": "ABDALLAH NASIB reads as a defensive choice because the work shows up in interruptions, regains, and pressure rather than a single obvious moment. That is exactly the kind of performance a normal recap can flatten."
+          "html": "<p>ABDALLAH NASIB reads as a defensive choice because the work shows up in interruptions, regains, and pressure rather than a single obvious moment. That is exactly the kind of performance a normal recap can flatten.</p>"
         },
         "zh": {
           "title": "把对手节奏切碎的人",
-          "body": "ABDALLAH NASIB 的价值不一定会在集锦里变成一个清楚瞬间。PMSR 里更明显的是，他通过夺回球权、打断进攻和持续施压，把对手的推进节奏切碎。"
+          "html": "<p>ABDALLAH NASIB 的价值不一定会在集锦里变成一个清楚瞬间。PMSR 里更明显的是，他通过夺回球权、打断进攻和持续施压，把对手的推进节奏切碎。</p>"
         }
       }
     },
@@ -533,14 +535,14 @@
           "在防线之间活跃"
         ]
       },
-      "narrative": {
+      "content": {
         "en": {
           "title": "A quieter performance the data keeps pulling back into view",
-          "body": "Rodrigo DE PAUL is not the easiest headline, which is the point. The data profile suggests a player who shaped the game through repeat actions rather than one clean clip."
+          "html": "<p>Rodrigo DE PAUL is not the easiest headline, which is the point. The data profile suggests a player who shaped the game through repeat actions rather than one clean clip.</p>"
         },
         "zh": {
           "title": "一个不那么显眼但值得被看见的表现",
-          "body": "Rodrigo DE PAUL 不是最容易被写进标题的人，这反而是他入选的理由。他的贡献来自一连串重复动作，而不是一个足够响亮的单一片段。"
+          "html": "<p>Rodrigo DE PAUL 不是最容易被写进标题的人，这反而是他入选的理由。他的贡献来自一连串重复动作，而不是一个足够响亮的单一片段。</p>"
         }
       }
     }

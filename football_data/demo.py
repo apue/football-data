@@ -379,10 +379,10 @@ def _editorial_section(report: dict[str, object]) -> str:
         if not isinstance(choice, Mapping):
             continue
         label = _nested_value(choice, "award_label", "en")
-        title = _nested_value(choice, "narrative", "en", "title")
-        body = _nested_value(choice, "narrative", "en", "body")
-        zh_title = _nested_value(choice, "narrative", "zh", "title")
-        zh_body = _nested_value(choice, "narrative", "zh", "body")
+        title = _editorial_title(choice, "en")
+        body_html = _editorial_body_html(choice, "en")
+        zh_title = _editorial_title(choice, "zh")
+        zh_body_html = _editorial_body_html(choice, "zh")
         chips = _nested_value(choice, "evidence_chips", "en")
         if isinstance(chips, list):
             chip_html = "".join(
@@ -400,9 +400,9 @@ def _editorial_section(report: dict[str, object]) -> str:
             f"{html.escape(_format_value(choice.get('opponent')), quote=False)}"
             f" · Match {html.escape(_format_value(choice.get('match_no')), quote=False)}</p>"
             f"<h3>{html.escape(_format_value(title), quote=False)}</h3>"
-            f"<p>{html.escape(_format_value(body), quote=False)}</p>"
+            f"{body_html}"
             f"<h3>{html.escape(_format_value(zh_title), quote=False)}</h3>"
-            f"<p>{html.escape(_format_value(zh_body), quote=False)}</p>"
+            f"{zh_body_html}"
             "</div>"
             "<aside>"
             f"<strong>{html.escape(_format_value(choice.get('score')), quote=False)}</strong>"
@@ -419,6 +419,23 @@ def _editorial_section(report: dict[str, object]) -> str:
         + "".join(cards)
         + "</section>"
     )
+
+
+def _editorial_title(choice: Mapping[str, object], lang: str) -> object:
+    return _nested_value(choice, "content", lang, "title") or _nested_value(
+        choice,
+        "narrative",
+        lang,
+        "title",
+    )
+
+
+def _editorial_body_html(choice: Mapping[str, object], lang: str) -> str:
+    content_html = _nested_value(choice, "content", lang, "html")
+    if content_html:
+        return _format_value(content_html)
+    body = _nested_value(choice, "narrative", lang, "body")
+    return f"<p>{html.escape(_format_value(body), quote=False)}</p>"
 
 
 def _table(rows: object) -> str:

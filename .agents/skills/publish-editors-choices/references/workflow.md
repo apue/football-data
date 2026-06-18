@@ -30,22 +30,22 @@ python scripts/generate_editorial.py --date YYYY-MM-DD
 
 Outputs:
 
+- `reports/editorial/YYYY-MM-DD.md`
+- `site/editorial/YYYY-MM-DD/evidence.json`
 - `site/editorial/latest.json`
 - `site/editorial/YYYY-MM-DD/choices.json`
 - `site/editorial/YYYY-MM-DD/index.html`
 - `site/editorial/index.html`
-- `reports/editorial/YYYY-MM-DD.md`
 - `site/index.html` is rebuilt by default so the homepage shows the latest cards.
 
-5. Read the generated JSON and Markdown. Revise narratives only when the evidence supports the wording.
+Markdown is the human-readable source. `evidence.json` is the structured audit source. `choices.json` is compiled frontend data with rendered HTML.
 
-6. If you revise narratives by editing JSON or Markdown manually, rebuild the homepage:
+5. Read `reports/editorial/YYYY-MM-DD.md`. Revise only the Markdown, and only when `evidence.json` or SQLite supports the wording.
+
+6. If you revise Markdown, compile it back to frontend JSON/HTML:
 
 ```bash
-python - <<'PY'
-from football_data.demo import build_demo_site
-build_demo_site("data/latest.sqlite", "site", "manifests")
-PY
+python scripts/render_editorial.py --date YYYY-MM-DD
 ```
 
 7. Verify:
