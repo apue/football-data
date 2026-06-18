@@ -1,0 +1,477 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-06-18T08:34:28+00:00",
+  "match_date": "2026-06-17",
+  "scoring_version": "v0.1",
+  "matches": [
+    {
+      "match_key": "FIFA-2026-M21-GHA-PAN",
+      "match_no": 21,
+      "match_date": "2026-06-17",
+      "kickoff_time": "19:00",
+      "stadium": "Toronto Stadium",
+      "home_team": "Ghana",
+      "away_team": "Panama",
+      "home_score": 1,
+      "away_score": 0
+    },
+    {
+      "match_key": "FIFA-2026-M22-ENG-CRO",
+      "match_no": 22,
+      "match_date": "2026-06-17",
+      "kickoff_time": "15:00",
+      "stadium": "Dallas Stadium",
+      "home_team": "England",
+      "away_team": "Croatia",
+      "home_score": 4,
+      "away_score": 2
+    },
+    {
+      "match_key": "FIFA-2026-M23-POR-COD",
+      "match_no": 23,
+      "match_date": "2026-06-17",
+      "kickoff_time": "12:00",
+      "stadium": "Houston Stadium",
+      "home_team": "Portugal",
+      "away_team": "Congo DR",
+      "home_score": 1,
+      "away_score": 1
+    },
+    {
+      "match_key": "FIFA-2026-M24-UZB-COL",
+      "match_no": 24,
+      "match_date": "2026-06-17",
+      "kickoff_time": "20:00",
+      "stadium": "Mexico City Stadium",
+      "home_team": "Uzbekistan",
+      "away_team": "Colombia",
+      "home_score": 1,
+      "away_score": 3
+    }
+  ],
+  "choices": [
+    {
+      "award_type": "player_of_the_day",
+      "award_label": {
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
+      },
+      "rank": 1,
+      "match_key": "FIFA-2026-M21-GHA-PAN",
+      "match_no": 21,
+      "player_no": 16,
+      "player_name": "Andres ANDRADE",
+      "team": "Panama",
+      "opponent": "Ghana",
+      "position": "DF",
+      "score": 75.6,
+      "primary_score": "composite_score",
+      "role_scores": {
+        "attacking_threat": 5.05,
+        "progressor": 69.64,
+        "off_ball": 29.5,
+        "defensive": 31.4,
+        "physical": 16.43
+      },
+      "score_components": [
+        {
+          "metric": "line_breaks_completed",
+          "value": 34,
+          "weight": 2.0,
+          "contribution": 68.0,
+          "score": "progressor"
+        },
+        {
+          "metric": "offers_received",
+          "value": 24,
+          "weight": 1.0,
+          "contribution": 24.0,
+          "score": "off_ball"
+        },
+        {
+          "metric": "possession_regains",
+          "value": 11,
+          "weight": 1.3,
+          "contribution": 14.3,
+          "score": "defensive"
+        },
+        {
+          "metric": "total_distance_m",
+          "value": 10233.3,
+          "weight": 0.001,
+          "contribution": 10.23,
+          "score": "physical"
+        },
+        {
+          "metric": "top_speed_kmh",
+          "value": 31,
+          "weight": 0.2,
+          "contribution": 6.2,
+          "score": "physical"
+        },
+        {
+          "metric": "possession_interrupted",
+          "value": 5,
+          "weight": 1.0,
+          "contribution": 5.0,
+          "score": "defensive"
+        }
+      ],
+      "evidence_chips": {
+        "en": [
+          "repeated line breaks",
+          "ball-winning profile"
+        ],
+        "zh": [
+          "持续打穿防线",
+          "夺回球权能力突出"
+        ]
+      }
+    },
+    {
+      "award_type": "player_of_the_day",
+      "award_label": {
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
+      },
+      "rank": 2,
+      "match_key": "FIFA-2026-M23-POR-COD",
+      "match_no": 23,
+      "player_no": 15,
+      "player_name": "JOAO NEVES",
+      "team": "Portugal",
+      "opponent": "Congo DR",
+      "position": "MF",
+      "score": 63.7,
+      "primary_score": "composite_score",
+      "role_scores": {
+        "attacking_threat": 17.95,
+        "progressor": 32.74,
+        "off_ball": 44.9,
+        "defensive": 17.4,
+        "physical": 17.82
+      },
+      "score_components": [
+        {
+          "metric": "line_breaks_completed",
+          "value": 14,
+          "weight": 2.0,
+          "contribution": 28.0,
+          "score": "progressor"
+        },
+        {
+          "metric": "offers_received",
+          "value": 23,
+          "weight": 1.0,
+          "contribution": 23.0,
+          "score": "off_ball"
+        },
+        {
+          "metric": "total_distance_m",
+          "value": 11977.1,
+          "weight": 0.001,
+          "contribution": 11.98,
+          "score": "physical"
+        },
+        {
+          "metric": "in_behind",
+          "value": 19,
+          "weight": 0.6,
+          "contribution": 11.4,
+          "score": "off_ball"
+        },
+        {
+          "metric": "total_offers",
+          "value": 69,
+          "weight": 0.1,
+          "contribution": 6.9,
+          "score": "off_ball"
+        },
+        {
+          "metric": "possession_regains",
+          "value": 5,
+          "weight": 1.3,
+          "contribution": 6.5,
+          "score": "defensive"
+        }
+      ],
+      "evidence_chips": {
+        "en": [
+          "goal scorer"
+        ],
+        "zh": [
+          "取得进球"
+        ]
+      }
+    },
+    {
+      "award_type": "player_of_the_day",
+      "award_label": {
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
+      },
+      "rank": 3,
+      "match_key": "FIFA-2026-M23-POR-COD",
+      "match_no": 23,
+      "player_no": 23,
+      "player_name": "VITINHA",
+      "team": "Portugal",
+      "opponent": "Congo DR",
+      "position": "MF",
+      "score": 62.9,
+      "primary_score": "composite_score",
+      "role_scores": {
+        "attacking_threat": 5.4,
+        "progressor": 65.4,
+        "off_ball": 38.1,
+        "defensive": 1.85,
+        "physical": 16.5
+      },
+      "score_components": [
+        {
+          "metric": "line_breaks_completed",
+          "value": 27,
+          "weight": 2.0,
+          "contribution": 54.0,
+          "score": "progressor"
+        },
+        {
+          "metric": "offers_received",
+          "value": 27,
+          "weight": 1.0,
+          "contribution": 27.0,
+          "score": "off_ball"
+        },
+        {
+          "metric": "total_distance_m",
+          "value": 10224.6,
+          "weight": 0.001,
+          "contribution": 10.22,
+          "score": "physical"
+        },
+        {
+          "metric": "top_speed_kmh",
+          "value": 31.4,
+          "weight": 0.2,
+          "contribution": 6.28,
+          "score": "physical"
+        },
+        {
+          "metric": "ball_progressions",
+          "value": 6,
+          "weight": 1.0,
+          "contribution": 6.0,
+          "score": "progressor"
+        },
+        {
+          "metric": "in_between",
+          "value": 14,
+          "weight": 0.4,
+          "contribution": 5.6,
+          "score": "off_ball"
+        }
+      ],
+      "evidence_chips": {
+        "en": [
+          "repeated line breaks",
+          "found again and again"
+        ],
+        "zh": [
+          "持续打穿防线",
+          "持续接应"
+        ]
+      }
+    },
+    {
+      "award_type": "progression_pick",
+      "award_label": {
+        "en": "Progression Pick",
+        "zh": "推进精选"
+      },
+      "rank": 1,
+      "match_key": "FIFA-2026-M23-POR-COD",
+      "match_no": 23,
+      "player_no": 4,
+      "player_name": "TOMAS ARAUJO",
+      "team": "Portugal",
+      "opponent": "Congo DR",
+      "position": "DF",
+      "score": 67.5,
+      "primary_score": "progressor",
+      "role_scores": {
+        "attacking_threat": 1.65,
+        "progressor": 67.46,
+        "off_ball": 8.7,
+        "defensive": 16.75,
+        "physical": 16.09
+      },
+      "score_components": [
+        {
+          "metric": "line_breaks_completed",
+          "value": 32,
+          "weight": 2.0,
+          "contribution": 64.0
+        },
+        {
+          "metric": "passes_completed",
+          "value": 98,
+          "weight": 0.02,
+          "contribution": 1.96
+        },
+        {
+          "metric": "ball_progressions",
+          "value": 1,
+          "weight": 1.0,
+          "contribution": 1.0
+        },
+        {
+          "metric": "step_ins",
+          "value": 1,
+          "weight": 0.5,
+          "contribution": 0.5
+        }
+      ],
+      "evidence_chips": {
+        "en": [
+          "repeated line breaks"
+        ],
+        "zh": [
+          "持续打穿防线"
+        ]
+      }
+    },
+    {
+      "award_type": "defensive_pick",
+      "award_label": {
+        "en": "Defensive Pick",
+        "zh": "防守精选"
+      },
+      "rank": 1,
+      "match_key": "FIFA-2026-M21-GHA-PAN",
+      "match_no": 21,
+      "player_no": 4,
+      "player_name": "Jonas ADJETEY",
+      "team": "Ghana",
+      "opponent": "Panama",
+      "position": "DF",
+      "score": 36.5,
+      "primary_score": "defensive",
+      "role_scores": {
+        "attacking_threat": 4.6,
+        "progressor": 16.42,
+        "off_ball": 8.3,
+        "defensive": 36.45,
+        "physical": 17.51
+      },
+      "score_components": [
+        {
+          "metric": "possession_regains",
+          "value": 9,
+          "weight": 1.3,
+          "contribution": 11.7
+        },
+        {
+          "metric": "possession_interrupted",
+          "value": 9,
+          "weight": 1.0,
+          "contribution": 9.0
+        },
+        {
+          "metric": "clearances",
+          "value": 9,
+          "weight": 0.5,
+          "contribution": 4.5
+        },
+        {
+          "metric": "blocks",
+          "value": 4,
+          "weight": 1.0,
+          "contribution": 4.0
+        },
+        {
+          "metric": "tackles_won",
+          "value": 2,
+          "weight": 1.5,
+          "contribution": 3.0
+        },
+        {
+          "metric": "interceptions",
+          "value": 2,
+          "weight": 1.5,
+          "contribution": 3.0
+        }
+      ],
+      "evidence_chips": {
+        "en": [
+          "ball-winning profile",
+          "disrupted attacks"
+        ],
+        "zh": [
+          "夺回球权能力突出",
+          "持续破坏进攻"
+        ]
+      }
+    },
+    {
+      "award_type": "hidden_gem",
+      "award_label": {
+        "en": "Hidden Gem",
+        "zh": "隐藏亮点"
+      },
+      "rank": 1,
+      "match_key": "FIFA-2026-M23-POR-COD",
+      "match_no": 23,
+      "player_no": 8,
+      "player_name": "BRUNO FERNANDES",
+      "team": "Portugal",
+      "opponent": "Congo DR",
+      "position": "MF",
+      "score": 52.4,
+      "primary_score": "off_ball",
+      "role_scores": {
+        "attacking_threat": 10.35,
+        "progressor": 25.36,
+        "off_ball": 52.4,
+        "defensive": 10.9,
+        "physical": 16.82
+      },
+      "score_components": [
+        {
+          "metric": "offers_received",
+          "value": 27,
+          "weight": 1.0,
+          "contribution": 27.0
+        },
+        {
+          "metric": "in_behind",
+          "value": 15,
+          "weight": 0.6,
+          "contribution": 9.0
+        },
+        {
+          "metric": "in_between",
+          "value": 22,
+          "weight": 0.4,
+          "contribution": 8.8
+        },
+        {
+          "metric": "total_offers",
+          "value": 76,
+          "weight": 0.1,
+          "contribution": 7.6
+        }
+      ],
+      "evidence_chips": {
+        "en": [
+          "found again and again",
+          "between-line presence"
+        ],
+        "zh": [
+          "持续接应",
+          "在防线之间活跃"
+        ]
+      }
+    }
+  ],
+  "audit": []
+}

@@ -76,6 +76,10 @@ def test_write_editorial_artifacts(tmp_path):
     assert saved["match_date"] == "2026-06-16"
     assert saved["source_markdown_path"] == "reports/editorial/2026-06-16.md"
     assert "narrative" not in first_choice
+    assert "score" not in first_choice
+    assert "primary_score" not in first_choice
+    assert "role_scores" not in first_choice
+    assert "score_components" not in first_choice
     assert "content" in first_choice
     assert first_choice["content"]["en"]["title"]
     assert first_choice["content"]["en"]["html"].startswith("<p>")
@@ -113,6 +117,9 @@ def test_write_editorial_artifacts(tmp_path):
     assert "帽子戏法" not in json.dumps(en_brief, ensure_ascii=False)
     assert "Editor's Choices" in html
     assert "Editor&apos;s Choices" not in html
+    assert "🇦🇷 Lionel MESSI" in html
+    assert "🇦🇷 Argentina vs 🇩🇿 Algeria" in html
+    assert "<span>score</span>" not in html
     assert "## Choices" in markdown
     assert "#### English" in markdown
     assert "#### 中文" in markdown
@@ -158,6 +165,35 @@ def test_generated_editorial_markdown_is_a_draft_not_final_copy(tmp_path):
     assert "Draft brief" in markdown
     assert "中文编辑草稿" in markdown
     assert "Use this as evidence, then rewrite the English and Chinese copy separately." in markdown
+
+
+def test_zh_fact_bank_uses_chinese_team_names_for_latest_loaded_day(tmp_path):
+    report = build_editorial_report("data/latest.sqlite", match_date="2026-06-17")
+    write_editorial_artifacts(
+        report,
+        site_dir=tmp_path / "site",
+        reports_dir=tmp_path / "reports",
+    )
+
+    fact_bank = json.loads(
+        (
+            tmp_path
+            / "site"
+            / "editorial"
+            / "2026-06-17"
+            / "fact_bank.zh.json"
+        ).read_text(encoding="utf-8")
+    )
+    text = json.dumps(fact_bank, ensure_ascii=False)
+
+    assert "巴拿马" in text
+    assert "加纳" in text
+    assert "葡萄牙" in text
+    assert "刚果（金）" in text
+    assert "Panama" not in text
+    assert "Ghana" not in text
+    assert "Portugal" not in text
+    assert "Congo DR" not in text
 
 
 def test_compile_editorial_markdown_renders_edited_copy(tmp_path):

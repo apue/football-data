@@ -37,8 +37,13 @@ def test_demo_uses_collapsed_long_sections_and_insight_tables(tmp_path):
     html = (tmp_path / "index.html").read_text(encoding="utf-8")
 
     assert "Editor's Choices" in html
+    assert "🇦🇷 Lionel MESSI" in html
+    assert "🇦🇷 Argentina vs 🇩🇿 Algeria" in html
     assert "The clearest attacking case" in html
     assert "最清楚的进攻答案" in html
+    assert "<span>score</span>" not in html
+    assert "<strong>37.5</strong>" not in html
+    assert "<th>Score</th>" not in html
     assert '<details class="panel collapsible">' in html
     assert "<summary><h2>New Matches</h2>" in html
     assert "<summary><h2>Loaded Matches</h2>" in html
@@ -47,6 +52,7 @@ def test_demo_uses_collapsed_long_sections_and_insight_tables(tmp_path):
     assert "Top 5 Progressors" in html
     assert "Top 5 Off-Ball Receivers" in html
     assert "Top 5 Defensive Contributors" in html
+    assert "🇫🇷 Michael OLISE" in html
     assert "Top 5 Completed Line Breaks" not in html
     assert "Top 5 Final Third Receptions" not in html
     assert "Goals and On-Target Shots" not in html

@@ -6,6 +6,8 @@ import sqlite3
 from collections.abc import Mapping
 from pathlib import Path
 
+from football_data.flags import format_player, format_team
+
 
 def build_demo_site(
     db_path: str | Path,
@@ -395,9 +397,9 @@ def _editorial_section(report: dict[str, object]) -> str:
             '<article class="panel editorial-card">'
             "<div>"
             f'<span class="award">{html.escape(_format_value(label), quote=False)}</span>'
-            f"<h3>{html.escape(_format_value(choice.get('player_name')), quote=False)}</h3>"
-            f"<p>{html.escape(_format_value(choice.get('team')), quote=False)} vs "
-            f"{html.escape(_format_value(choice.get('opponent')), quote=False)}"
+            f"<h3>{html.escape(format_player(choice.get('player_name'), choice.get('team')), quote=False)}</h3>"
+            f"<p>{html.escape(format_team(choice.get('team')), quote=False)} vs "
+            f"{html.escape(format_team(choice.get('opponent')), quote=False)}"
             f" · Match {html.escape(_format_value(choice.get('match_no')), quote=False)}</p>"
             f"<h3>{html.escape(_format_value(title), quote=False)}</h3>"
             f"{body_html}"
@@ -405,8 +407,6 @@ def _editorial_section(report: dict[str, object]) -> str:
             f"{zh_body_html}"
             "</div>"
             "<aside>"
-            f"<strong>{html.escape(_format_value(choice.get('score')), quote=False)}</strong>"
-            "<span>score</span>"
             f'<div class="chips">{chip_html}</div>'
             "</aside>"
             "</article>"
@@ -442,18 +442,31 @@ def _table(rows: object) -> str:
     if not rows:
         return "<p>No rows.</p>"
     rows = list(rows)  # type: ignore[arg-type]
-    headers = rows[0].keys()
+    headers = [header for header in rows[0].keys() if header != "Score"]
     head = "".join(f"<th>{html.escape(header)}</th>" for header in headers)
     body = []
     for row in rows:
         body.append(
             "<tr>"
             + "".join(
-                f"<td>{html.escape(_format_value(_value(row, header)))}</td>" for header in headers
+                f"<td>{html.escape(_format_table_cell(row, header))}</td>" for header in headers
             )
             + "</tr>"
         )
     return f"<table><thead><tr>{head}</tr></thead><tbody>{''.join(body)}</tbody></table>"
+
+
+def _format_table_cell(row: object, header: str) -> str:
+    value = _value(row, header)
+    if header in {"Player", "player_name"}:
+        return format_player(value, _row_team(row))
+    if header in {"Team", "team", "home_team", "away_team"}:
+        return format_team(value)
+    return _format_value(value)
+
+
+def _row_team(row: object) -> object:
+    return _value(row, "Team") or _value(row, "team")
 
 
 def _row_count(rows: object) -> int:

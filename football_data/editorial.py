@@ -8,6 +8,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from football_data.flags import format_player, format_team
+
 
 DEFAULT_SCORING_CONFIG = Path("config/scoring/v0.1.json")
 
@@ -23,20 +25,68 @@ AWARD_LABELS = {
 ZH_TEAM_NAMES = {
     "Algeria": "阿尔及利亚",
     "Argentina": "阿根廷",
+    "Australia": "澳大利亚",
     "Austria": "奥地利",
+    "Belgium": "比利时",
+    "Bosnia and Herzegovina": "波黑",
+    "Brazil": "巴西",
+    "Cabo Verde": "佛得角",
+    "Canada": "加拿大",
+    "Colombia": "哥伦比亚",
+    "Congo DR": "刚果（金）",
+    "Croatia": "克罗地亚",
+    "Curaçao": "库拉索",
+    "Czechia": "捷克",
+    "Côte d'Ivoire": "科特迪瓦",
+    "Ecuador": "厄瓜多尔",
+    "Egypt": "埃及",
+    "England": "英格兰",
     "France": "法国",
+    "Germany": "德国",
+    "Ghana": "加纳",
+    "Haiti": "海地",
+    "IR Iran": "伊朗",
+    "Iraq": "伊拉克",
+    "Japan": "日本",
     "Jordan": "约旦",
+    "Korea Republic": "韩国",
+    "Mexico": "墨西哥",
+    "Morocco": "摩洛哥",
+    "Netherlands": "荷兰",
+    "New Zealand": "新西兰",
+    "Norway": "挪威",
+    "Panama": "巴拿马",
+    "Paraguay": "巴拉圭",
+    "Portugal": "葡萄牙",
+    "Qatar": "卡塔尔",
+    "Saudi Arabia": "沙特阿拉伯",
+    "Scotland": "苏格兰",
     "Senegal": "塞内加尔",
+    "South Africa": "南非",
+    "Spain": "西班牙",
+    "Sweden": "瑞典",
+    "Switzerland": "瑞士",
+    "Tunisia": "突尼斯",
+    "Türkiye": "土耳其",
+    "Uruguay": "乌拉圭",
+    "USA": "美国",
+    "Uzbekistan": "乌兹别克斯坦",
 }
 
 
 ZH_PLAYER_NAMES = {
     "ABDALLAH NASIB": "纳西布",
+    "Andres ANDRADE": "安德烈斯·安德拉德",
+    "BRUNO FERNANDES": "布鲁诺·费尔南德斯",
+    "JOAO NEVES": "若昂·内维斯",
+    "Jonas ADJETEY": "乔纳斯·阿杰泰",
     "Kylian MBAPPE": "姆巴佩",
     "Lionel MESSI": "梅西",
     "Nicolas SEIWALD": "塞瓦尔德",
     "Rayan AIT-NOURI": "艾特-努里",
     "Rodrigo DE PAUL": "德保罗",
+    "TOMAS ARAUJO": "托马斯·阿劳若",
+    "VITINHA": "维蒂尼亚",
 }
 
 
@@ -167,6 +217,8 @@ def compile_editorial_markdown(
     for choice, section in zip(evidence_choices, choice_sections, strict=True):
         compiled_choice = dict(choice)
         compiled_choice.pop("narrative", None)
+        for internal_key in ("score", "primary_score", "role_scores", "score_components"):
+            compiled_choice.pop(internal_key, None)
         compiled_choice["content"] = {
             "en": _compile_language_content(section["en"]),
             "zh": _compile_language_content(section["zh"]),
@@ -1152,16 +1204,14 @@ def _choices_html(choices: list[dict[str, Any]]) -> str:
     <article class="choice-card">
       <div>
         <p class="award">{html.escape(choice["award_label"]["en"], quote=False)}</p>
-        <h2>{html.escape(choice["player_name"], quote=False)}</h2>
-        <p class="meta">{html.escape(choice["team"], quote=False)} vs {html.escape(choice["opponent"], quote=False)} · Match {choice["match_no"]}</p>
+        <h2>{html.escape(format_player(choice["player_name"], choice["team"]), quote=False)}</h2>
+        <p class="meta">{html.escape(format_team(choice["team"]), quote=False)} vs {html.escape(format_team(choice["opponent"]), quote=False)} · Match {choice["match_no"]}</p>
         <h3>{html.escape(en["title"], quote=False)}</h3>
         {en["html"]}
         <h3>{html.escape(zh["title"], quote=False)}</h3>
         {zh["html"]}
       </div>
       <aside>
-        <strong>{choice["score"]:.1f}</strong>
-        <span>score</span>
         <div class="chips">{chips}</div>
       </aside>
     </article>
