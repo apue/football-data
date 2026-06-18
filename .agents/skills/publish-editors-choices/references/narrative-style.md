@@ -8,12 +8,13 @@ Markdown is the human-readable source. Write and review copy in `reports/editori
 
 - Lead with the judgment, then give the reason.
 - Use at most two or three hard numbers in each body paragraph.
+- Put football actions before data labels: write what the player did on the pitch, then let evidence chips carry the audit trail.
 - Translate metrics into football language:
   - `goals >= 3`: hat-trick / 帽子戏法
   - `line_breaks_completed` plus `ball_progressions`: breaking lines, carrying through pressure / 打穿防线、推进过压力区
   - `offers_received`, `in_between`, `in_behind`: finding pockets, receiving between lines / 在防线之间接应、身后接应
   - `possession_regains`, `possession_interrupted`: disrupting rhythm, winning the ball back / 打断节奏、夺回球权
-- Do not pretend to have watched video. Say “PMSR profile”, “data profile”, or “数据画像” when the claim comes from data.
+- Do not pretend to have watched video. Avoid repeatedly naming the dataset in body copy; cite the evidence through chips and audit files.
 - Do not list every metric. Keep detailed components in `evidence.json` for audit.
 - Hidden Gem is optional. If the evidence is not strong, do not force one.
 
@@ -23,7 +24,7 @@ Use compact editorial language. Avoid hype unless the evidence is obvious.
 
 Good:
 
-> The hat-trick gives Messi the headline, but the PMSR profile makes the choice feel less like a popularity vote and more like the day’s cleanest attacking case.
+> Messi did not leave much room for argument. The hat-trick decides the headline, and he was also involved in the moves that kept Argentina playing forward.
 
 Bad:
 
@@ -31,15 +32,15 @@ Bad:
 
 ## Chinese Tone
 
-Use natural Chinese sports commentary. Do not mirror the English sentence by sentence.
+Use natural Chinese sports commentary. Write Chinese from evidence, not from the English draft. The Chinese copy should make the same editorial judgment, but it should not mirror English sentence order, metaphors, or abstractions.
 
 Good:
 
-> 梅西这场不用复杂包装：帽子戏法本身就是最直接的比赛叙事。更重要的是，PMSR 的进攻画像也支持这个判断。
+> 姆巴佩这场一直压着塞内加尔后卫线踢。两个进球是结果，更持续的威胁来自他不断冲击身后空间。
 
 Bad:
 
-> 梅西有 3 个进球、6 次射门、4 次射正、16 次接应、9 次身后接应，所以他得分最高。
+> 他给了这一天一个很直接的进攻答案。更有意思的是，他的跑动和接应一直在把防线往身后拉。
 
 ## Self-Check
 

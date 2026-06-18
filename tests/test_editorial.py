@@ -79,6 +79,54 @@ def test_write_editorial_artifacts(tmp_path):
     assert "#### 中文" in markdown
 
 
+def test_editorial_copy_avoids_translationese_and_self_referential_data_language(tmp_path):
+    report = build_editorial_report("data/latest.sqlite", match_date="2026-06-16")
+    write_editorial_artifacts(
+        report,
+        site_dir=tmp_path / "site",
+        reports_dir=tmp_path / "reports",
+    )
+
+    markdown = (tmp_path / "reports" / "editorial" / "2026-06-16.md").read_text(
+        encoding="utf-8"
+    )
+    awkward_phrases = [
+        "今天最清楚的答案",
+        "不用复杂包装",
+        "比赛叙事",
+        "给了这一天一个很直接的进攻答案",
+        "把防线往身后拉",
+        "PMSR 里",
+        "PMSR 的",
+        "数据画像",
+        "不是最容易被写进标题的人",
+        "这反而是他入选的理由",
+        "单一片段",
+        "made the headline and the data agree",
+        "PMSR profile",
+        "this dataset is built to surface",
+        "not just one highlight",
+        "normal recap can flatten",
+    ]
+    for phrase in awkward_phrases:
+        assert phrase not in markdown
+
+    expected_phrases = [
+        "最有说服力的一场表现",
+        "梅西这场",
+        "姆巴佩这场",
+        "压着塞内加尔后卫线踢",
+        "不断冲击身后空间",
+        "这类表现不一定上集锦",
+        "德保罗这类表现",
+        "接应点",
+        "did not leave much room for argument",
+        "kept Senegal’s back line pinned",
+    ]
+    for phrase in expected_phrases:
+        assert phrase in markdown
+
+
 def test_compile_editorial_markdown_renders_edited_copy(tmp_path):
     report = build_editorial_report("data/latest.sqlite", match_date="2026-06-16")
     write_editorial_artifacts(
@@ -94,9 +142,9 @@ def test_compile_editorial_markdown_renders_edited_copy(tmp_path):
     markdown = (
         tmp_path / "reports" / "editorial" / "2026-06-16.md"
     ).read_text(encoding="utf-8")
-    markdown = markdown.replace("The clearest case of the day", "A human-edited title", 1)
+    markdown = markdown.replace("The strongest case of the day", "A human-edited title", 1)
     markdown = markdown.replace(
-        "Lionel MESSI made the headline",
+        "Lionel MESSI did not leave much room for argument",
         "Lionel MESSI turned the day into a clean editorial call",
         1,
     )
@@ -152,7 +200,7 @@ def test_render_editorial_cli_compiles_existing_markdown(tmp_path):
     report_md = tmp_path / "reports" / "editorial" / "2026-06-16.md"
     report_md.write_text(
         report_md.read_text(encoding="utf-8").replace(
-            "The clearest case of the day",
+            "The strongest case of the day",
             "A rendered Markdown title",
             1,
         ),

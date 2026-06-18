@@ -23,3 +23,5 @@ def test_publish_editors_choices_skill_is_repo_scoped():
     assert "reports/editorial/YYYY-MM-DD.md" in references
     assert "scripts/render_editorial.py" in references
     assert "Markdown is the human-readable source" in references
+    assert "Write Chinese from evidence, not from the English draft" in references
+    assert "football actions before data labels" in references

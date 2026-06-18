@@ -20,6 +20,26 @@ AWARD_LABELS = {
 }
 
 
+ZH_TEAM_NAMES = {
+    "Algeria": "阿尔及利亚",
+    "Argentina": "阿根廷",
+    "Austria": "奥地利",
+    "France": "法国",
+    "Jordan": "约旦",
+    "Senegal": "塞内加尔",
+}
+
+
+ZH_PLAYER_NAMES = {
+    "ABDALLAH NASIB": "纳西布",
+    "Kylian MBAPPE": "姆巴佩",
+    "Lionel MESSI": "梅西",
+    "Nicolas SEIWALD": "塞瓦尔德",
+    "Rayan AIT-NOURI": "艾特-努里",
+    "Rodrigo DE PAUL": "德保罗",
+}
+
+
 def build_editorial_report(
     db_path: str | Path,
     match_date: str | None = None,
@@ -451,109 +471,107 @@ def _english_narrative(player: dict[str, Any], award_type: str) -> dict[str, str
     opponent = player["opponent"]
     goals = int(player.get("goals") or 0)
     if award_type == "player_of_the_day":
-        title = "The clearest case of the day"
+        title = "The strongest case of the day"
         if goals >= 3:
             body = (
-                f"{name} made the headline and the data agree. A hat-trick is already "
-                f"the story, but the PMSR profile also shows a player connecting the "
-                f"finish with repeated line-breaking involvement against {opponent}."
+                f"{name} did not leave much room for argument. The hat-trick decides "
+                f"the headline, and his involvement between the finish and the build-up "
+                f"kept {opponent} under pressure."
             )
         elif goals >= 2:
             body = (
-                f"{name} gave the day a direct attacking answer. The brace is the obvious "
-                "part; the more interesting signal is how often the movement kept pulling "
-                "the defence toward its own goal."
+                f"{name} kept {opponent}’s back line pinned. The two goals were the "
+                "finish, but the threat came from how often he found space near the box "
+                "and forced defenders to turn."
             )
         elif _high(player, "offers_received", 25) and _high(player, "line_breaks_completed", 12):
             body = (
-                f"{name} is the non-scorer who forced his way into the top tier. The PMSR "
-                "profile reads like midfield control: constant availability, repeated "
-                "line breaks, and enough defensive work to keep the game tilted."
+                f"{name} made the list without needing a goal. He kept showing for the "
+                "ball, helped break lines, and gave his team a steady way to keep moving "
+                "play forward."
             )
         elif goals:
             body = (
-                f"{name} gave the day a direct attacking answer. The goal is only the top "
-                "line; the broader profile still points to a player repeatedly involved "
-                "in the dangerous parts of the match."
+                f"{name} gave his team the finish, but the case is wider than the goal. "
+                "He kept finding useful positions and stayed involved in the dangerous "
+                "parts of the match."
             )
         else:
             body = (
-                f"{name} stands out without needing a scoreboard shortcut. The PMSR "
-                "profile points to influence across chance involvement, movement, and territory."
+                f"{name} stood out without a scoreboard shortcut. His value came through "
+                "in chance involvement, movement, and the way his team advanced territory."
             )
     elif award_type == "progression_pick":
-        title = "A progression profile worth separating from the scoreline"
+        title = "The day’s clearest progressor"
         body = (
-            f"{name} is the kind of player this dataset is built to surface. The value is "
-            "not just one highlight; it is the repeated work of moving the game through "
-            "line breaks and carries."
+            f"{name} kept moving the game through pressure. His value was in the repeat "
+            "actions: carrying forward, breaking lines, and turning possession into territory."
         )
     elif award_type == "defensive_pick":
-        title = "The day’s most disruptive defensive profile"
+        title = "The day’s most disruptive defender"
         body = (
-            f"{name} reads as a defensive choice because the work shows up in interruptions, "
-            "regains, and pressure rather than a single obvious moment. That is exactly the "
-            "kind of performance a normal recap can flatten."
+            f"{name} did the kind of defensive work that changes the rhythm of a game. "
+            "He broke up moves, won the ball back, and made it harder for the opponent "
+            "to play through midfield."
         )
     else:
-        title = "A quieter performance the data keeps pulling back into view"
+        title = "A quieter game that mattered"
         body = (
-            f"{name} is not the easiest headline, which is the point. The data profile "
-            "suggests a player who shaped the game through repeat actions rather than one "
-            "clean clip."
+            f"{name} had the sort of game that may not make the first highlight reel. "
+            "He kept offering angles, connected play into the gaps, and helped the attack "
+            "keep its rhythm."
         )
     return {"title": title, "body": body}
 
 
 def _chinese_narrative(player: dict[str, Any], award_type: str) -> dict[str, str]:
-    name = player["player_name"]
-    opponent = player["opponent"]
+    name = _zh_player_name(player["player_name"])
+    opponent = _zh_team_name(player["opponent"])
     goals = int(player.get("goals") or 0)
     if award_type == "player_of_the_day":
-        title = "今天最清楚的答案"
+        title = "最有说服力的一场表现"
         if goals >= 3:
             body = (
-                f"{name} 这场不用复杂包装：帽子戏法本身就是最直接的比赛叙事。"
-                "更重要的是，PMSR 的进攻画像也支持这个判断，他不只是完成终结，"
-                "还持续参与打穿防线的过程。"
+                f"{_zh_phrase(name, '这场很难绕开。')}帽子戏法本身就够有分量，"
+                f"更关键的是，他不只是最后一脚，还多次参与向前推进和打穿{opponent}防线。"
             )
         elif goals >= 2:
             body = (
-                f"{name} 给了这一天一个很直接的进攻答案。梅开二度是最醒目的部分，"
-                "但更有意思的是，他的跑动和接应一直在把防线往身后拉。"
+                f"{_zh_phrase(name, f'这场一直压着{opponent}后卫线踢。')}两个进球是结果，"
+                "更持续的威胁来自他不断冲击身后空间，也不断在禁区附近接到球。"
             )
         elif _high(player, "offers_received", 25) and _high(player, "line_breaks_completed", 12):
             body = (
-                f"{name} 是那种没有靠进球也挤进主选的人。PMSR 里的画像更像是中场控制："
-                "持续接应、反复打穿防线，也有足够的防守参与把比赛留在自己一侧。"
+                f"{_zh_phrase(name, '没有靠进球抢镜，但存在感很足。')}"
+                "他持续给队友接应点，也能把球送过防线，中场推进很多时候就是靠这些动作续上。"
             )
         elif goals:
             body = (
-                f"{name} 给了这一天一个很直接的进攻答案。进球是表层结果，"
-                "而数据画像里持续出现的威胁，才是他被选中的原因。"
+                f"{_zh_phrase(name, '的进球是最容易被记住的一幕，但他不只贡献了终结。')}"
+                "他持续出现在危险区域，也让球队的进攻有了更多落点。"
             )
         else:
             body = (
-                f"{name} 的入选不是靠比分提示，而是靠整场比赛里的参与痕迹。"
-                "PMSR 显示，他在机会、接应和推进之间都留下了足够清楚的证据。"
+                f"{_zh_phrase(name, '的价值不靠比分提醒。')}"
+                "他在机会、接应和推进之间都留下了足够多的痕迹，整场参与感很清楚。"
             )
     elif award_type == "progression_pick":
-        title = "不只看比分时，他的推进会被看见"
+        title = "推进最亮眼的人"
         body = (
-            f"{name} 是这类数据最应该挖出来的人。亮点不在某一次镜头，"
-            "而在反复把球带过压力区、打穿防线的过程里。"
+            f"{_zh_phrase(name, '最醒目的地方是推进。')}"
+            "他反复把球带过压力区，也能用向前传递打穿防线，让球队从控球真正走到前场。"
         )
     elif award_type == "defensive_pick":
         title = "把对手节奏切碎的人"
         body = (
-            f"{name} 的价值不一定会在集锦里变成一个清楚瞬间。PMSR 里更明显的是，"
-            "他通过夺回球权、打断进攻和持续施压，把对手的推进节奏切碎。"
+            f"{_zh_phrase(name, '这场更像是在不断拆掉对手节奏。')}"
+            "反复夺回球权、打断进攻、持续施压，这些动作把对手的推进切得很碎。"
         )
     else:
-        title = "一个不那么显眼但值得被看见的表现"
+        title = "不抢镜，但很管用"
         body = (
-            f"{name} 不是最容易被写进标题的人，这反而是他入选的理由。"
-            "他的贡献来自一连串重复动作，而不是一个足够响亮的单一片段。"
+            f"{_zh_phrase(name, '这类表现不一定上集锦，但很管用。')}"
+            "他不断给队友提供接应点，也能把球送到两线之间，进攻节奏很多时候就是靠这些小动作续上的。"
         )
     return {"title": title, "body": body}
 
@@ -574,6 +592,19 @@ def _append_if(
 
 def _high(player: dict[str, Any], metric: str, threshold: float) -> bool:
     return float(player.get(metric) or 0) >= threshold
+
+
+def _zh_team_name(team: str) -> str:
+    return ZH_TEAM_NAMES.get(team, team)
+
+
+def _zh_player_name(player_name: str) -> str:
+    return ZH_PLAYER_NAMES.get(player_name, player_name)
+
+
+def _zh_phrase(name: str, text: str) -> str:
+    separator = "" if any("\u4e00" <= char <= "\u9fff" for char in name) else " "
+    return f"{name}{separator}{text}"
 
 
 def _build_audit(
