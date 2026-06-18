@@ -1,23 +1,6 @@
 {
-  "generated_at": "2026-06-18T08:04:24+00:00",
-  "new_matches": [
-    {
-      "match_no": 21,
-      "source_id": "fifa-world-cup-2026-pmsr-m21-gha-pan-v1"
-    },
-    {
-      "match_no": 22,
-      "source_id": "fifa-world-cup-2026-pmsr-m22-eng-cro-v1"
-    },
-    {
-      "match_no": 23,
-      "source_id": "fifa-world-cup-2026-pmsr-m23-por-cod-v1"
-    },
-    {
-      "match_no": 24,
-      "source_id": "fifa-world-cup-2026-pmsr-m24-uzb-col-v1"
-    }
-  ],
+  "generated_at": "2026-06-18T08:41:37+00:00",
+  "new_matches": [],
   "version_updates": [],
   "downloaded": [
     "fifa-world-cup-2026-pmsr-m01-mex-rsa-v1",
