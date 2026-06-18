@@ -41,6 +41,12 @@ Expected generated outputs:
 - `manifests/update-events.json`
 - `site/index.html`
 
+## Editor's Choices
+
+When the user asks to publish or check Editor's Choices, daily picks, 每日精选, Player of the Day, or hidden gems, use the repo-scoped skill at `.agents/skills/publish-editors-choices/SKILL.md`.
+
+The editorial workflow generates opinionated content, so prefer a PR branch over direct pushes to `main` unless the user explicitly asks for direct publication.
+
 ## Source Policy
 
 - Do not commit `raw/*.pdf` or `raw/**/*.pdf`.

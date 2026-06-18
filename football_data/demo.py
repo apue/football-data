@@ -17,6 +17,7 @@ def build_demo_site(
     manifests_path = Path(manifests_dir)
     latest_run = _load_json(manifests_path / "latest-run.json")
     update_events = _load_json(manifests_path / "update-events.json")
+    latest_editorial = _load_json(out / "editorial" / "latest.json")
     conn = sqlite3.connect(db_path)
     conn.row_factory = sqlite3.Row
     try:
@@ -194,6 +195,7 @@ def build_demo_site(
             coverage=coverage,
             latest_run=latest_run,
             update_events=update_events,
+            latest_editorial=latest_editorial,
             matches=matches,
             fastest=fastest,
             distance=distance,
@@ -215,6 +217,7 @@ def _page(
     coverage: list[sqlite3.Row],
     latest_run: dict[str, object],
     update_events: dict[str, object],
+    latest_editorial: dict[str, object],
     matches: list[sqlite3.Row],
     fastest: list[sqlite3.Row],
     distance: list[sqlite3.Row],
@@ -253,6 +256,13 @@ def _page(
     .metric .label {{ display: block; color: #526277; font-size: 12px; text-transform: uppercase; }}
     .summary {{ margin-bottom: 16px; }}
     .panel {{ background: #ffffff; border: 1px solid #dde3ee; border-radius: 8px; padding: 18px; overflow-x: auto; }}
+    .editorial-card {{ display: grid; grid-template-columns: minmax(0, 1fr) 160px; gap: 16px; margin-top: 12px; }}
+    .editorial-card h3 {{ font-size: 21px; margin: 2px 0 4px; }}
+    .editorial-card .award {{ color: #59677c; font-size: 12px; font-weight: 700; text-transform: uppercase; }}
+    .editorial-card aside {{ border-left: 1px solid #e8edf5; padding-left: 16px; }}
+    .editorial-card aside strong {{ display: block; font-size: 28px; }}
+    .chips {{ display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }}
+    .chips span {{ background: #edf2fa; border: 1px solid #dce5f2; border-radius: 999px; padding: 5px 9px; font-size: 12px; color: #35465d; }}
     .summary + .panel {{ margin-top: 16px; }}
     details.panel summary {{ cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 12px; }}
     details.panel summary h2 {{ margin: 0; }}
@@ -266,6 +276,8 @@ def _page(
     @media (max-width: 640px) {{
       table {{ font-size: 12px; }}
       th, td {{ padding: 7px 5px; }}
+      .editorial-card {{ grid-template-columns: 1fr; }}
+      .editorial-card aside {{ border-left: 0; border-top: 1px solid #e8edf5; padding-left: 0; padding-top: 12px; }}
     }}
   </style>
 </head>
@@ -293,6 +305,7 @@ def _page(
         </section>
       </div>
     </section>
+    {_editorial_section(latest_editorial)}
     <details class="panel collapsible">
       <summary><h2>Loaded Matches</h2><span>{len(matches)} rows</span></summary>
       {_table(matches)}
@@ -357,6 +370,57 @@ def _coverage_metrics(rows: list[sqlite3.Row], latest_run: dict[str, object]) ->
     )
 
 
+def _editorial_section(report: dict[str, object]) -> str:
+    choices = report.get("choices")
+    if not isinstance(choices, list) or not choices:
+        return ""
+    cards = []
+    for choice in choices[:3]:
+        if not isinstance(choice, Mapping):
+            continue
+        label = _nested_value(choice, "award_label", "en")
+        title = _nested_value(choice, "narrative", "en", "title")
+        body = _nested_value(choice, "narrative", "en", "body")
+        zh_title = _nested_value(choice, "narrative", "zh", "title")
+        zh_body = _nested_value(choice, "narrative", "zh", "body")
+        chips = _nested_value(choice, "evidence_chips", "en")
+        if isinstance(chips, list):
+            chip_html = "".join(
+                f"<span>{html.escape(_format_value(chip), quote=False)}</span>"
+                for chip in chips[:4]
+            )
+        else:
+            chip_html = ""
+        cards.append(
+            '<article class="panel editorial-card">'
+            "<div>"
+            f'<span class="award">{html.escape(_format_value(label), quote=False)}</span>'
+            f"<h3>{html.escape(_format_value(choice.get('player_name')), quote=False)}</h3>"
+            f"<p>{html.escape(_format_value(choice.get('team')), quote=False)} vs "
+            f"{html.escape(_format_value(choice.get('opponent')), quote=False)}"
+            f" · Match {html.escape(_format_value(choice.get('match_no')), quote=False)}</p>"
+            f"<h3>{html.escape(_format_value(title), quote=False)}</h3>"
+            f"<p>{html.escape(_format_value(body), quote=False)}</p>"
+            f"<h3>{html.escape(_format_value(zh_title), quote=False)}</h3>"
+            f"<p>{html.escape(_format_value(zh_body), quote=False)}</p>"
+            "</div>"
+            "<aside>"
+            f"<strong>{html.escape(_format_value(choice.get('score')), quote=False)}</strong>"
+            "<span>score</span>"
+            f'<div class="chips">{chip_html}</div>'
+            "</aside>"
+            "</article>"
+        )
+    match_date = html.escape(_format_value(report.get("match_date")), quote=False)
+    return (
+        '<section class="summary">'
+        f"<h2>Editor's Choices</h2>"
+        f"<p>Latest editorial picks for local match day {match_date}.</p>"
+        + "".join(cards)
+        + "</section>"
+    )
+
+
 def _table(rows: object) -> str:
     if not rows:
         return "<p>No rows.</p>"
@@ -387,6 +451,16 @@ def _value(row: object, key: str) -> object:
     if isinstance(row, Mapping):
         return row.get(key)
     return ""
+
+
+def _nested_value(row: object, *keys: str) -> object:
+    value: object = row
+    for key in keys:
+        if isinstance(value, Mapping):
+            value = value.get(key)
+        else:
+            return ""
+    return value
 
 
 def _format_value(value: object) -> str:

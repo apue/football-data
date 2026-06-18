@@ -31,6 +31,8 @@ By default this repository does not redistribute original PDF files. Local PDF c
 - `manifests/update-events.json` - new matches, version updates, downloads, and failures
 - `examples/*.sql` - reusable SQL examples
 - `notebooks/*.ipynb` - notebook-style demo examples
+- `site/editorial/` and `reports/editorial/` - generated Editor's Choices artifacts when published
+- `.agents/skills/publish-editors-choices/` - repo-scoped Codex skill for the editorial publishing workflow
 - GitHub Pages demo generated from the latest SQLite database: https://apue.github.io/football-data/
 
 ## Current SQLite Coverage
@@ -56,8 +58,21 @@ python -m pip install -e ".[dev]"
 python scripts/update_dataset.py
 sqlite3 data/latest.sqlite < examples/top_fastest_players.sql
 sqlite3 data/latest.sqlite < examples/top_attacking_threats.sql
+python scripts/generate_editorial.py --date 2026-06-16
 python scripts/check_status.py
 ```
+
+## Editor's Choices
+
+Editor's Choices are data-informed editorial picks generated from structured PMSR evidence. They are not official FIFA awards. The generator selects candidates from the SQLite database, writes auditable JSON, and produces English and Chinese narrative drafts that should read like editorial notes rather than metric dumps.
+
+Run:
+
+```bash
+python scripts/generate_editorial.py --date YYYY-MM-DD
+```
+
+Omit `--date` to use the latest available local match date in the database. Outputs are written to `site/editorial/`, `reports/editorial/`, and the homepage is rebuilt with the latest cards.
 
 ## Update Policy
 
@@ -84,6 +99,7 @@ Failures are reported in `manifests/latest-run.json`, `manifests/update-events.j
 - Which players were the best line-breaking progressors?
 - Which players were the most active off-ball receivers?
 - Which players made the strongest defensive contribution?
+- Which players did the daily Editor's Choices select, and why?
 
 ## Limitations
 

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Publish Editor's Choices"
+  short_description: "Generate football-data editorial picks"
+  default_prompt: "Publish Editor's Choices for the latest available match day."
