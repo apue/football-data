@@ -26,13 +26,14 @@ def test_build_editorial_report_for_match_day():
     assert first_choice["score"] > 0
     assert 1 <= len(first_choice["evidence_chips"]["en"]) <= 4
     assert 1 <= len(first_choice["evidence_chips"]["zh"]) <= 4
-    assert first_choice["narrative"]["en"]["title"]
-    assert first_choice["narrative"]["en"]["body"]
-    assert first_choice["narrative"]["zh"]["title"]
-    assert first_choice["narrative"]["zh"]["body"]
+    assert "narrative" not in first_choice
+    assert first_choice["draft"]["en"]["title"]
+    assert first_choice["draft"]["en"]["body"]
+    assert first_choice["draft"]["zh"]["title"]
+    assert first_choice["draft"]["zh"]["body"]
 
-    digit_count = len(re.findall(r"\d", first_choice["narrative"]["en"]["body"]))
-    assert digit_count <= 6
+    digit_count = len(re.findall(r"\d", first_choice["draft"]["en"]["body"]))
+    assert digit_count <= 10
 
 
 def test_write_editorial_artifacts(tmp_path):
@@ -72,14 +73,17 @@ def test_write_editorial_artifacts(tmp_path):
     assert "**" not in first_choice["content"]["en"]["html"]
     assert "markdown" not in first_choice["content"]["en"]
     assert "narrative" not in evidence["choices"][0]
+    assert "draft" not in evidence["choices"][0]
     assert "Editor's Choices" in html
     assert "Editor&apos;s Choices" not in html
     assert "## Choices" in markdown
     assert "#### English" in markdown
     assert "#### 中文" in markdown
+    assert "Draft brief" in markdown
+    assert "中文编辑草稿" in markdown
 
 
-def test_editorial_copy_avoids_translationese_and_self_referential_data_language(tmp_path):
+def test_generated_editorial_markdown_is_a_draft_not_final_copy(tmp_path):
     report = build_editorial_report("data/latest.sqlite", match_date="2026-06-16")
     write_editorial_artifacts(
         report,
@@ -96,6 +100,9 @@ def test_editorial_copy_avoids_translationese_and_self_referential_data_language
         "比赛叙事",
         "给了这一天一个很直接的进攻答案",
         "把防线往身后拉",
+        "最有说服力的一场表现",
+        "中场推进很多时候就是靠这些动作续上",
+        "进攻节奏很多时候就是靠这些小动作续上的",
         "PMSR 里",
         "PMSR 的",
         "数据画像",
@@ -111,20 +118,9 @@ def test_editorial_copy_avoids_translationese_and_self_referential_data_language
     for phrase in awkward_phrases:
         assert phrase not in markdown
 
-    expected_phrases = [
-        "最有说服力的一场表现",
-        "梅西这场",
-        "姆巴佩这场",
-        "压着塞内加尔后卫线踢",
-        "不断冲击身后空间",
-        "这类表现不一定上集锦",
-        "德保罗这类表现",
-        "接应点",
-        "did not leave much room for argument",
-        "kept Senegal’s back line pinned",
-    ]
-    for phrase in expected_phrases:
-        assert phrase in markdown
+    assert "Draft brief" in markdown
+    assert "中文编辑草稿" in markdown
+    assert "Use this as evidence, then rewrite the English and Chinese copy separately." in markdown
 
 
 def test_compile_editorial_markdown_renders_edited_copy(tmp_path):
@@ -142,9 +138,9 @@ def test_compile_editorial_markdown_renders_edited_copy(tmp_path):
     markdown = (
         tmp_path / "reports" / "editorial" / "2026-06-16.md"
     ).read_text(encoding="utf-8")
-    markdown = markdown.replace("The strongest case of the day", "A human-edited title", 1)
+    markdown = markdown.replace("Draft brief - Player of the Day", "A human-edited title", 1)
     markdown = markdown.replace(
-        "Lionel MESSI did not leave much room for argument",
+        "Use this as evidence, then rewrite the English and Chinese copy separately",
         "Lionel MESSI turned the day into a clean editorial call",
         1,
     )
@@ -200,7 +196,7 @@ def test_render_editorial_cli_compiles_existing_markdown(tmp_path):
     report_md = tmp_path / "reports" / "editorial" / "2026-06-16.md"
     report_md.write_text(
         report_md.read_text(encoding="utf-8").replace(
-            "The strongest case of the day",
+            "Draft brief - Player of the Day",
             "A rendered Markdown title",
             1,
         ),

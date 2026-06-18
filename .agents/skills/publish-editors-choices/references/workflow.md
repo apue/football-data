@@ -40,7 +40,13 @@ Outputs:
 
 Markdown is the human-readable source. `evidence.json` is the structured audit source. `choices.json` is compiled frontend data with rendered HTML.
 
-5. Read `reports/editorial/YYYY-MM-DD.md`. Revise only the Markdown, and only when `evidence.json` or SQLite supports the wording.
+5. Read `site/editorial/YYYY-MM-DD/evidence.json` and `reports/editorial/YYYY-MM-DD.md`.
+
+Treat generated Markdown as a draft brief, not publishable copy. It exists to carry the selected players, evidence chips, and top metrics into a human-editable shape.
+
+Rewrite Chinese and English in separate passes from the same evidence. Do not use either finished language version as input for the other. The two versions should make the same selection argument, but sentence order and idiom can differ.
+
+Revise only the Markdown, and only when `evidence.json` or SQLite supports the wording.
 
 6. If you revise Markdown, compile it back to frontend JSON/HTML:
 

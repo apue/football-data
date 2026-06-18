@@ -4,11 +4,16 @@ Editor’s Choices are not dashboard prose. Write like a data-aware football edi
 
 Markdown is the human-readable source. Write and review copy in `reports/editorial/YYYY-MM-DD.md`; never make editorial wording changes directly in compiled frontend JSON.
 
+Treat generated Markdown as a draft brief, not publishable copy. The generator should select players and surface evidence; Codex should do the final editorial rewrite.
+
 ## Principles
 
 - Lead with the judgment, then give the reason.
 - Use at most two or three hard numbers in each body paragraph.
 - Put football actions before data labels: write what the player did on the pitch, then let evidence chips carry the audit trail.
+- Rewrite Chinese and English in separate passes from the same evidence.
+- Do not use either finished language version as input for the other.
+- Vary the angle for each pick; do not reuse the same sentence frame across multiple players.
 - Translate metrics into football language:
   - `goals >= 3`: hat-trick / 帽子戏法
   - `line_breaks_completed` plus `ball_progressions`: breaking lines, carrying through pressure / 打穿防线、推进过压力区
@@ -20,7 +25,7 @@ Markdown is the human-readable source. Write and review copy in `reports/editori
 
 ## English Tone
 
-Use compact editorial language. Avoid hype unless the evidence is obvious.
+Use compact editorial language. Avoid hype unless the evidence is obvious. Draft from `evidence.json`, not from the Chinese copy.
 
 Good:
 

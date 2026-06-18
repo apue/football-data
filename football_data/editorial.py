@@ -389,7 +389,7 @@ def _choice(
         "role_scores": player["role_scores"],
         "score_components": components[:6],
         "evidence_chips": _evidence_chips(player, award_type),
-        "narrative": _narrative(player, award_type),
+        "draft": _draft_brief(player, award_type),
     }
 
 
@@ -459,121 +459,98 @@ def _evidence_chips(player: dict[str, Any], award_type: str) -> dict[str, list[s
     return {"en": en[:4], "zh": zh[:4]}
 
 
-def _narrative(player: dict[str, Any], award_type: str) -> dict[str, dict[str, str]]:
+def _draft_brief(player: dict[str, Any], award_type: str) -> dict[str, dict[str, str]]:
     return {
-        "en": _english_narrative(player, award_type),
-        "zh": _chinese_narrative(player, award_type),
+        "en": _english_draft_brief(player, award_type),
+        "zh": _chinese_draft_brief(player, award_type),
     }
 
 
-def _english_narrative(player: dict[str, Any], award_type: str) -> dict[str, str]:
+def _english_draft_brief(player: dict[str, Any], award_type: str) -> dict[str, str]:
     name = player["player_name"]
+    team = player["team"]
     opponent = player["opponent"]
-    goals = int(player.get("goals") or 0)
-    if award_type == "player_of_the_day":
-        title = "The strongest case of the day"
-        if goals >= 3:
-            body = (
-                f"{name} did not leave much room for argument. The hat-trick decides "
-                f"the headline, and his involvement between the finish and the build-up "
-                f"kept {opponent} under pressure."
-            )
-        elif goals >= 2:
-            body = (
-                f"{name} kept {opponent}’s back line pinned. The two goals were the "
-                "finish, but the threat came from how often he found space near the box "
-                "and forced defenders to turn."
-            )
-        elif _high(player, "offers_received", 25) and _high(player, "line_breaks_completed", 12):
-            body = (
-                f"{name} made the list without needing a goal. He kept showing for the "
-                "ball, helped break lines, and gave his team a steady way to keep moving "
-                "play forward."
-            )
-        elif goals:
-            body = (
-                f"{name} gave his team the finish, but the case is wider than the goal. "
-                "He kept finding useful positions and stayed involved in the dangerous "
-                "parts of the match."
-            )
-        else:
-            body = (
-                f"{name} stood out without a scoreboard shortcut. His value came through "
-                "in chance involvement, movement, and the way his team advanced territory."
-            )
-    elif award_type == "progression_pick":
-        title = "The day’s clearest progressor"
-        body = (
-            f"{name} kept moving the game through pressure. His value was in the repeat "
-            "actions: carrying forward, breaking lines, and turning possession into territory."
-        )
-    elif award_type == "defensive_pick":
-        title = "The day’s most disruptive defender"
-        body = (
-            f"{name} did the kind of defensive work that changes the rhythm of a game. "
-            "He broke up moves, won the ball back, and made it harder for the opponent "
-            "to play through midfield."
-        )
-    else:
-        title = "A quieter game that mattered"
-        body = (
-            f"{name} had the sort of game that may not make the first highlight reel. "
-            "He kept offering angles, connected play into the gaps, and helped the attack "
-            "keep its rhythm."
-        )
+    title = f"Draft brief - {AWARD_LABELS[award_type]['en']}"
+    body = (
+        "Use this as evidence, then rewrite the English and Chinese copy separately. "
+        f"{name} ({team} vs {opponent}) was selected for {AWARD_LABELS[award_type]['en']}. "
+        f"Main evidence: {_english_metric_summary(player)}."
+    )
     return {"title": title, "body": body}
 
 
-def _chinese_narrative(player: dict[str, Any], award_type: str) -> dict[str, str]:
+def _chinese_draft_brief(player: dict[str, Any], award_type: str) -> dict[str, str]:
     name = _zh_player_name(player["player_name"])
+    team = _zh_team_name(player["team"])
     opponent = _zh_team_name(player["opponent"])
-    goals = int(player.get("goals") or 0)
-    if award_type == "player_of_the_day":
-        title = "最有说服力的一场表现"
-        if goals >= 3:
-            body = (
-                f"{_zh_phrase(name, '这场很难绕开。')}帽子戏法本身就够有分量，"
-                f"更关键的是，他不只是最后一脚，还多次参与向前推进和打穿{opponent}防线。"
-            )
-        elif goals >= 2:
-            body = (
-                f"{_zh_phrase(name, f'这场一直压着{opponent}后卫线踢。')}两个进球是结果，"
-                "更持续的威胁来自他不断冲击身后空间，也不断在禁区附近接到球。"
-            )
-        elif _high(player, "offers_received", 25) and _high(player, "line_breaks_completed", 12):
-            body = (
-                f"{_zh_phrase(name, '没有靠进球抢镜，但存在感很足。')}"
-                "他持续给队友接应点，也能把球送过防线，中场推进很多时候就是靠这些动作续上。"
-            )
-        elif goals:
-            body = (
-                f"{_zh_phrase(name, '的进球是最容易被记住的一幕，但他不只贡献了终结。')}"
-                "他持续出现在危险区域，也让球队的进攻有了更多落点。"
-            )
-        else:
-            body = (
-                f"{_zh_phrase(name, '的价值不靠比分提醒。')}"
-                "他在机会、接应和推进之间都留下了足够多的痕迹，整场参与感很清楚。"
-            )
-    elif award_type == "progression_pick":
-        title = "推进最亮眼的人"
-        body = (
-            f"{_zh_phrase(name, '最醒目的地方是推进。')}"
-            "他反复把球带过压力区，也能用向前传递打穿防线，让球队从控球真正走到前场。"
-        )
-    elif award_type == "defensive_pick":
-        title = "把对手节奏切碎的人"
-        body = (
-            f"{_zh_phrase(name, '这场更像是在不断拆掉对手节奏。')}"
-            "反复夺回球权、打断进攻、持续施压，这些动作把对手的推进切得很碎。"
-        )
-    else:
-        title = "不抢镜，但很管用"
-        body = (
-            f"{_zh_phrase(name, '这类表现不一定上集锦，但很管用。')}"
-            "他不断给队友提供接应点，也能把球送到两线之间，进攻节奏很多时候就是靠这些小动作续上的。"
-        )
+    title = f"中文编辑草稿 - {AWARD_LABELS[award_type]['zh']}"
+    body = (
+        "这段只作为证据 brief，不是可发布文案。中英文应分别从同一份 evidence 改写，"
+        f"不要互相翻译。{name}（{team}对{opponent}）入选{AWARD_LABELS[award_type]['zh']}。"
+        f"主要依据：{_chinese_metric_summary(player)}。"
+    )
     return {"title": title, "body": body}
+
+
+def _english_metric_summary(player: dict[str, Any]) -> str:
+    metrics = _metric_summary_items(player)
+    return ", ".join(f"{item['label_en']} {item['value']}" for item in metrics)
+
+
+def _chinese_metric_summary(player: dict[str, Any]) -> str:
+    metrics = _metric_summary_items(player)
+    return "，".join(f"{item['label_zh']}{item['value']}" for item in metrics)
+
+
+def _metric_summary_items(player: dict[str, Any]) -> list[dict[str, str]]:
+    labels = {
+        "goals": ("goals", "进球"),
+        "attempts": ("attempts", "射门"),
+        "on_target": ("on target", "射正"),
+        "line_breaks_completed": ("line breaks", "打穿防线"),
+        "ball_progressions": ("ball progressions", "推进"),
+        "offers_received": ("offers received", "接应成功"),
+        "in_between": ("between-line offers", "两线间接应"),
+        "in_behind": ("in-behind offers", "身后接应"),
+        "possession_regains": ("possession regains", "夺回球权"),
+        "possession_interrupted": ("interruptions", "破坏进攻"),
+        "blocks": ("blocks", "封堵"),
+        "total_distance_m": ("distance metres", "跑动米数"),
+        "top_speed_kmh": ("top speed km/h", "最高速度km/h"),
+    }
+    items: list[dict[str, str]] = []
+    seen: set[str] = set()
+    for component in player.get("score_components", {}).get("composite_score", []):
+        metric = str(component.get("metric"))
+        if metric in seen or metric not in labels:
+            continue
+        seen.add(metric)
+        en, zh = labels[metric]
+        items.append(
+            {
+                "label_en": en,
+                "label_zh": zh,
+                "value": str(_clean_number(float(component.get("value") or 0))),
+            }
+        )
+        if len(items) >= 4:
+            return items
+    for metric, (en, zh) in labels.items():
+        if metric in seen:
+            continue
+        value = float(player.get(metric) or 0)
+        if value <= 0:
+            continue
+        items.append(
+            {
+                "label_en": en,
+                "label_zh": zh,
+                "value": str(_clean_number(value)),
+            }
+        )
+        if len(items) >= 4:
+            break
+    return items
 
 
 def _append_if(
@@ -590,21 +567,12 @@ def _append_if(
         zh.append(zh_text)
 
 
-def _high(player: dict[str, Any], metric: str, threshold: float) -> bool:
-    return float(player.get(metric) or 0) >= threshold
-
-
 def _zh_team_name(team: str) -> str:
     return ZH_TEAM_NAMES.get(team, team)
 
 
 def _zh_player_name(player_name: str) -> str:
     return ZH_PLAYER_NAMES.get(player_name, player_name)
-
-
-def _zh_phrase(name: str, text: str) -> str:
-    separator = "" if any("\u4e00" <= char <= "\u9fff" for char in name) else " "
-    return f"{name}{separator}{text}"
 
 
 def _build_audit(
@@ -646,6 +614,7 @@ def _evidence_payload(report: dict[str, Any]) -> dict[str, Any]:
     evidence = json.loads(json.dumps(report, ensure_ascii=False))
     for choice in evidence["choices"]:
         choice.pop("narrative", None)
+        choice.pop("draft", None)
     return evidence
 
 
@@ -838,15 +807,15 @@ def _render_markdown_report(report: dict[str, Any]) -> str:
                 "",
                 "#### English",
                 "",
-                f"**{choice['narrative']['en']['title']}**",
+                f"**{choice['draft']['en']['title']}**",
                 "",
-                choice["narrative"]["en"]["body"],
+                choice["draft"]["en"]["body"],
                 "",
                 "#### 中文",
                 "",
-                f"**{choice['narrative']['zh']['title']}**",
+                f"**{choice['draft']['zh']['title']}**",
                 "",
-                choice["narrative"]["zh"]["body"],
+                choice["draft"]["zh"]["body"],
                 "",
                 "Evidence: " + ", ".join(choice["evidence_chips"]["en"]),
                 "",

@@ -66,7 +66,7 @@ python scripts/check_status.py
 
 ## Editor's Choices
 
-Editor's Choices are data-informed editorial picks generated from structured PMSR evidence. They are not official FIFA awards. The generator selects candidates from the SQLite database, writes auditable evidence, and produces an English/Chinese Markdown report that should read like editorial notes rather than metric dumps.
+Editor's Choices are data-informed editorial picks generated from structured PMSR evidence. They are not official FIFA awards. The generator selects candidates from the SQLite database, writes auditable evidence, and produces an English/Chinese Markdown draft brief. Final copy should be edited from `evidence.json`, with Chinese and English written independently rather than translated from each other.
 
 Run:
 
@@ -74,7 +74,7 @@ Run:
 python scripts/generate_editorial.py --date YYYY-MM-DD
 ```
 
-Omit `--date` to use the latest available local match date in the database. Review the human-readable output at `reports/editorial/YYYY-MM-DD.md`.
+Omit `--date` to use the latest available local match date in the database. Review and rewrite the human-readable output at `reports/editorial/YYYY-MM-DD.md`.
 
 If the Markdown copy changes, compile it back to frontend JSON/HTML:
 
