@@ -1,0 +1,4 @@
+interface:
+  display_name: "Calibrate POTM Labels"
+  short_description: "Use Firecrawl evidence and POTM labels to audit scoring weights."
+  default_prompt: "Calibrate POTM labels for the latest football-data match day."

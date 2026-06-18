@@ -47,6 +47,14 @@ Markdown is the human-readable source. `evidence.json` is the structured audit s
 
 Treat generated Markdown as a draft brief, not publishable copy. It exists to carry the selected players, evidence chips, and top metrics into a human-editable shape.
 
+Before rewriting copy, run the POTM calibration gate when labels exist or when Firecrawl can find credible match recognition for the date:
+
+```bash
+python scripts/calibrate_potm.py --date YYYY-MM-DD
+```
+
+If labels are missing, use the `calibrate-potm-labels` skill and `scripts/discover_potm_evidence.py --date YYYY-MM-DD` to find match-day candidate sources through Firecrawl/Keypool. Use `scripts/search_potm_evidence.py` only for targeted follow-up searches, then add only confirmed labels to `calibration/potm-labels.json`. POTM calibration is a sanity check: if the POTM is outside the model Top 3, pause and explain whether this is a known model gap, a one-off narrative choice, or a data extraction issue. Do not silently bend Editor's Choices around POTM.
+
 Rewrite Chinese and English in separate passes from the same evidence. Use `fact_bank.zh.json` for Chinese and `brief.en.json` for English. Do not use either finished language version as input for the other. The two versions should make the same selection argument, but sentence order and idiom can differ.
 
 For Chinese, act as a from-scratch Chinese sports editor: start from player, match, facts, and allowed angles in `fact_bank.zh.json`; do not inherit the draft Markdown sentence frame. Generate 3-5 Chinese title candidates from those facts, reject candidates that sound like translated English, and use the most natural one. Examples of natural title shape: `帽子戏法就是答案`, `最能把球带出去的人`, `不抢镜的连接器`.

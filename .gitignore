@@ -3,6 +3,7 @@
 __pycache__/
 .pytest_cache/
 .playwright-mcp/
+.env.local
 *.pyc
 *.egg-info/
 

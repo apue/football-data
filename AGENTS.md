@@ -49,6 +49,12 @@ Use `reports/editorial/YYYY-MM-DD.md` as the human review surface. `scripts/gene
 
 The editorial workflow generates opinionated content, so prefer a PR branch over direct pushes to `main` unless the user explicitly asks for direct publication.
 
+## POTM Calibration
+
+When the user asks to calibrate weights, inspect Player of the Match alignment, use Firecrawl/Keypool for evidence discovery, or explain why a FIFA POTM differs from our picks, use the repo-scoped skill at `.agents/skills/calibrate-potm-labels/SKILL.md`.
+
+Treat POTM as a weak label. Use `scripts/discover_potm_evidence.py --date YYYY-MM-DD` for match-day candidate discovery, `scripts/search_potm_evidence.py` for targeted follow-up searches, write only confirmed labels to `calibration/potm-labels.json`, and run `scripts/calibrate_potm.py --date YYYY-MM-DD` to produce rank-diff reports. Do not feed POTM directly into Editor's Choices scoring; use repeated misses as prompts for scoring experiments.
+
 ## Source Policy
 
 - Do not commit `raw/*.pdf` or `raw/**/*.pdf`.

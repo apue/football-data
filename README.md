@@ -32,10 +32,13 @@ By default this repository does not redistribute original PDF files. Local PDF c
 - `examples/*.sql` - reusable SQL examples
 - `notebooks/*.ipynb` - notebook-style demo examples
 - `reports/editorial/*.md` - human-readable Editor's Choices reports when published
+- `calibration/potm-labels.json` - optional weak labels for Player of the Match calibration
+- `calibration/reports/*.md` - POTM/model rank-diff reports when calibration is run
 - `site/editorial/` - rendered Editor's Choices JSON/HTML for the demo site
 - `site/editorial/*/fact_bank.zh.json` - raw Chinese fact bank for from-scratch Chinese sports-editor copy
 - `site/editorial/*/brief.zh.json` and `brief.en.json` - legacy Chinese draft brief plus English editorial input
 - `.agents/skills/publish-editors-choices/` - repo-scoped Codex skill for the editorial publishing workflow
+- `.agents/skills/calibrate-potm-labels/` - repo-scoped Codex skill for Firecrawl-assisted scoring calibration
 - GitHub Pages demo generated from the latest SQLite database: https://apue.github.io/football-data/
 
 ## Current SQLite Coverage
@@ -85,6 +88,20 @@ python scripts/render_editorial.py --date YYYY-MM-DD
 ```
 
 The compiled frontend artifacts are written to `site/editorial/`, and the homepage is rebuilt with the latest cards.
+
+## POTM Calibration
+
+POTM calibration compares external Player of the Match labels with this project's per-match model ranking. It is a weak-label sanity check, not an official scoring input. If a confirmed POTM is outside the model Top 3, the report flags the miss so the scoring weights can be reviewed for patterns such as late winners, decisive goal involvements, defensive performances, or extraction/name-matching issues.
+
+Optional Firecrawl search is supported through Keypool for evidence discovery:
+
+```bash
+python scripts/discover_potm_evidence.py --date YYYY-MM-DD
+python scripts/search_potm_evidence.py "FIFA 2026 Match 21 Ghana Panama Player of the Match" --limit 5
+python scripts/calibrate_potm.py --date YYYY-MM-DD
+```
+
+Keep `KEYPOOL_KEY` and `KEYPOOL_URL` in local `.env.local`. Do not commit secrets or use external pages as a direct replacement for structured PMSR evidence.
 
 ## Update Policy
 
