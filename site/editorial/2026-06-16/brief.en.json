@@ -1,0 +1,340 @@
+{
+  "schema_version": 1,
+  "language": "en",
+  "generated_at": "2026-06-18T05:15:47+00:00",
+  "match_date": "2026-06-16",
+  "scoring_version": "v0.1",
+  "editorial_voice": "A data-aware football analyst writing for a general audience: clear, light, and grounded in the evidence without sounding like a table.",
+  "choices": [
+    {
+      "award_type": "player_of_the_day",
+      "award_label": "Player of the Day",
+      "player_name": "Lionel MESSI",
+      "team": "Argentina",
+      "opponent": "Algeria",
+      "match_no": 19,
+      "score": 68.6,
+      "why_selected": "Obvious pick: the hat-trick decides the top-line argument.",
+      "title_candidates": [
+        "The hat-trick was enough",
+        "Three goals, no debate",
+        "The obvious top pick"
+      ],
+      "action_notes": [
+        "scored every goal for his team",
+        "repeatedly broke the opponent's lines"
+      ],
+      "key_metrics": [
+        {
+          "metric": "line_breaks_completed",
+          "label": "completed line breaks",
+          "value": 12,
+          "unit": ""
+        },
+        {
+          "metric": "goals",
+          "label": "goals",
+          "value": 3,
+          "unit": ""
+        },
+        {
+          "metric": "offers_received",
+          "label": "received offers",
+          "value": 16,
+          "unit": ""
+        },
+        {
+          "metric": "on_target",
+          "label": "shots on target",
+          "value": 4,
+          "unit": ""
+        },
+        {
+          "metric": "total_distance_m",
+          "label": "distance",
+          "value": 6808.4,
+          "unit": "m"
+        }
+      ],
+      "evidence_chips": [
+        "hat-trick",
+        "high shot quality"
+      ],
+      "avoid": [
+        "metric dumps",
+        "generic AI phrasing",
+        "claims that imply video review"
+      ]
+    },
+    {
+      "award_type": "player_of_the_day",
+      "award_label": "Player of the Day",
+      "player_name": "Kylian MBAPPE",
+      "team": "France",
+      "opponent": "Senegal",
+      "match_no": 17,
+      "score": 60.7,
+      "why_selected": "Goals matter, but frame the repeated threat behind the line.",
+      "title_candidates": [
+        "The constant threat behind",
+        "Two goals and a deeper problem",
+        "Always stretching the line"
+      ],
+      "action_notes": [
+        "kept attacking the space behind the line"
+      ],
+      "key_metrics": [
+        {
+          "metric": "in_behind",
+          "label": "in-behind offers",
+          "value": 30,
+          "unit": ""
+        },
+        {
+          "metric": "goals",
+          "label": "goals",
+          "value": 2,
+          "unit": ""
+        },
+        {
+          "metric": "offers_received",
+          "label": "received offers",
+          "value": 11,
+          "unit": ""
+        },
+        {
+          "metric": "total_distance_m",
+          "label": "distance",
+          "value": 9686.1,
+          "unit": "m"
+        },
+        {
+          "metric": "ball_progressions",
+          "label": "ball progressions",
+          "value": 9,
+          "unit": ""
+        }
+      ],
+      "evidence_chips": [
+        "brace",
+        "high shot quality"
+      ],
+      "avoid": [
+        "metric dumps",
+        "generic AI phrasing",
+        "claims that imply video review"
+      ]
+    },
+    {
+      "award_type": "player_of_the_day",
+      "award_label": "Player of the Day",
+      "player_name": "Nicolas SEIWALD",
+      "team": "Austria",
+      "opponent": "Jordan",
+      "match_no": 20,
+      "score": 59.8,
+      "why_selected": "Focus on the connective midfield role.",
+      "title_candidates": [
+        "The midfield connector",
+        "The link in possession",
+        "A quiet route through midfield"
+      ],
+      "action_notes": [
+        "repeatedly broke the opponent's lines",
+        "kept giving teammates a passing option"
+      ],
+      "key_metrics": [
+        {
+          "metric": "offers_received",
+          "label": "received offers",
+          "value": 35,
+          "unit": ""
+        },
+        {
+          "metric": "line_breaks_completed",
+          "label": "completed line breaks",
+          "value": 15,
+          "unit": ""
+        },
+        {
+          "metric": "total_distance_m",
+          "label": "distance",
+          "value": 11721.4,
+          "unit": "m"
+        },
+        {
+          "metric": "possession_regains",
+          "label": "possession regains",
+          "value": 6,
+          "unit": ""
+        },
+        {
+          "metric": "offers_received",
+          "label": "received offers",
+          "value": 35,
+          "unit": ""
+        }
+      ],
+      "evidence_chips": [
+        "repeated line breaks",
+        "found again and again",
+        "between-line presence"
+      ],
+      "avoid": [
+        "metric dumps",
+        "generic AI phrasing",
+        "claims that imply video review"
+      ]
+    },
+    {
+      "award_type": "progression_pick",
+      "award_label": "Progression Pick",
+      "player_name": "Rayan AIT-NOURI",
+      "team": "Algeria",
+      "opponent": "Argentina",
+      "match_no": 19,
+      "score": 53.6,
+      "why_selected": "Focus on moving the ball through pressure and into territory.",
+      "title_candidates": [
+        "The best route forward",
+        "Carrying through pressure",
+        "Progression from a losing side"
+      ],
+      "action_notes": [
+        "repeatedly broke the opponent's lines",
+        "carried the ball through pressure"
+      ],
+      "key_metrics": [
+        {
+          "metric": "line_breaks_completed",
+          "label": "completed line breaks",
+          "value": 15,
+          "unit": ""
+        },
+        {
+          "metric": "ball_progressions",
+          "label": "ball progressions",
+          "value": 15,
+          "unit": ""
+        },
+        {
+          "metric": "take_ons",
+          "label": "take-ons",
+          "value": 11,
+          "unit": ""
+        }
+      ],
+      "evidence_chips": [
+        "repeated line breaks",
+        "constant carries"
+      ],
+      "avoid": [
+        "metric dumps",
+        "generic AI phrasing",
+        "claims that imply video review"
+      ]
+    },
+    {
+      "award_type": "defensive_pick",
+      "award_label": "Defensive Pick",
+      "player_name": "ABDALLAH NASIB",
+      "team": "Jordan",
+      "opponent": "Austria",
+      "match_no": 20,
+      "score": 41.0,
+      "why_selected": "Focus on stopping attacks and forcing resets.",
+      "title_candidates": [
+        "The stubborn stopper",
+        "Breaking the flow",
+        "The defender who kept resetting attacks"
+      ],
+      "action_notes": [
+        "won possession back repeatedly",
+        "blocked attacks before they became cleaner chances"
+      ],
+      "key_metrics": [
+        {
+          "metric": "possession_regains",
+          "label": "possession regains",
+          "value": 12,
+          "unit": ""
+        },
+        {
+          "metric": "blocks",
+          "label": "blocks",
+          "value": 9,
+          "unit": ""
+        },
+        {
+          "metric": "possession_interrupted",
+          "label": "interruptions",
+          "value": 8,
+          "unit": ""
+        }
+      ],
+      "evidence_chips": [
+        "ball-winning profile",
+        "disrupted attacks"
+      ],
+      "avoid": [
+        "metric dumps",
+        "generic AI phrasing",
+        "claims that imply video review"
+      ]
+    },
+    {
+      "award_type": "hidden_gem",
+      "award_label": "Hidden Gem",
+      "player_name": "Rodrigo DE PAUL",
+      "team": "Argentina",
+      "opponent": "Algeria",
+      "match_no": 19,
+      "score": 54.3,
+      "why_selected": "Explain the quieter linking work that kept possession connected.",
+      "title_candidates": [
+        "The quiet connector",
+        "The link behind the highlights",
+        "A useful game between the lines"
+      ],
+      "action_notes": [
+        "kept giving teammates a passing option",
+        "kept appearing between the lines"
+      ],
+      "key_metrics": [
+        {
+          "metric": "offers_received",
+          "label": "received offers",
+          "value": 34,
+          "unit": ""
+        },
+        {
+          "metric": "in_between",
+          "label": "between-line offers",
+          "value": 21,
+          "unit": ""
+        },
+        {
+          "metric": "in_behind",
+          "label": "in-behind offers",
+          "value": 7,
+          "unit": ""
+        }
+      ],
+      "evidence_chips": [
+        "found again and again",
+        "between-line presence"
+      ],
+      "avoid": [
+        "metric dumps",
+        "generic AI phrasing",
+        "claims that imply video review"
+      ]
+    }
+  ],
+  "review_checklist": [
+    "Title reads like natural English sports copy.",
+    "Each pick has a distinct football angle.",
+    "Evidence supports the claim without metric dumping.",
+    "No implied video review or outside rating source."
+  ]
+}

@@ -93,6 +93,14 @@ def write_editorial_artifacts(
         json.dumps(evidence, ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
     )
+    (dated_path / "brief.zh.json").write_text(
+        json.dumps(_language_brief_payload(report, "zh"), ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    (dated_path / "brief.en.json").write_text(
+        json.dumps(_language_brief_payload(report, "en"), ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
     write_compiled_editorial_artifacts(compiled, site_dir=site_path)
 
 
@@ -616,6 +624,273 @@ def _evidence_payload(report: dict[str, Any]) -> dict[str, Any]:
         choice.pop("narrative", None)
         choice.pop("draft", None)
     return evidence
+
+
+def _language_brief_payload(report: dict[str, Any], language: str) -> dict[str, Any]:
+    if language not in {"en", "zh"}:
+        raise ValueError(f"Unsupported editorial brief language: {language}")
+    return {
+        "schema_version": 1,
+        "language": language,
+        "generated_at": report["generated_at"],
+        "match_date": report["match_date"],
+        "scoring_version": report["scoring_version"],
+        "editorial_voice": _editorial_voice(language),
+        "choices": [
+            _language_choice_brief(choice, language)
+            for choice in report["choices"]
+        ],
+        "review_checklist": _review_checklist(language),
+    }
+
+
+def _language_choice_brief(choice: dict[str, Any], language: str) -> dict[str, Any]:
+    if language == "zh":
+        return {
+            "award_type": choice["award_type"],
+            "award_label": choice["award_label"]["zh"],
+            "player_name": _zh_player_name(choice["player_name"]),
+            "team": _zh_team_name(choice["team"]),
+            "opponent": _zh_team_name(choice["opponent"]),
+            "match_no": choice["match_no"],
+            "score": choice["score"],
+            "why_selected": _zh_selection_angle(choice),
+            "title_candidates": _zh_title_candidates(choice),
+            "action_notes": _zh_action_notes(choice),
+            "key_metrics": _choice_metric_items(choice, "zh"),
+            "evidence_chips": choice["evidence_chips"]["zh"],
+            "avoid": [
+                "英文直译腔",
+                "可见部分",
+                "影响不只在",
+                "把答案写明了",
+                "数据画像",
+            ],
+        }
+    return {
+        "award_type": choice["award_type"],
+        "award_label": choice["award_label"]["en"],
+        "player_name": choice["player_name"],
+        "team": choice["team"],
+        "opponent": choice["opponent"],
+        "match_no": choice["match_no"],
+        "score": choice["score"],
+        "why_selected": _en_selection_angle(choice),
+        "title_candidates": _en_title_candidates(choice),
+        "action_notes": _en_action_notes(choice),
+        "key_metrics": _choice_metric_items(choice, "en"),
+        "evidence_chips": choice["evidence_chips"]["en"],
+        "avoid": [
+            "metric dumps",
+            "generic AI phrasing",
+            "claims that imply video review",
+        ],
+    }
+
+
+def _editorial_voice(language: str) -> str:
+    if language == "zh":
+        return (
+            "严肃足球数据分析员面向大众发帖：先讲球场作用，再带少量关键数据；"
+            "可以轻松一点，但不要像翻译稿或指标表。"
+        )
+    return (
+        "A data-aware football analyst writing for a general audience: clear, light, "
+        "and grounded in the evidence without sounding like a table."
+    )
+
+
+def _review_checklist(language: str) -> list[str]:
+    if language == "zh":
+        return [
+            "标题像中文体育内容，不像英文标题翻译。",
+            "每张卡片有一个具体球场动作或作用。",
+            "明显表现直给，隐藏亮点解释为什么值得看。",
+            "最多带两三个关键数字，不堆指标。",
+            "没有暗示看过录像或外部评分。",
+        ]
+    return [
+        "Title reads like natural English sports copy.",
+        "Each pick has a distinct football angle.",
+        "Evidence supports the claim without metric dumping.",
+        "No implied video review or outside rating source.",
+    ]
+
+
+def _zh_selection_angle(choice: dict[str, Any]) -> str:
+    goals = _metric_value(choice, "goals")
+    if goals >= 3:
+        return "明显答案：帽子戏法直接决定当天最佳，但可以补一句他还参与推进。"
+    if goals >= 2:
+        return "进球很醒目，但更要写他持续冲击身后空间。"
+    if choice["award_type"] == "progression_pick":
+        return "重点写他如何把球从压力区带到前场。"
+    if choice["award_type"] == "defensive_pick":
+        return "重点写他如何让对手进攻停下来、重新组织。"
+    if choice["award_type"] == "hidden_gem":
+        return "重点写他为什么不抢镜但让进攻不断线。"
+    return "重点写他在接应、转移和打穿防线里的连接作用。"
+
+
+def _en_selection_angle(choice: dict[str, Any]) -> str:
+    goals = _metric_value(choice, "goals")
+    if goals >= 3:
+        return "Obvious pick: the hat-trick decides the top-line argument."
+    if goals >= 2:
+        return "Goals matter, but frame the repeated threat behind the line."
+    if choice["award_type"] == "progression_pick":
+        return "Focus on moving the ball through pressure and into territory."
+    if choice["award_type"] == "defensive_pick":
+        return "Focus on stopping attacks and forcing resets."
+    if choice["award_type"] == "hidden_gem":
+        return "Explain the quieter linking work that kept possession connected."
+    return "Focus on the connective midfield role."
+
+
+def _zh_title_candidates(choice: dict[str, Any]) -> list[str]:
+    name = _zh_player_name(choice["player_name"])
+    goals = _metric_value(choice, "goals")
+    if goals >= 3:
+        return [
+            "帽子戏法就是答案",
+            f"{name}用三球定了调",
+            "三球在手，不用多解释",
+            f"当天最佳绕不开{name}",
+        ]
+    if goals >= 2:
+        return [
+            f"{name}一直冲身后",
+            "塞内加尔防线被他压住了",
+            "两个进球之外，还有持续威胁",
+            f"{name}把纵深打出来了",
+        ]
+    if choice["award_type"] == "progression_pick":
+        return [
+            "最能把球带出去的人",
+            "压力下的推进出口",
+            f"{name}把边路推进打出来了",
+            "不是赢球方，也有亮点",
+        ]
+    if choice["award_type"] == "defensive_pick":
+        return [
+            "后场最硬的一道闸",
+            "他让进攻一遍遍停下",
+            f"{name}把防守活干满了",
+            "承压局里的防守答案",
+        ]
+    if choice["award_type"] == "hidden_gem":
+        return [
+            "不抢镜的连接器",
+            f"{name}把进攻接起来了",
+            "看不见的接应很关键",
+            "隐藏亮点在传球角度里",
+        ]
+    return [
+        "中场接口很关键",
+        f"{name}让进攻转起来",
+        "不是进球，也能决定节奏",
+        "推进和接应都在线",
+    ]
+
+
+def _en_title_candidates(choice: dict[str, Any]) -> list[str]:
+    goals = _metric_value(choice, "goals")
+    if goals >= 3:
+        return ["The hat-trick was enough", "Three goals, no debate", "The obvious top pick"]
+    if goals >= 2:
+        return ["The constant threat behind", "Two goals and a deeper problem", "Always stretching the line"]
+    if choice["award_type"] == "progression_pick":
+        return ["The best route forward", "Carrying through pressure", "Progression from a losing side"]
+    if choice["award_type"] == "defensive_pick":
+        return ["The stubborn stopper", "Breaking the flow", "The defender who kept resetting attacks"]
+    if choice["award_type"] == "hidden_gem":
+        return ["The quiet connector", "The link behind the highlights", "A useful game between the lines"]
+    return ["The midfield connector", "The link in possession", "A quiet route through midfield"]
+
+
+def _zh_action_notes(choice: dict[str, Any]) -> list[str]:
+    notes: list[str] = []
+    if _metric_value(choice, "goals") >= 3:
+        notes.append("包办球队全部进球")
+    elif _metric_value(choice, "goals") >= 2:
+        notes.append("反复冲击后卫身后")
+    if _metric_value(choice, "line_breaks_completed") >= 12:
+        notes.append("多次打穿对方防线")
+    if _metric_value(choice, "ball_progressions") >= 10:
+        notes.append("主动把球带过压力区")
+    if _metric_value(choice, "offers_received") >= 25:
+        notes.append("持续给队友接应点")
+    if _metric_value(choice, "in_between") >= 15:
+        notes.append("经常出现在两线之间")
+    if _metric_value(choice, "possession_regains") >= 8:
+        notes.append("不断把球权抢回来")
+    if _metric_value(choice, "blocks") >= 8:
+        notes.append("用封堵把对手进攻挡下来")
+    return notes[:4]
+
+
+def _en_action_notes(choice: dict[str, Any]) -> list[str]:
+    notes: list[str] = []
+    if _metric_value(choice, "goals") >= 3:
+        notes.append("scored every goal for his team")
+    elif _metric_value(choice, "goals") >= 2:
+        notes.append("kept attacking the space behind the line")
+    if _metric_value(choice, "line_breaks_completed") >= 12:
+        notes.append("repeatedly broke the opponent's lines")
+    if _metric_value(choice, "ball_progressions") >= 10:
+        notes.append("carried the ball through pressure")
+    if _metric_value(choice, "offers_received") >= 25:
+        notes.append("kept giving teammates a passing option")
+    if _metric_value(choice, "in_between") >= 15:
+        notes.append("kept appearing between the lines")
+    if _metric_value(choice, "possession_regains") >= 8:
+        notes.append("won possession back repeatedly")
+    if _metric_value(choice, "blocks") >= 8:
+        notes.append("blocked attacks before they became cleaner chances")
+    return notes[:4]
+
+
+def _choice_metric_items(choice: dict[str, Any], language: str) -> list[dict[str, Any]]:
+    labels = {
+        "goals": {"en": "goals", "zh": "进球"},
+        "on_target": {"en": "shots on target", "zh": "射正"},
+        "line_breaks_completed": {"en": "completed line breaks", "zh": "打穿防线"},
+        "ball_progressions": {"en": "ball progressions", "zh": "推进"},
+        "take_ons": {"en": "take-ons", "zh": "尝试过人"},
+        "offers_received": {"en": "received offers", "zh": "接应成功"},
+        "in_between": {"en": "between-line offers", "zh": "两线间接应"},
+        "in_behind": {"en": "in-behind offers", "zh": "身后接应"},
+        "possession_regains": {"en": "possession regains", "zh": "夺回球权"},
+        "possession_interrupted": {"en": "interruptions", "zh": "破坏进攻"},
+        "blocks": {"en": "blocks", "zh": "封堵"},
+        "total_distance_m": {"en": "distance", "zh": "跑动距离"},
+    }
+    items: list[dict[str, Any]] = []
+    for component in choice.get("score_components", []):
+        metric = str(component.get("metric"))
+        if metric not in labels:
+            continue
+        value = _clean_number(float(component.get("value") or 0))
+        unit = "m" if metric == "total_distance_m" and language == "en" else ""
+        unit = "米" if metric == "total_distance_m" and language == "zh" else unit
+        items.append(
+            {
+                "metric": metric,
+                "label": labels[metric][language],
+                "value": value,
+                "unit": unit,
+            }
+        )
+        if len(items) >= 5:
+            break
+    return items
+
+
+def _metric_value(choice: dict[str, Any], metric: str) -> float:
+    for component in choice.get("score_components", []):
+        if component.get("metric") == metric:
+            return float(component.get("value") or 0)
+    return 0.0
 
 
 def _parse_choice_sections(markdown_text: str) -> list[dict[str, list[str]]]:

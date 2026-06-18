@@ -32,33 +32,47 @@ Outputs:
 
 - `reports/editorial/YYYY-MM-DD.md`
 - `site/editorial/YYYY-MM-DD/evidence.json`
+- `site/editorial/YYYY-MM-DD/brief.zh.json`
+- `site/editorial/YYYY-MM-DD/brief.en.json`
 - `site/editorial/latest.json`
 - `site/editorial/YYYY-MM-DD/choices.json`
 - `site/editorial/YYYY-MM-DD/index.html`
 - `site/editorial/index.html`
 - `site/index.html` is rebuilt by default so the homepage shows the latest cards.
 
-Markdown is the human-readable source. `evidence.json` is the structured audit source. `choices.json` is compiled frontend data with rendered HTML.
+Markdown is the human-readable source. `evidence.json` is the structured audit source. `brief.zh.json` and `brief.en.json` are language-specific editorial inputs. `choices.json` is compiled frontend data with rendered HTML.
 
-5. Read `site/editorial/YYYY-MM-DD/evidence.json` and `reports/editorial/YYYY-MM-DD.md`.
+5. Read `site/editorial/YYYY-MM-DD/evidence.json`, `site/editorial/YYYY-MM-DD/brief.zh.json`, `site/editorial/YYYY-MM-DD/brief.en.json`, and `reports/editorial/YYYY-MM-DD.md`.
 
 Treat generated Markdown as a draft brief, not publishable copy. It exists to carry the selected players, evidence chips, and top metrics into a human-editable shape.
 
-Rewrite Chinese and English in separate passes from the same evidence. Do not use either finished language version as input for the other. The two versions should make the same selection argument, but sentence order and idiom can differ.
+Rewrite Chinese and English in separate passes from the same evidence. Use `brief.zh.json` for Chinese and `brief.en.json` for English. Do not use either finished language version as input for the other. The two versions should make the same selection argument, but sentence order and idiom can differ.
+
+For Chinese, Generate 3-5 Chinese title candidates from `brief.zh.json`, reject candidates that sound like translated English, and use the most natural one. Examples of natural title shape: `帽子戏法就是答案`, `最能把球带出去的人`, `不抢镜的连接器`.
 
 Revise only the Markdown, and only when `evidence.json` or SQLite supports the wording.
 
-6. If you revise Markdown, compile it back to frontend JSON/HTML:
+6. Run an editorial review pass before rendering:
+
+- Does the Chinese read like a Chinese football post rather than an English rewrite?
+- Does each card have a distinct football angle?
+- Does obvious evidence stay direct while hidden-gem evidence gets a clear why-it-matters explanation?
+- Are there at most two or three key numbers per body?
+- Does the copy avoid implying video review or outside ratings?
+
+If any card fails the editorial review pass, rewrite that card only.
+
+7. If you revise Markdown, compile it back to frontend JSON/HTML:
 
 ```bash
 python scripts/render_editorial.py --date YYYY-MM-DD
 ```
 
-7. Verify:
+8. Verify:
 
 ```bash
 python -m pytest -q
 for f in examples/*.sql; do sqlite3 data/latest.sqlite < "$f" >/dev/null || exit 1; done
 ```
 
-8. Follow `pr-policy.md` for publication.
+9. Follow `pr-policy.md` for publication.

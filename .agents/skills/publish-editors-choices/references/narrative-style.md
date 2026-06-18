@@ -13,6 +13,7 @@ Treat generated Markdown as a draft brief, not publishable copy. The generator s
 - Put football actions before data labels: write what the player did on the pitch, then let evidence chips carry the audit trail.
 - Rewrite Chinese and English in separate passes from the same evidence.
 - Do not use either finished language version as input for the other.
+- Use `brief.zh.json` and `brief.en.json` as the language-specific inputs.
 - Vary the angle for each pick; do not reuse the same sentence frame across multiple players.
 - Translate metrics into football language:
   - `goals >= 3`: hat-trick / 帽子戏法
@@ -39,6 +40,8 @@ Bad:
 
 Use natural Chinese sports commentary. Write Chinese from evidence, not from the English draft. The Chinese copy should make the same editorial judgment, but it should not mirror English sentence order, metaphors, or abstractions.
 
+Before writing each Chinese card, Generate 3-5 Chinese title candidates from `brief.zh.json`. Pick the one that sounds most like a Chinese football post. Reject titles that feel mechanically abstract, such as `帽子戏法把答案写明了`; prefer direct phrasing such as `帽子戏法就是答案`.
+
 Good:
 
 > 姆巴佩这场一直压着塞内加尔后卫线踢。两个进球是结果，更持续的威胁来自他不断冲击身后空间。
@@ -54,5 +57,6 @@ Before publishing, check:
 - Every claim is supported by `evidence.json` or SQLite.
 - The English and Chinese versions make the same selection argument.
 - The copy does not sound like a metric table.
+- Run an editorial review pass: serious football analysis, light public-facing tone, distinct angle per player, and no translationese.
 - No external match observation is implied unless an external source was actually checked.
 - After Markdown edits, run `scripts/render_editorial.py --date YYYY-MM-DD`.

@@ -48,17 +48,23 @@ def test_write_editorial_artifacts(tmp_path):
     latest = tmp_path / "site" / "editorial" / "latest.json"
     dated_json = tmp_path / "site" / "editorial" / "2026-06-16" / "choices.json"
     evidence_json = tmp_path / "site" / "editorial" / "2026-06-16" / "evidence.json"
+    zh_brief_json = tmp_path / "site" / "editorial" / "2026-06-16" / "brief.zh.json"
+    en_brief_json = tmp_path / "site" / "editorial" / "2026-06-16" / "brief.en.json"
     dated_html = tmp_path / "site" / "editorial" / "2026-06-16" / "index.html"
     report_md = tmp_path / "reports" / "editorial" / "2026-06-16.md"
 
     assert latest.exists()
     assert dated_json.exists()
     assert evidence_json.exists()
+    assert zh_brief_json.exists()
+    assert en_brief_json.exists()
     assert dated_html.exists()
     assert report_md.exists()
 
     saved = json.loads(latest.read_text(encoding="utf-8"))
     evidence = json.loads(evidence_json.read_text(encoding="utf-8"))
+    zh_brief = json.loads(zh_brief_json.read_text(encoding="utf-8"))
+    en_brief = json.loads(en_brief_json.read_text(encoding="utf-8"))
     html = dated_html.read_text(encoding="utf-8")
     markdown = report_md.read_text(encoding="utf-8")
     first_choice = saved["choices"][0]
@@ -74,6 +80,17 @@ def test_write_editorial_artifacts(tmp_path):
     assert "markdown" not in first_choice["content"]["en"]
     assert "narrative" not in evidence["choices"][0]
     assert "draft" not in evidence["choices"][0]
+    assert zh_brief["language"] == "zh"
+    assert en_brief["language"] == "en"
+    assert zh_brief["choices"][0]["player_name"] == "梅西"
+    assert zh_brief["choices"][0]["team"] == "阿根廷"
+    assert zh_brief["choices"][0]["opponent"] == "阿尔及利亚"
+    assert "title_candidates" in zh_brief["choices"][0]
+    assert "帽子戏法就是答案" in zh_brief["choices"][0]["title_candidates"]
+    assert "Lionel" not in json.dumps(zh_brief, ensure_ascii=False)
+    assert "hat-trick" not in json.dumps(zh_brief, ensure_ascii=False)
+    assert en_brief["choices"][0]["player_name"] == "Lionel MESSI"
+    assert "帽子戏法" not in json.dumps(en_brief, ensure_ascii=False)
     assert "Editor's Choices" in html
     assert "Editor&apos;s Choices" not in html
     assert "## Choices" in markdown

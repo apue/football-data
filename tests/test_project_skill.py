@@ -27,4 +27,8 @@ def test_publish_editors_choices_skill_is_repo_scoped():
     assert "Treat generated Markdown as a draft brief, not publishable copy" in references
     assert "Rewrite Chinese and English in separate passes from the same evidence" in references
     assert "Do not use either finished language version as input for the other" in references
+    assert "brief.zh.json" in references
+    assert "brief.en.json" in references
+    assert "Generate 3-5 Chinese title candidates" in references
+    assert "editorial review pass" in references
     assert "football actions before data labels" in references

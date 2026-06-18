@@ -45,7 +45,7 @@ Expected generated outputs:
 
 When the user asks to publish or check Editor's Choices, daily picks, 每日精选, Player of the Day, or hidden gems, use the repo-scoped skill at `.agents/skills/publish-editors-choices/SKILL.md`.
 
-Use `reports/editorial/YYYY-MM-DD.md` as the human review surface. `scripts/generate_editorial.py` produces a draft brief, not publishable copy. Rewrite Chinese and English independently from `evidence.json`; do not use either finished language version as input for the other. Do not ask the user to review compiled JSON; regenerate frontend JSON/HTML with `scripts/render_editorial.py` after Markdown edits.
+Use `reports/editorial/YYYY-MM-DD.md` as the human review surface. `scripts/generate_editorial.py` produces `evidence.json`, `brief.zh.json`, `brief.en.json`, and a Markdown draft brief, not publishable copy. Rewrite Chinese from `brief.zh.json` and English from `brief.en.json`; do not use either finished language version as input for the other. Run an editorial review pass before rendering. Do not ask the user to review compiled JSON; regenerate frontend JSON/HTML with `scripts/render_editorial.py` after Markdown edits.
 
 The editorial workflow generates opinionated content, so prefer a PR branch over direct pushes to `main` unless the user explicitly asks for direct publication.
 
