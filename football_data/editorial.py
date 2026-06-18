@@ -93,6 +93,10 @@ def write_editorial_artifacts(
         json.dumps(evidence, ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
     )
+    (dated_path / "fact_bank.zh.json").write_text(
+        json.dumps(_zh_fact_bank_payload(report), ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
     (dated_path / "brief.zh.json").write_text(
         json.dumps(_language_brief_payload(report, "zh"), ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
@@ -624,6 +628,116 @@ def _evidence_payload(report: dict[str, Any]) -> dict[str, Any]:
         choice.pop("narrative", None)
         choice.pop("draft", None)
     return evidence
+
+
+def _zh_fact_bank_payload(report: dict[str, Any]) -> dict[str, Any]:
+    matches_by_key = {
+        str(match["match_key"]): match
+        for match in report.get("matches", [])
+    }
+    return {
+        "schema_version": 1,
+        "language": "zh",
+        "generated_at": report["generated_at"],
+        "match_date": report["match_date"],
+        "scoring_version": report["scoring_version"],
+        "editorial_process": "from_scratch_chinese_sports_editor",
+        "editorial_voice": (
+            "严肃足球数据分析员面向大众发帖：判断清楚，语气可以轻松一点；"
+            "先讲球场作用，再自然带一两个关键事实。"
+        ),
+        "forbidden_inputs": [
+            "英文稿",
+            "英文标题",
+            "英文成稿",
+            "已成型选择理由句子",
+        ],
+        "review_loop": [
+            "先用中文体育编辑视角从事实重写，不继承旧稿句式。",
+            "再做 qu-ai-wei 式严格审稿：删翻译腔、空话、事实越界。",
+            "只在卡片不顺时做 humanizer-zh 式语感修复。",
+        ],
+        "choices": [
+            _zh_fact_bank_choice(choice, matches_by_key.get(str(choice["match_key"])))
+            for choice in report["choices"]
+        ],
+    }
+
+
+def _zh_fact_bank_choice(
+    choice: dict[str, Any],
+    match: dict[str, Any] | None,
+) -> dict[str, Any]:
+    return {
+        "award_type": choice["award_type"],
+        "award_label": choice["award_label"]["zh"],
+        "player_name": _zh_player_name(choice["player_name"]),
+        "team": _zh_team_name(choice["team"]),
+        "opponent": _zh_team_name(choice["opponent"]),
+        "match_no": choice["match_no"],
+        "match_scoreline": _zh_match_scoreline(choice, match),
+        "position": choice.get("position"),
+        "facts": _zh_fact_bank_facts(choice),
+        "allowed_angles": _zh_allowed_angles(choice),
+        "evidence_chips": choice["evidence_chips"]["zh"],
+    }
+
+
+def _zh_match_scoreline(choice: dict[str, Any], match: dict[str, Any] | None) -> str:
+    if not match:
+        return ""
+    home = _zh_team_name(str(match["home_team"]))
+    away = _zh_team_name(str(match["away_team"]))
+    if choice["team"] == match["away_team"]:
+        return f"{away} {match['away_score']}-{match['home_score']} {home}"
+    return f"{home} {match['home_score']}-{match['away_score']} {away}"
+
+
+def _zh_fact_bank_facts(choice: dict[str, Any]) -> list[str]:
+    facts: list[str] = []
+    for chip in choice["evidence_chips"]["zh"]:
+        _append_unique(facts, chip)
+    for item in _choice_metric_items(choice, "zh"):
+        _append_unique(facts, _zh_metric_fact(item))
+    return facts
+
+
+def _zh_metric_fact(item: dict[str, Any]) -> str:
+    metric = str(item["metric"])
+    value = _format_zh_value(item["value"])
+    label = str(item["label"])
+    unit = str(item.get("unit") or "")
+    if metric == "goals":
+        return f"{value} 个进球"
+    if metric == "total_distance_m":
+        return f"跑动距离 {value} {unit}"
+    return f"{value} 次{label}"
+
+
+def _format_zh_value(value: object) -> str:
+    if isinstance(value, float) and value.is_integer():
+        return str(int(value))
+    return str(value)
+
+
+def _append_unique(items: list[str], item: str) -> None:
+    if item and item not in items:
+        items.append(item)
+
+
+def _zh_allowed_angles(choice: dict[str, Any]) -> list[str]:
+    goals = _metric_value(choice, "goals")
+    if goals >= 3:
+        return ["明显最佳", "不必绕远", "可以补充他不只负责最后一脚"]
+    if goals >= 2:
+        return ["进球很醒目", "持续冲击身后空间", "让对手防线不敢前压"]
+    if choice["award_type"] == "progression_pick":
+        return ["输球方亮点", "把球从压力里带出来", "推进出口"]
+    if choice["award_type"] == "defensive_pick":
+        return ["承压局防守", "让对手进攻停下来", "脏活和硬活"]
+    if choice["award_type"] == "hidden_gem":
+        return ["不抢镜", "持续提供接应角度", "让前场不断线"]
+    return ["中场连接点", "接应和转移", "帮助球队持续向前处理"]
 
 
 def _language_brief_payload(report: dict[str, Any], language: str) -> dict[str, Any]:

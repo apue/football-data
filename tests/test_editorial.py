@@ -48,6 +48,7 @@ def test_write_editorial_artifacts(tmp_path):
     latest = tmp_path / "site" / "editorial" / "latest.json"
     dated_json = tmp_path / "site" / "editorial" / "2026-06-16" / "choices.json"
     evidence_json = tmp_path / "site" / "editorial" / "2026-06-16" / "evidence.json"
+    zh_fact_bank_json = tmp_path / "site" / "editorial" / "2026-06-16" / "fact_bank.zh.json"
     zh_brief_json = tmp_path / "site" / "editorial" / "2026-06-16" / "brief.zh.json"
     en_brief_json = tmp_path / "site" / "editorial" / "2026-06-16" / "brief.en.json"
     dated_html = tmp_path / "site" / "editorial" / "2026-06-16" / "index.html"
@@ -56,6 +57,7 @@ def test_write_editorial_artifacts(tmp_path):
     assert latest.exists()
     assert dated_json.exists()
     assert evidence_json.exists()
+    assert zh_fact_bank_json.exists()
     assert zh_brief_json.exists()
     assert en_brief_json.exists()
     assert dated_html.exists()
@@ -63,6 +65,7 @@ def test_write_editorial_artifacts(tmp_path):
 
     saved = json.loads(latest.read_text(encoding="utf-8"))
     evidence = json.loads(evidence_json.read_text(encoding="utf-8"))
+    zh_fact_bank = json.loads(zh_fact_bank_json.read_text(encoding="utf-8"))
     zh_brief = json.loads(zh_brief_json.read_text(encoding="utf-8"))
     en_brief = json.loads(en_brief_json.read_text(encoding="utf-8"))
     html = dated_html.read_text(encoding="utf-8")
@@ -80,6 +83,23 @@ def test_write_editorial_artifacts(tmp_path):
     assert "markdown" not in first_choice["content"]["en"]
     assert "narrative" not in evidence["choices"][0]
     assert "draft" not in evidence["choices"][0]
+    assert zh_fact_bank["language"] == "zh"
+    assert zh_fact_bank["editorial_process"] == "from_scratch_chinese_sports_editor"
+    assert zh_fact_bank["choices"][0]["player_name"] == "梅西"
+    assert zh_fact_bank["choices"][0]["match_scoreline"] == "阿根廷 3-0 阿尔及利亚"
+    assert any("帽子戏法" in fact for fact in zh_fact_bank["choices"][0]["facts"])
+    assert any("4 次射正" in fact for fact in zh_fact_bank["choices"][0]["facts"])
+    assert any("跑动距离 6808.4 米" in fact for fact in zh_fact_bank["choices"][0]["facts"])
+    progression_choice = next(
+        choice
+        for choice in zh_fact_bank["choices"]
+        if choice["award_type"] == "progression_pick"
+    )
+    assert progression_choice["match_scoreline"] == "阿尔及利亚 0-3 阿根廷"
+    assert "英文稿" in zh_fact_bank["forbidden_inputs"]
+    fact_bank_text = json.dumps(zh_fact_bank, ensure_ascii=False)
+    assert "why_selected" not in fact_bank_text
+    assert "title_candidates" not in fact_bank_text
     assert zh_brief["language"] == "zh"
     assert en_brief["language"] == "en"
     assert zh_brief["choices"][0]["player_name"] == "梅西"

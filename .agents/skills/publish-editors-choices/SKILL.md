@@ -22,8 +22,10 @@ Read these before acting:
 - Treat generated Markdown as a draft brief, not publishable copy.
 - Let Codex revise Markdown from generated evidence; do not invent facts outside `evidence.json`/SQLite.
 - Rewrite Chinese and English independently from the same evidence.
-- Use `brief.zh.json` for Chinese copy and `brief.en.json` for English copy; do not cross-feed language outputs.
-- Generate 3-5 Chinese title candidates, reject translationese, then write the selected title/body.
+- Use `fact_bank.zh.json` as the primary Chinese input. Use `brief.zh.json` only for legacy diagnostics, not as the Chinese writing base.
+- Write Chinese as a from-scratch Chinese sports editor from facts, then review it with a strict `qu-ai-wei` style pass; use `humanizer-zh` style repair only for cards that fail review.
+- Use `brief.en.json` plus `evidence.json` for English copy; do not cross-feed language outputs.
+- Generate 3-5 Chinese title candidates from the fact bank, reject translationese, then write the selected title/body.
 - Run an editorial review pass before rendering: judge natural language, distinct angles, evidence support, and no implied video review.
 - Run `scripts/render_editorial.py` after Markdown edits to compile frontend JSON/HTML.
 - Use local match dates from `matches.match_date`, not Beijing date or workflow run time.

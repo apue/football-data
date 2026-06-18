@@ -23,10 +23,14 @@ def test_publish_editors_choices_skill_is_repo_scoped():
     assert "reports/editorial/YYYY-MM-DD.md" in references
     assert "scripts/render_editorial.py" in references
     assert "Markdown is the human-readable source" in references
-    assert "Write Chinese from evidence, not from the English draft" in references
+    assert "Write Chinese from `fact_bank.zh.json`, not from the English draft" in references
     assert "Treat generated Markdown as a draft brief, not publishable copy" in references
     assert "Rewrite Chinese and English in separate passes from the same evidence" in references
     assert "Do not use either finished language version as input for the other" in references
+    assert "fact_bank.zh.json" in references
+    assert "from-scratch Chinese sports editor" in references
+    assert "qu-ai-wei" in references
+    assert "humanizer-zh" in references
     assert "brief.zh.json" in references
     assert "brief.en.json" in references
     assert "Generate 3-5 Chinese title candidates" in references

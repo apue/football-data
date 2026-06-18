@@ -33,7 +33,8 @@ By default this repository does not redistribute original PDF files. Local PDF c
 - `notebooks/*.ipynb` - notebook-style demo examples
 - `reports/editorial/*.md` - human-readable Editor's Choices reports when published
 - `site/editorial/` - rendered Editor's Choices JSON/HTML for the demo site
-- `site/editorial/*/brief.zh.json` and `brief.en.json` - language-specific editorial inputs for Chinese-first and English-first copy
+- `site/editorial/*/fact_bank.zh.json` - raw Chinese fact bank for from-scratch Chinese sports-editor copy
+- `site/editorial/*/brief.zh.json` and `brief.en.json` - legacy Chinese draft brief plus English editorial input
 - `.agents/skills/publish-editors-choices/` - repo-scoped Codex skill for the editorial publishing workflow
 - GitHub Pages demo generated from the latest SQLite database: https://apue.github.io/football-data/
 
@@ -67,7 +68,7 @@ python scripts/check_status.py
 
 ## Editor's Choices
 
-Editor's Choices are data-informed editorial picks generated from structured PMSR evidence. They are not official FIFA awards. The generator selects candidates from the SQLite database, writes auditable evidence, and produces language-specific draft inputs: `brief.zh.json`, `brief.en.json`, and an English/Chinese Markdown draft brief. Final copy should be edited from the relevant language brief plus `evidence.json`, with Chinese and English written independently rather than translated from each other.
+Editor's Choices are data-informed editorial picks generated from structured PMSR evidence. They are not official FIFA awards. The generator selects candidates from the SQLite database, writes auditable evidence, and produces `fact_bank.zh.json`, `brief.zh.json`, `brief.en.json`, and an English/Chinese Markdown draft brief. Final Chinese copy should be written from `fact_bank.zh.json` as fresh Chinese sports copy, then reviewed for translationese and factual drift. Final English copy should be written separately from `brief.en.json` plus `evidence.json`. The two languages should make the same judgment, but neither should be a translation of the other.
 
 Run:
 

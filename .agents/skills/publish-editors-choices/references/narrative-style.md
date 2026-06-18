@@ -13,7 +13,8 @@ Treat generated Markdown as a draft brief, not publishable copy. The generator s
 - Put football actions before data labels: write what the player did on the pitch, then let evidence chips carry the audit trail.
 - Rewrite Chinese and English in separate passes from the same evidence.
 - Do not use either finished language version as input for the other.
-- Use `brief.zh.json` and `brief.en.json` as the language-specific inputs.
+- Use `fact_bank.zh.json` as the Chinese input and `brief.en.json` as the English input.
+- Keep `brief.zh.json` for compatibility checks only; it is not the Chinese writing base.
 - Vary the angle for each pick; do not reuse the same sentence frame across multiple players.
 - Translate metrics into football language:
   - `goals >= 3`: hat-trick / 帽子戏法
@@ -38,9 +39,18 @@ Bad:
 
 ## Chinese Tone
 
-Use natural Chinese sports commentary. Write Chinese from evidence, not from the English draft. The Chinese copy should make the same editorial judgment, but it should not mirror English sentence order, metaphors, or abstractions.
+Use natural Chinese sports commentary. Write Chinese from `fact_bank.zh.json`, not from the English draft and not from the generated Markdown frame. The Chinese copy should make the same editorial judgment, but it should not mirror English sentence order, metaphors, or abstractions.
 
-Before writing each Chinese card, Generate 3-5 Chinese title candidates from `brief.zh.json`. Pick the one that sounds most like a Chinese football post. Reject titles that feel mechanically abstract, such as `帽子戏法把答案写明了`; prefer direct phrasing such as `帽子戏法就是答案`.
+Before writing each Chinese card, generate 3-5 Chinese title candidates from facts and allowed angles in `fact_bank.zh.json`. Pick the one that sounds most like a Chinese football post. Reject titles that feel mechanically abstract, such as `帽子戏法把答案写明了`; prefer direct phrasing such as `帽子戏法就是答案`.
+
+After drafting Chinese, run a strict `qu-ai-wei` style review:
+
+- Does it sound like a Chinese football editor wrote it directly?
+- Is there at least one concrete football action before the numbers?
+- Are abstract phrases and polished-but-empty claims removed?
+- Is every claim supported by `fact_bank.zh.json`, `evidence.json`, or SQLite?
+
+Use `humanizer-zh` style repair only for cards that fail this review. Repair rhythm and word choice, but do not change the player selection argument.
 
 Good:
 
@@ -58,5 +68,6 @@ Before publishing, check:
 - The English and Chinese versions make the same selection argument.
 - The copy does not sound like a metric table.
 - Run an editorial review pass: serious football analysis, light public-facing tone, distinct angle per player, and no translationese.
+- Chinese has passed the from-scratch Chinese sports editor -> `qu-ai-wei` reviewer -> optional `humanizer-zh` repair loop.
 - No external match observation is implied unless an external source was actually checked.
 - After Markdown edits, run `scripts/render_editorial.py --date YYYY-MM-DD`.
