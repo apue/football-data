@@ -1,0 +1,551 @@
+{
+  "schema_version": 2,
+  "generated_at": "2026-06-18T03:24:25+00:00",
+  "compiled_at": "2026-06-18T03:24:25+00:00",
+  "match_date": "2026-06-16",
+  "scoring_version": "v0.1",
+  "source_markdown_path": "reports/editorial/2026-06-16.md",
+  "matches": [
+    {
+      "match_key": "FIFA-2026-M17-FRA-SEN",
+      "match_no": 17,
+      "match_date": "2026-06-16",
+      "kickoff_time": "15:00",
+      "stadium": "New York/New Jersey Stadium",
+      "home_team": "France",
+      "away_team": "Senegal",
+      "home_score": 3,
+      "away_score": 1
+    },
+    {
+      "match_key": "FIFA-2026-M18-IRQ-NOR",
+      "match_no": 18,
+      "match_date": "2026-06-16",
+      "kickoff_time": "18:00",
+      "stadium": "Boston Stadium",
+      "home_team": "Iraq",
+      "away_team": "Norway",
+      "home_score": 1,
+      "away_score": 4
+    },
+    {
+      "match_key": "FIFA-2026-M19-ARG-ALG",
+      "match_no": 19,
+      "match_date": "2026-06-16",
+      "kickoff_time": "20:00",
+      "stadium": "Kansas City Stadium",
+      "home_team": "Argentina",
+      "away_team": "Algeria",
+      "home_score": 3,
+      "away_score": 0
+    },
+    {
+      "match_key": "FIFA-2026-M20-AUT-JOR",
+      "match_no": 20,
+      "match_date": "2026-06-16",
+      "kickoff_time": "21:00",
+      "stadium": "San Francisco Bay Area Stadium",
+      "home_team": "Austria",
+      "away_team": "Jordan",
+      "home_score": 3,
+      "away_score": 1
+    }
+  ],
+  "choices": [
+    {
+      "award_type": "player_of_the_day",
+      "award_label": {
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
+      },
+      "rank": 1,
+      "match_key": "FIFA-2026-M19-ARG-ALG",
+      "match_no": 19,
+      "player_no": 10,
+      "player_name": "Lionel MESSI",
+      "team": "Argentina",
+      "opponent": "Algeria",
+      "position": "FW",
+      "score": 68.6,
+      "primary_score": "composite_score",
+      "role_scores": {
+        "attacking_threat": 35.05,
+        "progressor": 30.6,
+        "off_ball": 29.0,
+        "defensive": 6.45,
+        "physical": 12.69
+      },
+      "score_components": [
+        {
+          "metric": "line_breaks_completed",
+          "value": 12,
+          "weight": 2.0,
+          "contribution": 24.0,
+          "score": "progressor"
+        },
+        {
+          "metric": "goals",
+          "value": 3,
+          "weight": 6.0,
+          "contribution": 18.0,
+          "score": "attacking_threat"
+        },
+        {
+          "metric": "offers_received",
+          "value": 16,
+          "weight": 1.0,
+          "contribution": 16.0,
+          "score": "off_ball"
+        },
+        {
+          "metric": "on_target",
+          "value": 4,
+          "weight": 2.0,
+          "contribution": 8.0,
+          "score": "attacking_threat"
+        },
+        {
+          "metric": "total_distance_m",
+          "value": 6808.4,
+          "weight": 0.001,
+          "contribution": 6.81,
+          "score": "physical"
+        },
+        {
+          "metric": "top_speed_kmh",
+          "value": 29.4,
+          "weight": 0.2,
+          "contribution": 5.88,
+          "score": "physical"
+        }
+      ],
+      "evidence_chips": {
+        "en": [
+          "hat-trick",
+          "high shot quality"
+        ],
+        "zh": [
+          "帽子戏法",
+          "射门质量突出"
+        ]
+      },
+      "content": {
+        "en": {
+          "title": "The clearest case of the day",
+          "html": "<p>Lionel MESSI made the headline and the data agree. A hat-trick is already the story, but the PMSR profile also shows a player connecting the finish with repeated line-breaking involvement against Algeria.</p>"
+        },
+        "zh": {
+          "title": "今天最清楚的答案",
+          "html": "<p>Lionel MESSI 这场不用复杂包装：帽子戏法本身就是最直接的比赛叙事。更重要的是，PMSR 的进攻画像也支持这个判断，他不只是完成终结，还持续参与打穿防线的过程。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "player_of_the_day",
+      "award_label": {
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
+      },
+      "rank": 2,
+      "match_key": "FIFA-2026-M17-FRA-SEN",
+      "match_no": 17,
+      "player_no": 10,
+      "player_name": "Kylian MBAPPE",
+      "team": "France",
+      "opponent": "Senegal",
+      "position": "FW",
+      "score": 60.7,
+      "primary_score": "composite_score",
+      "role_scores": {
+        "attacking_threat": 32.1,
+        "progressor": 17.78,
+        "off_ball": 39.6,
+        "defensive": 5.15,
+        "physical": 16.71
+      },
+      "score_components": [
+        {
+          "metric": "in_behind",
+          "value": 30,
+          "weight": 0.6,
+          "contribution": 18.0,
+          "score": "off_ball"
+        },
+        {
+          "metric": "goals",
+          "value": 2,
+          "weight": 6.0,
+          "contribution": 12.0,
+          "score": "attacking_threat"
+        },
+        {
+          "metric": "offers_received",
+          "value": 11,
+          "weight": 1.0,
+          "contribution": 11.0,
+          "score": "off_ball"
+        },
+        {
+          "metric": "total_distance_m",
+          "value": 9686.1,
+          "weight": 0.001,
+          "contribution": 9.69,
+          "score": "physical"
+        },
+        {
+          "metric": "ball_progressions",
+          "value": 9,
+          "weight": 1.0,
+          "contribution": 9.0,
+          "score": "progressor"
+        },
+        {
+          "metric": "on_target",
+          "value": 4,
+          "weight": 2.0,
+          "contribution": 8.0,
+          "score": "attacking_threat"
+        }
+      ],
+      "evidence_chips": {
+        "en": [
+          "brace",
+          "high shot quality"
+        ],
+        "zh": [
+          "梅开二度",
+          "射门质量突出"
+        ]
+      },
+      "content": {
+        "en": {
+          "title": "The clearest case of the day",
+          "html": "<p>Kylian MBAPPE gave the day a direct attacking answer. The brace is the obvious part; the more interesting signal is how often the movement kept pulling the defence toward its own goal.</p>"
+        },
+        "zh": {
+          "title": "今天最清楚的答案",
+          "html": "<p>Kylian MBAPPE 给了这一天一个很直接的进攻答案。梅开二度是最醒目的部分，但更有意思的是，他的跑动和接应一直在把防线往身后拉。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "player_of_the_day",
+      "award_label": {
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
+      },
+      "rank": 3,
+      "match_key": "FIFA-2026-M20-AUT-JOR",
+      "match_no": 20,
+      "player_no": 6,
+      "player_name": "Nicolas SEIWALD",
+      "team": "Austria",
+      "opponent": "Jordan",
+      "position": "MF",
+      "score": 59.8,
+      "primary_score": "composite_score",
+      "role_scores": {
+        "attacking_threat": 7.75,
+        "progressor": 35.74,
+        "off_ball": 50.7,
+        "defensive": 22.5,
+        "physical": 18.26
+      },
+      "score_components": [
+        {
+          "metric": "offers_received",
+          "value": 35,
+          "weight": 1.0,
+          "contribution": 35.0,
+          "score": "off_ball"
+        },
+        {
+          "metric": "line_breaks_completed",
+          "value": 15,
+          "weight": 2.0,
+          "contribution": 30.0,
+          "score": "progressor"
+        },
+        {
+          "metric": "total_distance_m",
+          "value": 11721.4,
+          "weight": 0.001,
+          "contribution": 11.72,
+          "score": "physical"
+        },
+        {
+          "metric": "possession_regains",
+          "value": 6,
+          "weight": 1.3,
+          "contribution": 7.8,
+          "score": "defensive"
+        },
+        {
+          "metric": "total_offers",
+          "value": 71,
+          "weight": 0.1,
+          "contribution": 7.1,
+          "score": "off_ball"
+        },
+        {
+          "metric": "offers_received",
+          "value": 35,
+          "weight": 0.2,
+          "contribution": 7.0,
+          "score": "attacking_threat"
+        }
+      ],
+      "evidence_chips": {
+        "en": [
+          "repeated line breaks",
+          "found again and again",
+          "between-line presence"
+        ],
+        "zh": [
+          "持续打穿防线",
+          "持续接应",
+          "在防线之间活跃"
+        ]
+      },
+      "content": {
+        "en": {
+          "title": "The clearest case of the day",
+          "html": "<p>Nicolas SEIWALD is the non-scorer who forced his way into the top tier. The PMSR profile reads like midfield control: constant availability, repeated line breaks, and enough defensive work to keep the game tilted.</p>"
+        },
+        "zh": {
+          "title": "今天最清楚的答案",
+          "html": "<p>Nicolas SEIWALD 是那种没有靠进球也挤进主选的人。PMSR 里的画像更像是中场控制：持续接应、反复打穿防线，也有足够的防守参与把比赛留在自己一侧。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "progression_pick",
+      "award_label": {
+        "en": "Progression Pick",
+        "zh": "推进精选"
+      },
+      "rank": 1,
+      "match_key": "FIFA-2026-M19-ARG-ALG",
+      "match_no": 19,
+      "player_no": 15,
+      "player_name": "Rayan AIT-NOURI",
+      "team": "Algeria",
+      "opponent": "Argentina",
+      "position": "DF",
+      "score": 53.6,
+      "primary_score": "progressor",
+      "role_scores": {
+        "attacking_threat": 3.45,
+        "progressor": 53.58,
+        "off_ball": 17.1,
+        "defensive": 15.8,
+        "physical": 15.83
+      },
+      "score_components": [
+        {
+          "metric": "line_breaks_completed",
+          "value": 15,
+          "weight": 2.0,
+          "contribution": 30.0
+        },
+        {
+          "metric": "ball_progressions",
+          "value": 15,
+          "weight": 1.0,
+          "contribution": 15.0
+        },
+        {
+          "metric": "take_ons",
+          "value": 11,
+          "weight": 0.5,
+          "contribution": 5.5
+        },
+        {
+          "metric": "step_ins",
+          "value": 4,
+          "weight": 0.5,
+          "contribution": 2.0
+        },
+        {
+          "metric": "passes_completed",
+          "value": 54,
+          "weight": 0.02,
+          "contribution": 1.08
+        }
+      ],
+      "evidence_chips": {
+        "en": [
+          "repeated line breaks",
+          "constant carries"
+        ],
+        "zh": [
+          "持续打穿防线",
+          "推进很活跃"
+        ]
+      },
+      "content": {
+        "en": {
+          "title": "A progression profile worth separating from the scoreline",
+          "html": "<p>Rayan AIT-NOURI is the kind of player this dataset is built to surface. The value is not just one highlight; it is the repeated work of moving the game through line breaks and carries.</p>"
+        },
+        "zh": {
+          "title": "不只看比分时，他的推进会被看见",
+          "html": "<p>Rayan AIT-NOURI 是这类数据最应该挖出来的人。亮点不在某一次镜头，而在反复把球带过压力区、打穿防线的过程里。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "defensive_pick",
+      "award_label": {
+        "en": "Defensive Pick",
+        "zh": "防守精选"
+      },
+      "rank": 1,
+      "match_key": "FIFA-2026-M20-AUT-JOR",
+      "match_no": 20,
+      "player_no": 3,
+      "player_name": "ABDALLAH NASIB",
+      "team": "Jordan",
+      "opponent": "Austria",
+      "position": "DF",
+      "score": 41.0,
+      "primary_score": "defensive",
+      "role_scores": {
+        "attacking_threat": 0.0,
+        "progressor": 19.9,
+        "off_ball": 0.3,
+        "defensive": 40.95,
+        "physical": 14.0
+      },
+      "score_components": [
+        {
+          "metric": "possession_regains",
+          "value": 12,
+          "weight": 1.3,
+          "contribution": 15.6
+        },
+        {
+          "metric": "blocks",
+          "value": 9,
+          "weight": 1.0,
+          "contribution": 9.0
+        },
+        {
+          "metric": "possession_interrupted",
+          "value": 8,
+          "weight": 1.0,
+          "contribution": 8.0
+        },
+        {
+          "metric": "clearances",
+          "value": 8,
+          "weight": 0.5,
+          "contribution": 4.0
+        },
+        {
+          "metric": "tackles_won",
+          "value": 2,
+          "weight": 1.5,
+          "contribution": 3.0
+        },
+        {
+          "metric": "pressing_direct",
+          "value": 3,
+          "weight": 0.3,
+          "contribution": 0.9
+        }
+      ],
+      "evidence_chips": {
+        "en": [
+          "ball-winning profile",
+          "disrupted attacks"
+        ],
+        "zh": [
+          "夺回球权能力突出",
+          "持续破坏进攻"
+        ]
+      },
+      "content": {
+        "en": {
+          "title": "The day’s most disruptive defensive profile",
+          "html": "<p>ABDALLAH NASIB reads as a defensive choice because the work shows up in interruptions, regains, and pressure rather than a single obvious moment. That is exactly the kind of performance a normal recap can flatten.</p>"
+        },
+        "zh": {
+          "title": "把对手节奏切碎的人",
+          "html": "<p>ABDALLAH NASIB 的价值不一定会在集锦里变成一个清楚瞬间。PMSR 里更明显的是，他通过夺回球权、打断进攻和持续施压，把对手的推进节奏切碎。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "hidden_gem",
+      "award_label": {
+        "en": "Hidden Gem",
+        "zh": "隐藏亮点"
+      },
+      "rank": 1,
+      "match_key": "FIFA-2026-M19-ARG-ALG",
+      "match_no": 19,
+      "player_no": 7,
+      "player_name": "Rodrigo DE PAUL",
+      "team": "Argentina",
+      "opponent": "Algeria",
+      "position": "MF",
+      "score": 54.3,
+      "primary_score": "off_ball",
+      "role_scores": {
+        "attacking_threat": 8.55,
+        "progressor": 17.48,
+        "off_ball": 54.3,
+        "defensive": 16.7,
+        "physical": 16.39
+      },
+      "score_components": [
+        {
+          "metric": "offers_received",
+          "value": 34,
+          "weight": 1.0,
+          "contribution": 34.0
+        },
+        {
+          "metric": "in_between",
+          "value": 21,
+          "weight": 0.4,
+          "contribution": 8.4
+        },
+        {
+          "metric": "total_offers",
+          "value": 77,
+          "weight": 0.1,
+          "contribution": 7.7
+        },
+        {
+          "metric": "in_behind",
+          "value": 7,
+          "weight": 0.6,
+          "contribution": 4.2
+        }
+      ],
+      "evidence_chips": {
+        "en": [
+          "found again and again",
+          "between-line presence"
+        ],
+        "zh": [
+          "持续接应",
+          "在防线之间活跃"
+        ]
+      },
+      "content": {
+        "en": {
+          "title": "A quieter performance the data keeps pulling back into view",
+          "html": "<p>Rodrigo DE PAUL is not the easiest headline, which is the point. The data profile suggests a player who shaped the game through repeat actions rather than one clean clip.</p>"
+        },
+        "zh": {
+          "title": "一个不那么显眼但值得被看见的表现",
+          "html": "<p>Rodrigo DE PAUL 不是最容易被写进标题的人，这反而是他入选的理由。他的贡献来自一连串重复动作，而不是一个足够响亮的单一片段。</p>"
+        }
+      }
+    }
+  ],
+  "audit": []
+}

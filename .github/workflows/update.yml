@@ -5,11 +5,15 @@ on:
     branches: [main]
     paths:
       - ".github/workflows/update.yml"
+      - ".agents/**"
       - "AGENTS.md"
       - "README.md"
+      - "config/**"
       - "pyproject.toml"
       - "football_data/**"
+      - "reports/**"
       - "scripts/**"
+      - "site/**"
       - "examples/**"
       - "notebooks/**"
       - "tests/**"
