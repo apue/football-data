@@ -29,6 +29,8 @@ By default this repository does not redistribute original PDF files. Local PDF c
 - `manifests/sources.json` - source document manifest
 - `manifests/discovered-sources.json` - current FIFA hub discovery result
 - `manifests/update-events.json` - new matches, version updates, downloads, and failures
+- `manifests/editorial-queue.json` - pending Editor's Choices dates after data updates
+- `manifests/editorial-run.json` - latest autonomous editorial workflow status
 - `examples/*.sql` - reusable SQL examples
 - `notebooks/*.ipynb` - notebook-style demo examples
 - `reports/editorial/*.md` - human-readable Editor's Choices reports when published
@@ -42,6 +44,7 @@ By default this repository does not redistribute original PDF files. Local PDF c
 - `.agents/skills/publish-editors-choices/` - repo-scoped Codex skill for the editorial publishing workflow
 - `.agents/skills/calibrate-potm-labels/` - repo-scoped Codex skill for Firecrawl-assisted scoring calibration
 - `.agents/skills/evaluate-potm-workflow/` - repo-scoped Codex skill for POTM workflow evaluation
+- `.env.example` - blank local/GitHub secret template for editorial agent and Firecrawl settings
 - GitHub Pages demo generated from the latest SQLite database: https://apue.github.io/football-data/
 
 ## Current SQLite Coverage
@@ -98,7 +101,33 @@ To run the loop against an already edited Markdown report without overwriting it
 python scripts/run_editorial_loop.py --date YYYY-MM-DD --use-existing-markdown
 ```
 
+To run the autonomous editorial queue used by GitHub Actions:
+
+```bash
+python scripts/run_editorial_queue.py
+```
+
 The compiled frontend artifacts are written to `site/editorial/`, and the homepage is rebuilt with the latest cards.
+
+## Editorial Automation
+
+`.github/workflows/editorial.yml` runs after the `Update Dataset` workflow succeeds and can also be started manually. It checks `manifests/editorial-queue.json`, runs the editor agent for pending match dates, validates the edited Markdown through the review-repair-validate loop, commits published editorial outputs with `[skip ci]`, and deploys GitHub Pages.
+
+Configure repository secrets with these names when you want the cloud workflow to publish new editorial copy:
+
+```text
+OPENAI_API_KEY
+OPENAI_BASE_URL
+EDITORIAL_ZH_WRITER_MODEL
+EDITORIAL_ZH_EDITOR_MODEL
+EDITORIAL_EN_WRITER_MODEL
+EDITORIAL_EN_EDITOR_MODEL
+EDITORIAL_FACT_CHECK_MODEL
+KEYPOOL_KEY
+KEYPOOL_URL
+```
+
+Optional model overrides are listed in `.env.example`. Missing OpenAI credentials do not publish drafts; the workflow writes `manifests/editorial-run.json` with `needs_credentials` and exits cleanly so the data update pipeline stays healthy.
 
 ## POTM Calibration
 
@@ -126,9 +155,10 @@ The intended automated update schedule is daily around 12:00 Asia/Shanghai. The 
 5. extracts structured records,
 6. rebuilds `data/latest.sqlite`,
 7. validates outputs,
-8. regenerates demo pages and update status.
+8. regenerates demo pages and update status,
+9. triggers the editorial workflow after the update workflow succeeds.
 
-Failures are reported in `manifests/latest-run.json`, `manifests/update-events.json`, and GitHub Actions logs. A Codex/agent-assisted recovery flow can inspect failures, use browser diagnostics when static discovery breaks, update discovery/parser code, and push a corrective change.
+Failures are reported in `manifests/latest-run.json`, `manifests/update-events.json`, `manifests/editorial-run.json`, and GitHub Actions logs. A Codex/agent-assisted recovery flow can inspect failures, use browser diagnostics when static discovery breaks, update discovery/parser code, and push a corrective change.
 
 ## Example Questions
 

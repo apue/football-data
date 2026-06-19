@@ -1,8 +1,96 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-06-19T15:13:44+00:00",
+  "generated_at": "2026-06-19T15:36:40+00:00",
   "match_date": "2026-06-18",
   "scoring_version": "v0.3",
+  "editorial_input_hash": "46f47d3c0a14e3a28c434e84a4dbae6fc13885a86781129cd5e7ba7f2b459faf",
+  "editorial_input": {
+    "schema_version": "4",
+    "match_date": "2026-06-18",
+    "scoring_version": "v0.3",
+    "scoring_config_sha256": "450c692cebd49691c3517eb7dbc750beddbd91a01a7487b6598de50ac808b92c",
+    "matches": [
+      {
+        "match_key": "FIFA-2026-M25-CZE-RSA",
+        "source_id": "fifa-world-cup-2026-pmsr-m25-cze-rsa-v1",
+        "match_no": 25,
+        "match_date": "2026-06-18",
+        "home_team": "Czechia",
+        "away_team": "South Africa",
+        "home_score": 1,
+        "away_score": 1
+      },
+      {
+        "match_key": "FIFA-2026-M26-SUI-BIH",
+        "source_id": "fifa-world-cup-2026-pmsr-m26-sui-bih-v1",
+        "match_no": 26,
+        "match_date": "2026-06-18",
+        "home_team": "Switzerland",
+        "away_team": "Bosnia and Herzegovina",
+        "home_score": 4,
+        "away_score": 1
+      },
+      {
+        "match_key": "FIFA-2026-M27-CAN-QAT",
+        "source_id": "fifa-world-cup-2026-pmsr-m27-can-qat-v1",
+        "match_no": 27,
+        "match_date": "2026-06-18",
+        "home_team": "Canada",
+        "away_team": "Qatar",
+        "home_score": 6,
+        "away_score": 0
+      },
+      {
+        "match_key": "FIFA-2026-M28-MEX-KOR",
+        "source_id": "fifa-world-cup-2026-pmsr-m28-mex-kor-v1",
+        "match_no": 28,
+        "match_date": "2026-06-18",
+        "home_team": "Mexico",
+        "away_team": "Korea Republic",
+        "home_score": 1,
+        "away_score": 0
+      }
+    ],
+    "source_documents": [
+      {
+        "source_id": "fifa-world-cup-2026-pmsr-m25-cze-rsa-v1",
+        "match_key": "FIFA-2026-M25-CZE-RSA",
+        "match_no": 25,
+        "version": 1,
+        "sha256": "70eac257248c9e8f5eb7df07d660f3224ebd04306fe4f195ff8c5b146f7ef857",
+        "file_size": 5639790,
+        "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M25-CZE-V-RSA.pdf"
+      },
+      {
+        "source_id": "fifa-world-cup-2026-pmsr-m26-sui-bih-v1",
+        "match_key": "FIFA-2026-M26-SUI-BIH",
+        "match_no": 26,
+        "version": 1,
+        "sha256": "ef2e8713092b94e6137bc12c78fc8e12e7760b2af4c1a17f17b39a2bcc09957e",
+        "file_size": 5768975,
+        "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M26-SUI-V-BIH.pdf"
+      },
+      {
+        "source_id": "fifa-world-cup-2026-pmsr-m27-can-qat-v1",
+        "match_key": "FIFA-2026-M27-CAN-QAT",
+        "match_no": 27,
+        "version": 1,
+        "sha256": "066e71c7d48b42e0e212936a5dc3aecfa2a7dd9e7f872565c033b27123bf9a67",
+        "file_size": 5807367,
+        "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M27-CAN-V-QAT.pdf"
+      },
+      {
+        "source_id": "fifa-world-cup-2026-pmsr-m28-mex-kor-v1",
+        "match_key": "FIFA-2026-M28-MEX-KOR",
+        "match_no": 28,
+        "version": 1,
+        "sha256": "40e5663887806285da56121cd2e97a45e7c7094933bec0fcf925e9ac5cb684bc",
+        "file_size": 5758019,
+        "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M28-MEX-V-KOR.pdf"
+      }
+    ],
+    "input_hash": "46f47d3c0a14e3a28c434e84a4dbae6fc13885a86781129cd5e7ba7f2b459faf"
+  },
   "matches": [
     {
       "match_key": "FIFA-2026-M25-CZE-RSA",

@@ -12,6 +12,7 @@ def main() -> int:
     parser.add_argument("--db", default="data/latest.sqlite", help="SQLite database path.")
     parser.add_argument("--site-dir", default="site", help="Site output directory.")
     parser.add_argument("--manifests-dir", default="manifests", help="Manifests directory.")
+    parser.add_argument("--scoring-config", default="config/scoring/v0.3.json")
     parser.add_argument(
         "--out",
         default="manifests/editorial-queue.json",
@@ -24,6 +25,7 @@ def main() -> int:
         db_path=args.db,
         site_dir=args.site_dir,
         manifests_dir=args.manifests_dir,
+        scoring_config_path=args.scoring_config,
     )
     write_editorial_queue(queue, args.out)
     if args.json:

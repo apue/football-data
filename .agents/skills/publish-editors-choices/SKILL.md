@@ -18,6 +18,7 @@ Read these before acting:
 ## Core Rules
 
 - Treat `scripts/run_editorial_loop.py` as the default publication entrypoint.
+- Treat `scripts/run_editorial_queue.py` as the autonomous CI entrypoint after dataset updates.
 - Treat `scripts/generate_editorial.py` as the deterministic evidence-and-draft generator underneath the loop.
 - Treat `reports/editorial/YYYY-MM-DD.md` as the human-readable editorial source.
 - Treat generated Markdown as a draft brief, not publishable copy.

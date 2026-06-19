@@ -1,0 +1,111 @@
+name: Editorial
+
+on:
+  workflow_run:
+    workflows: ["Update Dataset"]
+    types: [completed]
+  workflow_dispatch:
+    inputs:
+      fake:
+        description: "Use deterministic fake editor backend for workflow smoke testing."
+        required: false
+        default: "false"
+        type: choice
+        options:
+          - "false"
+          - "true"
+
+concurrency:
+  group: editorial
+  cancel-in-progress: false
+
+jobs:
+  editorial:
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+      issues: write
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+
+      - name: Install package
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[dev]"
+
+      - name: Run editorial queue
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_BASE_URL: ${{ secrets.OPENAI_BASE_URL }}
+          EDITORIAL_ORCHESTRATOR_MODEL: ${{ secrets.EDITORIAL_ORCHESTRATOR_MODEL }}
+          EDITORIAL_RESEARCH_MODEL: ${{ secrets.EDITORIAL_RESEARCH_MODEL }}
+          EDITORIAL_SELECTION_MODEL: ${{ secrets.EDITORIAL_SELECTION_MODEL }}
+          EDITORIAL_ZH_WRITER_MODEL: ${{ secrets.EDITORIAL_ZH_WRITER_MODEL }}
+          EDITORIAL_ZH_EDITOR_MODEL: ${{ secrets.EDITORIAL_ZH_EDITOR_MODEL }}
+          EDITORIAL_EN_WRITER_MODEL: ${{ secrets.EDITORIAL_EN_WRITER_MODEL }}
+          EDITORIAL_EN_EDITOR_MODEL: ${{ secrets.EDITORIAL_EN_EDITOR_MODEL }}
+          EDITORIAL_FACT_CHECK_MODEL: ${{ secrets.EDITORIAL_FACT_CHECK_MODEL }}
+          EDITORIAL_AGENT_TIMEOUT_SECONDS: ${{ secrets.EDITORIAL_AGENT_TIMEOUT_SECONDS }}
+          KEYPOOL_KEY: ${{ secrets.KEYPOOL_KEY }}
+          KEYPOOL_URL: ${{ secrets.KEYPOOL_URL }}
+        run: |
+          EXTRA_ARGS=""
+          if [ "${{ github.event.inputs.fake }}" = "true" ]; then
+            EXTRA_ARGS="--fake --no-research"
+          fi
+          python scripts/run_editorial_queue.py --json ${EXTRA_ARGS}
+
+      - name: Upload editorial artifacts
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: editorial-run
+          path: |
+            manifests/editorial-queue.json
+            manifests/editorial-run.json
+            agent-runs/**
+            reports/editorial/**
+            site/editorial/**
+          if-no-files-found: ignore
+
+      - name: Run tests
+        run: python -m pytest -q
+
+      - name: Commit editorial outputs when changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add reports/editorial site/editorial agent-runs manifests/editorial-queue.json manifests/editorial-run.json site/index.html
+          if git diff --cached --quiet; then
+            echo "No editorial changes to commit."
+          else
+            git commit -m "chore: publish editorial picks [skip ci]"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v6
+        with:
+          enablement: true
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: site
+
+      - name: Deploy Pages
+        id: deployment
+        uses: actions/deploy-pages@v5

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import os
 import re
 import signal
 import sys
@@ -864,14 +865,16 @@ def _external_result_count(external_evidence: dict[str, Any]) -> int:
 def _load_env(path: str | Path) -> dict[str, str]:
     env: dict[str, str] = {}
     env_path = Path(path)
-    if not env_path.exists():
-        return env
-    for raw in env_path.read_text(encoding="utf-8").splitlines():
-        line = raw.strip()
-        if not line or line.startswith("#") or "=" not in line:
-            continue
-        key, value = line.split("=", 1)
-        env[key.strip()] = value.strip().strip('"').strip("'")
+    if env_path.exists():
+        for raw in env_path.read_text(encoding="utf-8").splitlines():
+            line = raw.strip()
+            if not line or line.startswith("#") or "=" not in line:
+                continue
+            key, value = line.split("=", 1)
+            env[key.strip()] = value.strip().strip('"').strip("'")
+    for key in ["OPENAI_API_KEY", "OPENAI_BASE_URL", *MODEL_ENV_KEYS.values()]:
+        if key in os.environ:
+            env[key] = os.environ[key]
     return env
 
 

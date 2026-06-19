@@ -36,6 +36,32 @@ def test_build_editorial_queue_reports_up_to_date_when_editorial_matches_data(tm
     assert queue["status"] == "up_to_date"
 
 
+def test_build_editorial_queue_detects_stale_editorial_input_hash(tmp_path):
+    site_dir = _site_with_latest_editorial(tmp_path, "2026-06-18")
+    dated_dir = site_dir / "editorial" / "2026-06-18"
+    dated_dir.mkdir(parents=True)
+    (dated_dir / "choices.json").write_text(
+        json.dumps(
+            {
+                "match_date": "2026-06-18",
+                "editorial_input_hash": "stale-hash",
+                "choices": [],
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    queue = build_editorial_queue(
+        db_path="data/latest.sqlite",
+        site_dir=site_dir,
+        manifests_dir="manifests",
+    )
+
+    assert queue["pending_dates"] == ["2026-06-18"]
+    assert queue["pending_items"][0]["reason"] == "editorial_input_changed"
+    assert queue["pending_items"][0]["current_input_hash"] != "stale-hash"
+
+
 def test_check_editorial_queue_cli_writes_json(tmp_path):
     out_path = tmp_path / "editorial-queue.json"
     site_dir = _site_with_latest_editorial(tmp_path, "2026-06-17")

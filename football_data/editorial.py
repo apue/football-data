@@ -8,6 +8,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from football_data.editorial_fingerprint import editorial_input_fingerprint
 from football_data.flags import format_player, format_team
 from football_data.metric_benchmarks import hidden_gem_profile, progression_benchmark
 
@@ -109,11 +110,18 @@ def build_editorial_report(
 
     selection_result = _select_choices_with_review(players, scoring)
     choices = selection_result["choices"]
+    input_fingerprint = editorial_input_fingerprint(
+        db_path,
+        selected_date,
+        scoring_config_path,
+    )
     return {
         "schema_version": 1,
         "generated_at": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
         "match_date": selected_date,
         "scoring_version": scoring["version"],
+        "editorial_input_hash": input_fingerprint["input_hash"],
+        "editorial_input": input_fingerprint,
         "matches": matches,
         "choices": choices,
         "selection_review": selection_result["review"],
@@ -242,6 +250,8 @@ def compile_editorial_markdown(
         "compiled_at": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
         "match_date": evidence["match_date"],
         "scoring_version": evidence["scoring_version"],
+        "editorial_input_hash": evidence.get("editorial_input_hash"),
+        "editorial_input": evidence.get("editorial_input"),
         "source_markdown_path": source_markdown_path,
         "matches": evidence["matches"],
         "choices": compiled_choices,

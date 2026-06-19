@@ -6,15 +6,24 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
+from football_data.editorial_fingerprint import DEFAULT_SCORING_CONFIG, editorial_input_fingerprint
+
 
 def build_editorial_queue(
     db_path: str | Path = "data/latest.sqlite",
     site_dir: str | Path = "site",
     manifests_dir: str | Path = "manifests",
+    scoring_config_path: str | Path = DEFAULT_SCORING_CONFIG,
 ) -> dict[str, Any]:
     latest_data_date = _latest_data_date(db_path)
     latest_editorial_date = _latest_editorial_date(site_dir)
-    pending_dates = _pending_dates(db_path, latest_editorial_date)
+    pending_items = _pending_items(
+        db_path=db_path,
+        site_dir=site_dir,
+        latest_editorial_date=latest_editorial_date,
+        scoring_config_path=scoring_config_path,
+    )
+    pending_dates = [item["match_date"] for item in pending_items]
     update_events = _load_json(Path(manifests_dir) / "update-events.json")
     latest_run = _load_json(Path(manifests_dir) / "latest-run.json")
 
@@ -25,6 +34,7 @@ def build_editorial_queue(
         "latest_data_date": latest_data_date,
         "latest_editorial_date": latest_editorial_date,
         "pending_dates": pending_dates,
+        "pending_items": pending_items,
         "pending_matches": _matches_for_dates(db_path, pending_dates),
         "new_matches": update_events.get("new_matches", latest_run.get("new_matches", [])),
         "version_updates": update_events.get(
@@ -32,7 +42,7 @@ def build_editorial_queue(
             latest_run.get("version_updates", []),
         ),
         "failures": update_events.get("failures", latest_run.get("failures", [])),
-        "reason": _reason(pending_dates, update_events, latest_run),
+        "reason": _reason(pending_items, update_events, latest_run),
     }
     return queue
 
@@ -67,30 +77,63 @@ def _latest_editorial_date(site_dir: str | Path) -> str | None:
     return str(value) if value else None
 
 
-def _pending_dates(db_path: str | Path, latest_editorial_date: str | None) -> list[str]:
+def _pending_items(
+    *,
+    db_path: str | Path,
+    site_dir: str | Path,
+    latest_editorial_date: str | None,
+    scoring_config_path: str | Path,
+) -> list[dict[str, Any]]:
+    items: list[dict[str, Any]] = []
+    for match_date in _data_dates(db_path):
+        fingerprint = editorial_input_fingerprint(db_path, match_date, scoring_config_path)
+        published_hash = _published_input_hash(site_dir, match_date)
+        reason: str | None = None
+        if latest_editorial_date is None or match_date > latest_editorial_date:
+            reason = "data_date_ahead_of_editorial"
+        elif published_hash and published_hash != fingerprint["input_hash"]:
+            reason = "editorial_input_changed"
+
+        if reason is not None:
+            items.append(
+                {
+                    "match_date": match_date,
+                    "reason": reason,
+                    "current_input_hash": fingerprint["input_hash"],
+                    "published_input_hash": published_hash,
+                    "scoring_version": fingerprint.get("scoring_version"),
+                    "source_ids": [
+                        source["source_id"]
+                        for source in fingerprint.get("source_documents", [])
+                    ],
+                }
+            )
+    return items
+
+
+def _data_dates(db_path: str | Path) -> list[str]:
     conn = sqlite3.connect(db_path)
     try:
-        if latest_editorial_date:
-            rows = conn.execute(
-                """
-                select distinct match_date
-                from matches
-                where match_date > ?
-                order by match_date
-                """,
-                (latest_editorial_date,),
-            ).fetchall()
-        else:
-            rows = conn.execute(
-                """
-                select distinct match_date
-                from matches
-                order by match_date
-                """
-            ).fetchall()
+        rows = conn.execute(
+            """
+            select distinct match_date
+            from matches
+            order by match_date
+            """
+        ).fetchall()
     finally:
         conn.close()
     return [str(row[0]) for row in rows]
+
+
+def _published_input_hash(site_dir: str | Path, match_date: str) -> str | None:
+    editorial_dir = Path(site_dir) / "editorial" / match_date
+    for filename in ("choices.json", "evidence.json"):
+        payload = _load_json(editorial_dir / filename)
+        value = payload.get("editorial_input_hash")
+        if value:
+            return str(value)
+    return None
 
 
 def _matches_for_dates(db_path: str | Path, match_dates: list[str]) -> list[dict[str, Any]]:
@@ -115,14 +158,16 @@ def _matches_for_dates(db_path: str | Path, match_dates: list[str]) -> list[dict
 
 
 def _reason(
-    pending_dates: list[str],
+    pending_items: list[dict[str, Any]],
     update_events: dict[str, Any],
     latest_run: dict[str, Any],
 ) -> str:
-    if not pending_dates:
+    if not pending_items:
         return "editorial_up_to_date"
     new_matches = update_events.get("new_matches") or latest_run.get("new_matches") or []
     version_updates = update_events.get("version_updates") or latest_run.get("version_updates") or []
+    if any(item.get("reason") == "editorial_input_changed" for item in pending_items):
+        return "editorial_input_changed"
     if new_matches and version_updates:
         return "new_matches_and_version_updates"
     if new_matches:

@@ -28,6 +28,12 @@ sqlite3 data/latest.sqlite \
 python scripts/run_editorial_loop.py --date YYYY-MM-DD
 ```
 
+For autonomous CI publishing after a dataset update, run the queue entrypoint instead:
+
+```bash
+python scripts/run_editorial_queue.py
+```
+
 Outputs:
 
 - `agent-runs/YYYY-MM-DD/final.json`
@@ -36,6 +42,8 @@ Outputs:
 - `agent-runs/YYYY-MM-DD/iteration-001/copy_review.zh.json`
 - `agent-runs/YYYY-MM-DD/iteration-001/validation.json`
 - `agent-runs/YYYY-MM-DD/iteration-001/decision.json`
+- `manifests/editorial-queue.json`
+- `manifests/editorial-run.json`
 - `reports/editorial/YYYY-MM-DD.md`
 - `site/editorial/YYYY-MM-DD/evidence.json`
 - `site/editorial/YYYY-MM-DD/fact_bank.zh.json`
@@ -48,6 +56,8 @@ Outputs:
 - `site/index.html` is rebuilt by default so the homepage shows the latest cards.
 
 Markdown is the human-readable source. `evidence.json` is the structured audit source. `fact_bank.zh.json` is the primary Chinese writing input. `brief.zh.json` is kept for compatibility and diagnostics; do not use it as the Chinese writing base. `brief.en.json` is the English writing input. `choices.json` is compiled frontend data with rendered HTML. `agent-runs/` records the Review -> Repair -> Validate loop state.
+
+The queue runner uses `editorial_input_hash` to detect new match dates, scoring changes, and source-document changes. Missing OpenAI credentials should produce `needs_credentials` in `manifests/editorial-run.json`, not a draft publication.
 
 5. Read `agent-runs/YYYY-MM-DD/final.json`, `site/editorial/YYYY-MM-DD/evidence.json`, `site/editorial/YYYY-MM-DD/fact_bank.zh.json`, `site/editorial/YYYY-MM-DD/brief.zh.json`, `site/editorial/YYYY-MM-DD/brief.en.json`, and `reports/editorial/YYYY-MM-DD.md`.
 

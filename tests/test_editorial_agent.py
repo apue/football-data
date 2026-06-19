@@ -184,6 +184,19 @@ def test_load_editorial_agent_config_uses_openai_base_url_only(tmp_path):
     assert "OPEN_BASE_URL" not in config.loaded_keys
 
 
+def test_load_editorial_agent_config_reads_process_environment(tmp_path, monkeypatch):
+    env_path = tmp_path / "missing.env"
+    monkeypatch.setenv("OPENAI_API_KEY", "env-secret")
+    monkeypatch.setenv("OPENAI_BASE_URL", "https://api.example.test/v1")
+    monkeypatch.setenv("EDITORIAL_EN_WRITER_MODEL", "env-en-writer")
+
+    config = load_editorial_agent_config(env_path)
+
+    assert config.api_key == "env-secret"
+    assert config.base_url == "https://api.example.test/v1"
+    assert config.models["en_writer"] == "env-en-writer"
+
+
 def test_filter_llm_fact_check_warnings_drops_absent_assist_claims():
     warnings = _filter_llm_warnings(
         "This copy mentions line breaks but not the forbidden term.",

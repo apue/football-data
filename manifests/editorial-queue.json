@@ -1,10 +1,11 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-06-19T12:37:33+00:00",
+  "generated_at": "2026-06-19T15:43:47+00:00",
   "status": "up_to_date",
   "latest_data_date": "2026-06-18",
   "latest_editorial_date": "2026-06-18",
   "pending_dates": [],
+  "pending_items": [],
   "pending_matches": [],
   "new_matches": [],
   "version_updates": [],

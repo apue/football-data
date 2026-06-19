@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-06-19 - Autonomous Editorial Workflow
+
+Added CI automation for Editor's Choices after dataset updates:
+
+- Added `.github/workflows/editorial.yml`, triggered by the successful `Update Dataset` workflow and by manual dispatch.
+- Added `scripts/run_editorial_queue.py` and `football_data.editorial_queue_runner` to process pending editorial dates.
+- Added `editorial_input_hash` to editorial artifacts so source/PMSR/scoring changes can trigger reruns.
+- Added `manifests/editorial-queue.json` and `manifests/editorial-run.json` status outputs.
+- Added `.env.example` with blank OpenAI, model, and Firecrawl/Keypool placeholders.
+- Updated agent config loading so GitHub Actions repository secrets work through process environment variables.
+
 ## 2026-06-19 - Editorial Loop and Detailed Line Breaks
 
 Added a review-repair-validate loop for daily Editor's Choices and expanded player progression data:
