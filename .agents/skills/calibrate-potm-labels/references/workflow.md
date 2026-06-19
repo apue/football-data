@@ -5,12 +5,12 @@ Use this when Codex needs to find external match recognition, compare it with ou
 ## Inputs
 
 - SQLite database: `data/latest.sqlite`
-- Scoring config: `config/scoring/v0.2.json`
+- Scoring config: `config/scoring/v0.3.json`
 - Label store: `calibration/potm-labels.json`
 - Report output: `calibration/reports/YYYY-MM-DD.md`
 - Firecrawl search through Keypool env: `.env.local` with `KEYPOOL_URL` and `KEYPOOL_KEY`
 
-`v0.2` is the production default. It includes structured impact features derived from PMSR goals and final scoreline, including opening, equalizing, go-ahead, match-winning, late, stoppage-time, and late match-winning goals. Use `config/scoring/v0.1.json` only as a historical baseline when investigating pre-impact misses.
+`v0.3` is the production default. It includes structured impact features derived from PMSR goals, lineup status, and final scoreline, including opening, equalizing, go-ahead, match-winning, late, stoppage-time, late match-winning goals, only-goal winners, braces, hat-tricks, and substitute scoring bursts. Use `config/scoring/v0.1.json` or `config/scoring/v0.2.json` only as historical baselines when investigating earlier ranking misses.
 
 ## Evidence Discovery
 

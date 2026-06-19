@@ -23,7 +23,7 @@ def main() -> None:
     parser.add_argument("--labels", default="calibration/potm-labels.json", help="POTM labels JSON.")
     parser.add_argument(
         "--scoring-config",
-        default="config/scoring/v0.2.json",
+        default="config/scoring/v0.3.json",
         help="Scoring configuration JSON.",
     )
     parser.add_argument("--evidence", default=None, help="Existing evidence candidate JSON.")

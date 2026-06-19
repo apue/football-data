@@ -4,6 +4,7 @@ version = "0.1.0"
 description = "Extracted SQLite dataset and demos from publicly available FIFA Training Centre PMSR reports."
 requires-python = ">=3.11"
 dependencies = [
+  "openai-agents>=0.17.6",
   "pymupdf>=1.26.0",
 ]
 

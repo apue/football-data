@@ -11,11 +11,12 @@ from typing import Any
 from football_data.flags import format_player, format_team
 
 
-DEFAULT_SCORING_CONFIG = Path("config/scoring/v0.2.json")
+DEFAULT_SCORING_CONFIG = Path("config/scoring/v0.3.json")
 
 
 AWARD_LABELS = {
     "player_of_the_day": {"en": "Player of the Day", "zh": "每日最佳球员"},
+    "impact_pick": {"en": "Impact Pick", "zh": "影响力精选"},
     "progression_pick": {"en": "Progression Pick", "zh": "推进精选"},
     "defensive_pick": {"en": "Defensive Pick", "zh": "防守精选"},
     "hidden_gem": {"en": "Hidden Gem", "zh": "隐藏亮点"},
@@ -105,7 +106,8 @@ def build_editorial_report(
     finally:
         conn.close()
 
-    choices = _select_choices(players, scoring)
+    selection_result = _select_choices_with_review(players, scoring)
+    choices = selection_result["choices"]
     return {
         "schema_version": 1,
         "generated_at": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
@@ -113,6 +115,7 @@ def build_editorial_report(
         "scoring_version": scoring["version"],
         "matches": matches,
         "choices": choices,
+        "selection_review": selection_result["review"],
         "audit": _build_audit(players, choices, selected_date),
     }
 
@@ -234,13 +237,14 @@ def compile_editorial_markdown(
         "source_markdown_path": source_markdown_path,
         "matches": evidence["matches"],
         "choices": compiled_choices,
+        "selection_review": evidence.get("selection_review"),
         "audit": evidence["audit"],
     }
 
 
 def _load_scoring_config(path: str | Path) -> dict[str, Any]:
     config = json.loads(Path(path).read_text(encoding="utf-8"))
-    if config.get("version") not in {"v0.1", "v0.2"}:
+    if config.get("version") not in {"v0.1", "v0.2", "v0.3"}:
         raise ValueError(f"Unsupported scoring config version: {config.get('version')}")
     return config
 
@@ -273,7 +277,7 @@ def _player_rows_for_date(conn: sqlite3.Connection, match_date: str) -> list[sql
           select match_key, team, upper(player_name) as player_name,
                  count(*) as shots,
                  sum(is_on_target) as on_target,
-                 sum(is_goal) as goals
+                 sum(case when outcome like '% - Goal' then 1 else 0 end) as goals
           from shots
           group by match_key, team, upper(player_name)
         ),
@@ -297,7 +301,7 @@ def _player_rows_for_date(conn: sqlite3.Connection, match_date: str) -> list[sql
             ) as goal_order
           from shots s
           join matches m using(match_key)
-          where s.is_goal = 1
+          where s.outcome like '% - Goal'
         ),
         goal_states as (
           select
@@ -344,14 +348,32 @@ def _player_rows_for_date(conn: sqlite3.Connection, match_date: str) -> list[sql
           m.match_date,
           m.home_team,
           m.away_team,
+          m.home_score,
+          m.away_score,
           case when a.team = m.home_team then m.away_team else m.home_team end as opponent,
+          case when a.team = m.home_team then m.home_score else m.away_score end as team_final_goals,
+          case when a.team = m.home_team then m.away_score else m.home_score end as opponent_final_goals,
           a.team,
           a.player_no,
           a.player_name,
           a.position,
+          a.roster_status,
+          a.started,
           coalesce(s.shots, d.attempts_at_goal, 0) as shots,
           coalesce(s.on_target, 0) as on_target,
           coalesce(s.goals, d.goals, 0) as goals,
+          case when coalesce(s.goals, d.goals, 0) >= 2 then 1 else 0 end as brace,
+          case when coalesce(s.goals, d.goals, 0) >= 3 then 1 else 0 end as hat_trick,
+          case when a.started = 0 then coalesce(s.goals, d.goals, 0) else 0 end as substitute_goal,
+          case when a.started = 0 and coalesce(s.goals, d.goals, 0) >= 2 then 1 else 0 end as substitute_brace,
+          case
+            when coalesce(s.goals, d.goals, 0) > 0
+             and (
+               (a.team = m.home_team and m.home_score = 1 and m.away_score = 0)
+               or (a.team = m.away_team and m.away_score = 1 and m.home_score = 0)
+             )
+            then 1 else 0
+          end as only_goal_winner,
           coalesce(g.opening_goal, 0) as opening_goal,
           coalesce(g.equalizing_goal, 0) as equalizing_goal,
           coalesce(g.go_ahead_goal, 0) as go_ahead_goal,
@@ -439,28 +461,87 @@ def _score_player(row: sqlite3.Row, scoring: dict[str, Any]) -> dict[str, Any]:
     composite = 0.0
     for score_name, weight in scoring["composite_weights"].items():
         composite += role_scores.get(score_name, 0) * float(weight)
+    headline = composite
+    for score_name, weight in scoring.get("headline_weights", {}).items():
+        if score_name == "composite_score":
+            headline += composite * float(weight)
+        else:
+            headline += role_scores.get(score_name, 0) * float(weight)
     features["role_scores"] = role_scores
     features["score_components"] = component_map
     features["composite_score"] = round(composite, 2)
+    features["headline_score"] = round(headline, 2)
     return features
 
 
-def _select_choices(players: list[dict[str, Any]], scoring: dict[str, Any]) -> list[dict[str, Any]]:
+def _select_choices_with_review(
+    players: list[dict[str, Any]],
+    scoring: dict[str, Any],
+) -> dict[str, Any]:
+    baseline_choices = _select_choices(players, scoring)
+    baseline_review = _review_editorial_selection(players, baseline_choices, scoring)
+    iterations = [_selection_review_iteration(1, baseline_choices, baseline_review)]
+
+    final_choices = baseline_choices
+    final_review = baseline_review
+    if baseline_review["status"] != "publishable":
+        adjusted_choices = _select_choices(players, scoring, apply_editorial_guards=True)
+        adjusted_review = _review_editorial_selection(players, adjusted_choices, scoring)
+        iterations.append(_selection_review_iteration(2, adjusted_choices, adjusted_review))
+        final_choices = adjusted_choices
+        final_review = adjusted_review
+
+    return {
+        "choices": final_choices,
+        "review": {
+            "status": final_review["status"],
+            "alerts": final_review["alerts"],
+            "iterations": iterations,
+        },
+    }
+
+
+def _select_choices(
+    players: list[dict[str, Any]],
+    scoring: dict[str, Any],
+    *,
+    apply_editorial_guards: bool = False,
+) -> list[dict[str, Any]]:
     choices: list[dict[str, Any]] = []
     used_keys: set[tuple[str, str, int]] = set()
 
-    players_of_day = sorted(players, key=lambda row: row["composite_score"], reverse=True)[
+    players_of_day = sorted(players, key=lambda row: row["headline_score"], reverse=True)[
         : int(scoring["selection"]["players_of_the_day"])
     ]
     for rank, player in enumerate(players_of_day, start=1):
-        choices.append(_choice("player_of_the_day", player, rank, primary_score="composite_score"))
+        choices.append(_choice("player_of_the_day", player, rank, primary_score="headline_score"))
+        used_keys.add(_player_key(player))
+
+    impact_min = float(scoring["selection"].get("minimum_impact_pick_score", 0))
+    impact_candidates = [
+        player
+        for player in players
+        if _player_key(player) not in used_keys
+        and player["role_scores"].get("impact", 0) >= impact_min
+    ]
+    impact_candidates.sort(key=lambda row: row["role_scores"]["impact"], reverse=True)
+    for rank, player in enumerate(
+        impact_candidates[: int(scoring["selection"].get("impact_picks", 0))],
+        start=1,
+    ):
+        choices.append(_choice("impact_pick", player, rank, primary_score="impact"))
         used_keys.add(_player_key(player))
 
     for award_type, score_name in [
         ("progression_pick", "progressor"),
         ("defensive_pick", "defensive"),
     ]:
-        player = _top_unused_role_player(players, used_keys, score_name)
+        player = _top_unused_role_player(
+            players,
+            used_keys,
+            score_name,
+            avoid_heavy_defensive_loss=apply_editorial_guards,
+        )
         if player is None:
             continue
         choices.append(_choice(award_type, player, 1, primary_score=score_name))
@@ -480,13 +561,21 @@ def _select_choices(players: list[dict[str, Any]], scoring: dict[str, Any]) -> l
         >= hidden_min
     ]
     hidden_candidates.sort(
-        key=lambda row: max(
-            row["role_scores"]["progressor"],
-            row["role_scores"]["off_ball"],
-            row["role_scores"]["defensive"],
-        ),
+        key=_hidden_role_score,
         reverse=True,
     )
+    if apply_editorial_guards:
+        used_teams = {choice["team"] for choice in choices}
+        diverse_hidden_candidates = [
+            player for player in hidden_candidates if player["team"] not in used_teams
+        ]
+        if diverse_hidden_candidates:
+            hidden_candidates = diverse_hidden_candidates
+        safer_hidden_candidates = [
+            player for player in hidden_candidates if not _hidden_gem_contextual_risk(player)
+        ]
+        if safer_hidden_candidates:
+            hidden_candidates = safer_hidden_candidates
     for rank, player in enumerate(
         hidden_candidates[: int(scoring["selection"]["hidden_gems"])],
         start=1,
@@ -503,8 +592,8 @@ def _choice(
     rank: int,
     primary_score: str,
 ) -> dict[str, Any]:
-    if primary_score == "composite_score":
-        score = player["composite_score"]
+    if primary_score in {"composite_score", "headline_score"}:
+        score = player[primary_score]
         components = _top_components_across_roles(player)
     else:
         score = player["role_scores"][primary_score]
@@ -519,6 +608,10 @@ def _choice(
         "player_name": player["player_name"],
         "team": player["team"],
         "opponent": player["opponent"],
+        "home_score": player.get("home_score"),
+        "away_score": player.get("away_score"),
+        "team_final_goals": player.get("team_final_goals"),
+        "opponent_final_goals": player.get("opponent_final_goals"),
         "position": player["position"],
         "score": round(float(score), 1),
         "primary_score": primary_score,
@@ -533,6 +626,8 @@ def _top_unused_role_player(
     players: list[dict[str, Any]],
     used_keys: set[tuple[str, str, int]],
     score_name: str,
+    *,
+    avoid_heavy_defensive_loss: bool = False,
 ) -> dict[str, Any] | None:
     candidates = [
         player
@@ -541,7 +636,225 @@ def _top_unused_role_player(
     ]
     if not candidates:
         return None
-    return max(candidates, key=lambda row: row["role_scores"][score_name])
+    candidates.sort(key=lambda row: row["role_scores"][score_name], reverse=True)
+    if score_name == "defensive" and avoid_heavy_defensive_loss:
+        safer_candidate = _top_safer_defensive_candidate(
+            candidates,
+            minimum_score=candidates[0]["role_scores"][score_name] * 0.75,
+        )
+        if safer_candidate is not None:
+            return safer_candidate
+    return candidates[0]
+
+
+def _review_editorial_selection(
+    players: list[dict[str, Any]],
+    choices: list[dict[str, Any]],
+    scoring: dict[str, Any],
+) -> dict[str, Any]:
+    alerts: list[dict[str, Any]] = []
+    if not choices:
+        alerts.append(
+            {
+                "level": "high",
+                "code": "no_editorial_choices",
+                "message": "No editorial choices were generated.",
+            }
+        )
+        return {"status": "needs_adjustment", "alerts": alerts}
+
+    defensive_pick = next(
+        (choice for choice in choices if choice["award_type"] == "defensive_pick"),
+        None,
+    )
+    if defensive_pick is not None and _heavy_defensive_loss(defensive_pick):
+        replacement = _safer_defensive_replacement(players, choices, defensive_pick)
+        alerts.append(
+            {
+                "level": "high" if replacement else "medium",
+                "code": "defensive_pick_from_heavy_loss",
+                "message": (
+                    f"{defensive_pick['player_name']} has the top defensive score, "
+                    f"but {defensive_pick['team']} conceded "
+                    f"{_team_goals_conceded(defensive_pick)} in a heavy loss."
+                ),
+                "player_name": defensive_pick["player_name"],
+                "team": defensive_pick["team"],
+                "replacement_candidate": replacement["player_name"] if replacement else None,
+            }
+        )
+
+    hidden_gem = next((choice for choice in choices if choice["award_type"] == "hidden_gem"), None)
+    if hidden_gem is not None:
+        teams_before_hidden = {
+            choice["team"]
+            for choice in choices
+            if choice["award_type"] != "hidden_gem"
+        }
+        replacement = _diverse_hidden_gem_replacement(
+            players,
+            choices,
+            hidden_gem,
+            minimum_role_score=float(scoring["selection"]["minimum_hidden_gem_role_score"]),
+        )
+        if hidden_gem["team"] in teams_before_hidden and replacement is not None:
+            alerts.append(
+                {
+                    "level": "high",
+                    "code": "hidden_gem_duplicates_existing_team",
+                    "message": (
+                        f"{hidden_gem['player_name']} is a strong hidden-gem profile, "
+                        f"but {hidden_gem['team']} already has another pick and "
+                        f"{replacement['player_name']} gives the slate a distinct match angle."
+                    ),
+                    "player_name": hidden_gem["player_name"],
+                    "team": hidden_gem["team"],
+                    "replacement_candidate": replacement["player_name"],
+                }
+            )
+        if _hidden_gem_contextual_risk(hidden_gem) and replacement is not None:
+            alerts.append(
+                {
+                    "level": "high",
+                    "code": "hidden_gem_defensive_profile_from_heavy_loss",
+                    "message": (
+                        f"{hidden_gem['player_name']} has a strong defensive hidden-gem profile, "
+                        f"but {hidden_gem['team']} conceded "
+                        f"{_team_goals_conceded(hidden_gem)} in a heavy loss."
+                    ),
+                    "player_name": hidden_gem["player_name"],
+                    "team": hidden_gem["team"],
+                    "replacement_candidate": replacement["player_name"],
+                }
+            )
+
+    team_counts: dict[str, int] = {}
+    for choice in choices:
+        team_counts[choice["team"]] = team_counts.get(choice["team"], 0) + 1
+    repeated_teams = [
+        {"team": team, "count": count}
+        for team, count in sorted(team_counts.items())
+        if count > 1
+    ]
+    if repeated_teams:
+        alerts.append(
+            {
+                "level": "info",
+                "code": "same_team_multiple_picks",
+                "message": "Multiple picks can still come from one team when roles are clearly distinct.",
+                "teams": repeated_teams,
+            }
+        )
+
+    status = "needs_adjustment" if any(alert["level"] == "high" for alert in alerts) else "publishable"
+    return {"status": status, "alerts": alerts}
+
+
+def _selection_review_iteration(
+    iteration: int,
+    choices: list[dict[str, Any]],
+    review: dict[str, Any],
+) -> dict[str, Any]:
+    return {
+        "iteration": iteration,
+        "status": review["status"],
+        "alerts": review["alerts"],
+        "choice_names": [choice["player_name"] for choice in choices],
+    }
+
+
+def _top_safer_defensive_candidate(
+    candidates: list[dict[str, Any]],
+    *,
+    minimum_score: float,
+) -> dict[str, Any] | None:
+    safer_candidates = [
+        player
+        for player in candidates
+        if player["role_scores"].get("defensive", 0) >= minimum_score
+        and not _heavy_defensive_loss(player)
+    ]
+    return safer_candidates[0] if safer_candidates else None
+
+
+def _safer_defensive_replacement(
+    players: list[dict[str, Any]],
+    choices: list[dict[str, Any]],
+    current: dict[str, Any],
+) -> dict[str, Any] | None:
+    current_key = _player_key(current)
+    used_keys = {
+        _player_key(choice)
+        for choice in choices
+        if _player_key(choice) != current_key
+    }
+    candidates = [
+        player
+        for player in players
+        if _player_key(player) not in used_keys
+        and player["role_scores"].get("defensive", 0)
+        >= current["role_scores"].get("defensive", 0) * 0.75
+        and not _heavy_defensive_loss(player)
+    ]
+    if not candidates:
+        return None
+    return max(candidates, key=lambda row: row["role_scores"]["defensive"])
+
+
+def _diverse_hidden_gem_replacement(
+    players: list[dict[str, Any]],
+    choices: list[dict[str, Any]],
+    current: dict[str, Any],
+    *,
+    minimum_role_score: float,
+) -> dict[str, Any] | None:
+    current_key = _player_key(current)
+    used_keys = {
+        _player_key(choice)
+        for choice in choices
+        if _player_key(choice) != current_key
+    }
+    used_teams = {
+        choice["team"]
+        for choice in choices
+        if _player_key(choice) != current_key
+    }
+    candidates = [
+        player
+        for player in players
+        if _player_key(player) not in used_keys
+        and player["team"] not in used_teams
+        and int(player.get("goals") or 0) == 0
+        and _hidden_role_score(player) >= minimum_role_score
+        and not _hidden_gem_contextual_risk(player)
+    ]
+    if not candidates:
+        return None
+    return max(candidates, key=_hidden_role_score)
+
+
+def _heavy_defensive_loss(player: dict[str, Any]) -> bool:
+    return _team_goals_conceded(player) >= 3 and _team_goal_difference(player) <= -2
+
+
+def _hidden_gem_contextual_risk(player: dict[str, Any]) -> bool:
+    return _best_role_score(player) == "defensive" and _heavy_defensive_loss(player)
+
+
+def _team_goals_conceded(player: dict[str, Any]) -> int:
+    return int(player.get("opponent_final_goals") or 0)
+
+
+def _team_goal_difference(player: dict[str, Any]) -> int:
+    return int(player.get("team_final_goals") or 0) - int(player.get("opponent_final_goals") or 0)
+
+
+def _hidden_role_score(player: dict[str, Any]) -> float:
+    return max(
+        player["role_scores"]["progressor"],
+        player["role_scores"]["off_ball"],
+        player["role_scores"]["defensive"],
+    )
 
 
 def _best_role_score(player: dict[str, Any]) -> str:
@@ -562,24 +875,45 @@ def _top_components_across_roles(player: dict[str, Any]) -> list[dict[str, Any]]
 def _evidence_chips(player: dict[str, Any], award_type: str) -> dict[str, list[str]]:
     en: list[str] = []
     zh: list[str] = []
+    if int(player.get("hat_trick") or 0) > 0:
+        en.append("hat-trick")
+        zh.append("帽子戏法")
+    elif int(player.get("brace") or 0) > 0:
+        en.append("brace")
+        zh.append("梅开二度")
+
+    if int(player.get("substitute_brace") or 0) > 0:
+        en.append("substitute brace")
+        zh.append("替补双响")
+    elif int(player.get("substitute_goal") or 0) > 0:
+        en.append("substitute goal")
+        zh.append("替补进球")
+
+    if int(player.get("only_goal_winner") or 0) > 0:
+        en.append("only goal")
+        zh.append("全场唯一进球")
+
     if int(player.get("late_match_winning_goal") or 0) > 0:
         en.append("late winner")
         zh.append("补时制胜")
     elif int(player.get("match_winning_goal") or 0) > 0:
         en.append("match-winning goal")
         zh.append("打入制胜球")
+    elif int(player.get("opening_goal") or 0) > 0:
+        en.append("opening goal")
+        zh.append("首开纪录")
     elif int(player.get("go_ahead_goal") or 0) > 0:
         en.append("go-ahead goal")
-        zh.append("反超进球")
+        zh.append("取得领先")
     elif int(player.get("equalizing_goal") or 0) > 0:
         en.append("equaliser")
         zh.append("扳平进球")
 
     goals = int(player.get("goals") or 0)
-    if goals >= 3:
+    if goals >= 3 and "hat-trick" not in en:
         en.append("hat-trick")
         zh.append("帽子戏法")
-    elif goals == 2:
+    elif goals == 2 and "brace" not in en:
         en.append("brace")
         zh.append("梅开二度")
     elif goals == 1:
@@ -654,9 +988,14 @@ def _chinese_metric_summary(player: dict[str, Any]) -> str:
 def _metric_summary_items(player: dict[str, Any]) -> list[dict[str, str]]:
     labels = {
         "goals": ("goals", "进球"),
+        "brace": ("brace", "梅开二度"),
+        "hat_trick": ("hat-trick", "帽子戏法"),
+        "substitute_goal": ("substitute goals", "替补进球"),
+        "substitute_brace": ("substitute brace", "替补双响"),
+        "only_goal_winner": ("only goal", "全场唯一进球"),
         "opening_goal": ("opening goal", "首开纪录"),
         "equalizing_goal": ("equaliser", "扳平进球"),
-        "go_ahead_goal": ("go-ahead goal", "反超进球"),
+        "go_ahead_goal": ("go-ahead goal", "领先进球"),
         "match_winning_goal": ("match-winning goal", "制胜进球"),
         "late_goal": ("late goal", "晚段进球"),
         "stoppage_time_goal": ("stoppage-time goal", "补时进球"),
@@ -871,6 +1210,10 @@ def _append_unique(items: list[str], item: str) -> None:
 
 def _zh_allowed_angles(choice: dict[str, Any]) -> list[str]:
     goals = _metric_value(choice, "goals")
+    if _metric_value(choice, "substitute_brace") > 0:
+        return ["替补双响", "改变比赛走势", "不用包装得太复杂"]
+    if _metric_value(choice, "only_goal_winner") > 0:
+        return ["全场唯一进球", "决定比分", "直接写关键性"]
     if goals >= 3:
         return ["明显最佳", "不必绕远", "可以补充他不只负责最后一脚"]
     if goals >= 2:
@@ -981,6 +1324,10 @@ def _review_checklist(language: str) -> list[str]:
 
 def _zh_selection_angle(choice: dict[str, Any]) -> str:
     goals = _metric_value(choice, "goals")
+    if _metric_value(choice, "substitute_brace") > 0:
+        return "先写替补出场后连进两球，重点是他把比赛直接推向瑞士。"
+    if _metric_value(choice, "only_goal_winner") > 0:
+        return "先写全场唯一进球，这种比赛里决定比分的人必须被看到。"
     if goals >= 3:
         return "明显答案：帽子戏法直接决定当天最佳，但可以补一句他还参与推进。"
     if goals >= 2:
@@ -1000,6 +1347,10 @@ def _zh_selection_angle(choice: dict[str, Any]) -> str:
 
 def _en_selection_angle(choice: dict[str, Any]) -> str:
     goals = _metric_value(choice, "goals")
+    if _metric_value(choice, "substitute_brace") > 0:
+        return "Lead with the substitute brace and the way it changed the match."
+    if _metric_value(choice, "only_goal_winner") > 0:
+        return "Lead with the only goal in a one-goal match."
     if goals >= 3:
         return "Obvious pick: the hat-trick decides the top-line argument."
     if goals >= 2:
@@ -1020,6 +1371,20 @@ def _en_selection_angle(choice: dict[str, Any]) -> str:
 def _zh_title_candidates(choice: dict[str, Any]) -> list[str]:
     name = _zh_player_name(choice["player_name"])
     goals = _metric_value(choice, "goals")
+    if _metric_value(choice, "substitute_brace") > 0:
+        return [
+            f"{name}替补上来就改了比赛",
+            "替补双响，不用多绕",
+            f"{name}把瑞士的胜势打出来",
+            "两脚终结，比赛变简单了",
+        ]
+    if _metric_value(choice, "only_goal_winner") > 0:
+        return [
+            "唯一进球就是答案",
+            f"{name}打进全场最关键一球",
+            "1比0的比赛，进球者不能被漏掉",
+            f"{name}把比分定住了",
+        ]
     if goals >= 3:
         return [
             "帽子戏法就是答案",
@@ -1079,6 +1444,10 @@ def _zh_title_candidates(choice: dict[str, Any]) -> list[str]:
 
 def _en_title_candidates(choice: dict[str, Any]) -> list[str]:
     goals = _metric_value(choice, "goals")
+    if _metric_value(choice, "substitute_brace") > 0:
+        return ["The substitute who changed it", "Two goals off the bench", "The bench answer"]
+    if _metric_value(choice, "only_goal_winner") > 0:
+        return ["The only goal mattered", "The decisive scorer", "The 1-0 answer"]
     if goals >= 3:
         return ["The hat-trick was enough", "Three goals, no debate", "The obvious top pick"]
     if goals >= 2:
@@ -1098,12 +1467,16 @@ def _en_title_candidates(choice: dict[str, Any]) -> list[str]:
 
 def _zh_action_notes(choice: dict[str, Any]) -> list[str]:
     notes: list[str] = []
+    if _metric_value(choice, "substitute_brace") > 0:
+        notes.append("替补出场后完成梅开二度")
+    if _metric_value(choice, "only_goal_winner") > 0:
+        notes.append("打进全场唯一进球")
     if _metric_value(choice, "late_match_winning_goal") > 0:
         notes.append("补时阶段打进制胜球")
     elif _metric_value(choice, "match_winning_goal") > 0:
         notes.append("打进决定比分的进球")
     if _metric_value(choice, "goals") >= 3:
-        notes.append("包办球队全部进球")
+        notes.append("完成帽子戏法")
     elif _metric_value(choice, "goals") >= 2:
         notes.append("反复冲击后卫身后")
     if _metric_value(choice, "line_breaks_completed") >= 12:
@@ -1123,12 +1496,16 @@ def _zh_action_notes(choice: dict[str, Any]) -> list[str]:
 
 def _en_action_notes(choice: dict[str, Any]) -> list[str]:
     notes: list[str] = []
+    if _metric_value(choice, "substitute_brace") > 0:
+        notes.append("scored twice after coming off the bench")
+    if _metric_value(choice, "only_goal_winner") > 0:
+        notes.append("scored the only goal of the match")
     if _metric_value(choice, "late_match_winning_goal") > 0:
         notes.append("scored the stoppage-time winner")
     elif _metric_value(choice, "match_winning_goal") > 0:
         notes.append("scored the match-winning goal")
     if _metric_value(choice, "goals") >= 3:
-        notes.append("scored every goal for his team")
+        notes.append("scored a hat-trick")
     elif _metric_value(choice, "goals") >= 2:
         notes.append("kept attacking the space behind the line")
     if _metric_value(choice, "line_breaks_completed") >= 12:
@@ -1149,9 +1526,14 @@ def _en_action_notes(choice: dict[str, Any]) -> list[str]:
 def _choice_metric_items(choice: dict[str, Any], language: str) -> list[dict[str, Any]]:
     labels = {
         "goals": {"en": "goals", "zh": "进球"},
+        "brace": {"en": "brace", "zh": "梅开二度"},
+        "hat_trick": {"en": "hat-trick", "zh": "帽子戏法"},
+        "substitute_goal": {"en": "substitute goals", "zh": "替补进球"},
+        "substitute_brace": {"en": "substitute brace", "zh": "替补双响"},
+        "only_goal_winner": {"en": "only goal", "zh": "全场唯一进球"},
         "opening_goal": {"en": "opening goal", "zh": "首开纪录"},
         "equalizing_goal": {"en": "equaliser", "zh": "扳平进球"},
-        "go_ahead_goal": {"en": "go-ahead goal", "zh": "反超进球"},
+        "go_ahead_goal": {"en": "go-ahead goal", "zh": "领先进球"},
         "match_winning_goal": {"en": "match-winning goal", "zh": "制胜进球"},
         "late_goal": {"en": "late goal", "zh": "晚段进球"},
         "stoppage_time_goal": {"en": "stoppage-time goal", "zh": "补时进球"},

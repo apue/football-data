@@ -18,7 +18,7 @@ def main() -> None:
     )
     parser.add_argument(
         "--scoring-config",
-        default="config/scoring/v0.2.json",
+        default="config/scoring/v0.3.json",
         help="Scoring configuration JSON.",
     )
     parser.add_argument("--site-dir", default="site", help="Site output directory.")

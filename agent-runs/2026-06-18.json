@@ -1,0 +1,165 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-06-19T12:36:02+00:00",
+  "status": "success",
+  "match_date": "2026-06-18",
+  "scoring_version": "v0.3",
+  "research": {
+    "enabled": false,
+    "status": "skipped",
+    "result_count": 0
+  },
+  "selection_review": {
+    "status": "publishable",
+    "alerts": [
+      {
+        "level": "info",
+        "code": "same_team_multiple_picks",
+        "message": "Multiple picks can still come from one team when roles are clearly distinct.",
+        "teams": [
+          {
+            "team": "Switzerland",
+            "count": 2
+          }
+        ]
+      }
+    ],
+    "iterations": [
+      {
+        "iteration": 1,
+        "status": "needs_adjustment",
+        "alerts": [
+          {
+            "level": "high",
+            "code": "defensive_pick_from_heavy_loss",
+            "message": "Nikola KATIC has the top defensive score, but Bosnia and Herzegovina conceded 4 in a heavy loss.",
+            "player_name": "Nikola KATIC",
+            "team": "Bosnia and Herzegovina",
+            "replacement_candidate": "LEE Gihyuk"
+          },
+          {
+            "level": "high",
+            "code": "hidden_gem_duplicates_existing_team",
+            "message": "Oswin APPOLLIS is a strong hidden-gem profile, but South Africa already has another pick and Ladislav KREJCI gives the slate a distinct match angle.",
+            "player_name": "Oswin APPOLLIS",
+            "team": "South Africa",
+            "replacement_candidate": "Ladislav KREJCI"
+          },
+          {
+            "level": "info",
+            "code": "same_team_multiple_picks",
+            "message": "Multiple picks can still come from one team when roles are clearly distinct.",
+            "teams": [
+              {
+                "team": "South Africa",
+                "count": 2
+              },
+              {
+                "team": "Switzerland",
+                "count": 2
+              }
+            ]
+          }
+        ],
+        "choice_names": [
+          "Jonathan DAVID",
+          "Teboho MOKOENA",
+          "Johan MANZAMBI",
+          "Luis ROMO",
+          "Granit XHAKA",
+          "Nikola KATIC",
+          "Oswin APPOLLIS"
+        ]
+      },
+      {
+        "iteration": 2,
+        "status": "publishable",
+        "alerts": [
+          {
+            "level": "info",
+            "code": "same_team_multiple_picks",
+            "message": "Multiple picks can still come from one team when roles are clearly distinct.",
+            "teams": [
+              {
+                "team": "Switzerland",
+                "count": 2
+              }
+            ]
+          }
+        ],
+        "choice_names": [
+          "Jonathan DAVID",
+          "Teboho MOKOENA",
+          "Johan MANZAMBI",
+          "Luis ROMO",
+          "Granit XHAKA",
+          "LEE Gihyuk",
+          "Ladislav KREJCI"
+        ]
+      }
+    ]
+  },
+  "models": {},
+  "tool_calls": [
+    {
+      "role": "fact_check",
+      "model": "deepseek-ai/DeepSeek-V4-Flash",
+      "input_chars": 4035,
+      "output_chars": 0,
+      "warnings": [
+        "LLM fact-check timed out during the live run; deterministic checks passed."
+      ],
+      "status": "timeout"
+    }
+  ],
+  "fact_check": {
+    "status": "warning",
+    "deterministic_status": "pass",
+    "llm_status": "timeout",
+    "warnings": [
+      "LLM fact-check timed out during the live run; deterministic checks passed."
+    ]
+  },
+  "artifacts": {
+    "markdown": "reports/editorial/2026-06-18.md",
+    "choices": "site/editorial/2026-06-18/choices.json",
+    "external_evidence": "site/editorial/2026-06-18/external_evidence.json"
+  },
+  "choices": [
+    {
+      "award_type": "player_of_the_day",
+      "player_name": "Jonathan DAVID",
+      "team": "Canada"
+    },
+    {
+      "award_type": "player_of_the_day",
+      "player_name": "Teboho MOKOENA",
+      "team": "South Africa"
+    },
+    {
+      "award_type": "player_of_the_day",
+      "player_name": "Johan MANZAMBI",
+      "team": "Switzerland"
+    },
+    {
+      "award_type": "impact_pick",
+      "player_name": "Luis ROMO",
+      "team": "Mexico"
+    },
+    {
+      "award_type": "progression_pick",
+      "player_name": "Granit XHAKA",
+      "team": "Switzerland"
+    },
+    {
+      "award_type": "defensive_pick",
+      "player_name": "LEE Gihyuk",
+      "team": "Korea Republic"
+    },
+    {
+      "award_type": "hidden_gem",
+      "player_name": "Ladislav KREJCI",
+      "team": "Czechia"
+    }
+  ]
+}

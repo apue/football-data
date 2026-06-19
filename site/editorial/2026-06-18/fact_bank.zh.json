@@ -1,0 +1,220 @@
+{
+  "schema_version": 1,
+  "language": "zh",
+  "generated_at": "2026-06-19T12:14:17+00:00",
+  "match_date": "2026-06-18",
+  "scoring_version": "v0.3",
+  "editorial_process": "from_scratch_chinese_sports_editor",
+  "editorial_voice": "严肃足球数据分析员面向大众发帖：判断清楚，语气可以轻松一点；先讲球场作用，再自然带一两个关键事实。",
+  "forbidden_inputs": [
+    "英文稿",
+    "英文标题",
+    "英文成稿",
+    "已成型选择理由句子"
+  ],
+  "review_loop": [
+    "先用中文体育编辑视角从事实重写，不继承旧稿句式。",
+    "再做 qu-ai-wei 式严格审稿：删翻译腔、空话、事实越界。",
+    "只在卡片不顺时做 humanizer-zh 式语感修复。"
+  ],
+  "choices": [
+    {
+      "award_type": "player_of_the_day",
+      "award_label": "每日最佳球员",
+      "player_name": "Jonathan DAVID",
+      "team": "加拿大",
+      "opponent": "卡塔尔",
+      "match_no": 27,
+      "match_scoreline": "加拿大 6-0 卡塔尔",
+      "position": "FW",
+      "facts": [
+        "帽子戏法",
+        "射门质量突出",
+        "3 个进球",
+        "15 次接应成功",
+        "6 次射正",
+        "1 次帽子戏法",
+        "跑动距离 10188.9 米"
+      ],
+      "allowed_angles": [
+        "明显最佳",
+        "不必绕远",
+        "可以补充他不只负责最后一脚"
+      ],
+      "evidence_chips": [
+        "帽子戏法",
+        "射门质量突出"
+      ]
+    },
+    {
+      "award_type": "player_of_the_day",
+      "award_label": "每日最佳球员",
+      "player_name": "Teboho MOKOENA",
+      "team": "南非",
+      "opponent": "捷克",
+      "match_no": 25,
+      "match_scoreline": "南非 1-1 捷克",
+      "position": "MF",
+      "facts": [
+        "扳平进球",
+        "取得进球",
+        "持续打穿防线",
+        "持续接应",
+        "29 次打穿防线",
+        "38 次接应成功",
+        "跑动距离 10523.7 米",
+        "1 个进球",
+        "6 次夺回球权"
+      ],
+      "allowed_angles": [
+        "中场连接点",
+        "接应和转移",
+        "帮助球队持续向前处理"
+      ],
+      "evidence_chips": [
+        "扳平进球",
+        "取得进球",
+        "持续打穿防线",
+        "持续接应"
+      ]
+    },
+    {
+      "award_type": "player_of_the_day",
+      "award_label": "每日最佳球员",
+      "player_name": "Johan MANZAMBI",
+      "team": "瑞士",
+      "opponent": "波黑",
+      "match_no": 26,
+      "match_scoreline": "瑞士 4-1 波黑",
+      "position": "MF",
+      "facts": [
+        "梅开二度",
+        "替补双响",
+        "首开纪录",
+        "2 个进球",
+        "1 次梅开二度",
+        "2 次替补进球",
+        "1 次替补双响",
+        "7 次接应成功"
+      ],
+      "allowed_angles": [
+        "替补双响",
+        "改变比赛走势",
+        "不用包装得太复杂"
+      ],
+      "evidence_chips": [
+        "梅开二度",
+        "替补双响",
+        "首开纪录"
+      ]
+    },
+    {
+      "award_type": "impact_pick",
+      "award_label": "影响力精选",
+      "player_name": "Luis ROMO",
+      "team": "墨西哥",
+      "opponent": "韩国",
+      "match_no": 28,
+      "match_scoreline": "墨西哥 1-0 韩国",
+      "position": "MF",
+      "facts": [
+        "全场唯一进球",
+        "打入制胜球",
+        "取得进球",
+        "在防线之间活跃",
+        "1 次制胜进球",
+        "1 次全场唯一进球",
+        "1 次领先进球",
+        "1 次首开纪录"
+      ],
+      "allowed_angles": [
+        "全场唯一进球",
+        "决定比分",
+        "直接写关键性"
+      ],
+      "evidence_chips": [
+        "全场唯一进球",
+        "打入制胜球",
+        "取得进球",
+        "在防线之间活跃"
+      ]
+    },
+    {
+      "award_type": "progression_pick",
+      "award_label": "推进精选",
+      "player_name": "Granit XHAKA",
+      "team": "瑞士",
+      "opponent": "波黑",
+      "match_no": 26,
+      "match_scoreline": "瑞士 4-1 波黑",
+      "position": "MF",
+      "facts": [
+        "取得进球",
+        "持续打穿防线",
+        "持续接应",
+        "31 次打穿防线",
+        "2 次推进",
+        "1 次尝试过人"
+      ],
+      "allowed_angles": [
+        "输球方亮点",
+        "把球从压力里带出来",
+        "推进出口"
+      ],
+      "evidence_chips": [
+        "取得进球",
+        "持续打穿防线",
+        "持续接应"
+      ]
+    },
+    {
+      "award_type": "defensive_pick",
+      "award_label": "防守精选",
+      "player_name": "LEE Gihyuk",
+      "team": "韩国",
+      "opponent": "墨西哥",
+      "match_no": 28,
+      "match_scoreline": "韩国 0-1 墨西哥",
+      "position": "MF",
+      "facts": [
+        "夺回球权能力突出",
+        "9 次夺回球权",
+        "7 次破坏进攻",
+        "2 次封堵"
+      ],
+      "allowed_angles": [
+        "承压局防守",
+        "让对手进攻停下来",
+        "脏活和硬活"
+      ],
+      "evidence_chips": [
+        "夺回球权能力突出"
+      ]
+    },
+    {
+      "award_type": "hidden_gem",
+      "award_label": "隐藏亮点",
+      "player_name": "Ladislav KREJCI",
+      "team": "捷克",
+      "opponent": "南非",
+      "match_no": 25,
+      "match_scoreline": "捷克 1-1 南非",
+      "position": "DF",
+      "facts": [
+        "持续打穿防线",
+        "夺回球权能力突出",
+        "18 次打穿防线",
+        "1 次推进"
+      ],
+      "allowed_angles": [
+        "不抢镜",
+        "持续提供接应角度",
+        "让前场不断线"
+      ],
+      "evidence_chips": [
+        "持续打穿防线",
+        "夺回球权能力突出"
+      ]
+    }
+  ]
+}

@@ -145,7 +145,7 @@ def test_calibrate_potm_cli_writes_markdown_report(tmp_path):
     markdown = report_path.read_text(encoding="utf-8")
     assert "# POTM Calibration - 2026-06-17" in markdown
     assert "Caleb YIRENKYI" in markdown
-    assert "Scoring version: `v0.2`" in markdown
+    assert "Scoring version: `v0.3`" in markdown
     assert "rank 1" in markdown
     assert "ok" in markdown
 

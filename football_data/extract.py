@@ -272,6 +272,7 @@ def _parse_shots(match: Match, source_id: str, *pages: list[str]) -> list[Shot]:
             outcome = lines[idx + 2]
             body_part = lines[idx + 3]
             delivery_type = lines[idx + 4]
+            is_goal = outcome.endswith(" - Goal")
             shot_no += 1
             shots.append(
                 Shot(
@@ -283,8 +284,8 @@ def _parse_shots(match: Match, source_id: str, *pages: list[str]) -> list[Shot]:
                     outcome=outcome,
                     body_part=body_part,
                     delivery_type=delivery_type,
-                    is_goal="Goal" in outcome,
-                    is_on_target=("On Target" in outcome) or ("Goal" in outcome),
+                    is_goal=is_goal,
+                    is_on_target=("On Target" in outcome) or is_goal,
                     source_id=source_id,
                 )
             )

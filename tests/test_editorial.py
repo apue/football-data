@@ -1,10 +1,14 @@
 import json
 import re
+import sqlite3
 import subprocess
 import sys
 from pathlib import Path
 
 from football_data.editorial import (
+    _load_scoring_config,
+    _player_rows_for_date,
+    _score_player,
     build_editorial_report,
     compile_editorial_markdown,
     write_editorial_artifacts,
@@ -16,7 +20,7 @@ def test_build_editorial_report_for_match_day():
 
     assert report["schema_version"] == 1
     assert report["match_date"] == "2026-06-16"
-    assert report["scoring_version"] == "v0.2"
+    assert report["scoring_version"] == "v0.3"
     assert report["matches"]
     assert report["choices"]
 
@@ -55,6 +59,92 @@ def test_editorial_impact_layer_surfaces_decisive_goal_players():
         component["metric"] == "late_match_winning_goal"
         for component in caleb["score_components"]
     )
+
+
+def test_editorial_headline_impact_surfaces_goal_stories_for_latest_day():
+    report = build_editorial_report("data/latest.sqlite", match_date="2026-06-18")
+    choices_by_name = {choice["player_name"]: choice for choice in report["choices"]}
+
+    assert "Jonathan DAVID" in choices_by_name
+    assert "Luis ROMO" in choices_by_name
+    assert "Johan MANZAMBI" in choices_by_name
+
+    david = choices_by_name["Jonathan DAVID"]
+    assert david["award_type"] == "player_of_the_day"
+    assert david["role_scores"]["impact"] >= 20
+    assert any(component["metric"] == "hat_trick" for component in david["score_components"])
+
+    romo = choices_by_name["Luis ROMO"]
+    assert any(component["metric"] == "only_goal_winner" for component in romo["score_components"])
+
+    manzambi = choices_by_name["Johan MANZAMBI"]
+    assert any(component["metric"] == "substitute_brace" for component in manzambi["score_components"])
+
+
+def test_editorial_scoring_ignores_goal_prevented_rows_in_existing_database():
+    conn = sqlite3.connect("data/latest.sqlite")
+    conn.row_factory = sqlite3.Row
+    try:
+        scoring = _load_scoring_config("config/scoring/v0.2.json")
+        players = [
+            _score_player(row, scoring)
+            for row in _player_rows_for_date(conn, "2026-06-18")
+        ]
+    finally:
+        conn.close()
+
+    tajon = next(
+        player
+        for player in players
+        if player["match_no"] == 27 and player["player_name"] == "Tajon BUCHANAN"
+    )
+
+    assert tajon["goals"] == 0
+    assert tajon["role_scores"]["impact"] == 0
+
+
+def test_editorial_self_review_loop_rebalances_contextual_risks():
+    report = build_editorial_report("data/latest.sqlite", match_date="2026-06-18")
+    choices_by_award = {choice["award_type"]: choice for choice in report["choices"]}
+    player_names = [choice["player_name"] for choice in report["choices"]]
+
+    assert report["selection_review"]["status"] == "publishable"
+    assert not [
+        alert
+        for alert in report["selection_review"]["alerts"]
+        if alert["level"] == "high"
+    ]
+    assert [iteration["status"] for iteration in report["selection_review"]["iterations"]] == [
+        "needs_adjustment",
+        "publishable",
+    ]
+
+    assert "Jonathan DAVID" in player_names
+    assert "Johan MANZAMBI" in player_names
+    assert "Luis ROMO" in player_names
+    assert "Nikola KATIC" not in player_names
+    assert "Oswin APPOLLIS" not in player_names
+
+    defensive_pick = choices_by_award["defensive_pick"]
+    assert defensive_pick["team"] == "Korea Republic"
+    assert defensive_pick["player_name"] == "LEE Gihyuk"
+
+    hidden_gem = choices_by_award["hidden_gem"]
+    teams_before_hidden = {
+        choice["team"]
+        for choice in report["choices"]
+        if choice["award_type"] != "hidden_gem"
+    }
+    assert hidden_gem["team"] not in teams_before_hidden
+    assert hidden_gem["player_name"] == "Ladislav KREJCI"
+
+
+def test_chinese_fact_bank_does_not_label_ordinary_go_ahead_goal_as_comeback():
+    report = build_editorial_report("data/latest.sqlite", match_date="2026-06-18")
+
+    fact_bank_text = json.dumps(report, ensure_ascii=False)
+
+    assert "反超进球" not in fact_bank_text
 
 
 def test_write_editorial_artifacts(tmp_path):
@@ -113,7 +203,7 @@ def test_write_editorial_artifacts(tmp_path):
     assert zh_fact_bank["choices"][0]["player_name"] == "梅西"
     assert zh_fact_bank["choices"][0]["match_scoreline"] == "阿根廷 3-0 阿尔及利亚"
     assert any("帽子戏法" in fact for fact in zh_fact_bank["choices"][0]["facts"])
-    assert any("4 次射正" in fact for fact in zh_fact_bank["choices"][0]["facts"])
+    assert any("3 个进球" in fact for fact in zh_fact_bank["choices"][0]["facts"])
     assert any("制胜进球" in fact for fact in zh_fact_bank["choices"][0]["facts"])
     progression_choice = next(
         choice

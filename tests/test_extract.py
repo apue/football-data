@@ -2,7 +2,8 @@ from pathlib import Path
 
 import pytest
 
-from football_data.extract import extract_pdf
+from football_data.extract import _parse_shots, extract_pdf
+from football_data.model import Match
 
 
 RAW_DIR = Path(__file__).resolve().parents[1] / "raw"
@@ -12,6 +13,53 @@ def _pdf(pattern: str) -> Path:
     matches = sorted(RAW_DIR.glob(f"**/{pattern}"))
     assert matches, f"No PDF fixture found for {pattern}"
     return matches[-1]
+
+
+def test_attempt_goal_prevented_is_not_parsed_as_goal():
+    match = Match(
+        match_key="FIFA-2026-M27-CAN-QAT",
+        match_no=27,
+        group_name="Group B",
+        match_date="2026-06-18",
+        kickoff_time="15:00",
+        stadium="BC Place Vancouver",
+        home_team="Canada",
+        away_team="Qatar",
+        home_score=6,
+        away_score=0,
+    )
+
+    shots = _parse_shots(
+        match,
+        "test-source",
+        [
+            "Attempts at Goal",
+            "Canada",
+            "Minute",
+            "Player",
+            "Outcome",
+            "Body Part",
+            "Delivery Type",
+            "37",
+            "Tajon BUCHANAN",
+            "On Target - Goal Prevented",
+            "Right Foot",
+            "Cross",
+            "49",
+            "Luis ROMO",
+            "On Target - Goal",
+            "Right Foot",
+            "Pass",
+            "18 June 2026 - BC Place Vancouver - 15:00",
+        ],
+    )
+
+    prevented = next(shot for shot in shots if shot.player_name == "Tajon BUCHANAN")
+    goal = next(shot for shot in shots if shot.player_name == "Luis ROMO")
+
+    assert prevented.is_on_target is True
+    assert prevented.is_goal is False
+    assert goal.is_goal is True
 
 
 def test_extract_match_metadata_from_brazil_morocco_pdf():
