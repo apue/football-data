@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-06-19 - Impact-Aware Editorial Scoring
+
+Improved the editorial scoring layer for decisive match actions:
+
+- Added `config/scoring/v0.2.json` as the default Editor's Choices scoring config.
+- Added structured impact features for opening, equalizing, go-ahead, match-winning, late, stoppage-time, and late match-winning goals.
+- Updated editorial evidence chips and draft facts so decisive goals can surface without turning the copy into a metric list.
+- Updated 2026-06-17 Editor's Choices output to surface Caleb YIRENKYI and Luis DIAZ as Player of the Day candidates.
+- Updated POTM calibration defaults and tests while preserving `v0.1` as a historical pre-impact comparison point.
+
 ## 2026-06-18 - Editor's Choices Workflow
 
 Added the first editorial publishing workflow:

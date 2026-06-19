@@ -16,7 +16,7 @@ def test_build_editorial_report_for_match_day():
 
     assert report["schema_version"] == 1
     assert report["match_date"] == "2026-06-16"
-    assert report["scoring_version"] == "v0.1"
+    assert report["scoring_version"] == "v0.2"
     assert report["matches"]
     assert report["choices"]
 
@@ -34,6 +34,27 @@ def test_build_editorial_report_for_match_day():
 
     digit_count = len(re.findall(r"\d", first_choice["draft"]["en"]["body"]))
     assert digit_count <= 10
+
+
+def test_editorial_impact_layer_surfaces_decisive_goal_players():
+    report = build_editorial_report("data/latest.sqlite", match_date="2026-06-17")
+
+    players_of_day = [
+        choice
+        for choice in report["choices"]
+        if choice["award_type"] == "player_of_the_day"
+    ]
+    player_names = [choice["player_name"] for choice in players_of_day]
+
+    assert "Caleb YIRENKYI" in player_names
+    assert "Luis DIAZ" in player_names
+
+    caleb = next(choice for choice in players_of_day if choice["player_name"] == "Caleb YIRENKYI")
+    assert caleb["role_scores"]["impact"] >= 40
+    assert any(
+        component["metric"] == "late_match_winning_goal"
+        for component in caleb["score_components"]
+    )
 
 
 def test_write_editorial_artifacts(tmp_path):
@@ -93,7 +114,7 @@ def test_write_editorial_artifacts(tmp_path):
     assert zh_fact_bank["choices"][0]["match_scoreline"] == "阿根廷 3-0 阿尔及利亚"
     assert any("帽子戏法" in fact for fact in zh_fact_bank["choices"][0]["facts"])
     assert any("4 次射正" in fact for fact in zh_fact_bank["choices"][0]["facts"])
-    assert any("跑动距离 6808.4 米" in fact for fact in zh_fact_bank["choices"][0]["facts"])
+    assert any("制胜进球" in fact for fact in zh_fact_bank["choices"][0]["facts"])
     progression_choice = next(
         choice
         for choice in zh_fact_bank["choices"]

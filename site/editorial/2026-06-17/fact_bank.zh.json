@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "language": "zh",
-  "generated_at": "2026-06-18T08:34:28+00:00",
+  "generated_at": "2026-06-19T07:56:43+00:00",
   "match_date": "2026-06-17",
-  "scoring_version": "v0.1",
+  "scoring_version": "v0.2",
   "editorial_process": "from_scratch_chinese_sports_editor",
   "editorial_voice": "严肃足球数据分析员面向大众发帖：判断清楚，语气可以轻松一点；先讲球场作用，再自然带一两个关键事实。",
   "forbidden_inputs": [
@@ -18,6 +18,64 @@
     "只在卡片不顺时做 humanizer-zh 式语感修复。"
   ],
   "choices": [
+    {
+      "award_type": "player_of_the_day",
+      "award_label": "每日最佳球员",
+      "player_name": "Caleb YIRENKYI",
+      "team": "加纳",
+      "opponent": "巴拿马",
+      "match_no": 21,
+      "match_scoreline": "加纳 1-0 巴拿马",
+      "position": "MF",
+      "facts": [
+        "补时制胜",
+        "取得进球",
+        "1 次补时制胜球",
+        "跑动距离 12645.8 米",
+        "1 次制胜进球",
+        "5 次打穿防线",
+        "5 次夺回球权"
+      ],
+      "allowed_angles": [
+        "补时绝杀",
+        "不只靠最后一脚",
+        "全场贡献支撑这个瞬间"
+      ],
+      "evidence_chips": [
+        "补时制胜",
+        "取得进球"
+      ]
+    },
+    {
+      "award_type": "player_of_the_day",
+      "award_label": "每日最佳球员",
+      "player_name": "Luis DIAZ",
+      "team": "哥伦比亚",
+      "opponent": "乌兹别克斯坦",
+      "match_no": 24,
+      "match_scoreline": "哥伦比亚 3-1 乌兹别克斯坦",
+      "position": "FW",
+      "facts": [
+        "打入制胜球",
+        "取得进球",
+        "持续接应",
+        "25 次接应成功",
+        "30 次身后接应",
+        "7 次打穿防线",
+        "1 次制胜进球",
+        "跑动距离 9133.7 米"
+      ],
+      "allowed_angles": [
+        "制胜球",
+        "决定比分走势",
+        "不只靠最后一脚"
+      ],
+      "evidence_chips": [
+        "打入制胜球",
+        "取得进球",
+        "持续接应"
+      ]
+    },
     {
       "award_type": "player_of_the_day",
       "award_label": "每日最佳球员",
@@ -44,60 +102,6 @@
       "evidence_chips": [
         "持续打穿防线",
         "夺回球权能力突出"
-      ]
-    },
-    {
-      "award_type": "player_of_the_day",
-      "award_label": "每日最佳球员",
-      "player_name": "若昂·内维斯",
-      "team": "葡萄牙",
-      "opponent": "刚果（金）",
-      "match_no": 23,
-      "match_scoreline": "葡萄牙 1-1 刚果（金）",
-      "position": "MF",
-      "facts": [
-        "取得进球",
-        "14 次打穿防线",
-        "23 次接应成功",
-        "跑动距离 11977.1 米",
-        "19 次身后接应",
-        "5 次夺回球权"
-      ],
-      "allowed_angles": [
-        "中场连接点",
-        "接应和转移",
-        "帮助球队持续向前处理"
-      ],
-      "evidence_chips": [
-        "取得进球"
-      ]
-    },
-    {
-      "award_type": "player_of_the_day",
-      "award_label": "每日最佳球员",
-      "player_name": "维蒂尼亚",
-      "team": "葡萄牙",
-      "opponent": "刚果（金）",
-      "match_no": 23,
-      "match_scoreline": "葡萄牙 1-1 刚果（金）",
-      "position": "MF",
-      "facts": [
-        "持续打穿防线",
-        "持续接应",
-        "27 次打穿防线",
-        "27 次接应成功",
-        "跑动距离 10224.6 米",
-        "6 次推进",
-        "14 次两线间接应"
-      ],
-      "allowed_angles": [
-        "中场连接点",
-        "接应和转移",
-        "帮助球队持续向前处理"
-      ],
-      "evidence_chips": [
-        "持续打穿防线",
-        "持续接应"
       ]
     },
     {
@@ -152,18 +156,18 @@
     {
       "award_type": "hidden_gem",
       "award_label": "隐藏亮点",
-      "player_name": "布鲁诺·费尔南德斯",
+      "player_name": "维蒂尼亚",
       "team": "葡萄牙",
       "opponent": "刚果（金）",
       "match_no": 23,
       "match_scoreline": "葡萄牙 1-1 刚果（金）",
       "position": "MF",
       "facts": [
+        "持续打穿防线",
         "持续接应",
-        "在防线之间活跃",
-        "27 次接应成功",
-        "15 次身后接应",
-        "22 次两线间接应"
+        "27 次打穿防线",
+        "6 次推进",
+        "1 次尝试过人"
       ],
       "allowed_angles": [
         "不抢镜",
@@ -171,8 +175,8 @@
         "让前场不断线"
       ],
       "evidence_chips": [
-        "持续接应",
-        "在防线之间活跃"
+        "持续打穿防线",
+        "持续接应"
       ]
     }
   ]

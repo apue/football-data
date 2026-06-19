@@ -11,7 +11,7 @@ from typing import Any
 from football_data.flags import format_player, format_team
 
 
-DEFAULT_SCORING_CONFIG = Path("config/scoring/v0.1.json")
+DEFAULT_SCORING_CONFIG = Path("config/scoring/v0.2.json")
 
 
 AWARD_LABELS = {
@@ -240,7 +240,7 @@ def compile_editorial_markdown(
 
 def _load_scoring_config(path: str | Path) -> dict[str, Any]:
     config = json.loads(Path(path).read_text(encoding="utf-8"))
-    if config.get("version") != "v0.1":
+    if config.get("version") not in {"v0.1", "v0.2"}:
         raise ValueError(f"Unsupported scoring config version: {config.get('version')}")
     return config
 
@@ -276,6 +276,67 @@ def _player_rows_for_date(conn: sqlite3.Connection, match_date: str) -> list[sql
                  sum(is_goal) as goals
           from shots
           group by match_key, team, upper(player_name)
+        ),
+        goal_rows as (
+          select
+            s.match_key,
+            s.team,
+            upper(s.player_name) as player_name,
+            s.minute,
+            s.shot_no,
+            m.home_team,
+            m.away_team,
+            m.home_score,
+            m.away_score,
+            case when s.team = m.home_team then m.away_team else m.home_team end as opponent,
+            case when s.team = m.home_team then m.home_score else m.away_score end as team_final_goals,
+            case when s.team = m.home_team then m.away_score else m.home_score end as opponent_final_goals,
+            row_number() over (
+              partition by s.match_key
+              order by s.minute, case when s.team = m.home_team then 0 else 1 end, s.shot_no
+            ) as goal_order
+          from shots s
+          join matches m using(match_key)
+          where s.is_goal = 1
+        ),
+        goal_states as (
+          select
+            g.match_key,
+            g.team,
+            g.player_name,
+            g.minute,
+            g.team_final_goals,
+            g.opponent_final_goals,
+            coalesce(sum(case when prev.team = g.team then 1 else 0 end), 0) as team_goals_before,
+            coalesce(sum(case when prev.team = g.opponent then 1 else 0 end), 0) as opponent_goals_before
+          from goal_rows g
+          left join goal_rows prev
+            on prev.match_key = g.match_key
+           and prev.goal_order < g.goal_order
+          group by
+            g.match_key,
+            g.team,
+            g.player_name,
+            g.opponent,
+            g.minute,
+            g.goal_order,
+            g.team_final_goals,
+            g.opponent_final_goals
+        ),
+        goal_impacts as (
+          select
+            match_key,
+            team,
+            player_name,
+            sum(case when team_goals_before = 0 and opponent_goals_before = 0 then 1 else 0 end) as opening_goal,
+            sum(case when team_goals_before < opponent_goals_before and team_goals_before + 1 = opponent_goals_before then 1 else 0 end) as equalizing_goal,
+            sum(case when team_goals_before <= opponent_goals_before and team_goals_before + 1 > opponent_goals_before then 1 else 0 end) as go_ahead_goal,
+            sum(case when team_final_goals > opponent_final_goals and team_goals_before + 1 = opponent_final_goals + 1 then 1 else 0 end) as match_winning_goal,
+            sum(case when minute >= 75 then 1 else 0 end) as late_goal,
+            sum(case when minute >= 90 then 1 else 0 end) as stoppage_time_goal,
+            sum(case when minute >= 85 and team_final_goals > opponent_final_goals and team_goals_before + 1 = opponent_final_goals + 1 then 1 else 0 end) as late_match_winning_goal
+          from goal_states
+          group by match_key, team, player_name
         )
         select
           m.match_key,
@@ -291,6 +352,13 @@ def _player_rows_for_date(conn: sqlite3.Connection, match_date: str) -> list[sql
           coalesce(s.shots, d.attempts_at_goal, 0) as shots,
           coalesce(s.on_target, 0) as on_target,
           coalesce(s.goals, d.goals, 0) as goals,
+          coalesce(g.opening_goal, 0) as opening_goal,
+          coalesce(g.equalizing_goal, 0) as equalizing_goal,
+          coalesce(g.go_ahead_goal, 0) as go_ahead_goal,
+          coalesce(g.match_winning_goal, 0) as match_winning_goal,
+          coalesce(g.late_goal, 0) as late_goal,
+          coalesce(g.stoppage_time_goal, 0) as stoppage_time_goal,
+          coalesce(g.late_match_winning_goal, 0) as late_match_winning_goal,
           coalesce(o.total_offers, 0) as total_offers,
           coalesce(o.offers_received, 0) as offers_received,
           coalesce(o.in_behind, 0) as in_behind,
@@ -332,6 +400,10 @@ def _player_rows_for_date(conn: sqlite3.Connection, match_date: str) -> list[sql
           on s.match_key = a.match_key
          and s.team = a.team
          and s.player_name = upper(a.player_name)
+        left join goal_impacts g
+          on g.match_key = a.match_key
+         and g.team = a.team
+         and g.player_name = upper(a.player_name)
         where m.match_date = ?
         """,
         (match_date,),
@@ -490,6 +562,19 @@ def _top_components_across_roles(player: dict[str, Any]) -> list[dict[str, Any]]
 def _evidence_chips(player: dict[str, Any], award_type: str) -> dict[str, list[str]]:
     en: list[str] = []
     zh: list[str] = []
+    if int(player.get("late_match_winning_goal") or 0) > 0:
+        en.append("late winner")
+        zh.append("补时制胜")
+    elif int(player.get("match_winning_goal") or 0) > 0:
+        en.append("match-winning goal")
+        zh.append("打入制胜球")
+    elif int(player.get("go_ahead_goal") or 0) > 0:
+        en.append("go-ahead goal")
+        zh.append("反超进球")
+    elif int(player.get("equalizing_goal") or 0) > 0:
+        en.append("equaliser")
+        zh.append("扳平进球")
+
     goals = int(player.get("goals") or 0)
     if goals >= 3:
         en.append("hat-trick")
@@ -569,6 +654,13 @@ def _chinese_metric_summary(player: dict[str, Any]) -> str:
 def _metric_summary_items(player: dict[str, Any]) -> list[dict[str, str]]:
     labels = {
         "goals": ("goals", "进球"),
+        "opening_goal": ("opening goal", "首开纪录"),
+        "equalizing_goal": ("equaliser", "扳平进球"),
+        "go_ahead_goal": ("go-ahead goal", "反超进球"),
+        "match_winning_goal": ("match-winning goal", "制胜进球"),
+        "late_goal": ("late goal", "晚段进球"),
+        "stoppage_time_goal": ("stoppage-time goal", "补时进球"),
+        "late_match_winning_goal": ("late winner", "补时制胜球"),
         "attempts": ("attempts", "射门"),
         "on_target": ("on target", "射正"),
         "line_breaks_completed": ("line breaks", "打穿防线"),
@@ -783,6 +875,10 @@ def _zh_allowed_angles(choice: dict[str, Any]) -> list[str]:
         return ["明显最佳", "不必绕远", "可以补充他不只负责最后一脚"]
     if goals >= 2:
         return ["进球很醒目", "持续冲击身后空间", "让对手防线不敢前压"]
+    if _metric_value(choice, "late_match_winning_goal") > 0:
+        return ["补时绝杀", "不只靠最后一脚", "全场贡献支撑这个瞬间"]
+    if _metric_value(choice, "match_winning_goal") > 0:
+        return ["制胜球", "决定比分走势", "不只靠最后一脚"]
     if choice["award_type"] == "progression_pick":
         return ["输球方亮点", "把球从压力里带出来", "推进出口"]
     if choice["award_type"] == "defensive_pick":
@@ -889,6 +985,10 @@ def _zh_selection_angle(choice: dict[str, Any]) -> str:
         return "明显答案：帽子戏法直接决定当天最佳，但可以补一句他还参与推进。"
     if goals >= 2:
         return "进球很醒目，但更要写他持续冲击身后空间。"
+    if _metric_value(choice, "late_match_winning_goal") > 0:
+        return "先写补时制胜这个最直接的比赛影响，再补充他全场并不是只等到最后一脚。"
+    if _metric_value(choice, "match_winning_goal") > 0:
+        return "先写制胜球改变比赛结果，再补充他的持续进攻或跑动证据。"
     if choice["award_type"] == "progression_pick":
         return "重点写他如何把球从压力区带到前场。"
     if choice["award_type"] == "defensive_pick":
@@ -904,6 +1004,10 @@ def _en_selection_angle(choice: dict[str, Any]) -> str:
         return "Obvious pick: the hat-trick decides the top-line argument."
     if goals >= 2:
         return "Goals matter, but frame the repeated threat behind the line."
+    if _metric_value(choice, "late_match_winning_goal") > 0:
+        return "Lead with the stoppage-time winner, then support it with the rest of his match profile."
+    if _metric_value(choice, "match_winning_goal") > 0:
+        return "Lead with the decisive goal, then support it with the broader match profile."
     if choice["award_type"] == "progression_pick":
         return "Focus on moving the ball through pressure and into territory."
     if choice["award_type"] == "defensive_pick":
@@ -929,6 +1033,20 @@ def _zh_title_candidates(choice: dict[str, Any]) -> list[str]:
             "塞内加尔防线被他压住了",
             "两个进球之外，还有持续威胁",
             f"{name}把纵深打出来了",
+        ]
+    if _metric_value(choice, "late_match_winning_goal") > 0:
+        return [
+            "绝杀就是最硬的答案",
+            f"{name}把比赛收走了",
+            "最后一脚，也是一整场的回报",
+            f"{name}等到了决定比赛的一刻",
+        ]
+    if _metric_value(choice, "match_winning_goal") > 0:
+        return [
+            "制胜球把答案写清楚了",
+            f"{name}打进关键一球",
+            "决定比分的那一下",
+            f"{name}站到了最关键的位置",
         ]
     if choice["award_type"] == "progression_pick":
         return [
@@ -965,6 +1083,10 @@ def _en_title_candidates(choice: dict[str, Any]) -> list[str]:
         return ["The hat-trick was enough", "Three goals, no debate", "The obvious top pick"]
     if goals >= 2:
         return ["The constant threat behind", "Two goals and a deeper problem", "Always stretching the line"]
+    if _metric_value(choice, "late_match_winning_goal") > 0:
+        return ["The late answer", "The winner at the end", "One finish that changed the day"]
+    if _metric_value(choice, "match_winning_goal") > 0:
+        return ["The decisive touch", "The goal that tilted it", "The moment that mattered"]
     if choice["award_type"] == "progression_pick":
         return ["The best route forward", "Carrying through pressure", "Progression from a losing side"]
     if choice["award_type"] == "defensive_pick":
@@ -976,6 +1098,10 @@ def _en_title_candidates(choice: dict[str, Any]) -> list[str]:
 
 def _zh_action_notes(choice: dict[str, Any]) -> list[str]:
     notes: list[str] = []
+    if _metric_value(choice, "late_match_winning_goal") > 0:
+        notes.append("补时阶段打进制胜球")
+    elif _metric_value(choice, "match_winning_goal") > 0:
+        notes.append("打进决定比分的进球")
     if _metric_value(choice, "goals") >= 3:
         notes.append("包办球队全部进球")
     elif _metric_value(choice, "goals") >= 2:
@@ -997,6 +1123,10 @@ def _zh_action_notes(choice: dict[str, Any]) -> list[str]:
 
 def _en_action_notes(choice: dict[str, Any]) -> list[str]:
     notes: list[str] = []
+    if _metric_value(choice, "late_match_winning_goal") > 0:
+        notes.append("scored the stoppage-time winner")
+    elif _metric_value(choice, "match_winning_goal") > 0:
+        notes.append("scored the match-winning goal")
     if _metric_value(choice, "goals") >= 3:
         notes.append("scored every goal for his team")
     elif _metric_value(choice, "goals") >= 2:
@@ -1019,6 +1149,13 @@ def _en_action_notes(choice: dict[str, Any]) -> list[str]:
 def _choice_metric_items(choice: dict[str, Any], language: str) -> list[dict[str, Any]]:
     labels = {
         "goals": {"en": "goals", "zh": "进球"},
+        "opening_goal": {"en": "opening goal", "zh": "首开纪录"},
+        "equalizing_goal": {"en": "equaliser", "zh": "扳平进球"},
+        "go_ahead_goal": {"en": "go-ahead goal", "zh": "反超进球"},
+        "match_winning_goal": {"en": "match-winning goal", "zh": "制胜进球"},
+        "late_goal": {"en": "late goal", "zh": "晚段进球"},
+        "stoppage_time_goal": {"en": "stoppage-time goal", "zh": "补时进球"},
+        "late_match_winning_goal": {"en": "late winner", "zh": "补时制胜球"},
         "on_target": {"en": "shots on target", "zh": "射正"},
         "line_breaks_completed": {"en": "completed line breaks", "zh": "打穿防线"},
         "ball_progressions": {"en": "ball progressions", "zh": "推进"},
