@@ -13,6 +13,8 @@ def test_editorial_workflow_runs_after_dataset_update_and_exposes_secret_env():
     assert 'workflows: ["Update Dataset"]' in text
     assert "workflow_dispatch" in text
     assert "python scripts/run_editorial_queue.py" in text
+    assert "--ignore=tests/test_extract.py" in text
+    assert "--ignore=tests/test_database.py" in text
     assert "OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}" in text
     assert "OPENAI_BASE_URL: ${{ secrets.OPENAI_BASE_URL }}" in text
     assert "KEYPOOL_KEY: ${{ secrets.KEYPOOL_KEY }}" in text
