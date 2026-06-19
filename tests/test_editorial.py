@@ -249,7 +249,9 @@ def test_generate_editorial_cli_rebuilds_homepage(tmp_path):
 
     homepage = (tmp_path / "site" / "index.html").read_text(encoding="utf-8")
     assert "Editor's Choices" in homepage
-    assert "Top 5 Attacking Threats" in homepage
+    assert "Player Leaderboards" in homepage
+    assert "Most Shots on Target" in homepage
+    assert "射正最多" in homepage
 
 
 def test_render_editorial_cli_compiles_existing_markdown(tmp_path):

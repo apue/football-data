@@ -1,16 +1,23 @@
 {
-  "generated_at": "2026-06-18T13:14:22+00:00",
+  "generated_at": "2026-06-19T03:08:14+00:00",
   "status": "success",
   "failure_code": null,
   "hub_url": "https://www.fifatrainingcentre.com/en/fifa-world-cup-2026/match-report-hub.php",
   "discovered": 24,
   "active_sources": 24,
-  "downloaded": 24,
+  "downloaded": 22,
   "parsed": 24,
   "matches": 24,
   "source_documents": 24,
   "new_matches": [],
-  "version_updates": [],
+  "version_updates": [
+    {
+      "match_no": 21,
+      "from_version": 1,
+      "to_version": 2,
+      "source_id": "fifa-world-cup-2026-pmsr-m21-gha-pan-v2"
+    }
+  ],
   "failures": [],
   "message": "Dataset rebuilt from FIFA Match Report Hub active PMSR sources."
 }

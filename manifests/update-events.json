@@ -1,10 +1,15 @@
 {
-  "generated_at": "2026-06-18T13:14:22+00:00",
+  "generated_at": "2026-06-19T03:08:14+00:00",
   "new_matches": [],
-  "version_updates": [],
+  "version_updates": [
+    {
+      "match_no": 21,
+      "from_version": 1,
+      "to_version": 2,
+      "source_id": "fifa-world-cup-2026-pmsr-m21-gha-pan-v2"
+    }
+  ],
   "downloaded": [
-    "fifa-world-cup-2026-pmsr-m01-mex-rsa-v1",
-    "fifa-world-cup-2026-pmsr-m02-kor-cze-v1",
     "fifa-world-cup-2026-pmsr-m03-can-bih-v2",
     "fifa-world-cup-2026-pmsr-m04-usa-par-v1",
     "fifa-world-cup-2026-pmsr-m05-hai-sco-v1",
@@ -23,7 +28,7 @@
     "fifa-world-cup-2026-pmsr-m18-irq-nor-v1",
     "fifa-world-cup-2026-pmsr-m19-arg-alg-v1",
     "fifa-world-cup-2026-pmsr-m20-aut-jor-v1",
-    "fifa-world-cup-2026-pmsr-m21-gha-pan-v1",
+    "fifa-world-cup-2026-pmsr-m21-gha-pan-v2",
     "fifa-world-cup-2026-pmsr-m22-eng-cro-v1",
     "fifa-world-cup-2026-pmsr-m23-por-cod-v1",
     "fifa-world-cup-2026-pmsr-m24-uzb-col-v1"
