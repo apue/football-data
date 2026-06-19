@@ -20,6 +20,7 @@ def test_build_database_loads_matches_shots_and_physical_rows(tmp_path):
         extract_pdf(_pdf("PMSR-M01*.pdf")),
         extract_pdf(_pdf("PMSR-M02*.pdf")),
         extract_pdf(_pdf("PMSR-M07*.pdf")),
+        extract_pdf(_pdf("PMSR-M25*.pdf")),
     ]
 
     build_database(db_path, records)
@@ -32,6 +33,9 @@ def test_build_database_loads_matches_shots_and_physical_rows(tmp_path):
         appearance_count = conn.execute("select count(*) from player_appearances").fetchone()[0]
         offer_count = conn.execute("select count(*) from player_offers_receptions").fetchone()[0]
         defensive_count = conn.execute("select count(*) from player_defensive_actions").fetchone()[0]
+        detailed_line_break_count = conn.execute(
+            "select count(*) from player_line_breaks"
+        ).fetchone()[0]
         source_columns = {
             row[1] for row in conn.execute("pragma table_info(source_documents)").fetchall()
         }
@@ -85,15 +89,27 @@ def test_build_database_loads_matches_shots_and_physical_rows(tmp_path):
               and player_name = 'DOUGLAS SANTOS'
             """
         ).fetchone()
+        krejci_line_breaks = conn.execute(
+            """
+            select line_breaks_attempted, line_breaks_completed, units_2_midfield_line,
+                   direction_through, direction_around, distribution_pass,
+                   distribution_ball_progression
+            from player_line_breaks
+            where match_key = 'FIFA-2026-M25-CZE-RSA'
+              and team = 'Czechia'
+              and player_name = 'Ladislav KREJCI'
+            """
+        ).fetchone()
     finally:
         conn.close()
 
-    assert match_count == 3
-    assert shot_count == 67
+    assert match_count == 4
+    assert shot_count >= 90
     assert physical_count >= 90
     assert appearance_count >= 150
     assert offer_count >= 90
     assert defensive_count >= 90
+    assert detailed_line_break_count >= 90
     assert {"source_id", "report_type", "version", "home_code", "away_code"}.issubset(
         source_columns
     )
@@ -107,3 +123,4 @@ def test_build_database_loads_matches_shots_and_physical_rows(tmp_path):
     assert fastest == ("SON Heungmin", "Korea Republic", 35.2)
     assert vinicius == ("FW", "starting", 61, 26, 5, 11)
     assert douglas == (12, 4, 14, 8)
+    assert krejci_line_breaks == (20, 18, 7, 7, 8, 19, 0)

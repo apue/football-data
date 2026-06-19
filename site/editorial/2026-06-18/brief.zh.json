@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "language": "zh",
-  "generated_at": "2026-06-19T12:14:17+00:00",
+  "generated_at": "2026-06-19T15:13:44+00:00",
   "match_date": "2026-06-18",
   "scoring_version": "v0.3",
   "editorial_voice": "严肃足球数据分析员面向大众发帖：先讲球场作用，再带少量关键数据；可以轻松一点，但不要像翻译稿或指标表。",
@@ -308,19 +308,19 @@
       ]
     },
     {
-      "award_type": "defensive_pick",
-      "award_label": "防守精选",
+      "award_type": "hidden_gem",
+      "award_label": "隐藏亮点",
       "player_name": "LEE Gihyuk",
       "team": "韩国",
       "opponent": "墨西哥",
       "match_no": 28,
       "score": 32.9,
-      "why_selected": "重点写他如何让对手进攻停下来、重新组织。",
+      "why_selected": "重点写他为什么不抢镜但让进攻不断线。",
       "title_candidates": [
-        "后场最硬的一道闸",
-        "他让进攻一遍遍停下",
-        "LEE Gihyuk把防守活干满了",
-        "承压局里的防守答案"
+        "不抢镜的连接器",
+        "LEE Gihyuk把进攻接起来了",
+        "看不见的接应很关键",
+        "隐藏亮点在传球角度里"
       ],
       "action_notes": [
         "不断把球权抢回来"
@@ -346,50 +346,6 @@
         }
       ],
       "evidence_chips": [
-        "夺回球权能力突出"
-      ],
-      "avoid": [
-        "英文直译腔",
-        "可见部分",
-        "影响不只在",
-        "把答案写明了",
-        "数据画像"
-      ]
-    },
-    {
-      "award_type": "hidden_gem",
-      "award_label": "隐藏亮点",
-      "player_name": "Ladislav KREJCI",
-      "team": "捷克",
-      "opponent": "南非",
-      "match_no": 25,
-      "score": 38.4,
-      "why_selected": "重点写他为什么不抢镜但让进攻不断线。",
-      "title_candidates": [
-        "不抢镜的连接器",
-        "Ladislav KREJCI把进攻接起来了",
-        "看不见的接应很关键",
-        "隐藏亮点在传球角度里"
-      ],
-      "action_notes": [
-        "多次打穿对方防线"
-      ],
-      "key_metrics": [
-        {
-          "metric": "line_breaks_completed",
-          "label": "打穿防线",
-          "value": 18,
-          "unit": ""
-        },
-        {
-          "metric": "ball_progressions",
-          "label": "推进",
-          "value": 1,
-          "unit": ""
-        }
-      ],
-      "evidence_chips": [
-        "持续打穿防线",
         "夺回球权能力突出"
       ],
       "avoid": [

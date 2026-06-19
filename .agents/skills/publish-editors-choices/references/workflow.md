@@ -22,14 +22,20 @@ sqlite3 data/latest.sqlite \
   "select match_date, count(*) from matches group by match_date order by match_date;"
 ```
 
-4. Generate editorial artifacts. Omit `--date` for the latest available local match date:
+4. Run the editorial loop for the local match date:
 
 ```bash
-python scripts/generate_editorial.py --date YYYY-MM-DD
+python scripts/run_editorial_loop.py --date YYYY-MM-DD
 ```
 
 Outputs:
 
+- `agent-runs/YYYY-MM-DD/final.json`
+- `agent-runs/YYYY-MM-DD/iteration-001/state.json`
+- `agent-runs/YYYY-MM-DD/iteration-001/selection_review.json`
+- `agent-runs/YYYY-MM-DD/iteration-001/copy_review.zh.json`
+- `agent-runs/YYYY-MM-DD/iteration-001/validation.json`
+- `agent-runs/YYYY-MM-DD/iteration-001/decision.json`
 - `reports/editorial/YYYY-MM-DD.md`
 - `site/editorial/YYYY-MM-DD/evidence.json`
 - `site/editorial/YYYY-MM-DD/fact_bank.zh.json`
@@ -41,9 +47,9 @@ Outputs:
 - `site/editorial/index.html`
 - `site/index.html` is rebuilt by default so the homepage shows the latest cards.
 
-Markdown is the human-readable source. `evidence.json` is the structured audit source. `fact_bank.zh.json` is the primary Chinese writing input. `brief.zh.json` is kept for compatibility and diagnostics; do not use it as the Chinese writing base. `brief.en.json` is the English writing input. `choices.json` is compiled frontend data with rendered HTML.
+Markdown is the human-readable source. `evidence.json` is the structured audit source. `fact_bank.zh.json` is the primary Chinese writing input. `brief.zh.json` is kept for compatibility and diagnostics; do not use it as the Chinese writing base. `brief.en.json` is the English writing input. `choices.json` is compiled frontend data with rendered HTML. `agent-runs/` records the Review -> Repair -> Validate loop state.
 
-5. Read `site/editorial/YYYY-MM-DD/evidence.json`, `site/editorial/YYYY-MM-DD/fact_bank.zh.json`, `site/editorial/YYYY-MM-DD/brief.zh.json`, `site/editorial/YYYY-MM-DD/brief.en.json`, and `reports/editorial/YYYY-MM-DD.md`.
+5. Read `agent-runs/YYYY-MM-DD/final.json`, `site/editorial/YYYY-MM-DD/evidence.json`, `site/editorial/YYYY-MM-DD/fact_bank.zh.json`, `site/editorial/YYYY-MM-DD/brief.zh.json`, `site/editorial/YYYY-MM-DD/brief.en.json`, and `reports/editorial/YYYY-MM-DD.md`.
 
 Treat generated Markdown as a draft brief, not publishable copy. It exists to carry the selected players, evidence chips, and top metrics into a human-editable shape.
 
@@ -61,7 +67,7 @@ For Chinese, act as a from-scratch Chinese sports editor: start from player, mat
 
 Revise only the Markdown, and only when `evidence.json` or SQLite supports the wording.
 
-6. Run an editorial review pass before rendering:
+6. Run an editorial review pass before rendering or accepting the loop decision:
 
 - First review Chinese with a strict `qu-ai-wei` style pass: plain Chinese, concrete football action, no empty polish, no factual drift.
 - If a Chinese card still reads stiff or translated, repair that card with a `humanizer-zh` style pass without changing the selection argument.
@@ -77,6 +83,12 @@ If any card fails the editorial review pass, rewrite that card only.
 
 ```bash
 python scripts/render_editorial.py --date YYYY-MM-DD
+```
+
+Then validate the edited Markdown without overwriting it:
+
+```bash
+python scripts/run_editorial_loop.py --date YYYY-MM-DD --use-existing-markdown
 ```
 
 8. Verify:

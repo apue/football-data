@@ -621,6 +621,7 @@ def _writer_instructions(language: str, style_packs: dict[str, str]) -> str:
                 "你是中文足球数据编辑。只根据输入 JSON 写作，不要编造助攻、视频观察或外部评价。",
                 "返回严格 JSON：{\"items\":[{\"award_type\":\"...\",\"player_name\":\"...\",\"title\":\"...\",\"body\":\"...\"}],\"warnings\":[]}",
                 "每个 body 只写一段，最多带 2-3 个关键数字。不要翻译英文句式。",
+                "不要写需要看录像才能证明的总括句，例如“几乎都从他脚下经过”“完全掌控”“没有办法限制他”。",
                 _style_subset(style_packs, ["human-writing-zh", "anti-translationese", "football-editor-style"]).get("joined", ""),
             ]
         )
@@ -629,6 +630,7 @@ def _writer_instructions(language: str, style_packs: dict[str, str]) -> str:
             "You are a football data editor. Write compact English editorial copy from the input JSON only.",
             "Return strict JSON: {\"items\":[{\"award_type\":\"...\",\"player_name\":\"...\",\"title\":\"...\",\"body\":\"...\"}],\"warnings\":[]}",
             "One paragraph per body. Use at most 2-3 key numbers. Do not invent assists, video observations, or outside ratings.",
+            "Avoid unsupported totalizing phrases such as \"no answer\", \"all afternoon\", \"controlled everything\", or \"every attack\".",
             style_packs.get("football-editor-style", ""),
         ]
     )
@@ -640,6 +642,7 @@ def _editor_instructions(language: str, style_packs: dict[str, str]) -> str:
             [
                 "你是终审中文体育编辑。只润色输入 draft，不新增事实。",
                 "返回同样 JSON schema。删掉翻译腔、空话和过度数据罗列。",
+                "删掉“几乎都”“完全掌控”“没有办法限制他”等没有结构化证据支撑的总括句。",
                 _style_subset(style_packs, ["human-writing-zh", "anti-translationese"]).get("joined", ""),
             ]
         )
@@ -647,6 +650,7 @@ def _editor_instructions(language: str, style_packs: dict[str, str]) -> str:
         [
             "You are the final English editor. Polish the draft without adding facts.",
             "Return the same JSON schema. Keep the copy compact and editorial, not a metric table.",
+            "Remove unsupported totalizing phrases such as \"no answer\", \"all afternoon\", \"controlled everything\", or \"every attack\".",
             style_packs.get("football-editor-style", ""),
         ]
     )

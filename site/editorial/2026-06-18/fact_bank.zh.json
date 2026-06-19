@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "language": "zh",
-  "generated_at": "2026-06-19T12:14:17+00:00",
+  "generated_at": "2026-06-19T15:13:44+00:00",
   "match_date": "2026-06-18",
   "scoring_version": "v0.3",
   "editorial_process": "from_scratch_chinese_sports_editor",
@@ -168,8 +168,8 @@
       ]
     },
     {
-      "award_type": "defensive_pick",
-      "award_label": "防守精选",
+      "award_type": "hidden_gem",
+      "award_label": "隐藏亮点",
       "player_name": "LEE Gihyuk",
       "team": "韩国",
       "opponent": "墨西哥",
@@ -183,36 +183,11 @@
         "2 次封堵"
       ],
       "allowed_angles": [
-        "承压局防守",
-        "让对手进攻停下来",
-        "脏活和硬活"
-      ],
-      "evidence_chips": [
-        "夺回球权能力突出"
-      ]
-    },
-    {
-      "award_type": "hidden_gem",
-      "award_label": "隐藏亮点",
-      "player_name": "Ladislav KREJCI",
-      "team": "捷克",
-      "opponent": "南非",
-      "match_no": 25,
-      "match_scoreline": "捷克 1-1 南非",
-      "position": "DF",
-      "facts": [
-        "持续打穿防线",
-        "夺回球权能力突出",
-        "18 次打穿防线",
-        "1 次推进"
-      ],
-      "allowed_angles": [
         "不抢镜",
         "持续提供接应角度",
         "让前场不断线"
       ],
       "evidence_chips": [
-        "持续打穿防线",
         "夺回球权能力突出"
       ]
     }

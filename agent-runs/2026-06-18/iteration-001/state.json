@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "iteration": 1,
+  "match_date": "2026-06-18",
+  "choices": [
+    {
+      "award_type": "player_of_the_day",
+      "player_name": "Jonathan DAVID",
+      "team": "Canada"
+    },
+    {
+      "award_type": "player_of_the_day",
+      "player_name": "Teboho MOKOENA",
+      "team": "South Africa"
+    },
+    {
+      "award_type": "player_of_the_day",
+      "player_name": "Johan MANZAMBI",
+      "team": "Switzerland"
+    },
+    {
+      "award_type": "impact_pick",
+      "player_name": "Luis ROMO",
+      "team": "Mexico"
+    },
+    {
+      "award_type": "progression_pick",
+      "player_name": "Granit XHAKA",
+      "team": "Switzerland"
+    },
+    {
+      "award_type": "hidden_gem",
+      "player_name": "LEE Gihyuk",
+      "team": "Korea Republic"
+    }
+  ]
+}

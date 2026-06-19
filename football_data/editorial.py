@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Any
 
 from football_data.flags import format_player, format_team
+from football_data.metric_benchmarks import hidden_gem_profile, progression_benchmark
 
 
 DEFAULT_SCORING_CONFIG = Path("config/scoring/v0.3.json")
@@ -124,6 +125,8 @@ def write_editorial_artifacts(
     report: dict[str, Any],
     site_dir: str | Path = "site",
     reports_dir: str | Path = "reports",
+    *,
+    preserve_existing_markdown: bool = False,
 ) -> None:
     site_path = Path(site_dir)
     editorial_path = site_path / "editorial"
@@ -133,7 +136,11 @@ def write_editorial_artifacts(
     reports_path.mkdir(parents=True, exist_ok=True)
 
     source_markdown_path = f"reports/editorial/{report['match_date']}.md"
-    markdown_text = _render_markdown_report(report)
+    markdown_path = reports_path / f"{report['match_date']}.md"
+    if preserve_existing_markdown and markdown_path.exists():
+        markdown_text = markdown_path.read_text(encoding="utf-8")
+    else:
+        markdown_text = _render_markdown_report(report)
     evidence = _evidence_payload(report)
     compiled = compile_editorial_markdown(
         evidence,
@@ -141,7 +148,8 @@ def write_editorial_artifacts(
         source_markdown_path=source_markdown_path,
     )
 
-    (reports_path / f"{report['match_date']}.md").write_text(markdown_text, encoding="utf-8")
+    if not (preserve_existing_markdown and markdown_path.exists()):
+        markdown_path.write_text(markdown_text, encoding="utf-8")
     (dated_path / "evidence.json").write_text(
         json.dumps(evidence, ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
@@ -387,6 +395,21 @@ def _player_rows_for_date(conn: sqlite3.Connection, match_date: str) -> list[sql
           coalesce(o.in_between, 0) as in_between,
           coalesce(d.passes_completed, 0) as passes_completed,
           coalesce(d.line_breaks_completed, 0) as line_breaks_completed,
+          coalesce(lb.units_4_attacking_line, 0) as units_4_attacking_line,
+          coalesce(lb.units_4_attacking_midfield_line, 0) as units_4_attacking_midfield_line,
+          coalesce(lb.units_4_midfield_line, 0) as units_4_midfield_line,
+          coalesce(lb.units_4_defensive_line, 0) as units_4_defensive_line,
+          coalesce(lb.units_3_attacking_line, 0) as units_3_attacking_line,
+          coalesce(lb.units_3_midfield_line, 0) as units_3_midfield_line,
+          coalesce(lb.units_3_defensive_line, 0) as units_3_defensive_line,
+          coalesce(lb.units_2_midfield_line, 0) as units_2_midfield_line,
+          coalesce(lb.units_2_defensive_line, 0) as units_2_defensive_line,
+          coalesce(lb.direction_through, 0) as direction_through,
+          coalesce(lb.direction_around, 0) as direction_around,
+          coalesce(lb.direction_over, 0) as direction_over,
+          coalesce(lb.distribution_pass, 0) as distribution_pass,
+          coalesce(lb.distribution_cross, 0) as distribution_cross,
+          coalesce(lb.distribution_ball_progression, 0) as distribution_ball_progression,
           coalesce(d.ball_progressions, 0) as ball_progressions,
           coalesce(d.take_ons, 0) as take_ons,
           coalesce(d.step_ins, 0) as step_ins,
@@ -406,6 +429,10 @@ def _player_rows_for_date(conn: sqlite3.Connection, match_date: str) -> list[sql
           on d.match_key = a.match_key
          and d.team = a.team
          and d.player_no = a.player_no
+        left join player_line_breaks lb
+          on lb.match_key = a.match_key
+         and lb.team = a.team
+         and lb.player_no = a.player_no
         left join player_offers_receptions o
           on o.match_key = a.match_key
          and o.team = a.team
@@ -471,6 +498,8 @@ def _score_player(row: sqlite3.Row, scoring: dict[str, Any]) -> dict[str, Any]:
     features["score_components"] = component_map
     features["composite_score"] = round(composite, 2)
     features["headline_score"] = round(headline, 2)
+    features["progression_benchmark"] = progression_benchmark(features)
+    features["hidden_gem_profile"] = hidden_gem_profile(features)
     return features
 
 
@@ -532,56 +561,32 @@ def _select_choices(
         choices.append(_choice("impact_pick", player, rank, primary_score="impact"))
         used_keys.add(_player_key(player))
 
-    for award_type, score_name in [
-        ("progression_pick", "progressor"),
-        ("defensive_pick", "defensive"),
-    ]:
+    player = _top_unused_role_player(
+        players,
+        used_keys,
+        "progressor",
+        avoid_heavy_defensive_loss=apply_editorial_guards,
+    )
+    if player is not None:
+        choices.append(_choice("progression_pick", player, 1, primary_score="progressor"))
+        used_keys.add(_player_key(player))
+
+    hidden_player = _top_hidden_gem_player(players, choices, used_keys, scoring, apply_editorial_guards)
+    hidden_profile = hidden_player.get("hidden_gem_profile", {}) if hidden_player is not None else {}
+    if hidden_player is not None:
+        choices.append(_choice("hidden_gem", hidden_player, 1, primary_score=_best_role_score(hidden_player)))
+        used_keys.add(_player_key(hidden_player))
+
+    if hidden_profile.get("profile") != "defensive_resistance":
         player = _top_unused_role_player(
             players,
             used_keys,
-            score_name,
+            "defensive",
             avoid_heavy_defensive_loss=apply_editorial_guards,
         )
-        if player is None:
-            continue
-        choices.append(_choice(award_type, player, 1, primary_score=score_name))
-        used_keys.add(_player_key(player))
-
-    hidden_min = float(scoring["selection"]["minimum_hidden_gem_role_score"])
-    hidden_candidates = [
-        player
-        for player in players
-        if _player_key(player) not in used_keys
-        and int(player.get("goals") or 0) == 0
-        and max(
-            player["role_scores"]["progressor"],
-            player["role_scores"]["off_ball"],
-            player["role_scores"]["defensive"],
-        )
-        >= hidden_min
-    ]
-    hidden_candidates.sort(
-        key=_hidden_role_score,
-        reverse=True,
-    )
-    if apply_editorial_guards:
-        used_teams = {choice["team"] for choice in choices}
-        diverse_hidden_candidates = [
-            player for player in hidden_candidates if player["team"] not in used_teams
-        ]
-        if diverse_hidden_candidates:
-            hidden_candidates = diverse_hidden_candidates
-        safer_hidden_candidates = [
-            player for player in hidden_candidates if not _hidden_gem_contextual_risk(player)
-        ]
-        if safer_hidden_candidates:
-            hidden_candidates = safer_hidden_candidates
-    for rank, player in enumerate(
-        hidden_candidates[: int(scoring["selection"]["hidden_gems"])],
-        start=1,
-    ):
-        choices.append(_choice("hidden_gem", player, rank, primary_score=_best_role_score(player)))
-        used_keys.add(_player_key(player))
+        if player is not None:
+            choices.append(_choice("defensive_pick", player, 1, primary_score="defensive"))
+            used_keys.add(_player_key(player))
 
     return choices
 
@@ -616,10 +621,55 @@ def _choice(
         "score": round(float(score), 1),
         "primary_score": primary_score,
         "role_scores": player["role_scores"],
+        "progression_benchmark": player.get("progression_benchmark"),
+        "hidden_gem_profile": player.get("hidden_gem_profile"),
         "score_components": components[:6],
         "evidence_chips": _evidence_chips(player, award_type),
         "draft": _draft_brief(player, award_type),
     }
+
+
+def _top_hidden_gem_player(
+    players: list[dict[str, Any]],
+    choices: list[dict[str, Any]],
+    used_keys: set[tuple[str, str, int]],
+    scoring: dict[str, Any],
+    apply_editorial_guards: bool,
+) -> dict[str, Any] | None:
+    if int(scoring["selection"].get("hidden_gems", 0)) <= 0:
+        return None
+    hidden_min = float(scoring["selection"]["minimum_hidden_gem_role_score"])
+    candidates = [
+        player
+        for player in players
+        if _player_key(player) not in used_keys
+        and int(player.get("goals") or 0) == 0
+        and _hidden_selection_score(player) >= hidden_min
+    ]
+    if not candidates:
+        return None
+    if not apply_editorial_guards:
+        return max(candidates, key=_hidden_role_score)
+
+    used_teams = {choice["team"] for choice in choices}
+    eligible = [
+        player
+        for player in candidates
+        if player.get("hidden_gem_profile", {}).get("eligible")
+        and not _hidden_gem_contextual_risk(player)
+    ]
+    if not eligible:
+        return None
+    diverse = [player for player in eligible if player["team"] not in used_teams]
+    pool = diverse or eligible
+    return max(
+        pool,
+        key=lambda player: (
+            _hidden_profile_priority(player),
+            float(player.get("hidden_gem_profile", {}).get("score") or 0),
+            _hidden_role_score(player),
+        ),
+    )
 
 
 def _top_unused_role_player(
@@ -825,12 +875,31 @@ def _diverse_hidden_gem_replacement(
         if _player_key(player) not in used_keys
         and player["team"] not in used_teams
         and int(player.get("goals") or 0) == 0
-        and _hidden_role_score(player) >= minimum_role_score
+        and _hidden_selection_score(player) >= minimum_role_score
+        and player.get("hidden_gem_profile", {}).get("eligible")
         and not _hidden_gem_contextual_risk(player)
     ]
     if not candidates:
         return None
-    return max(candidates, key=_hidden_role_score)
+    return max(
+        candidates,
+        key=lambda player: (
+            _hidden_profile_priority(player),
+            float(player.get("hidden_gem_profile", {}).get("score") or 0),
+            _hidden_role_score(player),
+        ),
+    )
+
+
+def _hidden_profile_priority(player: dict[str, Any]) -> int:
+    profile = player.get("hidden_gem_profile", {}).get("profile")
+    if profile == "defensive_resistance":
+        return 3
+    if profile == "off_ball_threat":
+        return 2
+    if profile == "progression_engine":
+        return 1
+    return 0
 
 
 def _heavy_defensive_loss(player: dict[str, Any]) -> bool:
@@ -855,6 +924,11 @@ def _hidden_role_score(player: dict[str, Any]) -> float:
         player["role_scores"]["off_ball"],
         player["role_scores"]["defensive"],
     )
+
+
+def _hidden_selection_score(player: dict[str, Any]) -> float:
+    profile_score = float(player.get("hidden_gem_profile", {}).get("score") or 0)
+    return max(_hidden_role_score(player), profile_score)
 
 
 def _best_role_score(player: dict[str, Any]) -> str:

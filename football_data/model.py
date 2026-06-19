@@ -164,6 +164,34 @@ class PlayerDistributionStat:
 
 
 @dataclass(frozen=True)
+class PlayerLineBreakStat:
+    match_key: str
+    team: str
+    player_no: int
+    player_name: str
+    source_id: str | None = None
+    page_number: int | None = None
+    line_breaks_attempted: int | None = None
+    line_breaks_completed: int | None = None
+    line_break_completion_pct: float | None = None
+    units_4_attacking_line: int | None = None
+    units_4_attacking_midfield_line: int | None = None
+    units_4_midfield_line: int | None = None
+    units_4_defensive_line: int | None = None
+    units_3_attacking_line: int | None = None
+    units_3_midfield_line: int | None = None
+    units_3_defensive_line: int | None = None
+    units_2_midfield_line: int | None = None
+    units_2_defensive_line: int | None = None
+    direction_through: int | None = None
+    direction_around: int | None = None
+    direction_over: int | None = None
+    distribution_pass: int | None = None
+    distribution_cross: int | None = None
+    distribution_ball_progression: int | None = None
+
+
+@dataclass(frozen=True)
 class PlayerOffersReceptions:
     match_key: str
     team: str
@@ -217,5 +245,6 @@ class ExtractedMatch:
     player_appearances: list[PlayerAppearance] = field(default_factory=list)
     player_event_markers: list[PlayerEventMarker] = field(default_factory=list)
     player_distributions: list[PlayerDistributionStat] = field(default_factory=list)
+    player_line_breaks: list[PlayerLineBreakStat] = field(default_factory=list)
     player_offers: list[PlayerOffersReceptions] = field(default_factory=list)
     player_defensive_actions: list[PlayerDefensiveActionStat] = field(default_factory=list)

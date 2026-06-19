@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-06-19T12:14:17+00:00",
-  "compiled_at": "2026-06-19T12:40:53+00:00",
+  "generated_at": "2026-06-19T15:13:44+00:00",
+  "compiled_at": "2026-06-19T15:13:44+00:00",
   "match_date": "2026-06-18",
   "scoring_version": "v0.3",
   "source_markdown_path": "reports/editorial/2026-06-18.md",
@@ -70,6 +70,17 @@
       "team_final_goals": 6,
       "opponent_final_goals": 0,
       "position": "FW",
+      "progression_benchmark": {
+        "score": 1.7,
+        "quality": "thin",
+        "support_actions": 0.0,
+        "pass_only_line_break_volume": false
+      },
+      "hidden_gem_profile": {
+        "eligible": false,
+        "profile": "insufficient_evidence",
+        "score": 32.9
+      },
       "evidence_chips": {
         "en": [
           "hat-trick",
@@ -82,12 +93,12 @@
       },
       "content": {
         "en": {
-          "title": "Three goals, no debate",
-          "html": "<p>Jonathan David's hat-trick made him the obvious Player of the Day. He scored three goals from six shots on target, leading Canada's 6-0 win over Qatar.</p>"
+          "title": "The hat-trick was enough",
+          "html": "<p>Jonathan David made the Player of the Day decision straightforward by scoring three goals in Canada's 6-0 win over Qatar. Six shots on target underline how often he turned Canada's attacks into clean finishes.</p>"
         },
         "zh": {
-          "title": "戴维戴帽，加拿大前场答案很直接",
-          "html": "<p>戴维的帽子戏法足够说明问题。加拿大6-0大胜卡塔尔，他6次射正打进3球，终结效率很高。</p><p>更有意思的是，他并不是只在禁区里等机会。15次接应成功让加拿大前场有了稳定落点，也把这场表现从“进了三个”往前推了一层。</p>"
+          "title": "戴维戴帽，加拿大六球横扫卡塔尔",
+          "html": "<p>戴维上演帽子戏法，加拿大 6-0 横扫卡塔尔。3个进球、6次射正，终结效率摆在台面上。除了最后一脚，他还有15次接应成功，说明他不只是站在禁区里等球。</p>"
         }
       }
     },
@@ -109,6 +120,17 @@
       "team_final_goals": 1,
       "opponent_final_goals": 1,
       "position": "MF",
+      "progression_benchmark": {
+        "score": 24.3,
+        "quality": "strong",
+        "support_actions": 3.0,
+        "pass_only_line_break_volume": false
+      },
+      "hidden_gem_profile": {
+        "eligible": true,
+        "profile": "progression_engine",
+        "score": 24.3
+      },
       "evidence_chips": {
         "en": [
           "equaliser",
@@ -126,11 +148,11 @@
       "content": {
         "en": {
           "title": "The midfield connector",
-          "html": "<p>Teboho Mokoena was the connective engine South Africa needed. He repeatedly broke the opponent's lines (29 completed line breaks) and constantly offered himself as a passing option (38 offers received). His equaliser capped a performance built on movement and connection.</p>"
+          "html": "<p>Teboho Mokoena served as South Africa's midfield connector, repeatedly breaking Czechia's defensive lines and giving teammates a reliable passing outlet. He completed 29 line breaks and received 38 offers, then scored the equaliser.</p>"
         },
         "zh": {
-          "title": "莫科埃纳把南非中场撑住了",
-          "html": "<p>南非1-1战平捷克，莫科埃纳的扳平球是最醒目的部分。</p><p>更稳定的是他在中场反复给出接应点。38次接应成功、29次完成打穿防线，让南非在被压迫时还有向前的线路。10公里以上跑动和6次夺回球权，也把攻防两端都补上了。</p>"
+          "title": "莫科埃纳扳平救主，中场接应撑起南非攻势",
+          "html": "<p>莫科埃纳的扳平进球帮助南非1-1逼平捷克。落后时，他在中场不停接应、反复打穿捷克防线，让南非始终有路向前。全场38次接应成功、29次打穿防线，跑动超过10.5公里，6次抢回球权，这些动作把进攻和防守都串了起来。</p>"
         }
       }
     },
@@ -152,6 +174,17 @@
       "team_final_goals": 4,
       "opponent_final_goals": 1,
       "position": "MF",
+      "progression_benchmark": {
+        "score": 8.1,
+        "quality": "thin",
+        "support_actions": 4.0,
+        "pass_only_line_break_volume": false
+      },
+      "hidden_gem_profile": {
+        "eligible": false,
+        "profile": "insufficient_evidence",
+        "score": 12.2
+      },
       "evidence_chips": {
         "en": [
           "brace",
@@ -167,11 +200,11 @@
       "content": {
         "en": {
           "title": "The substitute who changed it",
-          "html": "<p>Johan Manzambi's two goals after coming off the bench decided the match. He repeatedly attacked the space behind Bosnia and Herzegovina's defensive line, turning a tight contest into a comfortable 4-1 win for Switzerland.</p>"
+          "html": "<p>Johan Manzambi's two goals off the bench turned the match for Switzerland. The substitute brace gave a clear reason for his place here and helped Switzerland pull away to a 4-1 win.</p>"
         },
         "zh": {
-          "title": "替补双响，Manzambi把比赛打开放了",
-          "html": "<p>Manzambi替补登场后先为瑞士首开纪录，又在下半场再进一球，梅开二度把4-1的胜势打出来。</p><p>这样的入选不用绕太远：替补球员能直接改变比分，已经是很硬的理由。7次成功接应也说明他不是只碰到两脚机会，进入比赛节奏很快。</p>"
+          "title": "替补登场双响，Manzambi 把比分带开",
+          "html": "<p>瑞士4比1大胜波黑，替补登场的 Manzambi 把比分打开了。他上场后先首开纪录，再进一球完成双响，比赛也从僵持变成瑞士占优。</p><p>除了进球，7次成功接应也说明他进入比赛很快。替补双响已经是最直接的理由。</p>"
         }
       }
     },
@@ -193,6 +226,17 @@
       "team_final_goals": 1,
       "opponent_final_goals": 0,
       "position": "MF",
+      "progression_benchmark": {
+        "score": 7.75,
+        "quality": "thin",
+        "support_actions": 0.0,
+        "pass_only_line_break_volume": false
+      },
+      "hidden_gem_profile": {
+        "eligible": false,
+        "profile": "insufficient_evidence",
+        "score": 36.5
+      },
       "evidence_chips": {
         "en": [
           "only goal",
@@ -210,11 +254,11 @@
       "content": {
         "en": {
           "title": "The only goal mattered",
-          "html": "<p>Luis Romo was the difference in a 1-0 result. His goal was the match's only strike, serving as both the opener and the winner.</p>"
+          "html": "<p>Luis Romo delivered the decisive moment in a tight 1-0 win over Korea Republic, scoring the match's only goal. His strike helped Mexico secure a narrow but vital victory with no margin for error.</p>"
         },
         "zh": {
-          "title": "罗莫一锤定音，墨西哥1比0拿下韩国",
-          "html": "<p>路易斯·罗莫打入全场唯一进球，墨西哥1比0击退韩国。他整场游走在韩国中场与防线之间，反复接应拿球、转身向前输送，把推进一次次送到危险区域。最终他亲自完成致命一击，一粒进球决定三分归属。</p>"
+          "title": "罗莫制胜一击，墨西哥1比0力克韩国",
+          "html": "<p>路易斯·罗莫打入全场唯一进球，墨西哥1比0拿下韩国。他多次在韩国防线之间接应，把中场和前场串了起来，最终亲自完成致命一击。</p>"
         }
       }
     },
@@ -236,6 +280,17 @@
       "team_final_goals": 4,
       "opponent_final_goals": 1,
       "position": "MF",
+      "progression_benchmark": {
+        "score": 32.55,
+        "quality": "strong",
+        "support_actions": 6.0,
+        "pass_only_line_break_volume": false
+      },
+      "hidden_gem_profile": {
+        "eligible": true,
+        "profile": "progression_engine",
+        "score": 32.55
+      },
       "evidence_chips": {
         "en": [
           "goal scorer",
@@ -251,19 +306,19 @@
       "content": {
         "en": {
           "title": "The best route forward",
-          "html": "<p>Granit Xhaka was Switzerland's engine room, breaking through Bosnia's defensive lines 31 times and adding a goal to cap his influence.</p>"
+          "html": "<p>Granit Xhaka gave Switzerland a consistent route forward, repeatedly breaking Bosnia's lines with 31 completed line breaks and scoring a goal to cap his influence.</p>"
         },
         "zh": {
-          "title": "扎卡把瑞士的推进线接上了",
-          "html": "<p>扎卡也有进球，但这张卡更看重他的推进作用。</p><p>瑞士4-1击败波黑，他完成31次打穿防线，是当天最突出的向前传递之一。再加上29次接应成功，他一直在给队友提供出球点；进球只是把这场中场表现补上了一个更醒目的结尾。</p>"
+          "title": "扎卡：进球之外，31次打穿防线撑起瑞士推进",
+          "html": "<p>瑞士4-1击败波黑，扎卡不仅自己进球，还在中场反复打穿波黑防线。全场31次打穿防线、2次带球推进，再加上大量接应，他就是瑞士最稳定的向前出口之一。</p>"
         }
       }
     },
     {
-      "award_type": "defensive_pick",
+      "award_type": "hidden_gem",
       "award_label": {
-        "en": "Defensive Pick",
-        "zh": "防守精选"
+        "en": "Hidden Gem",
+        "zh": "隐藏亮点"
       },
       "rank": 1,
       "match_key": "FIFA-2026-M28-MEX-KOR",
@@ -277,6 +332,17 @@
       "team_final_goals": 0,
       "opponent_final_goals": 1,
       "position": "MF",
+      "progression_benchmark": {
+        "score": 16.3,
+        "quality": "thin",
+        "support_actions": 2.0,
+        "pass_only_line_break_volume": false
+      },
+      "hidden_gem_profile": {
+        "eligible": true,
+        "profile": "defensive_resistance",
+        "score": 50.85
+      },
       "evidence_chips": {
         "en": [
           "ball-winning profile"
@@ -287,51 +353,12 @@
       },
       "content": {
         "en": {
-          "title": "The defender who kept resetting attacks",
-          "html": "<p>Lee Gihyuk repeatedly broke up Mexico's rhythm, winning back possession nine times and forcing seven opposition resets. His two blocks capped a stubborn defensive display that kept Korea Republic in the game.</p>"
+          "title": "The hidden defensive note",
+          "html": "<p>Lee Gihyuk was the hidden defensive note in a narrow Korea Republic loss. He won the ball back nine times, broke up seven opposition moves, and helped keep a 1-0 match within reach.</p>"
         },
         "zh": {
-          "title": "韩国输球，LEE Gihyuk 的防守不能漏",
-          "html": "<p>墨西哥1-0赢球，但LEE Gihyuk让韩国把悬念留到了最后。</p><p>他9次夺回球权、7次破坏对手推进，还完成2次封堵。输球方防守球员入选需要更谨慎；这一次，他的防守动作足够密集，也确实把韩国留在了比赛里。</p>"
-        }
-      }
-    },
-    {
-      "award_type": "hidden_gem",
-      "award_label": {
-        "en": "Hidden Gem",
-        "zh": "隐藏亮点"
-      },
-      "rank": 1,
-      "match_key": "FIFA-2026-M25-CZE-RSA",
-      "match_no": 25,
-      "player_no": 7,
-      "player_name": "Ladislav KREJCI",
-      "team": "Czechia",
-      "opponent": "South Africa",
-      "home_score": 1,
-      "away_score": 1,
-      "team_final_goals": 1,
-      "opponent_final_goals": 1,
-      "position": "DF",
-      "evidence_chips": {
-        "en": [
-          "repeated line breaks",
-          "ball-winning profile"
-        ],
-        "zh": [
-          "持续打穿防线",
-          "夺回球权能力突出"
-        ]
-      },
-      "content": {
-        "en": {
-          "title": "The quiet connector",
-          "html": "<p>Ladislav Krejci was the quiet connector in Czechia's midfield, repeatedly breaking South Africa's lines with 18 completed line breaks. His linking work kept possession connected and gave the attack a platform despite the 1-1 draw.</p>"
-        },
-        "zh": {
-          "title": "克雷伊奇：捷克后场的安静出口",
-          "html": "<p>克雷伊奇没有进球，也不会抢走标题，但捷克1-1南非这场，他的出球很值得看。</p><p>18次完成打穿防线，让捷克从后场到前场的连接更顺。再加上防守端持续夺回球权，他的价值不是一个瞬间，而是一连串把球处理干净的动作。</p>"
+          "title": "李基赫：输球方也有防守亮点",
+          "html": "<p>韩国0比1负于墨西哥，李基赫的防守动作很密。9次抢回球权、7次破坏对方推进，再加上2次封堵，这些不是标题里最容易出现的东西，但足够解释他为什么值得被挑出来。</p>"
         }
       }
     }
@@ -367,10 +394,10 @@
           {
             "level": "high",
             "code": "hidden_gem_duplicates_existing_team",
-            "message": "Oswin APPOLLIS is a strong hidden-gem profile, but South Africa already has another pick and Ladislav KREJCI gives the slate a distinct match angle.",
+            "message": "Oswin APPOLLIS is a strong hidden-gem profile, but South Africa already has another pick and LEE Gihyuk gives the slate a distinct match angle.",
             "player_name": "Oswin APPOLLIS",
             "team": "South Africa",
-            "replacement_candidate": "Ladislav KREJCI"
+            "replacement_candidate": "LEE Gihyuk"
           },
           {
             "level": "info",
@@ -394,8 +421,8 @@
           "Johan MANZAMBI",
           "Luis ROMO",
           "Granit XHAKA",
-          "Nikola KATIC",
-          "Oswin APPOLLIS"
+          "Oswin APPOLLIS",
+          "Nikola KATIC"
         ]
       },
       {
@@ -420,8 +447,7 @@
           "Johan MANZAMBI",
           "Luis ROMO",
           "Granit XHAKA",
-          "LEE Gihyuk",
-          "Ladislav KREJCI"
+          "LEE Gihyuk"
         ]
       }
     ]

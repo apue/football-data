@@ -181,6 +181,38 @@ def test_extract_individual_in_possession_tables():
     assert vinicius_offers.offers_received == 26
 
 
+def test_extract_detailed_line_break_tables():
+    record = extract_pdf(_pdf("PMSR-M25*.pdf"))
+
+    krejci = next(
+        row
+        for row in record.player_line_breaks
+        if row.team == "Czechia" and row.player_name == "Ladislav KREJCI"
+    )
+    mokoena = next(
+        row
+        for row in record.player_line_breaks
+        if row.team == "South Africa" and row.player_name == "Teboho MOKOENA"
+    )
+
+    assert krejci.line_breaks_attempted == 20
+    assert krejci.line_breaks_completed == 18
+    assert krejci.units_4_attacking_line == 1
+    assert krejci.units_3_attacking_line == 8
+    assert krejci.units_2_midfield_line == 7
+    assert krejci.direction_through == 7
+    assert krejci.direction_around == 8
+    assert krejci.distribution_pass == 19
+    assert krejci.distribution_ball_progression == 0
+
+    assert mokoena.line_breaks_attempted == 32
+    assert mokoena.line_breaks_completed == 29
+    assert mokoena.units_2_midfield_line == 16
+    assert mokoena.direction_through == 11
+    assert mokoena.direction_around == 14
+    assert mokoena.distribution_ball_progression == 1
+
+
 def test_extract_individual_out_of_possession_table():
     record = extract_pdf(_pdf("PMSR-M07*.pdf"))
 

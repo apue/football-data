@@ -124,10 +124,7 @@ def test_editorial_self_review_loop_rebalances_contextual_risks():
     assert "Luis ROMO" in player_names
     assert "Nikola KATIC" not in player_names
     assert "Oswin APPOLLIS" not in player_names
-
-    defensive_pick = choices_by_award["defensive_pick"]
-    assert defensive_pick["team"] == "Korea Republic"
-    assert defensive_pick["player_name"] == "LEE Gihyuk"
+    assert "Ladislav KREJCI" not in player_names
 
     hidden_gem = choices_by_award["hidden_gem"]
     teams_before_hidden = {
@@ -136,7 +133,9 @@ def test_editorial_self_review_loop_rebalances_contextual_risks():
         if choice["award_type"] != "hidden_gem"
     }
     assert hidden_gem["team"] not in teams_before_hidden
-    assert hidden_gem["player_name"] == "Ladislav KREJCI"
+    assert hidden_gem["team"] == "Korea Republic"
+    assert hidden_gem["player_name"] == "LEE Gihyuk"
+    assert "defensive_pick" not in choices_by_award
 
 
 def test_chinese_fact_bank_does_not_label_ordinary_go_ahead_goal_as_comeback():

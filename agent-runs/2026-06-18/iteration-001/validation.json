@@ -1,0 +1,10 @@
+{
+  "status": "pass",
+  "checks": {
+    "selection": "pass",
+    "copy": "pass",
+    "facts": "pass"
+  },
+  "warnings": [],
+  "high_selection_alerts": []
+}

@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "language": "en",
-  "generated_at": "2026-06-19T12:14:17+00:00",
+  "generated_at": "2026-06-19T15:13:44+00:00",
   "match_date": "2026-06-18",
   "scoring_version": "v0.3",
   "editorial_voice": "A data-aware football analyst writing for a general audience: clear, light, and grounded in the evidence without sounding like a table.",
@@ -293,18 +293,18 @@
       ]
     },
     {
-      "award_type": "defensive_pick",
-      "award_label": "Defensive Pick",
+      "award_type": "hidden_gem",
+      "award_label": "Hidden Gem",
       "player_name": "LEE Gihyuk",
       "team": "Korea Republic",
       "opponent": "Mexico",
       "match_no": 28,
       "score": 32.9,
-      "why_selected": "Focus on stopping attacks and forcing resets.",
+      "why_selected": "Explain the quieter linking work that kept possession connected.",
       "title_candidates": [
-        "The stubborn stopper",
-        "Breaking the flow",
-        "The defender who kept resetting attacks"
+        "The quiet connector",
+        "The link behind the highlights",
+        "A useful game between the lines"
       ],
       "action_notes": [
         "won possession back repeatedly"
@@ -330,47 +330,6 @@
         }
       ],
       "evidence_chips": [
-        "ball-winning profile"
-      ],
-      "avoid": [
-        "metric dumps",
-        "generic AI phrasing",
-        "claims that imply video review"
-      ]
-    },
-    {
-      "award_type": "hidden_gem",
-      "award_label": "Hidden Gem",
-      "player_name": "Ladislav KREJCI",
-      "team": "Czechia",
-      "opponent": "South Africa",
-      "match_no": 25,
-      "score": 38.4,
-      "why_selected": "Explain the quieter linking work that kept possession connected.",
-      "title_candidates": [
-        "The quiet connector",
-        "The link behind the highlights",
-        "A useful game between the lines"
-      ],
-      "action_notes": [
-        "repeatedly broke the opponent's lines"
-      ],
-      "key_metrics": [
-        {
-          "metric": "line_breaks_completed",
-          "label": "completed line breaks",
-          "value": 18,
-          "unit": ""
-        },
-        {
-          "metric": "ball_progressions",
-          "label": "ball progressions",
-          "value": 1,
-          "unit": ""
-        }
-      ],
-      "evidence_chips": [
-        "repeated line breaks",
         "ball-winning profile"
       ],
       "avoid": [

@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-06-19 - Editorial Loop and Detailed Line Breaks
+
+Added a review-repair-validate loop for daily Editor's Choices and expanded player progression data:
+
+- Bumped SQLite schema to version 4.
+- Added `player_line_breaks` with detailed player line-break splits by unit line, direction, and distribution type.
+- Added progression and hidden-gem benchmark helpers so pass-only line-break volume is not overvalued against pressure-breaking or attacking-third actions.
+- Added `scripts/run_editorial_loop.py` and `football_data.editorial_loop` to write explicit loop audit artifacts under `agent-runs/`.
+- Updated the 2026-06-18 selection guard so heavy-loss defensive picks and duplicate-team hidden gems are repaired before publication.
+- Updated the repo-scoped Editor's Choices skill and docs to use the loop as the default publication path.
+
 ## 2026-06-19 - Impact-Aware Editorial Scoring
 
 Improved the editorial scoring layer for decisive match actions:

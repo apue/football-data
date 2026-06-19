@@ -7,7 +7,9 @@ from pathlib import Path
 from football_data.editorial_agent import (
     AgentTextClient,
     _deterministic_fact_check,
+    _editor_instructions,
     _filter_llm_warnings,
+    _writer_instructions,
     load_editorial_agent_config,
     run_editorial_agent,
 )
@@ -260,6 +262,14 @@ def test_deterministic_fact_check_catches_overbroad_editorial_claims():
     )
 
     assert any("overbroad" in warning for warning in warnings)
+
+
+def test_editorial_agent_prompts_explicitly_reject_overbroad_claims():
+    zh_prompt = _writer_instructions("zh", {})
+    en_prompt = _editor_instructions("en", {})
+
+    assert "几乎" in zh_prompt
+    assert "no answer" in en_prompt
 
 
 def test_run_editorial_agent_with_fake_client_writes_artifacts(tmp_path):

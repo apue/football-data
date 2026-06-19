@@ -17,6 +17,7 @@ from football_data.model import (
     PlayerDefensiveActionStat,
     PlayerDistributionStat,
     PlayerEventMarker,
+    PlayerLineBreakStat,
     PlayerOffersReceptions,
     PlayerPhysicalStat,
     Shot,
@@ -84,6 +85,7 @@ def extract_pdf(path: str | Path, source: DiscoveredSource | None = None) -> Ext
         player_appearances=appearances,
         player_event_markers=event_markers,
         player_distributions=_parse_distributions(match, source.source_id, pages, word_rows),
+        player_line_breaks=_parse_line_breaks(match, source.source_id, pages, word_rows),
         player_offers=_parse_offers(match, source.source_id, pages, word_rows),
         player_defensive_actions=_parse_defensive_actions(
             match,
@@ -430,6 +432,67 @@ def _parse_distributions(
             }
             rows.append(
                 PlayerDistributionStat(
+                    match_key=match.match_key,
+                    team=team,
+                    player_no=player_no,
+                    player_name=player_name,
+                    source_id=source_id,
+                    page_number=page_index + 1,
+                    **values,
+                )
+            )
+    return rows
+
+
+def _parse_line_breaks(
+    match: Match,
+    source_id: str,
+    pages: list[list[str]],
+    word_rows: list[list[WordRow]],
+) -> list[PlayerLineBreakStat]:
+    rows: list[PlayerLineBreakStat] = []
+    columns = {
+        "line_breaks_attempted": (185, 225),
+        "line_breaks_completed": (225, 265),
+        "line_break_completion_pct": (265, 315),
+        "units_4_attacking_line": (315, 350),
+        "units_4_attacking_midfield_line": (355, 395),
+        "units_4_midfield_line": (400, 435),
+        "units_4_defensive_line": (440, 475),
+        "units_3_attacking_line": (480, 515),
+        "units_3_midfield_line": (520, 560),
+        "units_3_defensive_line": (565, 600),
+        "units_2_midfield_line": (605, 645),
+        "units_2_defensive_line": (650, 685),
+        "direction_through": (690, 725),
+        "direction_around": (735, 770),
+        "direction_over": (775, 810),
+        "distribution_pass": (815, 850),
+        "distribution_cross": (860, 895),
+        "distribution_ball_progression": (905, 940),
+    }
+    percent_fields = {"line_break_completion_pct"}
+    for page_index, lines in enumerate(pages):
+        if len(lines) < 2 or lines[0] != "Line Breaks":
+            continue
+        team = lines[1]
+        for row in word_rows[page_index]:
+            identity = _player_identity_from_metric_row(row)
+            if identity is None:
+                continue
+            player_no, player_name = identity
+            values = {
+                name: (
+                    _parse_percent_cell(_row_text_between(row, *bounds))
+                    if name in percent_fields
+                    else _parse_int_cell(_row_text_between(row, *bounds))
+                )
+                for name, bounds in columns.items()
+            }
+            if values["line_breaks_attempted"] is None:
+                continue
+            rows.append(
+                PlayerLineBreakStat(
                     match_key=match.match_key,
                     team=team,
                     player_no=player_no,

@@ -7,7 +7,7 @@ from football_data.extract import extraction_timestamp, parser_version
 from football_data.model import ExtractedMatch
 
 
-SCHEMA_VERSION = 3
+SCHEMA_VERSION = 4
 
 
 def build_database(path: str | Path, records: list[ExtractedMatch]) -> None:
@@ -197,6 +197,36 @@ def _create_schema(conn: sqlite3.Connection) -> None:
           step_ins integer,
           attempts_at_goal integer,
           goals integer,
+          primary key(match_key, team, player_no),
+          foreign key(match_key) references matches(match_key),
+          foreign key(source_id) references source_documents(source_id)
+        );
+
+        create table player_line_breaks (
+          match_key text not null,
+          source_id text not null,
+          team text not null,
+          player_no integer not null,
+          player_name text not null,
+          page_number integer,
+          line_breaks_attempted integer,
+          line_breaks_completed integer,
+          line_break_completion_pct real,
+          units_4_attacking_line integer,
+          units_4_attacking_midfield_line integer,
+          units_4_midfield_line integer,
+          units_4_defensive_line integer,
+          units_3_attacking_line integer,
+          units_3_midfield_line integer,
+          units_3_defensive_line integer,
+          units_2_midfield_line integer,
+          units_2_defensive_line integer,
+          direction_through integer,
+          direction_around integer,
+          direction_over integer,
+          distribution_pass integer,
+          distribution_cross integer,
+          distribution_ball_progression integer,
           primary key(match_key, team, player_no),
           foreign key(match_key) references matches(match_key),
           foreign key(source_id) references source_documents(source_id)
@@ -426,6 +456,30 @@ def _insert_record(conn: sqlite3.Connection, record: ExtractedMatch) -> None:
         )
         """,
         [row.__dict__ for row in record.player_distributions],
+    )
+    conn.executemany(
+        """
+        insert into player_line_breaks(
+          match_key, source_id, team, player_no, player_name, page_number,
+          line_breaks_attempted, line_breaks_completed, line_break_completion_pct,
+          units_4_attacking_line, units_4_attacking_midfield_line,
+          units_4_midfield_line, units_4_defensive_line,
+          units_3_attacking_line, units_3_midfield_line, units_3_defensive_line,
+          units_2_midfield_line, units_2_defensive_line,
+          direction_through, direction_around, direction_over,
+          distribution_pass, distribution_cross, distribution_ball_progression
+        ) values(
+          :match_key, :source_id, :team, :player_no, :player_name, :page_number,
+          :line_breaks_attempted, :line_breaks_completed, :line_break_completion_pct,
+          :units_4_attacking_line, :units_4_attacking_midfield_line,
+          :units_4_midfield_line, :units_4_defensive_line,
+          :units_3_attacking_line, :units_3_midfield_line, :units_3_defensive_line,
+          :units_2_midfield_line, :units_2_defensive_line,
+          :direction_through, :direction_around, :direction_over,
+          :distribution_pass, :distribution_cross, :distribution_ball_progression
+        )
+        """,
+        [row.__dict__ for row in record.player_line_breaks],
     )
     conn.executemany(
         """

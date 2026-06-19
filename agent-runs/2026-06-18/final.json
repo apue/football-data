@@ -1,13 +1,13 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-06-19T12:36:02+00:00",
-  "status": "success",
+  "generated_at": "2026-06-19T15:13:44+00:00",
+  "status": "published",
+  "decision": "publish",
   "match_date": "2026-06-18",
-  "scoring_version": "v0.3",
-  "research": {
-    "enabled": false,
-    "status": "skipped",
-    "result_count": 0
+  "orchestrator": {
+    "pattern": "review_repair_validate",
+    "iterations": 1,
+    "max_iterations": 3
   },
   "selection_review": {
     "status": "publishable",
@@ -40,10 +40,10 @@
           {
             "level": "high",
             "code": "hidden_gem_duplicates_existing_team",
-            "message": "Oswin APPOLLIS is a strong hidden-gem profile, but South Africa already has another pick and Ladislav KREJCI gives the slate a distinct match angle.",
+            "message": "Oswin APPOLLIS is a strong hidden-gem profile, but South Africa already has another pick and LEE Gihyuk gives the slate a distinct match angle.",
             "player_name": "Oswin APPOLLIS",
             "team": "South Africa",
-            "replacement_candidate": "Ladislav KREJCI"
+            "replacement_candidate": "LEE Gihyuk"
           },
           {
             "level": "info",
@@ -67,8 +67,8 @@
           "Johan MANZAMBI",
           "Luis ROMO",
           "Granit XHAKA",
-          "Nikola KATIC",
-          "Oswin APPOLLIS"
+          "Oswin APPOLLIS",
+          "Nikola KATIC"
         ]
       },
       {
@@ -93,37 +93,29 @@
           "Johan MANZAMBI",
           "Luis ROMO",
           "Granit XHAKA",
-          "LEE Gihyuk",
-          "Ladislav KREJCI"
+          "LEE Gihyuk"
         ]
       }
     ]
   },
-  "models": {},
-  "tool_calls": [
-    {
-      "role": "fact_check",
-      "model": "deepseek-ai/DeepSeek-V4-Flash",
-      "input_chars": 4035,
-      "output_chars": 0,
-      "warnings": [
-        "LLM fact-check timed out during the live run; deterministic checks passed."
-      ],
-      "status": "timeout"
-    }
-  ],
-  "fact_check": {
-    "status": "warning",
-    "deterministic_status": "pass",
-    "llm_status": "timeout",
-    "warnings": [
-      "LLM fact-check timed out during the live run; deterministic checks passed."
+  "copy_review": {
+    "status": "pass",
+    "reviewer": "chinese_copy_reviewer",
+    "method": "rubric_placeholder",
+    "findings": [],
+    "notes": [
+      "Copy review is an explicit loop phase. The default local reviewer only records the phase; model-backed rubric review can replace it without changing the orchestrator contract."
     ]
   },
-  "artifacts": {
-    "markdown": "reports/editorial/2026-06-18.md",
-    "choices": "site/editorial/2026-06-18/choices.json",
-    "external_evidence": "site/editorial/2026-06-18/external_evidence.json"
+  "validation": {
+    "status": "pass",
+    "checks": {
+      "selection": "pass",
+      "copy": "pass",
+      "facts": "pass"
+    },
+    "warnings": [],
+    "high_selection_alerts": []
   },
   "choices": [
     {
@@ -152,14 +144,14 @@
       "team": "Switzerland"
     },
     {
-      "award_type": "defensive_pick",
+      "award_type": "hidden_gem",
       "player_name": "LEE Gihyuk",
       "team": "Korea Republic"
-    },
-    {
-      "award_type": "hidden_gem",
-      "player_name": "Ladislav KREJCI",
-      "team": "Czechia"
     }
-  ]
+  ],
+  "artifacts": {
+    "markdown": "reports/editorial/2026-06-18.md",
+    "evidence": "site/editorial/2026-06-18/evidence.json",
+    "site": "site/editorial/2026-06-18/index.html"
+  }
 }

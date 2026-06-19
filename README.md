@@ -32,6 +32,7 @@ By default this repository does not redistribute original PDF files. Local PDF c
 - `examples/*.sql` - reusable SQL examples
 - `notebooks/*.ipynb` - notebook-style demo examples
 - `reports/editorial/*.md` - human-readable Editor's Choices reports when published
+- `agent-runs/` - local audit traces for the Editor's Choices review-repair-validate loop
 - `calibration/potm-labels.json` - optional weak labels for Player of the Match calibration
 - `calibration/reports/*.md` - POTM/model rank-diff reports when calibration is run
 - `calibration/evaluation/*.md` - POTM evidence quality and calibration-readiness reports
@@ -54,6 +55,7 @@ The generated database currently includes:
 - player lineup appearances from the match summary page
 - raw minute markers associated with lineup rows
 - player in-possession distributions, including passes, line breaks, ball progressions, take-ons, step-ins, attempts, and goals
+- detailed player line-break splits by unit line, direction, and distribution type
 - player offers and receptions, including offer movement types
 - player out-of-possession actions, including tackles, blocks, interceptions, pressing, duels, regains, and interruptions
 
@@ -66,29 +68,34 @@ python -m pip install -e ".[dev]"
 python scripts/update_dataset.py
 sqlite3 data/latest.sqlite < examples/top_fastest_players.sql
 sqlite3 data/latest.sqlite < examples/top_attacking_threats.sql
-python scripts/generate_editorial.py --date 2026-06-17
-python scripts/render_editorial.py --date 2026-06-17
+python scripts/run_editorial_loop.py --date 2026-06-18
 python scripts/check_status.py
 ```
 
 ## Editor's Choices
 
-Editor's Choices are data-informed editorial picks generated from structured PMSR evidence. They are not official FIFA awards. The generator selects candidates from the SQLite database, writes auditable evidence, and produces `fact_bank.zh.json`, `brief.zh.json`, `brief.en.json`, and an English/Chinese Markdown draft brief. Final Chinese copy should be written from `fact_bank.zh.json` as fresh Chinese sports copy, then reviewed for translationese and factual drift. Final English copy should be written separately from `brief.en.json` plus `evidence.json`. The two languages should make the same judgment, but neither should be a translation of the other.
+Editor's Choices are data-informed editorial picks generated from structured PMSR evidence. They are not official FIFA awards. The loop selects candidates from the SQLite database, reviews contextual risks, repairs candidate slates when needed, validates facts/copy, and writes audit traces under `agent-runs/`. The underlying generator produces `fact_bank.zh.json`, `brief.zh.json`, `brief.en.json`, and an English/Chinese Markdown draft brief. Final Chinese copy should be written from `fact_bank.zh.json` as fresh Chinese sports copy, then reviewed for translationese and factual drift. Final English copy should be written separately from `brief.en.json` plus `evidence.json`. The two languages should make the same judgment, but neither should be a translation of the other.
 
 The default scoring config is `config/scoring/v0.3.json`. It keeps the role-style performance scores and adds a structured impact layer for goals that change the match state and match story: opening goals, equalisers, go-ahead goals, match-winning goals, late goals, stoppage-time goals, late match-winning goals, only-goal winners, braces, hat-tricks, and substitute scoring bursts. These features are derived from the PMSR shot table, lineup status, and final scoreline. POTM labels and media opinions are not scoring inputs.
 
 Run:
 
 ```bash
-python scripts/generate_editorial.py --date YYYY-MM-DD
+python scripts/run_editorial_loop.py --date YYYY-MM-DD
 ```
 
-Omit `--date` to use the latest available local match date in the database. Review and rewrite the human-readable output at `reports/editorial/YYYY-MM-DD.md`.
+Use local match dates from the database. Review and rewrite the human-readable output at `reports/editorial/YYYY-MM-DD.md` when the loop requests human review.
 
 If the Markdown copy changes, compile it back to frontend JSON/HTML:
 
 ```bash
 python scripts/render_editorial.py --date YYYY-MM-DD
+```
+
+To run the loop against an already edited Markdown report without overwriting it:
+
+```bash
+python scripts/run_editorial_loop.py --date YYYY-MM-DD --use-existing-markdown
 ```
 
 The compiled frontend artifacts are written to `site/editorial/`, and the homepage is rebuilt with the latest cards.
