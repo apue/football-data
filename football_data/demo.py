@@ -754,7 +754,7 @@ def _editorial_section(report: dict[str, object]) -> str:
     if not isinstance(choices, list) or not choices:
         return ""
     cards = []
-    for choice in choices[:3]:
+    for choice in choices:
         if not isinstance(choice, Mapping):
             continue
         en_chip_html = _chip_html(_nested_value(choice, "evidence_chips", "en"))

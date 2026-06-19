@@ -25,6 +25,54 @@ def test_demo_uses_player_first_bilingual_dashboard(tmp_path):
                 "en": {"title": "The clearest attacking case", "html": "<p>Messi gave the data a simple story to tell.</p>"},
                 "zh": {"title": "最清楚的进攻答案", "html": "<p>梅西让这一天的数据故事变得很直接。</p>"}
               }
+            },
+            {
+              "award_type": "player_of_the_day",
+              "award_label": {"en": "Player of the Day", "zh": "每日最佳球员"},
+              "player_name": "Luis ROMO",
+              "team": "Mexico",
+              "opponent": "Korea Republic",
+              "match_no": 22,
+              "evidence_chips": {
+                "en": ["late winner"],
+                "zh": ["绝杀"]
+              },
+              "content": {
+                "en": {"title": "The late answer", "html": "<p>Romo changed the result late.</p>"},
+                "zh": {"title": "最后的答案", "html": "<p>Romo 在最后阶段改写了结果。</p>"}
+              }
+            },
+            {
+              "award_type": "progression_pick",
+              "award_label": {"en": "Progression Pick", "zh": "推进之选"},
+              "player_name": "Granit XHAKA",
+              "team": "Switzerland",
+              "opponent": "Bosnia and Herzegovina",
+              "match_no": 26,
+              "evidence_chips": {
+                "en": ["progressive passing"],
+                "zh": ["向前传递"]
+              },
+              "content": {
+                "en": {"title": "The best route forward", "html": "<p>Xhaka gave Switzerland a route forward.</p>"},
+                "zh": {"title": "向前的线路", "html": "<p>Xhaka 给瑞士提供了向前线路。</p>"}
+              }
+            },
+            {
+              "award_type": "hidden_gem",
+              "award_label": {"en": "Hidden Gem", "zh": "隐藏亮点"},
+              "player_name": "LEE Gihyuk",
+              "team": "Korea Republic",
+              "opponent": "Mexico",
+              "match_no": 22,
+              "evidence_chips": {
+                "en": ["defensive work"],
+                "zh": ["防守贡献"]
+              },
+              "content": {
+                "en": {"title": "The hidden defensive note", "html": "<p>Lee made the defensive side visible.</p>"},
+                "zh": {"title": "被遮住的防守亮点", "html": "<p>李基赫的防守工作值得被看见。</p>"}
+              }
             }
           ]
         }
@@ -41,6 +89,9 @@ def test_demo_uses_player_first_bilingual_dashboard(tmp_path):
     assert "🇦🇷 Argentina vs 🇩🇿 Algeria" in html
     assert "The clearest attacking case" in html
     assert "最清楚的进攻答案" in html
+    assert "🇰🇷 LEE Gihyuk" in html
+    assert "The hidden defensive note" in html
+    assert "隐藏亮点" in html
     assert "<span>score</span>" not in html
     assert "<strong>37.5</strong>" not in html
     assert "<th>Score</th>" not in html
