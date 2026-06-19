@@ -21,6 +21,9 @@ from football_data.editorial import (
 from football_data.firecrawl import search_firecrawl
 
 
+DEFAULT_OPENAI_BASE_URL = "https://api.siliconflow.cn/v1"
+DEFAULT_AGENT_TIMEOUT_SECONDS = "90"
+
 DEFAULT_MODELS = {
     "orchestrator": "deepseek-ai/DeepSeek-V4-Pro",
     "research": "deepseek-ai/DeepSeek-V4-Flash",
@@ -189,11 +192,9 @@ def load_editorial_agent_config(
 ) -> EditorialAgentConfig:
     env = _load_env(env_path)
     api_key = env.get("OPENAI_API_KEY", "")
-    base_url = env.get("OPENAI_BASE_URL", "")
+    base_url = env.get("OPENAI_BASE_URL", DEFAULT_OPENAI_BASE_URL)
     if require_credentials and not api_key:
         raise ValueError("OPENAI_API_KEY is required")
-    if require_credentials and not base_url:
-        raise ValueError("OPENAI_BASE_URL is required")
     models = {
         role: env.get(env_key, DEFAULT_MODELS[role])
         for role, env_key in MODEL_ENV_KEYS.items()
@@ -212,7 +213,7 @@ def load_editorial_agent_config(
         base_url=base_url,
         models=models,
         loaded_keys=loaded_keys,
-        timeout_seconds=float(env.get("EDITORIAL_AGENT_TIMEOUT_SECONDS", "90")),
+        timeout_seconds=float(env.get("EDITORIAL_AGENT_TIMEOUT_SECONDS", DEFAULT_AGENT_TIMEOUT_SECONDS)),
     )
 
 

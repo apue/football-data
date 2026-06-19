@@ -117,17 +117,26 @@ Configure repository secrets with these names when you want the cloud workflow t
 
 ```text
 OPENAI_API_KEY
+KEYPOOL_KEY
+```
+
+The default OpenAI-compatible base URL is `https://api.siliconflow.cn/v1`, and default model routing is listed in `.env.example`. Add repository variables only when you want to override those defaults:
+
+```text
 OPENAI_BASE_URL
+EDITORIAL_ORCHESTRATOR_MODEL
+EDITORIAL_RESEARCH_MODEL
+EDITORIAL_SELECTION_MODEL
 EDITORIAL_ZH_WRITER_MODEL
 EDITORIAL_ZH_EDITOR_MODEL
 EDITORIAL_EN_WRITER_MODEL
 EDITORIAL_EN_EDITOR_MODEL
 EDITORIAL_FACT_CHECK_MODEL
-KEYPOOL_KEY
+EDITORIAL_AGENT_TIMEOUT_SECONDS
 KEYPOOL_URL
 ```
 
-Optional model overrides are listed in `.env.example`. Missing OpenAI credentials do not publish drafts; the workflow writes `manifests/editorial-run.json` with `needs_credentials` and exits cleanly so the data update pipeline stays healthy.
+Missing OpenAI credentials do not publish drafts; the workflow writes `manifests/editorial-run.json` with `needs_credentials` and exits cleanly so the data update pipeline stays healthy. `KEYPOOL_URL` is your KeyPool base URL and is required only for Firecrawl-backed evidence discovery; missing Firecrawl configuration does not block PMSR-only publishing.
 
 ## POTM Calibration
 
@@ -142,7 +151,7 @@ python scripts/search_potm_evidence.py "FIFA 2026 Match 21 Ghana Panama Player o
 python scripts/calibrate_potm.py --date YYYY-MM-DD
 ```
 
-Keep `KEYPOOL_KEY` and `KEYPOOL_URL` in local `.env.local`. Do not commit secrets or use external pages as a direct replacement for structured PMSR evidence.
+Keep `OPENAI_API_KEY`, `KEYPOOL_KEY`, and `KEYPOOL_URL` in local `.env.local`. Do not commit secrets or use external pages as a direct replacement for structured PMSR evidence.
 
 ## Update Policy
 

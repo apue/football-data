@@ -48,18 +48,18 @@ jobs:
       - name: Run editorial queue
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          OPENAI_BASE_URL: ${{ secrets.OPENAI_BASE_URL }}
-          EDITORIAL_ORCHESTRATOR_MODEL: ${{ secrets.EDITORIAL_ORCHESTRATOR_MODEL }}
-          EDITORIAL_RESEARCH_MODEL: ${{ secrets.EDITORIAL_RESEARCH_MODEL }}
-          EDITORIAL_SELECTION_MODEL: ${{ secrets.EDITORIAL_SELECTION_MODEL }}
-          EDITORIAL_ZH_WRITER_MODEL: ${{ secrets.EDITORIAL_ZH_WRITER_MODEL }}
-          EDITORIAL_ZH_EDITOR_MODEL: ${{ secrets.EDITORIAL_ZH_EDITOR_MODEL }}
-          EDITORIAL_EN_WRITER_MODEL: ${{ secrets.EDITORIAL_EN_WRITER_MODEL }}
-          EDITORIAL_EN_EDITOR_MODEL: ${{ secrets.EDITORIAL_EN_EDITOR_MODEL }}
-          EDITORIAL_FACT_CHECK_MODEL: ${{ secrets.EDITORIAL_FACT_CHECK_MODEL }}
-          EDITORIAL_AGENT_TIMEOUT_SECONDS: ${{ secrets.EDITORIAL_AGENT_TIMEOUT_SECONDS }}
+          OPENAI_BASE_URL: ${{ vars.OPENAI_BASE_URL || 'https://api.siliconflow.cn/v1' }}
+          EDITORIAL_ORCHESTRATOR_MODEL: ${{ vars.EDITORIAL_ORCHESTRATOR_MODEL || 'deepseek-ai/DeepSeek-V4-Pro' }}
+          EDITORIAL_RESEARCH_MODEL: ${{ vars.EDITORIAL_RESEARCH_MODEL || 'deepseek-ai/DeepSeek-V4-Flash' }}
+          EDITORIAL_SELECTION_MODEL: ${{ vars.EDITORIAL_SELECTION_MODEL || 'deepseek-ai/DeepSeek-V4-Pro' }}
+          EDITORIAL_ZH_WRITER_MODEL: ${{ vars.EDITORIAL_ZH_WRITER_MODEL || 'zai-org/GLM-5.2' }}
+          EDITORIAL_ZH_EDITOR_MODEL: ${{ vars.EDITORIAL_ZH_EDITOR_MODEL || 'Qwen/Qwen3.5-397B-A17B' }}
+          EDITORIAL_EN_WRITER_MODEL: ${{ vars.EDITORIAL_EN_WRITER_MODEL || 'deepseek-ai/DeepSeek-V4-Flash' }}
+          EDITORIAL_EN_EDITOR_MODEL: ${{ vars.EDITORIAL_EN_EDITOR_MODEL || 'deepseek-ai/DeepSeek-V4-Pro' }}
+          EDITORIAL_FACT_CHECK_MODEL: ${{ vars.EDITORIAL_FACT_CHECK_MODEL || 'deepseek-ai/DeepSeek-V4-Pro' }}
+          EDITORIAL_AGENT_TIMEOUT_SECONDS: ${{ vars.EDITORIAL_AGENT_TIMEOUT_SECONDS || '90' }}
           KEYPOOL_KEY: ${{ secrets.KEYPOOL_KEY }}
-          KEYPOOL_URL: ${{ secrets.KEYPOOL_URL }}
+          KEYPOOL_URL: ${{ vars.KEYPOOL_URL || secrets.KEYPOOL_URL }}
         run: |
           EXTRA_ARGS=""
           if [ "${{ github.event.inputs.fake }}" = "true" ]; then

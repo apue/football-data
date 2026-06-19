@@ -197,6 +197,17 @@ def test_load_editorial_agent_config_reads_process_environment(tmp_path, monkeyp
     assert config.models["en_writer"] == "env-en-writer"
 
 
+def test_load_editorial_agent_config_uses_default_base_url_and_models(tmp_path):
+    env_path = tmp_path / ".env.local"
+    env_path.write_text("OPENAI_API_KEY='secret'\n", encoding="utf-8")
+
+    config = load_editorial_agent_config(env_path)
+
+    assert config.base_url == "https://api.siliconflow.cn/v1"
+    assert config.models["zh_writer"] == "zai-org/GLM-5.2"
+    assert config.models["fact_check"] == "deepseek-ai/DeepSeek-V4-Pro"
+
+
 def test_filter_llm_fact_check_warnings_drops_absent_assist_claims():
     warnings = _filter_llm_warnings(
         "This copy mentions line breaks but not the forbidden term.",
