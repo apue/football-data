@@ -90,6 +90,7 @@ def test_potm_calibration_report_flags_large_rank_misses(tmp_path):
         db_path="data/latest.sqlite",
         labels_path=labels_path,
         match_date="2026-06-17",
+        scoring_config_path="config/scoring/v0.1.json",
         top_n=3,
     )
 
@@ -144,8 +145,9 @@ def test_calibrate_potm_cli_writes_markdown_report(tmp_path):
     markdown = report_path.read_text(encoding="utf-8")
     assert "# POTM Calibration - 2026-06-17" in markdown
     assert "Caleb YIRENKYI" in markdown
-    assert "rank 7" in markdown
-    assert "red_flag" in markdown
+    assert "Scoring version: `v0.2`" in markdown
+    assert "rank 1" in markdown
+    assert "ok" in markdown
 
 
 def test_discover_potm_evidence_candidates_builds_queries_per_match():

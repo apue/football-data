@@ -47,6 +47,8 @@ When the user asks to publish or check Editor's Choices, daily picks, 每日精�
 
 Use `reports/editorial/YYYY-MM-DD.md` as the human review surface. `scripts/generate_editorial.py` produces `evidence.json`, `fact_bank.zh.json`, `brief.zh.json`, `brief.en.json`, and a Markdown draft brief, not publishable copy. Write Chinese from `fact_bank.zh.json` as a from-scratch Chinese sports editor. Use `brief.zh.json` only as a legacy/diagnostic artifact, not as the primary Chinese writing input. Write English from `brief.en.json` and `evidence.json`; do not use either finished language version as input for the other. Review Chinese with a strict `qu-ai-wei` style pass for translationese, empty polish, and factual drift; use a `humanizer-zh` style repair only for cards that fail review. Do not ask the user to review compiled JSON; regenerate frontend JSON/HTML with `scripts/render_editorial.py` after Markdown edits.
 
+Default Editor's Choices scoring uses `config/scoring/v0.2.json`. The impact layer is derived from PMSR goals and final scoreline only; it can reward opening, equalizing, go-ahead, match-winning, late, stoppage-time, and late match-winning goals. Do not use POTM labels, media ratings, or social reactions as direct scoring inputs.
+
 The editorial workflow generates opinionated content, so prefer a PR branch over direct pushes to `main` unless the user explicitly asks for direct publication.
 
 ## POTM Calibration
@@ -54,6 +56,8 @@ The editorial workflow generates opinionated content, so prefer a PR branch over
 When the user asks to calibrate weights, inspect Player of the Match alignment, use Firecrawl/Keypool for evidence discovery, or explain why a FIFA POTM differs from our picks, use the repo-scoped skill at `.agents/skills/calibrate-potm-labels/SKILL.md`.
 
 Treat POTM as a weak label. Use `scripts/discover_potm_evidence.py --date YYYY-MM-DD` for match-day candidate discovery, `scripts/search_potm_evidence.py` for targeted follow-up searches, write only confirmed labels to `calibration/potm-labels.json`, and run `scripts/calibrate_potm.py --date YYYY-MM-DD` to produce rank-diff reports. Do not feed POTM directly into Editor's Choices scoring; use repeated misses as prompts for scoring experiments.
+
+Current POTM calibration defaults to `config/scoring/v0.2.json`. Use `--scoring-config config/scoring/v0.1.json` only to reproduce or explain pre-impact ranking misses.
 
 When the user asks to evaluate the POTM workflow, Firecrawl evidence quality, source quality, noise ratio, or calibration readiness, use the repo-scoped skill at `.agents/skills/evaluate-potm-workflow/SKILL.md`. Run `scripts/evaluate_potm_workflow.py --date YYYY-MM-DD`; pass `--discover` only when candidate evidence needs to be fetched first.
 

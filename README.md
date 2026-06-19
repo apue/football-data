@@ -66,14 +66,16 @@ python -m pip install -e ".[dev]"
 python scripts/update_dataset.py
 sqlite3 data/latest.sqlite < examples/top_fastest_players.sql
 sqlite3 data/latest.sqlite < examples/top_attacking_threats.sql
-python scripts/generate_editorial.py --date 2026-06-16
-python scripts/render_editorial.py --date 2026-06-16
+python scripts/generate_editorial.py --date 2026-06-17
+python scripts/render_editorial.py --date 2026-06-17
 python scripts/check_status.py
 ```
 
 ## Editor's Choices
 
 Editor's Choices are data-informed editorial picks generated from structured PMSR evidence. They are not official FIFA awards. The generator selects candidates from the SQLite database, writes auditable evidence, and produces `fact_bank.zh.json`, `brief.zh.json`, `brief.en.json`, and an English/Chinese Markdown draft brief. Final Chinese copy should be written from `fact_bank.zh.json` as fresh Chinese sports copy, then reviewed for translationese and factual drift. Final English copy should be written separately from `brief.en.json` plus `evidence.json`. The two languages should make the same judgment, but neither should be a translation of the other.
+
+The default scoring config is `config/scoring/v0.2.json`. It keeps the role-style performance scores and adds a structured impact layer for goals that change the match state: opening goals, equalisers, go-ahead goals, match-winning goals, late goals, stoppage-time goals, and late match-winning goals. These features are derived from the PMSR shot table and final scoreline. POTM labels and media opinions are not scoring inputs.
 
 Run:
 
@@ -93,7 +95,7 @@ The compiled frontend artifacts are written to `site/editorial/`, and the homepa
 
 ## POTM Calibration
 
-POTM calibration compares external Player of the Match labels with this project's per-match model ranking. It is a weak-label sanity check, not an official scoring input. If a confirmed POTM is outside the model Top 3, the report flags the miss so the scoring weights can be reviewed for patterns such as late winners, decisive goal involvements, defensive performances, or extraction/name-matching issues.
+POTM calibration compares external Player of the Match labels with this project's per-match model ranking. It is a weak-label sanity check, not an official scoring input. If a confirmed POTM is outside the model Top 3, the report flags the miss so the scoring weights can be reviewed for patterns such as late winners, decisive goal involvements, defensive performances, or extraction/name-matching issues. Current calibration defaults to `config/scoring/v0.2.json`; pass `--scoring-config config/scoring/v0.1.json` only when you need to inspect pre-impact historical misses.
 
 Optional Firecrawl search is supported through Keypool for evidence discovery:
 

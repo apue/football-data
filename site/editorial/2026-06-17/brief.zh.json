@@ -1,11 +1,137 @@
 {
   "schema_version": 1,
   "language": "zh",
-  "generated_at": "2026-06-18T08:34:28+00:00",
+  "generated_at": "2026-06-19T07:56:43+00:00",
   "match_date": "2026-06-17",
-  "scoring_version": "v0.1",
+  "scoring_version": "v0.2",
   "editorial_voice": "严肃足球数据分析员面向大众发帖：先讲球场作用，再带少量关键数据；可以轻松一点，但不要像翻译稿或指标表。",
   "choices": [
+    {
+      "award_type": "player_of_the_day",
+      "award_label": "每日最佳球员",
+      "player_name": "Caleb YIRENKYI",
+      "team": "加纳",
+      "opponent": "巴拿马",
+      "match_no": 21,
+      "score": 79.7,
+      "why_selected": "先写补时制胜这个最直接的比赛影响，再补充他全场并不是只等到最后一脚。",
+      "title_candidates": [
+        "绝杀就是最硬的答案",
+        "Caleb YIRENKYI把比赛收走了",
+        "最后一脚，也是一整场的回报",
+        "Caleb YIRENKYI等到了决定比赛的一刻"
+      ],
+      "action_notes": [
+        "补时阶段打进制胜球"
+      ],
+      "key_metrics": [
+        {
+          "metric": "late_match_winning_goal",
+          "label": "补时制胜球",
+          "value": 1,
+          "unit": ""
+        },
+        {
+          "metric": "total_distance_m",
+          "label": "跑动距离",
+          "value": 12645.8,
+          "unit": "米"
+        },
+        {
+          "metric": "match_winning_goal",
+          "label": "制胜进球",
+          "value": 1,
+          "unit": ""
+        },
+        {
+          "metric": "line_breaks_completed",
+          "label": "打穿防线",
+          "value": 5,
+          "unit": ""
+        },
+        {
+          "metric": "possession_regains",
+          "label": "夺回球权",
+          "value": 5,
+          "unit": ""
+        }
+      ],
+      "evidence_chips": [
+        "补时制胜",
+        "取得进球"
+      ],
+      "avoid": [
+        "英文直译腔",
+        "可见部分",
+        "影响不只在",
+        "把答案写明了",
+        "数据画像"
+      ]
+    },
+    {
+      "award_type": "player_of_the_day",
+      "award_label": "每日最佳球员",
+      "player_name": "Luis DIAZ",
+      "team": "哥伦比亚",
+      "opponent": "乌兹别克斯坦",
+      "match_no": 24,
+      "score": 78.0,
+      "why_selected": "先写制胜球改变比赛结果，再补充他的持续进攻或跑动证据。",
+      "title_candidates": [
+        "制胜球把答案写清楚了",
+        "Luis DIAZ打进关键一球",
+        "决定比分的那一下",
+        "Luis DIAZ站到了最关键的位置"
+      ],
+      "action_notes": [
+        "打进决定比分的进球",
+        "持续给队友接应点"
+      ],
+      "key_metrics": [
+        {
+          "metric": "offers_received",
+          "label": "接应成功",
+          "value": 25,
+          "unit": ""
+        },
+        {
+          "metric": "in_behind",
+          "label": "身后接应",
+          "value": 30,
+          "unit": ""
+        },
+        {
+          "metric": "line_breaks_completed",
+          "label": "打穿防线",
+          "value": 7,
+          "unit": ""
+        },
+        {
+          "metric": "match_winning_goal",
+          "label": "制胜进球",
+          "value": 1,
+          "unit": ""
+        },
+        {
+          "metric": "total_distance_m",
+          "label": "跑动距离",
+          "value": 9133.7,
+          "unit": "米"
+        }
+      ],
+      "evidence_chips": [
+        "打入制胜球",
+        "取得进球",
+        "持续接应"
+      ],
+      "avoid": [
+        "英文直译腔",
+        "可见部分",
+        "影响不只在",
+        "把答案写明了",
+        "数据画像"
+      ]
+    },
     {
       "award_type": "player_of_the_day",
       "award_label": "每日最佳球员",
@@ -60,130 +186,6 @@
       "evidence_chips": [
         "持续打穿防线",
         "夺回球权能力突出"
-      ],
-      "avoid": [
-        "英文直译腔",
-        "可见部分",
-        "影响不只在",
-        "把答案写明了",
-        "数据画像"
-      ]
-    },
-    {
-      "award_type": "player_of_the_day",
-      "award_label": "每日最佳球员",
-      "player_name": "若昂·内维斯",
-      "team": "葡萄牙",
-      "opponent": "刚果（金）",
-      "match_no": 23,
-      "score": 63.7,
-      "why_selected": "重点写他在接应、转移和打穿防线里的连接作用。",
-      "title_candidates": [
-        "中场接口很关键",
-        "若昂·内维斯让进攻转起来",
-        "不是进球，也能决定节奏",
-        "推进和接应都在线"
-      ],
-      "action_notes": [
-        "多次打穿对方防线"
-      ],
-      "key_metrics": [
-        {
-          "metric": "line_breaks_completed",
-          "label": "打穿防线",
-          "value": 14,
-          "unit": ""
-        },
-        {
-          "metric": "offers_received",
-          "label": "接应成功",
-          "value": 23,
-          "unit": ""
-        },
-        {
-          "metric": "total_distance_m",
-          "label": "跑动距离",
-          "value": 11977.1,
-          "unit": "米"
-        },
-        {
-          "metric": "in_behind",
-          "label": "身后接应",
-          "value": 19,
-          "unit": ""
-        },
-        {
-          "metric": "possession_regains",
-          "label": "夺回球权",
-          "value": 5,
-          "unit": ""
-        }
-      ],
-      "evidence_chips": [
-        "取得进球"
-      ],
-      "avoid": [
-        "英文直译腔",
-        "可见部分",
-        "影响不只在",
-        "把答案写明了",
-        "数据画像"
-      ]
-    },
-    {
-      "award_type": "player_of_the_day",
-      "award_label": "每日最佳球员",
-      "player_name": "维蒂尼亚",
-      "team": "葡萄牙",
-      "opponent": "刚果（金）",
-      "match_no": 23,
-      "score": 62.9,
-      "why_selected": "重点写他在接应、转移和打穿防线里的连接作用。",
-      "title_candidates": [
-        "中场接口很关键",
-        "维蒂尼亚让进攻转起来",
-        "不是进球，也能决定节奏",
-        "推进和接应都在线"
-      ],
-      "action_notes": [
-        "多次打穿对方防线",
-        "持续给队友接应点"
-      ],
-      "key_metrics": [
-        {
-          "metric": "line_breaks_completed",
-          "label": "打穿防线",
-          "value": 27,
-          "unit": ""
-        },
-        {
-          "metric": "offers_received",
-          "label": "接应成功",
-          "value": 27,
-          "unit": ""
-        },
-        {
-          "metric": "total_distance_m",
-          "label": "跑动距离",
-          "value": 10224.6,
-          "unit": "米"
-        },
-        {
-          "metric": "ball_progressions",
-          "label": "推进",
-          "value": 6,
-          "unit": ""
-        },
-        {
-          "metric": "in_between",
-          "label": "两线间接应",
-          "value": 14,
-          "unit": ""
-        }
-      ],
-      "evidence_chips": [
-        "持续打穿防线",
-        "持续接应"
       ],
       "avoid": [
         "英文直译腔",
@@ -289,45 +291,44 @@
     {
       "award_type": "hidden_gem",
       "award_label": "隐藏亮点",
-      "player_name": "布鲁诺·费尔南德斯",
+      "player_name": "维蒂尼亚",
       "team": "葡萄牙",
       "opponent": "刚果（金）",
       "match_no": 23,
-      "score": 52.4,
+      "score": 65.4,
       "why_selected": "重点写他为什么不抢镜但让进攻不断线。",
       "title_candidates": [
         "不抢镜的连接器",
-        "布鲁诺·费尔南德斯把进攻接起来了",
+        "维蒂尼亚把进攻接起来了",
         "看不见的接应很关键",
         "隐藏亮点在传球角度里"
       ],
       "action_notes": [
-        "持续给队友接应点",
-        "经常出现在两线之间"
+        "多次打穿对方防线"
       ],
       "key_metrics": [
         {
-          "metric": "offers_received",
-          "label": "接应成功",
+          "metric": "line_breaks_completed",
+          "label": "打穿防线",
           "value": 27,
           "unit": ""
         },
         {
-          "metric": "in_behind",
-          "label": "身后接应",
-          "value": 15,
+          "metric": "ball_progressions",
+          "label": "推进",
+          "value": 6,
           "unit": ""
         },
         {
-          "metric": "in_between",
-          "label": "两线间接应",
-          "value": 22,
+          "metric": "take_ons",
+          "label": "尝试过人",
+          "value": 1,
           "unit": ""
         }
       ],
       "evidence_chips": [
-        "持续接应",
-        "在防线之间活跃"
+        "持续打穿防线",
+        "持续接应"
       ],
       "avoid": [
         "英文直译腔",

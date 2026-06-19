@@ -1,9 +1,9 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-06-18T08:34:28+00:00",
-  "compiled_at": "2026-06-18T08:37:58+00:00",
+  "generated_at": "2026-06-19T07:56:43+00:00",
+  "compiled_at": "2026-06-19T08:06:59+00:00",
   "match_date": "2026-06-17",
-  "scoring_version": "v0.1",
+  "scoring_version": "v0.2",
   "source_markdown_path": "reports/editorial/2026-06-17.md",
   "matches": [
     {
@@ -61,6 +61,78 @@
       "rank": 1,
       "match_key": "FIFA-2026-M21-GHA-PAN",
       "match_no": 21,
+      "player_no": 3,
+      "player_name": "Caleb YIRENKYI",
+      "team": "Ghana",
+      "opponent": "Panama",
+      "position": "MF",
+      "evidence_chips": {
+        "en": [
+          "late winner",
+          "goal scorer"
+        ],
+        "zh": [
+          "补时制胜",
+          "取得进球"
+        ]
+      },
+      "content": {
+        "en": {
+          "title": "The late answer",
+          "html": "<p>Yirenkyi gave Ghana the cleanest kind of impact: the winner at the end of a 1-0 match. The finish is the headline, but the rest of the profile matters too: he covered 12.6 km and still had enough left to decide the match in stoppage time.</p>"
+        },
+        "zh": {
+          "title": "绝杀就是最硬的答案",
+          "html": "<p>加纳这场等到补时才破局，Yirenkyi 把最后一脚踢成了制胜球。更关键的是，他不是只等机会：全场跑了12.6公里，还完成5次夺回球权，最后还能出现在决定比赛的位置。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "player_of_the_day",
+      "award_label": {
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
+      },
+      "rank": 2,
+      "match_key": "FIFA-2026-M24-UZB-COL",
+      "match_no": 24,
+      "player_no": 7,
+      "player_name": "Luis DIAZ",
+      "team": "Colombia",
+      "opponent": "Uzbekistan",
+      "position": "FW",
+      "evidence_chips": {
+        "en": [
+          "match-winning goal",
+          "goal scorer",
+          "found again and again"
+        ],
+        "zh": [
+          "打入制胜球",
+          "取得进球",
+          "持续接应"
+        ]
+      },
+      "content": {
+        "en": {
+          "title": "The goal that tilted it",
+          "html": "<p>Diaz gave Colombia the decisive touch after Uzbekistan had pulled the match level. The goal is the simple reason he belongs here, but his wider attacking profile backs it up: 25 received offers and 30 in-behind offers made him the forward target Colombia kept finding.</p>"
+        },
+        "zh": {
+          "title": "迪亚斯站到了关键位置",
+          "html": "<p>乌兹别克斯坦扳平之后，哥伦比亚需要有人把比分再拿回来，迪亚斯完成了那一下。更有意思的是，他全场不是只等最后一脚：25次接应成功、30次身后接应，说明进攻很多时候都在找他。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "player_of_the_day",
+      "award_label": {
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
+      },
+      "rank": 3,
+      "match_key": "FIFA-2026-M21-GHA-PAN",
+      "match_no": 21,
       "player_no": 16,
       "player_name": "Andres ANDRADE",
       "team": "Panama",
@@ -78,80 +150,12 @@
       },
       "content": {
         "en": {
-          "title": "The losing side's loudest case",
-          "html": "<p>Panama lost the match, but Andrade was hard to flatten into the scoreline. For a defender, 34 completed line breaks is a huge passing footprint, and 11 possession regains show this was not only about playing out from the back.</p>"
+          "title": "Panama's case despite the score",
+          "html": "<p>The decisive goals take the headline, but Andrade still stays in the top group because his all-round game was too heavy to ignore. For a defender, 34 completed line breaks is a huge passing footprint; adding 11 possession regains makes the case stronger.</p>"
         },
         "zh": {
           "title": "安德拉德没被比分盖住",
           "html": "<p>巴拿马输了球，但安德拉德这场很难被比分盖掉。一个后卫34次打穿防线已经够突出；再加11次夺回球权，他不是只在后场出球，也一直在把回合抢回来。</p>"
-        }
-      }
-    },
-    {
-      "award_type": "player_of_the_day",
-      "award_label": {
-        "en": "Player of the Day",
-        "zh": "每日最佳球员"
-      },
-      "rank": 2,
-      "match_key": "FIFA-2026-M23-POR-COD",
-      "match_no": 23,
-      "player_no": 15,
-      "player_name": "JOAO NEVES",
-      "team": "Portugal",
-      "opponent": "Congo DR",
-      "position": "MF",
-      "evidence_chips": {
-        "en": [
-          "goal scorer"
-        ],
-        "zh": [
-          "取得进球"
-        ]
-      },
-      "content": {
-        "en": {
-          "title": "A goal, and plenty around it",
-          "html": "<p>Neves gave Portugal the cleanest all-round midfield case. The goal is the easy part to spot, but 14 completed line breaks and 19 in-behind offers show he kept pushing the match toward Congo DR's back line.</p>"
-        },
-        "zh": {
-          "title": "内维斯不只是进球",
-          "html": "<p>若昂·内维斯有进球，但这不是他入选的全部理由。14次打穿防线、19次身后接应，说明他一直在把葡萄牙的中场往禁区方向带。</p>"
-        }
-      }
-    },
-    {
-      "award_type": "player_of_the_day",
-      "award_label": {
-        "en": "Player of the Day",
-        "zh": "每日最佳球员"
-      },
-      "rank": 3,
-      "match_key": "FIFA-2026-M23-POR-COD",
-      "match_no": 23,
-      "player_no": 23,
-      "player_name": "VITINHA",
-      "team": "Portugal",
-      "opponent": "Congo DR",
-      "position": "MF",
-      "evidence_chips": {
-        "en": [
-          "repeated line breaks",
-          "found again and again"
-        ],
-        "zh": [
-          "持续打穿防线",
-          "持续接应"
-        ]
-      },
-      "content": {
-        "en": {
-          "title": "Portugal kept coming through him",
-          "html": "<p>If Neves gave Portugal the goal, Vitinha gave them the rhythm. He was found 27 times and completed 27 line breaks, the kind of repeated midfield work that keeps a draw from turning static.</p>"
-        },
-        "zh": {
-          "title": "葡萄牙绕不开维蒂尼亚",
-          "html": "<p>内维斯有进球，维蒂尼亚管的是葡萄牙中场的连续性。27次打穿防线、27次接应成功，他反复把球接出来，再送到更有用的位置。</p>"
         }
       }
     },
@@ -180,7 +184,7 @@
       "content": {
         "en": {
           "title": "Forward passes from the back",
-          "html": "<p>This progression pick is not about carrying past players. Araujo kept opening the next pass from deep areas, with 32 completed line breaks giving Portugal a steady route into better territory.</p>"
+          "html": "<p>Araujo's progression case is mostly about the first pass into better territory. With 32 completed line breaks, he gave Portugal a steady route out from deeper areas even when the match itself stayed tight.</p>"
         },
         "zh": {
           "title": "阿劳若把后场往前接",
@@ -214,8 +218,8 @@
       },
       "content": {
         "en": {
-          "title": "The stops that protected 1-0",
-          "html": "<p>Ghana's clean sheet needed this kind of work. Adjetey had nine possession regains, nine interruptions and four blocks, repeatedly turning Panama attacks into restarts.</p>"
+          "title": "The stops behind Ghana's 1-0",
+          "html": "<p>Ghana's winner needed protecting, and Adjetey gave them the right kind of defensive volume. His nine possession regains, nine interruptions and four blocks kept turning Panama attacks into resets.</p>"
         },
         "zh": {
           "title": "阿杰泰守住了加纳的1-0",
@@ -232,29 +236,29 @@
       "rank": 1,
       "match_key": "FIFA-2026-M23-POR-COD",
       "match_no": 23,
-      "player_no": 8,
-      "player_name": "BRUNO FERNANDES",
+      "player_no": 23,
+      "player_name": "VITINHA",
       "team": "Portugal",
       "opponent": "Congo DR",
       "position": "MF",
       "evidence_chips": {
         "en": [
-          "found again and again",
-          "between-line presence"
+          "repeated line breaks",
+          "found again and again"
         ],
         "zh": [
-          "持续接应",
-          "在防线之间活跃"
+          "持续打穿防线",
+          "持续接应"
         ]
       },
       "content": {
         "en": {
-          "title": "The spare man between the lines",
-          "html": "<p>Portugal had louder names in the main picks, but Bruno kept appearing in the awkward spaces. His 22 between-line offers and 27 received offers made him a constant release valve around the front line.</p>"
+          "title": "The quiet connector",
+          "html": "<p>Vitinha is the quieter pick because the match had louder moments elsewhere. Still, 27 completed line breaks and 27 received offers show how often Portugal used him to keep possession moving instead of letting the draw become static.</p>"
         },
         "zh": {
-          "title": "布鲁诺把前场接住了",
-          "html": "<p>布鲁诺不是这组里最抢眼的人，但他的价值在接球位置。27次接应成功、22次两线间接应，他一直在给葡萄牙前场留一个能继续打的点。</p>"
+          "title": "维蒂尼亚把进攻接起来了",
+          "html": "<p>这张 hidden gem 不是给进球，而是给连续性。维蒂尼亚27次打穿防线，把球送过第一道压力；27次接应成功，又让队友一直有能继续打的出口。</p>"
         }
       }
     }
