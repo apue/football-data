@@ -1,84 +1,14 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-06-20T12:49:14+00:00",
-  "status": "pending",
+  "generated_at": "2026-06-20T14:06:32+00:00",
+  "status": "up_to_date",
   "latest_data_date": "2026-06-19",
-  "latest_editorial_date": "2026-06-18",
-  "pending_dates": [
-    "2026-06-19"
-  ],
-  "pending_items": [
-    {
-      "match_date": "2026-06-19",
-      "reason": "data_date_ahead_of_editorial",
-      "current_input_hash": "a22023eadcb41bc608985a84a2bcdf43ad345ab99ec65e9c67892497af7ddea8",
-      "published_input_hash": null,
-      "scoring_version": "v0.3",
-      "source_ids": [
-        "fifa-world-cup-2026-pmsr-m29-bra-hai-v1",
-        "fifa-world-cup-2026-pmsr-m30-sco-mar-v1",
-        "fifa-world-cup-2026-pmsr-m31-tur-par-v1",
-        "fifa-world-cup-2026-pmsr-m32-usa-aus-v1"
-      ]
-    }
-  ],
-  "pending_matches": [
-    {
-      "match_no": 29,
-      "match_key": "FIFA-2026-M29-BRA-HAI",
-      "match_date": "2026-06-19",
-      "home_team": "Brazil",
-      "away_team": "Haiti",
-      "home_score": 3,
-      "away_score": 0
-    },
-    {
-      "match_no": 30,
-      "match_key": "FIFA-2026-M30-SCO-MAR",
-      "match_date": "2026-06-19",
-      "home_team": "Scotland",
-      "away_team": "Morocco",
-      "home_score": 0,
-      "away_score": 1
-    },
-    {
-      "match_no": 31,
-      "match_key": "FIFA-2026-M31-TUR-PAR",
-      "match_date": "2026-06-19",
-      "home_team": "Türkiye",
-      "away_team": "Paraguay",
-      "home_score": 0,
-      "away_score": 1
-    },
-    {
-      "match_no": 32,
-      "match_key": "FIFA-2026-M32-USA-AUS",
-      "match_date": "2026-06-19",
-      "home_team": "USA",
-      "away_team": "Australia",
-      "home_score": 2,
-      "away_score": 0
-    }
-  ],
-  "new_matches": [
-    {
-      "match_no": 29,
-      "source_id": "fifa-world-cup-2026-pmsr-m29-bra-hai-v1"
-    },
-    {
-      "match_no": 30,
-      "source_id": "fifa-world-cup-2026-pmsr-m30-sco-mar-v1"
-    },
-    {
-      "match_no": 31,
-      "source_id": "fifa-world-cup-2026-pmsr-m31-tur-par-v1"
-    },
-    {
-      "match_no": 32,
-      "source_id": "fifa-world-cup-2026-pmsr-m32-usa-aus-v1"
-    }
-  ],
+  "latest_editorial_date": "2026-06-19",
+  "pending_dates": [],
+  "pending_items": [],
+  "pending_matches": [],
+  "new_matches": [],
   "version_updates": [],
   "failures": [],
-  "reason": "new_matches"
+  "reason": "editorial_up_to_date"
 }
