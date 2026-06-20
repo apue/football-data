@@ -9,7 +9,9 @@ import sys
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
+
+from pydantic import BaseModel, Field
 
 from football_data.calibration import discover_potm_evidence_candidates
 from football_data.demo import build_demo_site
@@ -25,9 +27,6 @@ DEFAULT_OPENAI_BASE_URL = "https://api.siliconflow.cn/v1"
 DEFAULT_AGENT_TIMEOUT_SECONDS = "90"
 
 DEFAULT_MODELS = {
-    "orchestrator": "deepseek-ai/DeepSeek-V4-Pro",
-    "research": "deepseek-ai/DeepSeek-V4-Flash",
-    "selection": "deepseek-ai/DeepSeek-V4-Pro",
     "zh_writer": "zai-org/GLM-5.2",
     "zh_editor": "Qwen/Qwen3.5-397B-A17B",
     "en_writer": "deepseek-ai/DeepSeek-V4-Flash",
@@ -37,9 +36,6 @@ DEFAULT_MODELS = {
 
 
 MODEL_ENV_KEYS = {
-    "orchestrator": "EDITORIAL_ORCHESTRATOR_MODEL",
-    "research": "EDITORIAL_RESEARCH_MODEL",
-    "selection": "EDITORIAL_SELECTION_MODEL",
     "zh_writer": "EDITORIAL_ZH_WRITER_MODEL",
     "zh_editor": "EDITORIAL_ZH_EDITOR_MODEL",
     "en_writer": "EDITORIAL_EN_WRITER_MODEL",
@@ -66,6 +62,7 @@ class AgentTextClient:
         model: str,
         instructions: str,
         user_input: str,
+        output_type: type[Any] | None = None,
     ) -> str:
         raise NotImplementedError
 
@@ -74,7 +71,35 @@ class AgentCallTimeout(TimeoutError):
     pass
 
 
-class SdkAgentTextClient(AgentTextClient):
+class EditorialCopyItem(BaseModel):
+    award_type: str = Field(description="Award type from the input choice.")
+    player_name: str = Field(description="Player name from the input choice.")
+    title: str = Field(description="Short publishable title.")
+    body: str = Field(description="One publishable body paragraph.")
+
+
+class EditorialCopyOutput(BaseModel):
+    items: list[EditorialCopyItem]
+    warnings: list[str] = Field(default_factory=list)
+
+
+class EditorialFactCheckOutput(BaseModel):
+    status: str
+    warnings: list[str] = Field(default_factory=list)
+
+
+@dataclass(frozen=True)
+class EditorialWorkflowNode:
+    id: str
+    kind: str
+    handler: Callable[[dict[str, Any]], dict[str, Any] | None]
+    next_id: str | None = None
+    model_key: str | None = None
+    skills: tuple[str, ...] = ()
+    max_attempts: int = 1
+
+
+class AgentsSdkTextClient(AgentTextClient):
     def __init__(self, config: EditorialAgentConfig) -> None:
         self.config = config
 
@@ -85,6 +110,7 @@ class SdkAgentTextClient(AgentTextClient):
         model: str,
         instructions: str,
         user_input: str,
+        output_type: type[Any] | None = None,
     ) -> str:
         return asyncio.run(
             self._complete_async(
@@ -92,6 +118,7 @@ class SdkAgentTextClient(AgentTextClient):
                 model=model,
                 instructions=instructions,
                 user_input=user_input,
+                output_type=output_type,
             )
         )
 
@@ -102,6 +129,7 @@ class SdkAgentTextClient(AgentTextClient):
         model: str,
         instructions: str,
         user_input: str,
+        output_type: type[Any] | None = None,
     ) -> str:
         from agents import Agent, OpenAIChatCompletionsModel, Runner, set_tracing_disabled
         from openai import AsyncOpenAI
@@ -113,43 +141,17 @@ class SdkAgentTextClient(AgentTextClient):
             timeout=self.config.timeout_seconds,
         )
         sdk_model = OpenAIChatCompletionsModel(model=model, openai_client=client)
-        agent = Agent(name=role, instructions=instructions, model=sdk_model)
+        agent = Agent(name=role, instructions=instructions, model=sdk_model, output_type=output_type)
         result = await asyncio.wait_for(
             Runner.run(agent, user_input, max_turns=3),
             timeout=self.config.timeout_seconds,
         )
-        return str(result.final_output)
-
-
-class OpenAIChatCompletionsTextClient(AgentTextClient):
-    def __init__(self, config: EditorialAgentConfig) -> None:
-        self.config = config
-
-    def complete(
-        self,
-        *,
-        role: str,
-        model: str,
-        instructions: str,
-        user_input: str,
-    ) -> str:
-        from openai import OpenAI
-
-        client = OpenAI(
-            api_key=self.config.api_key,
-            base_url=self.config.base_url,
-            timeout=self.config.timeout_seconds,
-        )
-        response = client.chat.completions.create(
-            model=model,
-            messages=[
-                {"role": "system", "content": instructions},
-                {"role": "user", "content": user_input},
-            ],
-            temperature=0.4 if "writer" in role or "editor" in role else 0,
-            max_tokens=3000,
-        )
-        return response.choices[0].message.content or ""
+        final_output = result.final_output
+        if isinstance(final_output, BaseModel):
+            return final_output.model_dump_json()
+        if isinstance(final_output, dict):
+            return json.dumps(final_output, ensure_ascii=False)
+        return str(final_output)
 
 
 class FakeEditorialAgentClient(AgentTextClient):
@@ -160,9 +162,10 @@ class FakeEditorialAgentClient(AgentTextClient):
         model: str,
         instructions: str,
         user_input: str,
+        output_type: type[Any] | None = None,
     ) -> str:
         payload = json.loads(user_input)
-        if role == "fact_check":
+        if role.endswith("fact_check"):
             return json.dumps({"status": "pass", "warnings": []})
         language = payload["language"]
         items = []
@@ -217,6 +220,419 @@ def load_editorial_agent_config(
     )
 
 
+class EditorialWorkflowRunner:
+    name = "editorial_state_graph"
+    version = 1
+
+    def __init__(
+        self,
+        *,
+        match_date: str,
+        db_path: str | Path,
+        site_dir: str | Path,
+        reports_dir: str | Path,
+        manifests_dir: str | Path,
+        scoring_config_path: str | Path,
+        style_dir: str | Path,
+        env_path: str | Path,
+        text_client: AgentTextClient,
+        config: EditorialAgentConfig,
+        research: bool,
+        rebuild_homepage: bool,
+    ) -> None:
+        self.match_date = match_date
+        self.db_path = db_path
+        self.site_dir = site_dir
+        self.reports_dir = reports_dir
+        self.manifests_dir = manifests_dir
+        self.scoring_config_path = scoring_config_path
+        self.style_dir = style_dir
+        self.env_path = env_path
+        self.text_client = text_client
+        self.config = config
+        self.research = research
+        self.rebuild_homepage = rebuild_homepage
+        self.nodes = self._build_nodes()
+
+    def run(self) -> dict[str, Any]:
+        state: dict[str, Any] = {
+            "match_date": self.match_date,
+            "node_runs": [],
+        }
+        node_by_id = {node.id: node for node in self.nodes}
+        node = self.nodes[0]
+        while node is not None:
+            trace = self._run_node(node, state)
+            state["node_runs"].append(trace)
+            if trace["status"] == "failed":
+                raise state["_workflow_exception"]
+            node = node_by_id.get(node.next_id) if node.next_id else None
+        return state
+
+    def workflow_audit(self, state: dict[str, Any]) -> dict[str, Any]:
+        return {
+            "name": self.name,
+            "version": self.version,
+            "nodes": state.get("node_runs", []),
+        }
+
+    def _build_nodes(self) -> list[EditorialWorkflowNode]:
+        return [
+            EditorialWorkflowNode("build_evidence", "python", self._build_evidence, "external_research"),
+            EditorialWorkflowNode("external_research", "python", self._external_research, "zh_writer"),
+            EditorialWorkflowNode(
+                "zh_writer",
+                "agent",
+                self._zh_writer,
+                "zh_draft_fact_check",
+                model_key="zh_writer",
+                skills=("human-writing-zh", "anti-translationese", "football-editor-style"),
+            ),
+            EditorialWorkflowNode(
+                "zh_draft_fact_check",
+                "agent",
+                self._zh_draft_fact_check,
+                "zh_final_editor",
+                model_key="fact_check",
+                skills=("football-editor-style",),
+            ),
+            EditorialWorkflowNode(
+                "zh_final_editor",
+                "agent",
+                self._zh_final_editor,
+                "en_writer",
+                model_key="zh_editor",
+                skills=("human-writing-zh", "anti-translationese", "football-editor-style"),
+            ),
+            EditorialWorkflowNode(
+                "en_writer",
+                "agent",
+                self._en_writer,
+                "en_draft_fact_check",
+                model_key="en_writer",
+                skills=("football-editor-style",),
+            ),
+            EditorialWorkflowNode(
+                "en_draft_fact_check",
+                "agent",
+                self._en_draft_fact_check,
+                "en_final_editor",
+                model_key="fact_check",
+                skills=("football-editor-style",),
+            ),
+            EditorialWorkflowNode(
+                "en_final_editor",
+                "agent",
+                self._en_final_editor,
+                "render_markdown",
+                model_key="en_editor",
+                skills=("football-editor-style",),
+            ),
+            EditorialWorkflowNode("render_markdown", "python", self._render_markdown, "final_deterministic_validation"),
+            EditorialWorkflowNode(
+                "final_deterministic_validation",
+                "validator",
+                self._final_deterministic_validation,
+                "final_fact_check",
+            ),
+            EditorialWorkflowNode(
+                "final_fact_check",
+                "agent",
+                self._final_fact_check,
+                "compile_publish",
+                model_key="fact_check",
+                skills=("football-editor-style",),
+            ),
+            EditorialWorkflowNode("compile_publish", "python", self._compile_publish),
+        ]
+
+    def _run_node(
+        self,
+        node: EditorialWorkflowNode,
+        state: dict[str, Any],
+    ) -> dict[str, Any]:
+        trace: dict[str, Any] = {
+            "id": node.id,
+            "kind": node.kind,
+            "status": "running",
+            "max_attempts": node.max_attempts,
+        }
+        if node.model_key:
+            trace["model"] = self.config.models[node.model_key]
+        if node.skills:
+            trace["skills"] = list(node.skills)
+        try:
+            output = node.handler(state) or {}
+            trace.update(
+                {
+                    "status": "success",
+                    "warnings": output.get("warnings", []),
+                    "summary": output.get("summary", {}),
+                }
+            )
+        except Exception as exc:
+            state["_workflow_exception"] = exc
+            trace.update(
+                {
+                    "status": "failed",
+                    "warnings": [str(exc)[:1000]],
+                }
+            )
+        return trace
+
+    def _build_evidence(self, state: dict[str, Any]) -> dict[str, Any]:
+        report = build_editorial_report(
+            self.db_path,
+            match_date=self.match_date,
+            scoring_config_path=self.scoring_config_path,
+        )
+        write_editorial_artifacts(report, site_dir=self.site_dir, reports_dir=self.reports_dir)
+
+        paths = _artifact_paths(self.site_dir, self.reports_dir, self.match_date)
+        state.update(
+            {
+                "report": report,
+                "paths": paths,
+                "evidence": _load_json(paths["evidence"]),
+                "fact_bank": _load_json(paths["fact_bank"]),
+                "brief_en": _load_json(paths["brief_en"]),
+                "style_packs": _load_style_packs(self.style_dir),
+            }
+        )
+        return {
+            "summary": {
+                "choices": len(report["choices"]),
+                "scoring_version": report["scoring_version"],
+            }
+        }
+
+    def _external_research(self, state: dict[str, Any]) -> dict[str, Any]:
+        external_evidence = _external_evidence(
+            db_path=self.db_path,
+            match_date=self.match_date,
+            env_path=self.env_path,
+            research=self.research,
+        )
+        state["external_evidence"] = external_evidence
+        state["paths"]["external_evidence"].write_text(
+            json.dumps(external_evidence, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
+        return {
+            "summary": {
+                "enabled": self.research,
+                "status": external_evidence.get("status"),
+                "result_count": _external_result_count(external_evidence),
+            }
+        }
+
+    def _zh_writer(self, state: dict[str, Any]) -> dict[str, Any]:
+        return self._write_draft(state, "zh", state["fact_bank"]["choices"], "zh_writer", "zh_writer")
+
+    def _en_writer(self, state: dict[str, Any]) -> dict[str, Any]:
+        return self._write_draft(state, "en", state["brief_en"]["choices"], "en_writer", "en_writer")
+
+    def _zh_draft_fact_check(self, state: dict[str, Any]) -> dict[str, Any]:
+        return self._draft_fact_check(state, "zh", "zh_draft_fact_check", "zh_draft", "zh_draft_fact_check")
+
+    def _en_draft_fact_check(self, state: dict[str, Any]) -> dict[str, Any]:
+        return self._draft_fact_check(state, "en", "en_draft_fact_check", "en_draft", "en_draft_fact_check")
+
+    def _zh_final_editor(self, state: dict[str, Any]) -> dict[str, Any]:
+        return self._final_editor(
+            state,
+            "zh",
+            state["fact_bank"]["choices"],
+            "zh_final_editor",
+            "zh_draft",
+            "zh_draft_fact_check",
+            "zh_final",
+        )
+
+    def _en_final_editor(self, state: dict[str, Any]) -> dict[str, Any]:
+        return self._final_editor(
+            state,
+            "en",
+            state["brief_en"]["choices"],
+            "en_final_editor",
+            "en_draft",
+            "en_draft_fact_check",
+            "en_final",
+        )
+
+    def _write_draft(
+        self,
+        state: dict[str, Any],
+        language: str,
+        choices: list[dict[str, Any]],
+        role: str,
+        model_key: str,
+    ) -> dict[str, Any]:
+        items: list[dict[str, str]] = []
+        warnings: list[str] = []
+        for choice, identity_choice in zip(choices, state["report"]["choices"], strict=True):
+            payload = _language_payload(
+                language=language,
+                choices=[choice],
+                evidence=_evidence_for_choice(state["evidence"], identity_choice),
+                external_evidence=state["external_evidence"],
+                style_packs=state["style_packs"],
+            )
+            draft = _call_json(
+                self.text_client,
+                role=role,
+                model=self.config.models[model_key],
+                instructions=_writer_instructions(language, state["style_packs"]),
+                payload=payload,
+                output_type=EditorialCopyOutput,
+                timeout_seconds=self.config.timeout_seconds,
+            )
+            bound = _copy_output_bound_to_choices(draft, [identity_choice], language)
+            items.extend(bound["items"])
+            warnings.extend(str(warning) for warning in draft.get("warnings", []))
+        state[f"{language}_draft"] = {"items": items, "warnings": warnings}
+        return {
+            "warnings": warnings,
+            "summary": {"items": len(state[f"{language}_draft"]["items"])},
+        }
+
+    def _draft_fact_check(
+        self,
+        state: dict[str, Any],
+        language: str,
+        role: str,
+        draft_key: str,
+        output_key: str,
+    ) -> dict[str, Any]:
+        result = _call_json(
+            self.text_client,
+            role=role,
+            model=self.config.models["fact_check"],
+            instructions=_draft_fact_check_instructions(language, state["style_packs"]),
+            payload={
+                "language": language,
+                "match_date": self.match_date,
+                "evidence": state["evidence"],
+                "external_evidence": state["external_evidence"],
+                "draft": state[draft_key],
+            },
+            output_type=EditorialFactCheckOutput,
+            timeout_seconds=self.config.timeout_seconds,
+        )
+        state[output_key] = {
+            "status": result.get("status", "pass"),
+            "warnings": result.get("warnings", []),
+        }
+        return {
+            "warnings": state[output_key]["warnings"],
+            "summary": {"status": state[output_key]["status"]},
+        }
+
+    def _final_editor(
+        self,
+        state: dict[str, Any],
+        language: str,
+        choices: list[dict[str, Any]],
+        role: str,
+        draft_key: str,
+        fact_check_key: str,
+        output_key: str,
+    ) -> dict[str, Any]:
+        items: list[dict[str, str]] = []
+        warnings: list[str] = []
+        draft_items = state[draft_key]["items"]
+        for index, (choice, identity_choice) in enumerate(
+            zip(choices, state["report"]["choices"], strict=True)
+        ):
+            draft_item = draft_items[index] if index < len(draft_items) else _fallback_copy(identity_choice, language)
+            edited = _call_json(
+                self.text_client,
+                role=role,
+                model=self.config.models["zh_editor" if language == "zh" else "en_editor"],
+                instructions=_editor_instructions(language, state["style_packs"]),
+                payload={
+                    "language": language,
+                    "choices": [choice],
+                    "draft": {"items": [draft_item]},
+                    "draft_fact_check": state[fact_check_key],
+                    "style_packs": _style_subset(
+                        state["style_packs"],
+                        ["anti-translationese", "human-writing-zh"]
+                        if language == "zh"
+                        else ["football-editor-style"],
+                    ),
+                },
+                output_type=EditorialCopyOutput,
+                timeout_seconds=self.config.timeout_seconds,
+            )
+            bound = _copy_output_bound_to_choices(edited, [identity_choice], language)
+            items.extend(bound["items"])
+            warnings.extend(str(warning) for warning in edited.get("warnings", []))
+        state[output_key] = {"items": items, "warnings": warnings}
+        return {
+            "warnings": warnings,
+            "summary": {"items": len(state[output_key]["items"])},
+        }
+
+    def _render_markdown(self, state: dict[str, Any]) -> dict[str, Any]:
+        markdown_text = _render_agent_markdown(
+            report=state["report"],
+            en_copy=state["en_final"],
+            zh_copy=state["zh_final"],
+        )
+        state["markdown_text"] = markdown_text
+        state["paths"]["markdown"].write_text(markdown_text, encoding="utf-8")
+        return {"summary": {"markdown_chars": len(markdown_text)}}
+
+    def _final_deterministic_validation(self, state: dict[str, Any]) -> dict[str, Any]:
+        warnings = _deterministic_fact_check(state["evidence"], state["markdown_text"])
+        state["deterministic_warnings"] = warnings
+        if warnings:
+            raise RuntimeError(f"Editorial deterministic validation failed: {warnings}")
+        return {"warnings": warnings, "summary": {"status": "pass"}}
+
+    def _final_fact_check(self, state: dict[str, Any]) -> dict[str, Any]:
+        try:
+            llm_fact_check = _call_json(
+                self.text_client,
+                role="final_fact_check",
+                model=self.config.models["fact_check"],
+                instructions=_fact_check_instructions(state["style_packs"]),
+                payload={
+                    "match_date": self.match_date,
+                    "evidence": state["evidence"],
+                    "external_evidence": state["external_evidence"],
+                    "markdown": state["markdown_text"],
+                    "deterministic_warnings": state["deterministic_warnings"],
+                },
+                output_type=EditorialFactCheckOutput,
+                timeout_seconds=self.config.timeout_seconds,
+            )
+        except AgentCallTimeout as exc:
+            llm_fact_check = {"status": "timeout", "warnings": [str(exc)]}
+        llm_warnings = _filter_llm_warnings(state["markdown_text"], llm_fact_check.get("warnings", []))
+        llm_status = llm_fact_check.get("status", "pass") if llm_warnings else "pass"
+        fact_check = {
+            "status": "warning" if llm_warnings else "pass",
+            "deterministic_status": "pass",
+            "llm_status": llm_status,
+            "warnings": llm_warnings,
+        }
+        state["fact_check"] = fact_check
+        return {"warnings": llm_warnings, "summary": {"status": fact_check["status"]}}
+
+    def _compile_publish(self, state: dict[str, Any]) -> dict[str, Any]:
+        compiled = render_editorial_markdown_file(
+            match_date=self.match_date,
+            site_dir=self.site_dir,
+            reports_dir=self.reports_dir,
+        )
+        state["compiled"] = compiled
+        if self.rebuild_homepage:
+            build_demo_site(self.db_path, self.site_dir, self.manifests_dir)
+        return {"summary": {"choices": len(compiled.get("choices", []))}}
+
+
 def run_editorial_agent(
     *,
     match_date: str,
@@ -233,109 +649,27 @@ def run_editorial_agent(
     rebuild_homepage: bool = True,
 ) -> dict[str, Any]:
     config = load_editorial_agent_config(env_path, require_credentials=client is None)
-    text_client = client or OpenAIChatCompletionsTextClient(config)
-
-    report = build_editorial_report(
-        db_path,
+    text_client = client or AgentsSdkTextClient(config)
+    runner = EditorialWorkflowRunner(
         match_date=match_date,
-        scoring_config_path=scoring_config_path,
-    )
-    write_editorial_artifacts(report, site_dir=site_dir, reports_dir=reports_dir)
-
-    paths = _artifact_paths(site_dir, reports_dir, match_date)
-    evidence = _load_json(paths["evidence"])
-    fact_bank = _load_json(paths["fact_bank"])
-    brief_en = _load_json(paths["brief_en"])
-    external_evidence = _external_evidence(
         db_path=db_path,
-        match_date=match_date,
-        env_path=env_path,
-        research=research,
-    )
-    paths["external_evidence"].write_text(
-        json.dumps(external_evidence, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
-
-    style_packs = _load_style_packs(style_dir)
-    call_records: list[dict[str, Any]] = []
-
-    zh_final = _generate_language_copy(
-        client=text_client,
-        language="zh",
-        choices=fact_bank["choices"],
-        identity_choices=report["choices"],
-        evidence=evidence,
-        external_evidence=external_evidence,
-        style_packs=style_packs,
-        writer_model=config.models["zh_writer"],
-        editor_model=config.models["zh_editor"],
-        call_records=call_records,
-    )
-
-    en_final = _generate_language_copy(
-        client=text_client,
-        language="en",
-        choices=brief_en["choices"],
-        identity_choices=report["choices"],
-        evidence=evidence,
-        external_evidence=external_evidence,
-        style_packs=style_packs,
-        writer_model=config.models["en_writer"],
-        editor_model=config.models["en_editor"],
-        call_records=call_records,
-    )
-
-    markdown_text = _render_agent_markdown(
-        report=report,
-        en_copy=en_final,
-        zh_copy=zh_final,
-    )
-    paths["markdown"].write_text(markdown_text, encoding="utf-8")
-
-    deterministic_warnings = _deterministic_fact_check(evidence, markdown_text)
-    try:
-        llm_fact_check = _call_json(
-            text_client,
-            role="fact_check",
-            model=config.models["fact_check"],
-            instructions=_fact_check_instructions(style_packs),
-            payload={
-                "match_date": match_date,
-                "evidence": evidence,
-                "external_evidence": external_evidence,
-                "markdown": markdown_text,
-                "deterministic_warnings": deterministic_warnings,
-            },
-            call_records=call_records,
-            timeout_seconds=config.timeout_seconds,
-        )
-    except AgentCallTimeout as exc:
-        llm_fact_check = {
-            "status": "timeout",
-            "warnings": [str(exc)],
-        }
-    llm_warnings = _filter_llm_warnings(markdown_text, llm_fact_check.get("warnings", []))
-    llm_status = llm_fact_check.get("status", "pass") if llm_warnings else "pass"
-    if call_records and call_records[-1].get("role") == "fact_check":
-        call_records[-1]["warnings"] = llm_warnings
-        call_records[-1]["status"] = llm_status
-    fact_check = {
-        "status": "fail" if deterministic_warnings else ("warning" if llm_warnings else "pass"),
-        "deterministic_status": "fail" if deterministic_warnings else "pass",
-        "llm_status": llm_status,
-        "warnings": [*deterministic_warnings, *llm_warnings],
-    }
-    if fact_check["deterministic_status"] != "pass":
-        raise RuntimeError(f"Editorial fact check failed: {fact_check['warnings']}")
-
-    compiled = render_editorial_markdown_file(
-        match_date=match_date,
         site_dir=site_dir,
         reports_dir=reports_dir,
+        manifests_dir=manifests_dir,
+        scoring_config_path=scoring_config_path,
+        style_dir=style_dir,
+        env_path=env_path,
+        text_client=text_client,
+        config=config,
+        research=research,
+        rebuild_homepage=rebuild_homepage,
     )
-    if rebuild_homepage:
-        build_demo_site(db_path, site_dir, manifests_dir)
+    state = runner.run()
+    report = state["report"]
+    compiled = state["compiled"]
+    external_evidence = state["external_evidence"]
+    fact_check = state["fact_check"]
+    paths = state["paths"]
 
     run_payload = {
         "schema_version": 1,
@@ -350,7 +684,7 @@ def run_editorial_agent(
         },
         "selection_review": report.get("selection_review"),
         "models": {role: config.models[role] for role in sorted(config.models)},
-        "tool_calls": call_records,
+        "workflow": runner.workflow_audit(state),
         "fact_check": fact_check,
         "artifacts": {
             "markdown": str(paths["markdown"]),
@@ -452,97 +786,48 @@ def _language_payload(
     }
 
 
-def _generate_language_copy(
-    *,
-    client: AgentTextClient,
-    language: str,
-    choices: list[dict[str, Any]],
-    identity_choices: list[dict[str, Any]],
+def _evidence_for_choice(
     evidence: dict[str, Any],
-    external_evidence: dict[str, Any],
-    style_packs: dict[str, str],
-    writer_model: str,
-    editor_model: str,
-    call_records: list[dict[str, Any]],
+    identity_choice: dict[str, Any],
 ) -> dict[str, Any]:
-    items: list[dict[str, Any]] = []
-    writer_role = f"{language}_writer"
-    editor_role = f"{language}_editor"
-    for choice, identity_choice in zip(choices, identity_choices, strict=True):
-        single_choice_payload = _language_payload(
-            language=language,
-            choices=[choice],
-            evidence={
-                **evidence,
-                "choices": [
-                    evidence_choice
-                    for evidence_choice in evidence.get("choices", [])
-                    if evidence_choice.get("award_type") == choice.get("award_type")
-                    and evidence_choice.get("player_name") == choice.get("player_name")
-                ],
-            },
-            external_evidence=external_evidence,
-            style_packs=style_packs,
+    return {
+        **evidence,
+        "choices": [
+            choice
+            for choice in evidence.get("choices", [])
+            if choice.get("award_type") == identity_choice.get("award_type")
+            and choice.get("player_name") == identity_choice.get("player_name")
+        ],
+    }
+
+
+def _copy_output_bound_to_choices(
+    payload: dict[str, Any],
+    identity_choices: list[dict[str, Any]],
+    language: str,
+) -> dict[str, Any]:
+    raw_items = payload.get("items")
+    candidate_items = raw_items if isinstance(raw_items, list) else []
+    items: list[dict[str, str]] = []
+    for index, identity_choice in enumerate(identity_choices):
+        candidate = candidate_items[index] if index < len(candidate_items) else {}
+        if not isinstance(candidate, dict):
+            candidate = {}
+        title = str(candidate.get("title") or "").strip()
+        body = str(candidate.get("body") or "").strip()
+        if not title or not body:
+            fallback = _fallback_copy(identity_choice, language)
+            title = title or fallback["title"]
+            body = body or fallback["body"]
+        items.append(
+            {
+                "award_type": identity_choice["award_type"],
+                "player_name": identity_choice["player_name"],
+                "title": title,
+                "body": body,
+            }
         )
-        draft = _call_json(
-            client,
-            role=writer_role,
-            model=writer_model,
-            instructions=_writer_instructions(language, style_packs),
-            payload=single_choice_payload,
-            call_records=call_records,
-        )
-        edited = _call_json(
-            client,
-            role=editor_role,
-            model=editor_model,
-            instructions=_editor_instructions(language, style_packs),
-            payload={
-                "language": language,
-                "choices": [choice],
-                "draft": draft,
-                "style_packs": _style_subset(
-                    style_packs,
-                    ["anti-translationese", "human-writing-zh"]
-                    if language == "zh"
-                    else ["football-editor-style"],
-                ),
-            },
-            call_records=call_records,
-        )
-        item = _first_copy_item(edited, identity_choice)
-        if item:
-            items.append(item)
-    return {"items": items, "warnings": []}
-
-
-def _first_copy_item(payload: dict[str, Any], identity_choice: dict[str, Any]) -> dict[str, Any] | None:
-    items = _candidate_copy_items(payload)
-    if not items or not isinstance(items[0], dict):
-        return None
-    item = dict(items[0])
-    title = str(item.get("title") or "").strip()
-    body = str(item.get("body") or "").strip()
-    if not title or not body:
-        return None
-    item["award_type"] = identity_choice["award_type"]
-    item["player_name"] = identity_choice["player_name"]
-    item["title"] = title
-    item["body"] = body
-    return item
-
-
-def _candidate_copy_items(payload: dict[str, Any]) -> list[Any]:
-    direct = payload.get("items")
-    if isinstance(direct, list):
-        return direct
-    draft = payload.get("draft")
-    if isinstance(draft, dict) and isinstance(draft.get("items"), list):
-        return draft["items"]
-    output = payload.get("output")
-    if isinstance(output, dict) and isinstance(output.get("items"), list):
-        return output["items"]
-    return []
+    return {"items": items, "warnings": payload.get("warnings", [])}
 
 
 def _call_json(
@@ -552,7 +837,7 @@ def _call_json(
     model: str,
     instructions: str,
     payload: dict[str, Any],
-    call_records: list[dict[str, Any]],
+    output_type: type[Any] | None = None,
     timeout_seconds: float | None = None,
 ) -> dict[str, Any]:
     print(f"[editorial-agent] {role} -> {model}", file=sys.stderr, flush=True)
@@ -564,32 +849,14 @@ def _call_json(
                 model=model,
                 instructions=instructions,
                 user_input=user_input,
+                output_type=output_type,
             ),
             timeout_seconds=timeout_seconds,
             role=role,
         )
     except AgentCallTimeout as exc:
-        call_records.append(
-            {
-                "role": role,
-                "model": model,
-                "input_chars": len(user_input),
-                "output_chars": 0,
-                "warnings": [str(exc)],
-                "status": "timeout",
-            }
-        )
         raise
     parsed = _extract_json_object(response)
-    call_records.append(
-        {
-            "role": role,
-            "model": model,
-            "input_chars": len(user_input),
-            "output_chars": len(response),
-            "warnings": parsed.get("warnings", []),
-        }
-    )
     return parsed
 
 
@@ -642,18 +909,38 @@ def _editor_instructions(language: str, style_packs: dict[str, str]) -> str:
     if language == "zh":
         return "\n\n".join(
             [
-                "你是终审中文体育编辑。只润色输入 draft，不新增事实。",
-                "返回同样 JSON schema。删掉翻译腔、空话和过度数据罗列。",
+                "你是终审中文体育编辑。根据输入 draft、draft_fact_check 和 evidence 定稿，不新增事实。",
+                "返回同样 JSON schema。必须修复 draft_fact_check 指出的事实问题，再删掉翻译腔、空话和过度数据罗列。",
                 "删掉“几乎都”“完全掌控”“没有办法限制他”等没有结构化证据支撑的总括句。",
                 _style_subset(style_packs, ["human-writing-zh", "anti-translationese"]).get("joined", ""),
             ]
         )
     return "\n\n".join(
         [
-            "You are the final English editor. Polish the draft without adding facts.",
-            "Return the same JSON schema. Keep the copy compact and editorial, not a metric table.",
+            "You are the final English editor. Finalize the copy from the draft, draft_fact_check, and evidence without adding facts.",
+            "Return the same JSON schema. Fix any fact-check issues first, then keep the copy compact and editorial.",
             "Remove unsupported totalizing phrases such as \"no answer\", \"all afternoon\", \"controlled everything\", or \"every attack\".",
             style_packs.get("football-editor-style", ""),
+        ]
+    )
+
+
+def _draft_fact_check_instructions(language: str, style_packs: dict[str, str]) -> str:
+    if language == "zh":
+        return "\n\n".join(
+            [
+                "你是中文初稿事实核查编辑。只检查 draft 是否被 evidence 支撑，不润色。",
+                "返回严格 JSON：{\"status\":\"pass\"|\"fail\",\"warnings\":[\"...\"]}。",
+                "指出错比分、错进球、助攻臆造、视频观察、外部评价、过度总括或证据不足的句子。",
+                style_packs.get("fact-check-rules", ""),
+            ]
+        )
+    return "\n\n".join(
+        [
+            "You are a draft fact-checking editor. Check whether the draft is supported by evidence; do not rewrite it.",
+            "Return strict JSON: {\"status\":\"pass\"|\"fail\",\"warnings\":[\"...\"]}.",
+            "Flag wrong scorelines, unsupported assists, video observations, outside ratings, overbroad claims, or unsupported metrics.",
+            style_packs.get("fact-check-rules", ""),
         ]
     )
 
@@ -744,9 +1031,6 @@ def _choice_key(choice: dict[str, Any]) -> tuple[str, str]:
 
 
 def _fallback_copy(choice: dict[str, Any], language: str) -> dict[str, str]:
-    draft = choice.get("draft", {}).get(language)
-    if isinstance(draft, dict) and draft.get("title") and draft.get("body"):
-        return {"title": str(draft["title"]), "body": str(draft["body"])}
     if language == "zh":
         chips = "，".join(str(chip) for chip in choice.get("evidence_chips", {}).get("zh", []))
         return {

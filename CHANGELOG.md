@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-06-20 - Editorial State Graph
+
+Refactored the Editor's Choices publisher into a project-scoped state graph:
+
+- Added a lightweight `EditorialWorkflowRunner` with explicit node audit records.
+- Moved LLM working nodes to the OpenAI Agents SDK with structured output schemas.
+- Changed the editorial flow to writer draft -> draft fact check -> final editor -> final validation -> compile/publish.
+- Removed the direct Chat Completions backend and the `--sdk-backend` transition flag.
+- Removed unused orchestrator/research/selection model environment variables; those stages are deterministic Python-owned.
+
 ## 2026-06-20 - Editorial Path Cleanup
 
 Removed obsolete editorial code paths after the agent workflow became the single publication path:

@@ -1190,7 +1190,7 @@ def _zh_fact_bank_payload(report: dict[str, Any]) -> dict[str, Any]:
             "英文成稿",
             "已成型选择理由句子",
         ],
-        "review_loop": [
+        "editorial_review_guidance": [
             "先用中文体育编辑视角从事实重写，不继承旧稿句式。",
             "再做 qu-ai-wei 式严格审稿：删翻译腔、空话、事实越界。",
             "只在卡片不顺时做 humanizer-zh 式语感修复。",

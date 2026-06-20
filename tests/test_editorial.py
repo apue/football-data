@@ -100,7 +100,7 @@ def test_editorial_scoring_ignores_goal_prevented_rows_in_existing_database():
     assert tajon["role_scores"]["impact"] == 0
 
 
-def test_editorial_self_review_loop_rebalances_contextual_risks():
+def test_editorial_selection_gate_rebalances_contextual_risks():
     report = build_editorial_report("data/latest.sqlite", match_date="2026-06-18")
     choices_by_award = {choice["award_type"]: choice for choice in report["choices"]}
     player_names = [choice["player_name"] for choice in report["choices"]]
@@ -329,4 +329,3 @@ def test_compile_editorial_markdown_renders_edited_copy(tmp_path):
     assert "clean editorial call" in first_choice["content"]["en"]["html"]
     assert "**" not in first_choice["content"]["en"]["html"]
     assert "markdown" not in first_choice["content"]["en"]
-

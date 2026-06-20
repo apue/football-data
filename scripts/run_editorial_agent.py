@@ -6,8 +6,6 @@ import json
 
 from football_data.editorial_agent import (
     FakeEditorialAgentClient,
-    SdkAgentTextClient,
-    load_editorial_agent_config,
     run_editorial_agent,
 )
 
@@ -26,14 +24,11 @@ def main() -> int:
     parser.add_argument("--no-research", action="store_true", help="Skip Firecrawl research.")
     parser.add_argument("--no-homepage", action="store_true", help="Do not rebuild site/index.html.")
     parser.add_argument("--fake", action="store_true", help="Use deterministic fake agent backend.")
-    parser.add_argument("--sdk-backend", action="store_true", help="Use Agents SDK backend instead of direct chat completions.")
     parser.add_argument("--json", action="store_true", help="Print run JSON.")
     args = parser.parse_args()
     client = None
     if args.fake:
         client = FakeEditorialAgentClient()
-    elif args.sdk_backend:
-        client = SdkAgentTextClient(load_editorial_agent_config(args.env))
 
     result = run_editorial_agent(
         match_date=args.date,

@@ -25,18 +25,18 @@ def test_publish_editors_choices_skill_is_repo_scoped():
     assert "scripts/generate_editorial.py" not in text + references
     assert "scripts/render_editorial.py" not in text + references
     assert "scripts/run_editorial_loop.py" not in text + references
-    assert "Markdown is the human-readable agent output" in references
+    assert "editorial state graph" in text + references
+    assert "OpenAI Agents SDK" in text + references
+    assert "draft fact check" in text + references
+    assert "final_deterministic_validation" in references
     assert "Write Chinese from `fact_bank.zh.json`, not from the English draft" in references
     assert "Rewrite Chinese and English in separate passes from the same evidence" in references
     assert "Do not use either finished language version as input for the other" in references
     assert "fact_bank.zh.json" in references
     assert "from-scratch Chinese sports editor" in references
-    assert "qu-ai-wei" in references
-    assert "humanizer-zh" in references
     assert "brief.zh.json" not in references
     assert "brief.en.json" in references
     assert "Generate 3-5 Chinese title candidates" in references
-    assert "editorial review pass" in references
     assert "football actions before data labels" in references
 
 

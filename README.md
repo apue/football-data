@@ -77,7 +77,7 @@ python scripts/check_status.py
 
 ## Editor's Choices
 
-Editor's Choices are data-informed editorial picks generated from structured PMSR evidence. They are not official FIFA awards. The autonomous path selects candidates from the SQLite database, reviews contextual selection risks, runs the editor agent, fact-checks the generated Markdown, compiles frontend JSON/HTML, and rebuilds the homepage. Chinese copy is generated from `fact_bank.zh.json` as fresh Chinese sports copy. English copy is generated separately from `brief.en.json` plus `evidence.json`. The two languages should make the same judgment, but neither should be a translation of the other.
+Editor's Choices are data-informed editorial picks generated from structured PMSR evidence. They are not official FIFA awards. The autonomous path selects candidates from the SQLite database, then runs a lightweight editorial state graph: build evidence, optional research, writer draft, draft fact check, final editor, final validation, frontend compile, and homepage rebuild. LLM working nodes run through the OpenAI Agents SDK with structured outputs; deterministic Python nodes keep scoring, evidence, validation, and publishing reproducible. Chinese copy is generated from `fact_bank.zh.json` as fresh Chinese sports copy. English copy is generated separately from `brief.en.json` plus `evidence.json`. The two languages should make the same judgment, but neither should be a translation of the other.
 
 The default scoring config is `config/scoring/v0.3.json`. It keeps the role-style performance scores and adds a structured impact layer for goals that change the match state and match story: opening goals, equalisers, go-ahead goals, match-winning goals, late goals, stoppage-time goals, late match-winning goals, only-goal winners, braces, hat-tricks, and substitute scoring bursts. These features are derived from the PMSR shot table, lineup status, and final scoreline. POTM labels and media opinions are not scoring inputs.
 
@@ -103,7 +103,7 @@ The compiled frontend artifacts are written to `site/editorial/`, and the homepa
 
 ## Editorial Automation
 
-`.github/workflows/editorial.yml` runs after the `Update Dataset` workflow succeeds and can also be started manually. It checks `manifests/editorial-queue.json`, runs the editor agent for pending match dates, commits published editorial outputs with `[skip ci]`, and deploys GitHub Pages.
+`.github/workflows/editorial.yml` runs after the `Update Dataset` workflow succeeds and can also be started manually. It checks `manifests/editorial-queue.json`, runs the Agents SDK-backed editorial state graph for pending match dates, commits published editorial outputs with `[skip ci]`, and deploys GitHub Pages.
 
 Configure repository secrets with these names when you want the cloud workflow to publish new editorial copy:
 
@@ -116,9 +116,6 @@ The default OpenAI-compatible base URL is `https://api.siliconflow.cn/v1`, and d
 
 ```text
 OPENAI_BASE_URL
-EDITORIAL_ORCHESTRATOR_MODEL
-EDITORIAL_RESEARCH_MODEL
-EDITORIAL_SELECTION_MODEL
 EDITORIAL_ZH_WRITER_MODEL
 EDITORIAL_ZH_EDITOR_MODEL
 EDITORIAL_EN_WRITER_MODEL

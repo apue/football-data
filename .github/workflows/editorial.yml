@@ -49,9 +49,6 @@ jobs:
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           OPENAI_BASE_URL: ${{ vars.OPENAI_BASE_URL || 'https://api.siliconflow.cn/v1' }}
-          EDITORIAL_ORCHESTRATOR_MODEL: ${{ vars.EDITORIAL_ORCHESTRATOR_MODEL || 'deepseek-ai/DeepSeek-V4-Pro' }}
-          EDITORIAL_RESEARCH_MODEL: ${{ vars.EDITORIAL_RESEARCH_MODEL || 'deepseek-ai/DeepSeek-V4-Flash' }}
-          EDITORIAL_SELECTION_MODEL: ${{ vars.EDITORIAL_SELECTION_MODEL || 'deepseek-ai/DeepSeek-V4-Pro' }}
           EDITORIAL_ZH_WRITER_MODEL: ${{ vars.EDITORIAL_ZH_WRITER_MODEL || 'zai-org/GLM-5.2' }}
           EDITORIAL_ZH_EDITOR_MODEL: ${{ vars.EDITORIAL_ZH_EDITOR_MODEL || 'Qwen/Qwen3.5-397B-A17B' }}
           EDITORIAL_EN_WRITER_MODEL: ${{ vars.EDITORIAL_EN_WRITER_MODEL || 'deepseek-ai/DeepSeek-V4-Flash' }}

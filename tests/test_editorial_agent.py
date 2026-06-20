@@ -18,6 +18,7 @@ from football_data.editorial_agent import (
 class FakeEditorialClient(AgentTextClient):
     def __init__(self) -> None:
         self.calls: list[tuple[str, str]] = []
+        self.payloads: dict[str, list[dict[str, object]]] = {}
 
     def complete(
         self,
@@ -26,10 +27,12 @@ class FakeEditorialClient(AgentTextClient):
         model: str,
         instructions: str,
         user_input: str,
+        output_type: type[object] | None = None,
     ) -> str:
         self.calls.append((role, model))
         payload = json.loads(user_input)
-        if role == "fact_check":
+        self.payloads.setdefault(role, []).append(payload)
+        if role.endswith("fact_check"):
             return json.dumps({"status": "pass", "warnings": []})
         language = payload["language"]
         items = []
@@ -60,14 +63,16 @@ class WarningFactCheckClient(FakeEditorialClient):
         model: str,
         instructions: str,
         user_input: str,
+        output_type: type[object] | None = None,
     ) -> str:
-        if role == "fact_check":
+        if role == "final_fact_check":
             return json.dumps({"status": "fail", "warnings": ["advisory warning"]})
         return super().complete(
             role=role,
             model=model,
             instructions=instructions,
             user_input=user_input,
+            output_type=output_type,
         )
 
 
@@ -79,14 +84,16 @@ class FilteredFactCheckClient(FakeEditorialClient):
         model: str,
         instructions: str,
         user_input: str,
+        output_type: type[object] | None = None,
     ) -> str:
-        if role == "fact_check":
+        if role == "final_fact_check":
             return json.dumps({"status": "fail", "warnings": ["The markdown claims assists, but no assist data exists."]})
         return super().complete(
             role=role,
             model=model,
             instructions=instructions,
             user_input=user_input,
+            output_type=output_type,
         )
 
 
@@ -98,14 +105,16 @@ class TimeoutFactCheckClient(FakeEditorialClient):
         model: str,
         instructions: str,
         user_input: str,
+        output_type: type[object] | None = None,
     ) -> str:
-        if role == "fact_check":
+        if role == "final_fact_check":
             time.sleep(1)
         return super().complete(
             role=role,
             model=model,
             instructions=instructions,
             user_input=user_input,
+            output_type=output_type,
         )
 
 
@@ -117,9 +126,10 @@ class RenamingEditorialClient(FakeEditorialClient):
         model: str,
         instructions: str,
         user_input: str,
+        output_type: type[object] | None = None,
     ) -> str:
         payload = json.loads(user_input)
-        if role == "fact_check":
+        if role.endswith("fact_check"):
             return json.dumps({"status": "pass", "warnings": []})
         language = payload["language"]
         if language == "zh":
@@ -127,39 +137,6 @@ class RenamingEditorialClient(FakeEditorialClient):
         else:
             item = {"award_type": "changed", "player_name": "Renamed", "title": "English title", "body": "English body."}
         return json.dumps({"items": [item], "warnings": []}, ensure_ascii=False)
-
-
-class NestedDraftEditorialClient(FakeEditorialClient):
-    def complete(
-        self,
-        *,
-        role: str,
-        model: str,
-        instructions: str,
-        user_input: str,
-    ) -> str:
-        payload = json.loads(user_input)
-        if role == "fact_check":
-            return json.dumps({"status": "pass", "warnings": []})
-        language = payload["language"]
-        title = "嵌套中文标题" if language == "zh" else "Nested English title"
-        body = "嵌套中文正文。" if language == "zh" else "Nested English body."
-        return json.dumps(
-            {
-                "draft": {
-                    "items": [
-                        {
-                            "award_type": "changed",
-                            "player_name": "changed",
-                            "title": title,
-                            "body": body,
-                        }
-                    ]
-                },
-                "warnings": [],
-            },
-            ensure_ascii=False,
-        )
 
 
 def test_load_editorial_agent_config_uses_openai_base_url_only(tmp_path):
@@ -322,10 +299,21 @@ def test_run_editorial_agent_with_fake_client_writes_artifacts(tmp_path):
     assert choices_path.exists()
     assert run_path.exists()
     assert external_path.exists()
-    assert any(call[0] == "zh_writer" for call in client.calls)
-    assert any(call[0] == "zh_editor" for call in client.calls)
-    assert any(call[0] == "en_writer" for call in client.calls)
-    assert any(call[0] == "fact_check" for call in client.calls)
+    assert [call[0] for call in client.calls].count("zh_writer") == 6
+    assert [call[0] for call in client.calls].count("zh_final_editor") == 6
+    assert [call[0] for call in client.calls].count("en_writer") == 6
+    assert [call[0] for call in client.calls].count("en_final_editor") == 6
+    assert [call[0] for call in client.calls].count("zh_draft_fact_check") == 1
+    assert [call[0] for call in client.calls].count("en_draft_fact_check") == 1
+    assert [call[0] for call in client.calls].count("final_fact_check") == 1
+    assert client.payloads["zh_final_editor"][0]["draft_fact_check"] == {
+        "status": "pass",
+        "warnings": [],
+    }
+    assert client.payloads["en_final_editor"][0]["draft_fact_check"] == {
+        "status": "pass",
+        "warnings": [],
+    }
 
     markdown = markdown_path.read_text(encoding="utf-8")
     assert "### Player of the Day:" in markdown
@@ -340,6 +328,22 @@ def test_run_editorial_agent_with_fake_client_writes_artifacts(tmp_path):
 
     run_payload = json.loads(run_path.read_text(encoding="utf-8"))
     assert run_payload["match_date"] == "2026-06-18"
+    assert run_payload["workflow"]["name"] == "editorial_state_graph"
+    assert [node["id"] for node in run_payload["workflow"]["nodes"]] == [
+        "build_evidence",
+        "external_research",
+        "zh_writer",
+        "zh_draft_fact_check",
+        "zh_final_editor",
+        "en_writer",
+        "en_draft_fact_check",
+        "en_final_editor",
+        "render_markdown",
+        "final_deterministic_validation",
+        "final_fact_check",
+        "compile_publish",
+    ]
+    assert all(node["status"] == "success" for node in run_payload["workflow"]["nodes"])
     assert run_payload["fact_check"]["status"] == "pass"
     assert "OPENAI_API_KEY" not in json.dumps(run_payload)
 
@@ -435,27 +439,6 @@ def test_per_card_agent_copy_is_bound_to_original_choice_identity(tmp_path):
     assert "中文编辑草稿" not in markdown
 
 
-def test_agent_copy_parser_accepts_nested_draft_items(tmp_path):
-    run_editorial_agent(
-        match_date="2026-06-18",
-        db_path="data/latest.sqlite",
-        site_dir=tmp_path / "site",
-        reports_dir=tmp_path / "reports",
-        manifests_dir="manifests",
-        agent_runs_dir=tmp_path / "agent-runs",
-        client=NestedDraftEditorialClient(),
-        research=False,
-        rebuild_homepage=False,
-    )
-
-    markdown = (tmp_path / "reports" / "editorial" / "2026-06-18.md").read_text(
-        encoding="utf-8"
-    )
-    assert "嵌套中文标题" in markdown
-    assert "Nested English title" in markdown
-    assert "Draft brief" not in markdown
-
-
 def test_run_editorial_agent_cli_dry_run_with_fake_backend(tmp_path):
     out_dir = tmp_path / "out"
 
@@ -482,3 +465,14 @@ def test_run_editorial_agent_cli_dry_run_with_fake_backend(tmp_path):
 
     assert (out_dir / "reports" / "editorial" / "2026-06-18.md").exists()
     assert (out_dir / "agent-runs" / "2026-06-18.json").exists()
+
+
+def test_run_editorial_agent_cli_no_longer_exposes_sdk_transition_flag():
+    result = subprocess.run(
+        [sys.executable, "scripts/run_editorial_agent.py", "--help"],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+
+    assert "--sdk-backend" not in result.stdout
