@@ -25,6 +25,7 @@ from football_data.firecrawl import search_firecrawl
 
 DEFAULT_OPENAI_BASE_URL = "https://api.siliconflow.cn/v1"
 DEFAULT_AGENT_TIMEOUT_SECONDS = "90"
+DEFAULT_AGENT_MAX_CONCURRENCY = "3"
 
 DEFAULT_MODELS = {
     "zh_writer": "zai-org/GLM-5.2",
@@ -43,6 +44,11 @@ MODEL_ENV_KEYS = {
     "fact_check": "EDITORIAL_FACT_CHECK_MODEL",
 }
 
+CONTROL_ENV_KEYS = [
+    "EDITORIAL_AGENT_TIMEOUT_SECONDS",
+    "EDITORIAL_AGENT_MAX_CONCURRENCY",
+]
+
 
 @dataclass(frozen=True)
 class EditorialAgentConfig:
@@ -52,6 +58,16 @@ class EditorialAgentConfig:
     loaded_keys: list[str]
     tracing_disabled: bool = True
     timeout_seconds: float = 90.0
+    max_concurrency: int = 3
+
+
+@dataclass(frozen=True)
+class AgentCompletionRequest:
+    role: str
+    model: str
+    instructions: str
+    user_input: str
+    output_type: type[Any] | None = None
 
 
 class AgentTextClient:
@@ -65,6 +81,23 @@ class AgentTextClient:
         output_type: type[Any] | None = None,
     ) -> str:
         raise NotImplementedError
+
+    def complete_many(
+        self,
+        requests: list[AgentCompletionRequest],
+        *,
+        max_concurrency: int = 1,
+    ) -> list[str]:
+        return [
+            self.complete(
+                role=request.role,
+                model=request.model,
+                instructions=request.instructions,
+                user_input=request.user_input,
+                output_type=request.output_type,
+            )
+            for request in requests
+        ]
 
 
 class AgentCallTimeout(TimeoutError):
@@ -112,40 +145,87 @@ class AgentsSdkTextClient(AgentTextClient):
         user_input: str,
         output_type: type[Any] | None = None,
     ) -> str:
-        return asyncio.run(
-            self._complete_async(
+        requests = [
+            AgentCompletionRequest(
                 role=role,
                 model=model,
                 instructions=instructions,
                 user_input=user_input,
                 output_type=output_type,
             )
+        ]
+        return self.complete_many(requests, max_concurrency=1)[0]
+
+    def complete_many(
+        self,
+        requests: list[AgentCompletionRequest],
+        *,
+        max_concurrency: int = 1,
+    ) -> list[str]:
+        return asyncio.run(
+            self._complete_many_async(
+                requests,
+                max_concurrency=max_concurrency,
+            )
         )
 
-    async def _complete_async(
+    async def _complete_many_async(
         self,
+        requests: list[AgentCompletionRequest],
         *,
-        role: str,
-        model: str,
-        instructions: str,
-        user_input: str,
-        output_type: type[Any] | None = None,
-    ) -> str:
+        max_concurrency: int,
+    ) -> list[str]:
         from agents import Agent, OpenAIChatCompletionsModel, Runner, set_tracing_disabled
         from openai import AsyncOpenAI
 
         set_tracing_disabled(self.config.tracing_disabled)
-        client = AsyncOpenAI(
+        concurrency = max(1, max_concurrency)
+        semaphore = asyncio.Semaphore(concurrency)
+        async with AsyncOpenAI(
             api_key=self.config.api_key,
             base_url=self.config.base_url,
             timeout=self.config.timeout_seconds,
-        )
-        sdk_model = OpenAIChatCompletionsModel(model=model, openai_client=client)
-        agent = Agent(name=role, instructions=instructions, model=sdk_model, output_type=output_type)
-        result = await asyncio.wait_for(
-            Runner.run(agent, user_input, max_turns=3),
-            timeout=self.config.timeout_seconds,
-        )
+        ) as client:
+            tasks = [
+                self._run_request(
+                    request,
+                    client=client,
+                    semaphore=semaphore,
+                    Agent=Agent,
+                    OpenAIChatCompletionsModel=OpenAIChatCompletionsModel,
+                    Runner=Runner,
+                )
+                for request in requests
+            ]
+            return await asyncio.gather(*tasks)
+
+    async def _run_request(
+        self,
+        request: AgentCompletionRequest,
+        *,
+        client: Any,
+        semaphore: asyncio.Semaphore,
+        Agent: Any,
+        OpenAIChatCompletionsModel: Any,
+        Runner: Any,
+    ) -> str:
+        async with semaphore:
+            sdk_model = OpenAIChatCompletionsModel(model=request.model, openai_client=client)
+            agent = Agent(
+                name=request.role,
+                instructions=request.instructions,
+                model=sdk_model,
+                output_type=request.output_type,
+            )
+            try:
+                result = await asyncio.wait_for(
+                    Runner.run(agent, request.user_input, max_turns=3),
+                    timeout=self.config.timeout_seconds,
+                )
+            except asyncio.TimeoutError as exc:
+                raise AgentCallTimeout(
+                    f"{request.role} timed out after {self.config.timeout_seconds:g} seconds"
+                ) from exc
         final_output = result.final_output
         if isinstance(final_output, BaseModel):
             return final_output.model_dump_json()
@@ -207,16 +287,19 @@ def load_editorial_agent_config(
         for key in [
             "OPENAI_API_KEY",
             "OPENAI_BASE_URL",
+            *CONTROL_ENV_KEYS,
             *MODEL_ENV_KEYS.values(),
         ]
         if key in env
     ]
+    max_concurrency = int(env.get("EDITORIAL_AGENT_MAX_CONCURRENCY", DEFAULT_AGENT_MAX_CONCURRENCY))
     return EditorialAgentConfig(
         api_key=api_key,
         base_url=base_url,
         models=models,
         loaded_keys=loaded_keys,
         timeout_seconds=float(env.get("EDITORIAL_AGENT_TIMEOUT_SECONDS", DEFAULT_AGENT_TIMEOUT_SECONDS)),
+        max_concurrency=max(1, max_concurrency),
     )
 
 
@@ -470,30 +553,39 @@ class EditorialWorkflowRunner:
     ) -> dict[str, Any]:
         items: list[dict[str, str]] = []
         warnings: list[str] = []
-        for choice, identity_choice in zip(choices, state["report"]["choices"], strict=True):
-            payload = _language_payload(
-                language=language,
-                choices=[choice],
-                evidence=_evidence_for_choice(state["evidence"], identity_choice),
-                external_evidence=state["external_evidence"],
-                style_packs=state["style_packs"],
-            )
-            draft = _call_json(
-                self.text_client,
-                role=role,
-                model=self.config.models[model_key],
-                instructions=_writer_instructions(language, state["style_packs"]),
-                payload=payload,
-                output_type=EditorialCopyOutput,
-                timeout_seconds=self.config.timeout_seconds,
-            )
+        requests = [
+            {
+                "role": role,
+                "model": self.config.models[model_key],
+                "instructions": _writer_instructions(language, state["style_packs"]),
+                "payload": _language_payload(
+                    language=language,
+                    choices=[choice],
+                    evidence=_evidence_for_choice(state["evidence"], identity_choice),
+                    external_evidence=state["external_evidence"],
+                    style_packs=state["style_packs"],
+                ),
+                "output_type": EditorialCopyOutput,
+            }
+            for choice, identity_choice in zip(choices, state["report"]["choices"], strict=True)
+        ]
+        drafts = _call_json_many(
+            self.text_client,
+            requests,
+            max_concurrency=self.config.max_concurrency,
+        )
+        for draft, identity_choice in zip(drafts, state["report"]["choices"], strict=True):
             bound = _copy_output_bound_to_choices(draft, [identity_choice], language)
             items.extend(bound["items"])
             warnings.extend(str(warning) for warning in draft.get("warnings", []))
         state[f"{language}_draft"] = {"items": items, "warnings": warnings}
         return {
             "warnings": warnings,
-            "summary": {"items": len(state[f"{language}_draft"]["items"])},
+            "summary": {
+                "items": len(state[f"{language}_draft"]["items"]),
+                "agent_calls": len(requests),
+                "max_concurrency": self.config.max_concurrency,
+            },
         }
 
     def _draft_fact_check(
@@ -541,37 +633,48 @@ class EditorialWorkflowRunner:
         items: list[dict[str, str]] = []
         warnings: list[str] = []
         draft_items = state[draft_key]["items"]
+        requests: list[dict[str, Any]] = []
         for index, (choice, identity_choice) in enumerate(
             zip(choices, state["report"]["choices"], strict=True)
         ):
             draft_item = draft_items[index] if index < len(draft_items) else _fallback_copy(identity_choice, language)
-            edited = _call_json(
-                self.text_client,
-                role=role,
-                model=self.config.models["zh_editor" if language == "zh" else "en_editor"],
-                instructions=_editor_instructions(language, state["style_packs"]),
-                payload={
-                    "language": language,
-                    "choices": [choice],
-                    "draft": {"items": [draft_item]},
-                    "draft_fact_check": state[fact_check_key],
-                    "style_packs": _style_subset(
-                        state["style_packs"],
-                        ["anti-translationese", "human-writing-zh"]
-                        if language == "zh"
-                        else ["football-editor-style"],
-                    ),
-                },
-                output_type=EditorialCopyOutput,
-                timeout_seconds=self.config.timeout_seconds,
+            requests.append(
+                {
+                    "role": role,
+                    "model": self.config.models["zh_editor" if language == "zh" else "en_editor"],
+                    "instructions": _editor_instructions(language, state["style_packs"]),
+                    "payload": {
+                        "language": language,
+                        "choices": [choice],
+                        "draft": {"items": [draft_item]},
+                        "draft_fact_check": state[fact_check_key],
+                        "style_packs": _style_subset(
+                            state["style_packs"],
+                            ["anti-translationese", "human-writing-zh"]
+                            if language == "zh"
+                            else ["football-editor-style"],
+                        ),
+                    },
+                    "output_type": EditorialCopyOutput,
+                }
             )
+        edits = _call_json_many(
+            self.text_client,
+            requests,
+            max_concurrency=self.config.max_concurrency,
+        )
+        for edited, identity_choice in zip(edits, state["report"]["choices"], strict=True):
             bound = _copy_output_bound_to_choices(edited, [identity_choice], language)
             items.extend(bound["items"])
             warnings.extend(str(warning) for warning in edited.get("warnings", []))
         state[output_key] = {"items": items, "warnings": warnings}
         return {
             "warnings": warnings,
-            "summary": {"items": len(state[output_key]["items"])},
+            "summary": {
+                "items": len(state[output_key]["items"]),
+                "agent_calls": len(requests),
+                "max_concurrency": self.config.max_concurrency,
+            },
         }
 
     def _render_markdown(self, state: dict[str, Any]) -> dict[str, Any]:
@@ -843,6 +946,7 @@ def _call_json(
     print(f"[editorial-agent] {role} -> {model}", file=sys.stderr, flush=True)
     user_input = json.dumps(payload, ensure_ascii=False)
     try:
+        effective_timeout = None if isinstance(client, AgentsSdkTextClient) else timeout_seconds
         response = _complete_with_timeout(
             lambda: client.complete(
                 role=role,
@@ -851,13 +955,40 @@ def _call_json(
                 user_input=user_input,
                 output_type=output_type,
             ),
-            timeout_seconds=timeout_seconds,
+            timeout_seconds=effective_timeout,
             role=role,
         )
     except AgentCallTimeout as exc:
         raise
     parsed = _extract_json_object(response)
     return parsed
+
+
+def _call_json_many(
+    client: AgentTextClient,
+    requests: list[dict[str, Any]],
+    *,
+    max_concurrency: int,
+) -> list[dict[str, Any]]:
+    completion_requests: list[AgentCompletionRequest] = []
+    for request in requests:
+        role = str(request["role"])
+        model = str(request["model"])
+        print(f"[editorial-agent] {role} -> {model}", file=sys.stderr, flush=True)
+        completion_requests.append(
+            AgentCompletionRequest(
+                role=role,
+                model=model,
+                instructions=str(request["instructions"]),
+                user_input=json.dumps(request["payload"], ensure_ascii=False),
+                output_type=request.get("output_type"),
+            )
+        )
+    responses = client.complete_many(
+        completion_requests,
+        max_concurrency=max_concurrency,
+    )
+    return [_extract_json_object(response) for response in responses]
 
 
 def _complete_with_timeout(
@@ -1168,7 +1299,7 @@ def _load_env(path: str | Path) -> dict[str, str]:
                 continue
             key, value = line.split("=", 1)
             env[key.strip()] = value.strip().strip('"').strip("'")
-    for key in ["OPENAI_API_KEY", "OPENAI_BASE_URL", *MODEL_ENV_KEYS.values()]:
+    for key in ["OPENAI_API_KEY", "OPENAI_BASE_URL", *MODEL_ENV_KEYS.values(), *CONTROL_ENV_KEYS]:
         if key in os.environ:
             env[key] = os.environ[key]
     return env

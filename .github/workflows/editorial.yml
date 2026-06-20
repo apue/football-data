@@ -55,6 +55,7 @@ jobs:
           EDITORIAL_EN_EDITOR_MODEL: ${{ vars.EDITORIAL_EN_EDITOR_MODEL || 'deepseek-ai/DeepSeek-V4-Pro' }}
           EDITORIAL_FACT_CHECK_MODEL: ${{ vars.EDITORIAL_FACT_CHECK_MODEL || 'deepseek-ai/DeepSeek-V4-Pro' }}
           EDITORIAL_AGENT_TIMEOUT_SECONDS: ${{ vars.EDITORIAL_AGENT_TIMEOUT_SECONDS || '90' }}
+          EDITORIAL_AGENT_MAX_CONCURRENCY: ${{ vars.EDITORIAL_AGENT_MAX_CONCURRENCY || '3' }}
           KEYPOOL_KEY: ${{ secrets.KEYPOOL_KEY }}
           KEYPOOL_URL: ${{ vars.KEYPOOL_URL || secrets.KEYPOOL_URL }}
         run: |
