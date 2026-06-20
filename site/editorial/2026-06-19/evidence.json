@@ -1,7 +1,6 @@
 {
-  "schema_version": 2,
+  "schema_version": 1,
   "generated_at": "2026-06-20T12:49:14+00:00",
-  "compiled_at": "2026-06-20T13:05:11+00:00",
   "match_date": "2026-06-19",
   "scoring_version": "v0.3",
   "editorial_input_hash": "a22023eadcb41bc608985a84a2bcdf43ad345ab99ec65e9c67892497af7ddea8",
@@ -92,7 +91,6 @@
     ],
     "input_hash": "a22023eadcb41bc608985a84a2bcdf43ad345ab99ec65e9c67892497af7ddea8"
   },
-  "source_markdown_path": "reports/editorial/2026-06-19.md",
   "matches": [
     {
       "match_key": "FIFA-2026-M29-BRA-HAI",
@@ -158,6 +156,16 @@
       "team_final_goals": 1,
       "opponent_final_goals": 0,
       "position": "MF",
+      "score": 87.3,
+      "primary_score": "headline_score",
+      "role_scores": {
+        "attacking_threat": 20.8,
+        "impact": 25.0,
+        "progressor": 5.92,
+        "off_ball": 38.5,
+        "defensive": 11.2,
+        "physical": 16.57
+      },
       "progression_benchmark": {
         "score": 6.65,
         "quality": "thin",
@@ -169,6 +177,50 @@
         "profile": "insufficient_evidence",
         "score": 38.5
       },
+      "score_components": [
+        {
+          "metric": "in_behind",
+          "value": 28,
+          "weight": 0.6,
+          "contribution": 16.8,
+          "score": "off_ball"
+        },
+        {
+          "metric": "offers_received",
+          "value": 13,
+          "weight": 1.0,
+          "contribution": 13.0,
+          "score": "off_ball"
+        },
+        {
+          "metric": "match_winning_goal",
+          "value": 1,
+          "weight": 12.0,
+          "contribution": 12.0,
+          "score": "impact"
+        },
+        {
+          "metric": "total_distance_m",
+          "value": 10072.9,
+          "weight": 0.001,
+          "contribution": 10.07,
+          "score": "physical"
+        },
+        {
+          "metric": "goals",
+          "value": 1,
+          "weight": 8.0,
+          "contribution": 8.0,
+          "score": "attacking_threat"
+        },
+        {
+          "metric": "in_behind",
+          "value": 28,
+          "weight": 0.25,
+          "contribution": 7.0,
+          "score": "attacking_threat"
+        }
+      ],
       "evidence_chips": {
         "en": [
           "only goal",
@@ -180,16 +232,6 @@
           "打入制胜球",
           "取得进球"
         ]
-      },
-      "content": {
-        "en": {
-          "title": "The goal that tilted it",
-          "html": "<p>Saibari’s goal decided a tight contest and gave Morocco a 1-0 win. He made 28 runs in behind Scotland’s defence, with 13 of those turned into passes received — a reliable outlet for his side. The midfielder’s movement kept pressure on Scotland’s back line and helped Morocco secure the points.</p>"
-        },
-        "zh": {
-          "title": "萨伊巴里一锤定音，摩洛哥 1-0 胜苏格兰",
-          "html": "<p>萨伊巴里打入全场唯一进球，助摩洛哥 1-0 战胜苏格兰。</p><p>中场推进时，他 28 次尝试身后接应，成功 13 次，梳理了向前出球路线。</p><p>全场跑动超过 10 公里，兼顾了中场接应与进攻终结。</p>"
-        }
       }
     },
     {
@@ -210,6 +252,16 @@
       "team_final_goals": 2,
       "opponent_final_goals": 0,
       "position": "DF",
+      "score": 86.9,
+      "primary_score": "headline_score",
+      "role_scores": {
+        "attacking_threat": 12.85,
+        "impact": 19.0,
+        "progressor": 41.28,
+        "off_ball": 13.1,
+        "defensive": 26.65,
+        "physical": 17.76
+      },
       "progression_benchmark": {
         "score": 29.8,
         "quality": "strong",
@@ -221,6 +273,50 @@
         "profile": "progression_engine",
         "score": 29.8
       },
+      "score_components": [
+        {
+          "metric": "line_breaks_completed",
+          "value": 17,
+          "weight": 2.0,
+          "contribution": 34.0,
+          "score": "progressor"
+        },
+        {
+          "metric": "match_winning_goal",
+          "value": 1,
+          "weight": 12.0,
+          "contribution": 12.0,
+          "score": "impact"
+        },
+        {
+          "metric": "total_distance_m",
+          "value": 11063.4,
+          "weight": 0.001,
+          "contribution": 11.06,
+          "score": "physical"
+        },
+        {
+          "metric": "offers_received",
+          "value": 10,
+          "weight": 1.0,
+          "contribution": 10.0,
+          "score": "off_ball"
+        },
+        {
+          "metric": "goals",
+          "value": 1,
+          "weight": 8.0,
+          "contribution": 8.0,
+          "score": "attacking_threat"
+        },
+        {
+          "metric": "possession_interrupted",
+          "value": 8,
+          "weight": 1.0,
+          "contribution": 8.0,
+          "score": "defensive"
+        }
+      ],
       "evidence_chips": {
         "en": [
           "match-winning goal",
@@ -234,16 +330,6 @@
           "持续打穿防线",
           "持续破坏进攻"
         ]
-      },
-      "content": {
-        "en": {
-          "title": "The decisive touch",
-          "html": "<p>Freeman scored the match-winning goal and repeatedly broke lines to give the USA attack a reliable route forward. His 17 completed line breaks helped tilt a tight contest.</p>"
-        },
-        "zh": {
-          "title": "弗里曼制胜球加 17 次打穿，美国 2-0 拿下澳大利亚",
-          "html": "<p>弗里曼打入制胜球，帮助美国 2-0 拿下澳大利亚。</p><p>他全场 17 次打穿防线，把球从后场推上去，防守端也反复破坏对方的进攻推进。</p><p>全场跑动 11.06 公里，弗里曼在攻防两端都顶住了。</p>"
-        }
       }
     },
     {
@@ -264,6 +350,16 @@
       "team_final_goals": 1,
       "opponent_final_goals": 0,
       "position": "MF",
+      "score": 80.6,
+      "primary_score": "headline_score",
+      "role_scores": {
+        "attacking_threat": 15.0,
+        "impact": 25.0,
+        "progressor": 7.2,
+        "off_ball": 17.6,
+        "defensive": 22.75,
+        "physical": 18.2
+      },
       "progression_benchmark": {
         "score": 10.35,
         "quality": "thin",
@@ -275,6 +371,50 @@
         "profile": "insufficient_evidence",
         "score": 22.75
       },
+      "score_components": [
+        {
+          "metric": "total_distance_m",
+          "value": 12061.6,
+          "weight": 0.001,
+          "contribution": 12.06,
+          "score": "physical"
+        },
+        {
+          "metric": "match_winning_goal",
+          "value": 1,
+          "weight": 12.0,
+          "contribution": 12.0,
+          "score": "impact"
+        },
+        {
+          "metric": "offers_received",
+          "value": 9,
+          "weight": 1.0,
+          "contribution": 9.0,
+          "score": "off_ball"
+        },
+        {
+          "metric": "goals",
+          "value": 1,
+          "weight": 8.0,
+          "contribution": 8.0,
+          "score": "attacking_threat"
+        },
+        {
+          "metric": "top_speed_kmh",
+          "value": 30.7,
+          "weight": 0.2,
+          "contribution": 6.14,
+          "score": "physical"
+        },
+        {
+          "metric": "only_goal_winner",
+          "value": 1,
+          "weight": 6.0,
+          "contribution": 6.0,
+          "score": "impact"
+        }
+      ],
       "evidence_chips": {
         "en": [
           "only goal",
@@ -286,16 +426,6 @@
           "打入制胜球",
           "取得进球"
         ]
-      },
-      "content": {
-        "en": {
-          "title": "The only goal mattered",
-          "html": "<p>The only goal settled a tight contest. Matias Galarza’s finish earned Paraguay a 1-0 win over Türkiye. He ran more than 12 km, constantly presenting himself as a passing option and helping his team protect the lead.</p>"
-        },
-        "zh": {
-          "title": "加拉萨一锤定音，巴拉圭 1 比 0 力克土耳其",
-          "html": "<p>加拉萨打入全场唯一进球，帮助巴拉圭 1 比 0 击败土耳其。</p><p>除了制胜球，他在中场的跑动覆盖同样关键。全场跑动 12.1 公里，完成 9 次接应，加拉萨在中场提供了充足的支援。</p>"
-        }
       }
     },
     {
@@ -316,6 +446,16 @@
       "team_final_goals": 3,
       "opponent_final_goals": 0,
       "position": "FW",
+      "score": 19.0,
+      "primary_score": "impact",
+      "role_scores": {
+        "attacking_threat": 17.5,
+        "impact": 19.0,
+        "progressor": 6.5,
+        "off_ball": 39.5,
+        "defensive": 10.05,
+        "physical": 13.75
+      },
       "progression_benchmark": {
         "score": 3.05,
         "quality": "thin",
@@ -327,6 +467,26 @@
         "profile": "insufficient_evidence",
         "score": 39.5
       },
+      "score_components": [
+        {
+          "metric": "match_winning_goal",
+          "value": 1,
+          "weight": 12.0,
+          "contribution": 12.0
+        },
+        {
+          "metric": "go_ahead_goal",
+          "value": 1,
+          "weight": 5.0,
+          "contribution": 5.0
+        },
+        {
+          "metric": "opening_goal",
+          "value": 1,
+          "weight": 2.0,
+          "contribution": 2.0
+        }
+      ],
       "evidence_chips": {
         "en": [
           "match-winning goal",
@@ -338,16 +498,6 @@
           "取得进球",
           "在防线之间活跃"
         ]
-      },
-      "content": {
-        "en": {
-          "title": "The decisive touch",
-          "html": "<p>Matheus Cunha provided the decisive touch, scoring the opening goal in Brazil's 3-0 win over Haiti. His goal broke the deadlock and his movement between the lines gave Brazil a consistent route to goal throughout the match.</p>"
-        },
-        "zh": {
-          "title": "库尼亚首开纪录，巴西 3-0 胜海地",
-          "html": "<p>库尼亚打入全场首球，这也是制胜一球。</p><p>他在海地防线之间活跃接应，串联起巴西的中路推进。</p><p>巴西确立领先后再入两球，最终 3-0 取胜。</p>"
-        }
       }
     },
     {
@@ -368,6 +518,16 @@
       "team_final_goals": 0,
       "opponent_final_goals": 1,
       "position": "FW",
+      "score": 63.7,
+      "primary_score": "progressor",
+      "role_scores": {
+        "attacking_threat": 9.65,
+        "impact": 0.0,
+        "progressor": 63.68,
+        "off_ball": 44.7,
+        "defensive": 8.75,
+        "physical": 18.07
+      },
       "progression_benchmark": {
         "score": 23.45,
         "quality": "useful",
@@ -379,6 +539,38 @@
         "profile": "insufficient_evidence",
         "score": 44.7
       },
+      "score_components": [
+        {
+          "metric": "line_breaks_completed",
+          "value": 29,
+          "weight": 2.0,
+          "contribution": 58.0
+        },
+        {
+          "metric": "ball_progressions",
+          "value": 3,
+          "weight": 1.0,
+          "contribution": 3.0
+        },
+        {
+          "metric": "passes_completed",
+          "value": 59,
+          "weight": 0.02,
+          "contribution": 1.18
+        },
+        {
+          "metric": "take_ons",
+          "value": 2,
+          "weight": 0.5,
+          "contribution": 1.0
+        },
+        {
+          "metric": "step_ins",
+          "value": 1,
+          "weight": 0.5,
+          "contribution": 0.5
+        }
+      ],
       "evidence_chips": {
         "en": [
           "repeated line breaks",
@@ -388,16 +580,6 @@
           "持续打穿防线",
           "持续接应"
         ]
-      },
-      "content": {
-        "en": {
-          "title": "The best route forward",
-          "html": "<p>Arda Güler kept Türkiye moving forward against Paraguay by slipping through pressure and breaking lines time and again. He pierced the opposition’s shape with 29 completed line breaks and added three ball progressions, helping his side stay alive in the contest despite a narrow loss.</p>"
-        },
-        "zh": {
-          "title": "居莱尔 29 次打穿巴拉圭防线",
-          "html": "<p>土耳其 0 比 1 输给巴拉圭，居莱尔频繁回撤接应。</p><p>他全场 29 次打穿对方防线，完成 3 次推进。球队虽然落败，但居莱尔保证球能送过巴拉圭的防守线。</p>"
-        }
       }
     },
     {
@@ -418,6 +600,16 @@
       "team_final_goals": 1,
       "opponent_final_goals": 0,
       "position": "MF",
+      "score": 67.7,
+      "primary_score": "off_ball",
+      "role_scores": {
+        "attacking_threat": 11.6,
+        "impact": 0.0,
+        "progressor": 37.84,
+        "off_ball": 67.7,
+        "defensive": 5.2,
+        "physical": 18.6
+      },
       "progression_benchmark": {
         "score": 27.25,
         "quality": "strong",
@@ -429,6 +621,32 @@
         "profile": "off_ball_threat",
         "score": 67.7
       },
+      "score_components": [
+        {
+          "metric": "offers_received",
+          "value": 43,
+          "weight": 1.0,
+          "contribution": 43.0
+        },
+        {
+          "metric": "total_offers",
+          "value": 91,
+          "weight": 0.1,
+          "contribution": 9.1
+        },
+        {
+          "metric": "in_between",
+          "value": 21,
+          "weight": 0.4,
+          "contribution": 8.4
+        },
+        {
+          "metric": "in_behind",
+          "value": 12,
+          "weight": 0.6,
+          "contribution": 7.2
+        }
+      ],
       "evidence_chips": {
         "en": [
           "repeated line breaks",
@@ -440,16 +658,6 @@
           "持续接应",
           "在防线之间活跃"
         ]
-      },
-      "content": {
-        "en": {
-          "title": "The quiet connector",
-          "html": "<p>Morocco needed a link, and Ounahi provided it. He kept showing between the lines, offering a constant passing option. He received 43 offers in space, with 21 coming between the lines, giving Morocco a dependable route through midfield.</p>"
-        },
-        "zh": {
-          "title": "欧纳希活跃在两线之间，摩洛哥进攻始终不断线",
-          "html": "<p>欧纳希全场都在苏格兰中场与后卫之间找空当接应。</p><p>他完成 43 次接应，其中 21 次落在两线之间，12 次直接插到防线身后。</p><p>这些跑动持续打穿苏格兰防线。他不抢镜，却让摩洛哥前场出球始终不断线。</p>"
-        }
       }
     },
     {
@@ -470,6 +678,16 @@
       "team_final_goals": 3,
       "opponent_final_goals": 0,
       "position": "MF",
+      "score": 40.8,
+      "primary_score": "defensive",
+      "role_scores": {
+        "attacking_threat": 2.4,
+        "impact": 0.0,
+        "progressor": 14.94,
+        "off_ball": 16.8,
+        "defensive": 40.75,
+        "physical": 17.07
+      },
       "progression_benchmark": {
         "score": 4.85,
         "quality": "thin",
@@ -481,6 +699,44 @@
         "profile": "insufficient_evidence",
         "score": 40.75
       },
+      "score_components": [
+        {
+          "metric": "possession_regains",
+          "value": 13,
+          "weight": 1.3,
+          "contribution": 16.9
+        },
+        {
+          "metric": "tackles_won",
+          "value": 4,
+          "weight": 1.5,
+          "contribution": 6.0
+        },
+        {
+          "metric": "possession_interrupted",
+          "value": 6,
+          "weight": 1.0,
+          "contribution": 6.0
+        },
+        {
+          "metric": "interceptions",
+          "value": 3,
+          "weight": 1.5,
+          "contribution": 4.5
+        },
+        {
+          "metric": "clearances",
+          "value": 5,
+          "weight": 0.5,
+          "contribution": 2.5
+        },
+        {
+          "metric": "pressing_direct",
+          "value": 8,
+          "weight": 0.3,
+          "contribution": 2.4
+        }
+      ],
       "evidence_chips": {
         "en": [
           "ball-winning profile"
@@ -488,16 +744,6 @@
         "zh": [
           "夺回球权能力突出"
         ]
-      },
-      "content": {
-        "en": {
-          "title": "The stubborn stopper",
-          "html": "<p>Casemiro’s stubborn disruption helped disrupt Haiti’s rhythm. He broke up six attacking moves and won possession back 13 times, forcing reset after reset. That ball-winning profile helped Brazil secure a clean sheet in their 3-0 win.</p>"
-        },
-        "zh": {
-          "title": "卡塞米罗 13 次夺回球权，巴西中场守住节奏",
-          "html": "<p>巴西 3-0 海地，卡塞米罗守住中场防守。</p><p>他全场 13 次夺回球权，6 次破坏海地的进攻推进。对手试图带球冲过中场时，多次被他半路拦下。</p><p>靠这些抢截，巴西稳住节奏，支撑起前场进攻。</p>"
-        }
       }
     }
   ],

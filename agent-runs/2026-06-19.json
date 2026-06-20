@@ -1,0 +1,287 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-06-20T13:05:11+00:00",
+  "status": "success",
+  "match_date": "2026-06-19",
+  "scoring_version": "v0.3",
+  "research": {
+    "enabled": true,
+    "status": "failed",
+    "result_count": 0
+  },
+  "selection_review": {
+    "status": "publishable",
+    "alerts": [
+      {
+        "level": "info",
+        "code": "same_team_multiple_picks",
+        "message": "Multiple picks can still come from one team when roles are clearly distinct.",
+        "teams": [
+          {
+            "team": "Brazil",
+            "count": 2
+          },
+          {
+            "team": "Morocco",
+            "count": 2
+          }
+        ]
+      }
+    ],
+    "iterations": [
+      {
+        "iteration": 1,
+        "status": "publishable",
+        "alerts": [
+          {
+            "level": "info",
+            "code": "same_team_multiple_picks",
+            "message": "Multiple picks can still come from one team when roles are clearly distinct.",
+            "teams": [
+              {
+                "team": "Brazil",
+                "count": 2
+              },
+              {
+                "team": "Morocco",
+                "count": 2
+              }
+            ]
+          }
+        ],
+        "choice_names": [
+          "Ismael SAIBARI",
+          "Alex FREEMAN",
+          "Matias GALARZA",
+          "MATHEUS CUNHA",
+          "Arda GULER",
+          "Azzedine OUNAHI",
+          "CASEMIRO"
+        ]
+      }
+    ]
+  },
+  "models": {
+    "en_editor": "deepseek-ai/DeepSeek-V4-Pro",
+    "en_writer": "deepseek-ai/DeepSeek-V4-Flash",
+    "fact_check": "deepseek-ai/DeepSeek-V4-Pro",
+    "zh_editor": "Qwen/Qwen3.5-397B-A17B",
+    "zh_writer": "zai-org/GLM-5.2"
+  },
+  "workflow": {
+    "name": "editorial_state_graph",
+    "version": 1,
+    "nodes": [
+      {
+        "id": "build_evidence",
+        "kind": "python",
+        "status": "success",
+        "max_attempts": 1,
+        "warnings": [],
+        "summary": {
+          "choices": 7,
+          "scoring_version": "v0.3"
+        }
+      },
+      {
+        "id": "external_research",
+        "kind": "python",
+        "status": "success",
+        "max_attempts": 1,
+        "warnings": [],
+        "summary": {
+          "enabled": true,
+          "status": "failed",
+          "result_count": 0
+        }
+      },
+      {
+        "id": "zh_writer",
+        "kind": "agent",
+        "status": "success",
+        "max_attempts": 1,
+        "model": "zai-org/GLM-5.2",
+        "skills": [
+          "human-writing-zh",
+          "anti-translationese",
+          "football-editor-style"
+        ],
+        "warnings": [],
+        "summary": {
+          "items": 7
+        }
+      },
+      {
+        "id": "zh_draft_fact_check",
+        "kind": "agent",
+        "status": "success",
+        "max_attempts": 1,
+        "model": "deepseek-ai/DeepSeek-V4-Pro",
+        "skills": [
+          "football-editor-style"
+        ],
+        "warnings": [],
+        "summary": {
+          "status": "pass"
+        }
+      },
+      {
+        "id": "zh_final_editor",
+        "kind": "agent",
+        "status": "success",
+        "max_attempts": 1,
+        "model": "Qwen/Qwen3.5-397B-A17B",
+        "skills": [
+          "human-writing-zh",
+          "anti-translationese",
+          "football-editor-style"
+        ],
+        "warnings": [],
+        "summary": {
+          "items": 7
+        }
+      },
+      {
+        "id": "en_writer",
+        "kind": "agent",
+        "status": "success",
+        "max_attempts": 1,
+        "model": "deepseek-ai/DeepSeek-V4-Flash",
+        "skills": [
+          "football-editor-style"
+        ],
+        "warnings": [],
+        "summary": {
+          "items": 7
+        }
+      },
+      {
+        "id": "en_draft_fact_check",
+        "kind": "agent",
+        "status": "success",
+        "max_attempts": 1,
+        "model": "deepseek-ai/DeepSeek-V4-Pro",
+        "skills": [
+          "football-editor-style"
+        ],
+        "warnings": [
+          "Ismael SAIBARI draft states '54th-minute goal' but the structured evidence does not include the minute of the goal.",
+          "Ismael SAIBARI draft describes him as 'striker' but the evidence lists his position as MF."
+        ],
+        "summary": {
+          "status": "fail"
+        }
+      },
+      {
+        "id": "en_final_editor",
+        "kind": "agent",
+        "status": "success",
+        "max_attempts": 1,
+        "model": "deepseek-ai/DeepSeek-V4-Pro",
+        "skills": [
+          "football-editor-style"
+        ],
+        "warnings": [
+          "Fact-check failed for another player (Ismael SAIBARI) and is not applicable to Galarza's card.",
+          "Ismael SAIBARI draft states '54th-minute goal' but the structured evidence does not include the minute of the goal.",
+          "Ismael SAIBARI draft describes him as 'striker' but the evidence lists his position as MF."
+        ],
+        "summary": {
+          "items": 7
+        }
+      },
+      {
+        "id": "render_markdown",
+        "kind": "python",
+        "status": "success",
+        "max_attempts": 1,
+        "warnings": [],
+        "summary": {
+          "markdown_chars": 4178
+        }
+      },
+      {
+        "id": "final_deterministic_validation",
+        "kind": "validator",
+        "status": "success",
+        "max_attempts": 1,
+        "warnings": [],
+        "summary": {
+          "status": "pass"
+        }
+      },
+      {
+        "id": "final_fact_check",
+        "kind": "agent",
+        "status": "success",
+        "max_attempts": 1,
+        "model": "deepseek-ai/DeepSeek-V4-Pro",
+        "skills": [
+          "football-editor-style"
+        ],
+        "warnings": [],
+        "summary": {
+          "status": "pass"
+        }
+      },
+      {
+        "id": "compile_publish",
+        "kind": "python",
+        "status": "success",
+        "max_attempts": 1,
+        "warnings": [],
+        "summary": {
+          "choices": 7
+        }
+      }
+    ]
+  },
+  "fact_check": {
+    "status": "pass",
+    "deterministic_status": "pass",
+    "llm_status": "pass",
+    "warnings": []
+  },
+  "artifacts": {
+    "markdown": "reports/editorial/2026-06-19.md",
+    "choices": "site/editorial/2026-06-19/choices.json",
+    "external_evidence": "site/editorial/2026-06-19/external_evidence.json"
+  },
+  "choices": [
+    {
+      "award_type": "player_of_the_day",
+      "player_name": "Ismael SAIBARI",
+      "team": "Morocco"
+    },
+    {
+      "award_type": "player_of_the_day",
+      "player_name": "Alex FREEMAN",
+      "team": "USA"
+    },
+    {
+      "award_type": "player_of_the_day",
+      "player_name": "Matias GALARZA",
+      "team": "Paraguay"
+    },
+    {
+      "award_type": "impact_pick",
+      "player_name": "MATHEUS CUNHA",
+      "team": "Brazil"
+    },
+    {
+      "award_type": "progression_pick",
+      "player_name": "Arda GULER",
+      "team": "Türkiye"
+    },
+    {
+      "award_type": "hidden_gem",
+      "player_name": "Azzedine OUNAHI",
+      "team": "Morocco"
+    },
+    {
+      "award_type": "defensive_pick",
+      "player_name": "CASEMIRO",
+      "team": "Brazil"
+    }
+  ]
+}
