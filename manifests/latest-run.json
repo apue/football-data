@@ -1,15 +1,32 @@
 {
-  "generated_at": "2026-06-20T07:59:38+00:00",
+  "generated_at": "2026-06-20T12:47:31+00:00",
   "status": "success",
   "failure_code": null,
   "hub_url": "https://www.fifatrainingcentre.com/en/fifa-world-cup-2026/match-report-hub.php",
-  "discovered": 28,
-  "active_sources": 28,
-  "downloaded": 28,
-  "parsed": 28,
-  "matches": 28,
-  "source_documents": 28,
-  "new_matches": [],
+  "discovered": 32,
+  "active_sources": 32,
+  "downloaded": 32,
+  "parsed": 32,
+  "matches": 32,
+  "source_documents": 32,
+  "new_matches": [
+    {
+      "match_no": 29,
+      "source_id": "fifa-world-cup-2026-pmsr-m29-bra-hai-v1"
+    },
+    {
+      "match_no": 30,
+      "source_id": "fifa-world-cup-2026-pmsr-m30-sco-mar-v1"
+    },
+    {
+      "match_no": 31,
+      "source_id": "fifa-world-cup-2026-pmsr-m31-tur-par-v1"
+    },
+    {
+      "match_no": 32,
+      "source_id": "fifa-world-cup-2026-pmsr-m32-usa-aus-v1"
+    }
+  ],
   "version_updates": [],
   "failures": [],
   "message": "Dataset rebuilt from FIFA Match Report Hub active PMSR sources."
