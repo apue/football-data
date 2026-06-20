@@ -133,8 +133,6 @@ def write_editorial_artifacts(
     report: dict[str, Any],
     site_dir: str | Path = "site",
     reports_dir: str | Path = "reports",
-    *,
-    preserve_existing_markdown: bool = False,
 ) -> None:
     site_path = Path(site_dir)
     editorial_path = site_path / "editorial"
@@ -145,10 +143,7 @@ def write_editorial_artifacts(
 
     source_markdown_path = f"reports/editorial/{report['match_date']}.md"
     markdown_path = reports_path / f"{report['match_date']}.md"
-    if preserve_existing_markdown and markdown_path.exists():
-        markdown_text = markdown_path.read_text(encoding="utf-8")
-    else:
-        markdown_text = _render_markdown_report(report)
+    markdown_text = _render_markdown_report(report)
     evidence = _evidence_payload(report)
     compiled = compile_editorial_markdown(
         evidence,
@@ -156,8 +151,7 @@ def write_editorial_artifacts(
         source_markdown_path=source_markdown_path,
     )
 
-    if not (preserve_existing_markdown and markdown_path.exists()):
-        markdown_path.write_text(markdown_text, encoding="utf-8")
+    markdown_path.write_text(markdown_text, encoding="utf-8")
     (dated_path / "evidence.json").write_text(
         json.dumps(evidence, ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
@@ -166,12 +160,8 @@ def write_editorial_artifacts(
         json.dumps(_zh_fact_bank_payload(report), ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
     )
-    (dated_path / "brief.zh.json").write_text(
-        json.dumps(_language_brief_payload(report, "zh"), ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
     (dated_path / "brief.en.json").write_text(
-        json.dumps(_language_brief_payload(report, "en"), ensure_ascii=False, indent=2) + "\n",
+        json.dumps(_english_brief_payload(report), ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
     )
     write_compiled_editorial_artifacts(compiled, site_dir=site_path)
@@ -262,7 +252,7 @@ def compile_editorial_markdown(
 
 def _load_scoring_config(path: str | Path) -> dict[str, Any]:
     config = json.loads(Path(path).read_text(encoding="utf-8"))
-    if config.get("version") not in {"v0.1", "v0.2", "v0.3"}:
+    if config.get("version") != "v0.3":
         raise ValueError(f"Unsupported scoring config version: {config.get('version')}")
     return config
 
@@ -1029,7 +1019,6 @@ def _evidence_chips(player: dict[str, Any], award_type: str) -> dict[str, list[s
 def _draft_brief(player: dict[str, Any], award_type: str) -> dict[str, dict[str, str]]:
     return {
         "en": _english_draft_brief(player, award_type),
-        "zh": _chinese_draft_brief(player, award_type),
     }
 
 
@@ -1046,27 +1035,9 @@ def _english_draft_brief(player: dict[str, Any], award_type: str) -> dict[str, s
     return {"title": title, "body": body}
 
 
-def _chinese_draft_brief(player: dict[str, Any], award_type: str) -> dict[str, str]:
-    name = _zh_player_name(player["player_name"])
-    team = _zh_team_name(player["team"])
-    opponent = _zh_team_name(player["opponent"])
-    title = f"中文编辑草稿 - {AWARD_LABELS[award_type]['zh']}"
-    body = (
-        "这段只作为证据 brief，不是可发布文案。中英文应分别从同一份 evidence 改写，"
-        f"不要互相翻译。{name}（{team}对{opponent}）入选{AWARD_LABELS[award_type]['zh']}。"
-        f"主要依据：{_chinese_metric_summary(player)}。"
-    )
-    return {"title": title, "body": body}
-
-
 def _english_metric_summary(player: dict[str, Any]) -> str:
     metrics = _metric_summary_items(player)
     return ", ".join(f"{item['label_en']} {item['value']}" for item in metrics)
-
-
-def _chinese_metric_summary(player: dict[str, Any]) -> str:
-    metrics = _metric_summary_items(player)
-    return "，".join(f"{item['label_zh']}{item['value']}" for item in metrics)
 
 
 def _metric_summary_items(player: dict[str, Any]) -> list[dict[str, str]]:
@@ -1315,47 +1286,23 @@ def _zh_allowed_angles(choice: dict[str, Any]) -> list[str]:
     return ["中场连接点", "接应和转移", "帮助球队持续向前处理"]
 
 
-def _language_brief_payload(report: dict[str, Any], language: str) -> dict[str, Any]:
-    if language not in {"en", "zh"}:
-        raise ValueError(f"Unsupported editorial brief language: {language}")
+def _english_brief_payload(report: dict[str, Any]) -> dict[str, Any]:
     return {
         "schema_version": 1,
-        "language": language,
+        "language": "en",
         "generated_at": report["generated_at"],
         "match_date": report["match_date"],
         "scoring_version": report["scoring_version"],
-        "editorial_voice": _editorial_voice(language),
+        "editorial_voice": _english_editorial_voice(),
         "choices": [
-            _language_choice_brief(choice, language)
+            _english_choice_brief(choice)
             for choice in report["choices"]
         ],
-        "review_checklist": _review_checklist(language),
+        "review_checklist": _english_review_checklist(),
     }
 
 
-def _language_choice_brief(choice: dict[str, Any], language: str) -> dict[str, Any]:
-    if language == "zh":
-        return {
-            "award_type": choice["award_type"],
-            "award_label": choice["award_label"]["zh"],
-            "player_name": _zh_player_name(choice["player_name"]),
-            "team": _zh_team_name(choice["team"]),
-            "opponent": _zh_team_name(choice["opponent"]),
-            "match_no": choice["match_no"],
-            "score": choice["score"],
-            "why_selected": _zh_selection_angle(choice),
-            "title_candidates": _zh_title_candidates(choice),
-            "action_notes": _zh_action_notes(choice),
-            "key_metrics": _choice_metric_items(choice, "zh"),
-            "evidence_chips": choice["evidence_chips"]["zh"],
-            "avoid": [
-                "英文直译腔",
-                "可见部分",
-                "影响不只在",
-                "把答案写明了",
-                "数据画像",
-            ],
-        }
+def _english_choice_brief(choice: dict[str, Any]) -> dict[str, Any]:
     return {
         "award_type": choice["award_type"],
         "award_label": choice["award_label"]["en"],
@@ -1377,56 +1324,20 @@ def _language_choice_brief(choice: dict[str, Any], language: str) -> dict[str, A
     }
 
 
-def _editorial_voice(language: str) -> str:
-    if language == "zh":
-        return (
-            "严肃足球数据分析员面向大众发帖：先讲球场作用，再带少量关键数据；"
-            "可以轻松一点，但不要像翻译稿或指标表。"
-        )
+def _english_editorial_voice() -> str:
     return (
         "A data-aware football analyst writing for a general audience: clear, light, "
         "and grounded in the evidence without sounding like a table."
     )
 
 
-def _review_checklist(language: str) -> list[str]:
-    if language == "zh":
-        return [
-            "标题像中文体育内容，不像英文标题翻译。",
-            "每张卡片有一个具体球场动作或作用。",
-            "明显表现直给，隐藏亮点解释为什么值得看。",
-            "最多带两三个关键数字，不堆指标。",
-            "没有暗示看过录像或外部评分。",
-        ]
+def _english_review_checklist() -> list[str]:
     return [
         "Title reads like natural English sports copy.",
         "Each pick has a distinct football angle.",
         "Evidence supports the claim without metric dumping.",
         "No implied video review or outside rating source.",
     ]
-
-
-def _zh_selection_angle(choice: dict[str, Any]) -> str:
-    goals = _metric_value(choice, "goals")
-    if _metric_value(choice, "substitute_brace") > 0:
-        return "先写替补出场后连进两球，重点是他把比赛直接推向瑞士。"
-    if _metric_value(choice, "only_goal_winner") > 0:
-        return "先写全场唯一进球，这种比赛里决定比分的人必须被看到。"
-    if goals >= 3:
-        return "明显答案：帽子戏法直接决定当天最佳，但可以补一句他还参与推进。"
-    if goals >= 2:
-        return "进球很醒目，但更要写他持续冲击身后空间。"
-    if _metric_value(choice, "late_match_winning_goal") > 0:
-        return "先写补时制胜这个最直接的比赛影响，再补充他全场并不是只等到最后一脚。"
-    if _metric_value(choice, "match_winning_goal") > 0:
-        return "先写制胜球改变比赛结果，再补充他的持续进攻或跑动证据。"
-    if choice["award_type"] == "progression_pick":
-        return "重点写他如何把球从压力区带到前场。"
-    if choice["award_type"] == "defensive_pick":
-        return "重点写他如何让对手进攻停下来、重新组织。"
-    if choice["award_type"] == "hidden_gem":
-        return "重点写他为什么不抢镜但让进攻不断线。"
-    return "重点写他在接应、转移和打穿防线里的连接作用。"
 
 
 def _en_selection_angle(choice: dict[str, Any]) -> str:
@@ -1452,80 +1363,6 @@ def _en_selection_angle(choice: dict[str, Any]) -> str:
     return "Focus on the connective midfield role."
 
 
-def _zh_title_candidates(choice: dict[str, Any]) -> list[str]:
-    name = _zh_player_name(choice["player_name"])
-    goals = _metric_value(choice, "goals")
-    if _metric_value(choice, "substitute_brace") > 0:
-        return [
-            f"{name}替补上来就改了比赛",
-            "替补双响，不用多绕",
-            f"{name}把瑞士的胜势打出来",
-            "两脚终结，比赛变简单了",
-        ]
-    if _metric_value(choice, "only_goal_winner") > 0:
-        return [
-            "唯一进球就是答案",
-            f"{name}打进全场最关键一球",
-            "1比0的比赛，进球者不能被漏掉",
-            f"{name}把比分定住了",
-        ]
-    if goals >= 3:
-        return [
-            "帽子戏法就是答案",
-            f"{name}用三球定了调",
-            "三球在手，不用多解释",
-            f"当天最佳绕不开{name}",
-        ]
-    if goals >= 2:
-        return [
-            f"{name}一直冲身后",
-            "塞内加尔防线被他压住了",
-            "两个进球之外，还有持续威胁",
-            f"{name}把纵深打出来了",
-        ]
-    if _metric_value(choice, "late_match_winning_goal") > 0:
-        return [
-            "绝杀就是最硬的答案",
-            f"{name}把比赛收走了",
-            "最后一脚，也是一整场的回报",
-            f"{name}等到了决定比赛的一刻",
-        ]
-    if _metric_value(choice, "match_winning_goal") > 0:
-        return [
-            "制胜球把答案写清楚了",
-            f"{name}打进关键一球",
-            "决定比分的那一下",
-            f"{name}站到了最关键的位置",
-        ]
-    if choice["award_type"] == "progression_pick":
-        return [
-            "最能把球带出去的人",
-            "压力下的推进出口",
-            f"{name}把边路推进打出来了",
-            "不是赢球方，也有亮点",
-        ]
-    if choice["award_type"] == "defensive_pick":
-        return [
-            "后场最硬的一道闸",
-            "他让进攻一遍遍停下",
-            f"{name}把防守活干满了",
-            "承压局里的防守答案",
-        ]
-    if choice["award_type"] == "hidden_gem":
-        return [
-            "不抢镜的连接器",
-            f"{name}把进攻接起来了",
-            "看不见的接应很关键",
-            "隐藏亮点在传球角度里",
-        ]
-    return [
-        "中场接口很关键",
-        f"{name}让进攻转起来",
-        "不是进球，也能决定节奏",
-        "推进和接应都在线",
-    ]
-
-
 def _en_title_candidates(choice: dict[str, Any]) -> list[str]:
     goals = _metric_value(choice, "goals")
     if _metric_value(choice, "substitute_brace") > 0:
@@ -1547,35 +1384,6 @@ def _en_title_candidates(choice: dict[str, Any]) -> list[str]:
     if choice["award_type"] == "hidden_gem":
         return ["The quiet connector", "The link behind the highlights", "A useful game between the lines"]
     return ["The midfield connector", "The link in possession", "A quiet route through midfield"]
-
-
-def _zh_action_notes(choice: dict[str, Any]) -> list[str]:
-    notes: list[str] = []
-    if _metric_value(choice, "substitute_brace") > 0:
-        notes.append("替补出场后完成梅开二度")
-    if _metric_value(choice, "only_goal_winner") > 0:
-        notes.append("打进全场唯一进球")
-    if _metric_value(choice, "late_match_winning_goal") > 0:
-        notes.append("补时阶段打进制胜球")
-    elif _metric_value(choice, "match_winning_goal") > 0:
-        notes.append("打进决定比分的进球")
-    if _metric_value(choice, "goals") >= 3:
-        notes.append("完成帽子戏法")
-    elif _metric_value(choice, "goals") >= 2:
-        notes.append("反复冲击后卫身后")
-    if _metric_value(choice, "line_breaks_completed") >= 12:
-        notes.append("多次打穿对方防线")
-    if _metric_value(choice, "ball_progressions") >= 10:
-        notes.append("主动把球带过压力区")
-    if _metric_value(choice, "offers_received") >= 25:
-        notes.append("持续给队友接应点")
-    if _metric_value(choice, "in_between") >= 15:
-        notes.append("经常出现在两线之间")
-    if _metric_value(choice, "possession_regains") >= 8:
-        notes.append("不断把球权抢回来")
-    if _metric_value(choice, "blocks") >= 8:
-        notes.append("用封堵把对手进攻挡下来")
-    return notes[:4]
 
 
 def _en_action_notes(choice: dict[str, Any]) -> list[str]:
@@ -1841,6 +1649,7 @@ def _render_markdown_report(report: dict[str, Any]) -> str:
         )
     lines.extend(["", "## Choices", ""])
     for choice in report["choices"]:
+        zh_placeholder = _zh_markdown_placeholder(choice)
         lines.extend(
             [
                 f"### {choice['award_label']['en']}: {choice['player_name']}",
@@ -1855,9 +1664,9 @@ def _render_markdown_report(report: dict[str, Any]) -> str:
                 "",
                 "#### 中文",
                 "",
-                f"**{choice['draft']['zh']['title']}**",
+                f"**{zh_placeholder['title']}**",
                 "",
-                choice["draft"]["zh"]["body"],
+                zh_placeholder["body"],
                 "",
                 "Evidence: " + ", ".join(choice["evidence_chips"]["en"]),
                 "",
@@ -1870,6 +1679,17 @@ def _render_markdown_report(report: dict[str, Any]) -> str:
         lines.extend(f"- `{item['code']}`: {item['message']}" for item in report["audit"])
         lines.append("")
     return "\n".join(lines)
+
+
+def _zh_markdown_placeholder(choice: dict[str, Any]) -> dict[str, str]:
+    facts = "，".join(_zh_fact_bank_facts(choice)[:4]) or "详见 fact_bank.zh.json"
+    return {
+        "title": f"中文素材 - {choice['award_label']['zh']}",
+        "body": (
+            "中文成稿由 editor agent 基于 fact_bank.zh.json 独立生成；"
+            f"这里仅保留结构化事实占位。关键事实：{facts}。"
+        ),
+    }
 
 
 def _editorial_css() -> str:

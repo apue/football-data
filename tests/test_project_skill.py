@@ -19,19 +19,21 @@ def test_publish_editors_choices_skill_is_repo_scoped():
     assert "name: publish-editors-choices" in text
     assert "description: Use when" in text
     assert "Editor" in text
-    assert "scripts/generate_editorial.py" in text
+    assert "scripts/run_editorial_queue.py" in text
+    assert "scripts/run_editorial_agent.py" in references
     assert "reports/editorial/YYYY-MM-DD.md" in references
-    assert "scripts/render_editorial.py" in references
-    assert "Markdown is the human-readable source" in references
+    assert "scripts/generate_editorial.py" not in text + references
+    assert "scripts/render_editorial.py" not in text + references
+    assert "scripts/run_editorial_loop.py" not in text + references
+    assert "Markdown is the human-readable agent output" in references
     assert "Write Chinese from `fact_bank.zh.json`, not from the English draft" in references
-    assert "Treat generated Markdown as a draft brief, not publishable copy" in references
     assert "Rewrite Chinese and English in separate passes from the same evidence" in references
     assert "Do not use either finished language version as input for the other" in references
     assert "fact_bank.zh.json" in references
     assert "from-scratch Chinese sports editor" in references
     assert "qu-ai-wei" in references
     assert "humanizer-zh" in references
-    assert "brief.zh.json" in references
+    assert "brief.zh.json" not in references
     assert "brief.en.json" in references
     assert "Generate 3-5 Chinese title candidates" in references
     assert "editorial review pass" in references

@@ -11,7 +11,6 @@ from football_data.editorial_agent import (
     run_editorial_agent,
 )
 from football_data.editorial_fingerprint import DEFAULT_SCORING_CONFIG
-from football_data.editorial_loop import run_editorial_loop
 from football_data.editorial_queue import build_editorial_queue, write_editorial_queue
 
 
@@ -77,28 +76,17 @@ def run_editorial_queue(
                 env_path=env_path,
                 client=client,
                 research=research,
-                rebuild_homepage=False,
-            )
-            loop_result = run_editorial_loop(
-                match_date=match_date,
-                db_path=db_path,
-                site_dir=site_dir,
-                reports_dir=reports_dir,
-                manifests_dir=manifests_dir,
-                agent_runs_dir=agent_runs_dir,
-                scoring_config_path=scoring_config_path,
-                use_existing_markdown=True,
                 rebuild_homepage=True,
             )
-            if loop_result.get("status") != "published":
-                raise RuntimeError(f"Editorial loop did not publish: {loop_result.get('status')}")
+            if agent_result.get("status") != "success":
+                raise RuntimeError(f"Editorial agent did not publish: {agent_result.get('status')}")
             published_dates.append(match_date)
             runs.append(
                 {
                     "match_date": match_date,
                     "agent_status": agent_result.get("status"),
-                    "loop_status": loop_result.get("status"),
-                    "decision": loop_result.get("decision"),
+                    "fact_check": agent_result.get("fact_check", {}).get("status"),
+                    "choices": agent_result.get("choices", []),
                 }
             )
         except Exception as exc:

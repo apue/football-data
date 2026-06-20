@@ -1,8 +1,6 @@
 import json
 import re
 import sqlite3
-import subprocess
-import sys
 from pathlib import Path
 
 from football_data.editorial import (
@@ -33,8 +31,7 @@ def test_build_editorial_report_for_match_day():
     assert "narrative" not in first_choice
     assert first_choice["draft"]["en"]["title"]
     assert first_choice["draft"]["en"]["body"]
-    assert first_choice["draft"]["zh"]["title"]
-    assert first_choice["draft"]["zh"]["body"]
+    assert "zh" not in first_choice["draft"]
 
     digit_count = len(re.findall(r"\d", first_choice["draft"]["en"]["body"]))
     assert digit_count <= 10
@@ -85,7 +82,7 @@ def test_editorial_scoring_ignores_goal_prevented_rows_in_existing_database():
     conn = sqlite3.connect("data/latest.sqlite")
     conn.row_factory = sqlite3.Row
     try:
-        scoring = _load_scoring_config("config/scoring/v0.2.json")
+        scoring = _load_scoring_config("config/scoring/v0.3.json")
         players = [
             _score_player(row, scoring)
             for row in _player_rows_for_date(conn, "2026-06-18")
@@ -159,7 +156,6 @@ def test_write_editorial_artifacts(tmp_path):
     dated_json = tmp_path / "site" / "editorial" / "2026-06-16" / "choices.json"
     evidence_json = tmp_path / "site" / "editorial" / "2026-06-16" / "evidence.json"
     zh_fact_bank_json = tmp_path / "site" / "editorial" / "2026-06-16" / "fact_bank.zh.json"
-    zh_brief_json = tmp_path / "site" / "editorial" / "2026-06-16" / "brief.zh.json"
     en_brief_json = tmp_path / "site" / "editorial" / "2026-06-16" / "brief.en.json"
     dated_html = tmp_path / "site" / "editorial" / "2026-06-16" / "index.html"
     report_md = tmp_path / "reports" / "editorial" / "2026-06-16.md"
@@ -168,7 +164,7 @@ def test_write_editorial_artifacts(tmp_path):
     assert dated_json.exists()
     assert evidence_json.exists()
     assert zh_fact_bank_json.exists()
-    assert zh_brief_json.exists()
+    assert not (tmp_path / "site" / "editorial" / "2026-06-16" / "brief.zh.json").exists()
     assert en_brief_json.exists()
     assert dated_html.exists()
     assert report_md.exists()
@@ -176,7 +172,6 @@ def test_write_editorial_artifacts(tmp_path):
     saved = json.loads(latest.read_text(encoding="utf-8"))
     evidence = json.loads(evidence_json.read_text(encoding="utf-8"))
     zh_fact_bank = json.loads(zh_fact_bank_json.read_text(encoding="utf-8"))
-    zh_brief = json.loads(zh_brief_json.read_text(encoding="utf-8"))
     en_brief = json.loads(en_brief_json.read_text(encoding="utf-8"))
     html = dated_html.read_text(encoding="utf-8")
     markdown = report_md.read_text(encoding="utf-8")
@@ -214,15 +209,7 @@ def test_write_editorial_artifacts(tmp_path):
     fact_bank_text = json.dumps(zh_fact_bank, ensure_ascii=False)
     assert "why_selected" not in fact_bank_text
     assert "title_candidates" not in fact_bank_text
-    assert zh_brief["language"] == "zh"
     assert en_brief["language"] == "en"
-    assert zh_brief["choices"][0]["player_name"] == "梅西"
-    assert zh_brief["choices"][0]["team"] == "阿根廷"
-    assert zh_brief["choices"][0]["opponent"] == "阿尔及利亚"
-    assert "title_candidates" in zh_brief["choices"][0]
-    assert "帽子戏法就是答案" in zh_brief["choices"][0]["title_candidates"]
-    assert "Lionel" not in json.dumps(zh_brief, ensure_ascii=False)
-    assert "hat-trick" not in json.dumps(zh_brief, ensure_ascii=False)
     assert en_brief["choices"][0]["player_name"] == "Lionel MESSI"
     assert "帽子戏法" not in json.dumps(en_brief, ensure_ascii=False)
     assert "Editor's Choices" in html
@@ -234,7 +221,8 @@ def test_write_editorial_artifacts(tmp_path):
     assert "#### English" in markdown
     assert "#### 中文" in markdown
     assert "Draft brief" in markdown
-    assert "中文编辑草稿" in markdown
+    assert "中文编辑草稿" not in markdown
+    assert "fact_bank.zh.json" in markdown
 
 
 def test_generated_editorial_markdown_is_a_draft_not_final_copy(tmp_path):
@@ -273,7 +261,8 @@ def test_generated_editorial_markdown_is_a_draft_not_final_copy(tmp_path):
         assert phrase not in markdown
 
     assert "Draft brief" in markdown
-    assert "中文编辑草稿" in markdown
+    assert "中文编辑草稿" not in markdown
+    assert "fact_bank.zh.json" in markdown
     assert "Use this as evidence, then rewrite the English and Chinese copy separately." in markdown
 
 
@@ -341,70 +330,3 @@ def test_compile_editorial_markdown_renders_edited_copy(tmp_path):
     assert "**" not in first_choice["content"]["en"]["html"]
     assert "markdown" not in first_choice["content"]["en"]
 
-
-def test_generate_editorial_cli_rebuilds_homepage(tmp_path):
-    subprocess.run(
-        [
-            sys.executable,
-            "scripts/generate_editorial.py",
-            "--date",
-            "2026-06-16",
-            "--site-dir",
-            str(tmp_path / "site"),
-            "--reports-dir",
-            str(tmp_path / "reports"),
-        ],
-        check=True,
-    )
-
-    homepage = (tmp_path / "site" / "index.html").read_text(encoding="utf-8")
-    assert "Editor's Choices" in homepage
-    assert "Player Leaderboards" in homepage
-    assert "Most Shots on Target" in homepage
-    assert "射正最多" in homepage
-
-
-def test_render_editorial_cli_compiles_existing_markdown(tmp_path):
-    subprocess.run(
-        [
-            sys.executable,
-            "scripts/generate_editorial.py",
-            "--date",
-            "2026-06-16",
-            "--site-dir",
-            str(tmp_path / "site"),
-            "--reports-dir",
-            str(tmp_path / "reports"),
-        ],
-        check=True,
-    )
-    report_md = tmp_path / "reports" / "editorial" / "2026-06-16.md"
-    report_md.write_text(
-        report_md.read_text(encoding="utf-8").replace(
-            "Draft brief - Player of the Day",
-            "A rendered Markdown title",
-            1,
-        ),
-        encoding="utf-8",
-    )
-
-    subprocess.run(
-        [
-            sys.executable,
-            "scripts/render_editorial.py",
-            "--date",
-            "2026-06-16",
-            "--site-dir",
-            str(tmp_path / "site"),
-            "--reports-dir",
-            str(tmp_path / "reports"),
-        ],
-        check=True,
-    )
-
-    compiled = json.loads(
-        (tmp_path / "site" / "editorial" / "latest.json").read_text(encoding="utf-8")
-    )
-    homepage = (tmp_path / "site" / "index.html").read_text(encoding="utf-8")
-    assert compiled["choices"][0]["content"]["en"]["title"] == "A rendered Markdown title"
-    assert "A rendered Markdown title" in homepage

@@ -34,13 +34,13 @@ By default this repository does not redistribute original PDF files. Local PDF c
 - `examples/*.sql` - reusable SQL examples
 - `notebooks/*.ipynb` - notebook-style demo examples
 - `reports/editorial/*.md` - human-readable Editor's Choices reports when published
-- `agent-runs/` - local audit traces for the Editor's Choices review-repair-validate loop
+- `agent-runs/*.json` - editor agent run audits
 - `calibration/potm-labels.json` - optional weak labels for Player of the Match calibration
 - `calibration/reports/*.md` - POTM/model rank-diff reports when calibration is run
 - `calibration/evaluation/*.md` - POTM evidence quality and calibration-readiness reports
 - `site/editorial/` - rendered Editor's Choices JSON/HTML for the demo site
 - `site/editorial/*/fact_bank.zh.json` - raw Chinese fact bank for from-scratch Chinese sports-editor copy
-- `site/editorial/*/brief.zh.json` and `brief.en.json` - legacy Chinese draft brief plus English editorial input
+- `site/editorial/*/brief.en.json` - English editorial input
 - `.agents/skills/publish-editors-choices/` - repo-scoped Codex skill for the editorial publishing workflow
 - `.agents/skills/calibrate-potm-labels/` - repo-scoped Codex skill for Firecrawl-assisted scoring calibration
 - `.agents/skills/evaluate-potm-workflow/` - repo-scoped Codex skill for POTM workflow evaluation
@@ -71,47 +71,39 @@ python -m pip install -e ".[dev]"
 python scripts/update_dataset.py
 sqlite3 data/latest.sqlite < examples/top_fastest_players.sql
 sqlite3 data/latest.sqlite < examples/top_attacking_threats.sql
-python scripts/run_editorial_loop.py --date 2026-06-18
+python scripts/run_editorial_queue.py --fake --no-research --max-dates 1
 python scripts/check_status.py
 ```
 
 ## Editor's Choices
 
-Editor's Choices are data-informed editorial picks generated from structured PMSR evidence. They are not official FIFA awards. The loop selects candidates from the SQLite database, reviews contextual risks, repairs candidate slates when needed, validates facts/copy, and writes audit traces under `agent-runs/`. The underlying generator produces `fact_bank.zh.json`, `brief.zh.json`, `brief.en.json`, and an English/Chinese Markdown draft brief. Final Chinese copy should be written from `fact_bank.zh.json` as fresh Chinese sports copy, then reviewed for translationese and factual drift. Final English copy should be written separately from `brief.en.json` plus `evidence.json`. The two languages should make the same judgment, but neither should be a translation of the other.
+Editor's Choices are data-informed editorial picks generated from structured PMSR evidence. They are not official FIFA awards. The autonomous path selects candidates from the SQLite database, reviews contextual selection risks, runs the editor agent, fact-checks the generated Markdown, compiles frontend JSON/HTML, and rebuilds the homepage. Chinese copy is generated from `fact_bank.zh.json` as fresh Chinese sports copy. English copy is generated separately from `brief.en.json` plus `evidence.json`. The two languages should make the same judgment, but neither should be a translation of the other.
 
 The default scoring config is `config/scoring/v0.3.json`. It keeps the role-style performance scores and adds a structured impact layer for goals that change the match state and match story: opening goals, equalisers, go-ahead goals, match-winning goals, late goals, stoppage-time goals, late match-winning goals, only-goal winners, braces, hat-tricks, and substitute scoring bursts. These features are derived from the PMSR shot table, lineup status, and final scoreline. POTM labels and media opinions are not scoring inputs.
 
-Run:
-
-```bash
-python scripts/run_editorial_loop.py --date YYYY-MM-DD
-```
-
-Use local match dates from the database. Review and rewrite the human-readable output at `reports/editorial/YYYY-MM-DD.md` when the loop requests human review.
-
-If the Markdown copy changes, compile it back to frontend JSON/HTML:
-
-```bash
-python scripts/render_editorial.py --date YYYY-MM-DD
-```
-
-To run the loop against an already edited Markdown report without overwriting it:
-
-```bash
-python scripts/run_editorial_loop.py --date YYYY-MM-DD --use-existing-markdown
-```
-
-To run the autonomous editorial queue used by GitHub Actions:
+Run the autonomous queue used by GitHub Actions:
 
 ```bash
 python scripts/run_editorial_queue.py
+```
+
+For a targeted local run on one match date:
+
+```bash
+python scripts/run_editorial_agent.py --date YYYY-MM-DD
+```
+
+For a deterministic smoke test without credentials:
+
+```bash
+python scripts/run_editorial_queue.py --fake --no-research --max-dates 1
 ```
 
 The compiled frontend artifacts are written to `site/editorial/`, and the homepage is rebuilt with the latest cards.
 
 ## Editorial Automation
 
-`.github/workflows/editorial.yml` runs after the `Update Dataset` workflow succeeds and can also be started manually. It checks `manifests/editorial-queue.json`, runs the editor agent for pending match dates, validates the edited Markdown through the review-repair-validate loop, commits published editorial outputs with `[skip ci]`, and deploys GitHub Pages.
+`.github/workflows/editorial.yml` runs after the `Update Dataset` workflow succeeds and can also be started manually. It checks `manifests/editorial-queue.json`, runs the editor agent for pending match dates, commits published editorial outputs with `[skip ci]`, and deploys GitHub Pages.
 
 Configure repository secrets with these names when you want the cloud workflow to publish new editorial copy:
 
@@ -140,7 +132,7 @@ Missing OpenAI credentials do not publish drafts; the workflow writes `manifests
 
 ## POTM Calibration
 
-POTM calibration compares external Player of the Match labels with this project's per-match model ranking. It is a weak-label sanity check, not an official scoring input. If a confirmed POTM is outside the model Top 3, the report flags the miss so the scoring weights can be reviewed for patterns such as late winners, decisive goal involvements, defensive performances, or extraction/name-matching issues. Current calibration defaults to `config/scoring/v0.3.json`; pass `--scoring-config config/scoring/v0.1.json` or `--scoring-config config/scoring/v0.2.json` only when you need to inspect historical ranking misses.
+POTM calibration compares external Player of the Match labels with this project's per-match model ranking. It is a weak-label sanity check, not an official scoring input. If a confirmed POTM is outside the model Top 3, the report flags the miss so the scoring weights can be reviewed for patterns such as late winners, decisive goal involvements, defensive performances, or extraction/name-matching issues. Current calibration defaults to `config/scoring/v0.3.json`.
 
 Optional Firecrawl search is supported through Keypool for evidence discovery:
 

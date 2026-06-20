@@ -2,9 +2,7 @@
 
 Editor’s Choices are not dashboard prose. Write like a data-aware football editor.
 
-Markdown is the human-readable source. Write and review copy in `reports/editorial/YYYY-MM-DD.md`; never make editorial wording changes directly in compiled frontend JSON.
-
-Treat generated Markdown as a draft brief, not publishable copy. The generator should select players and surface evidence; Codex should do the final editorial rewrite.
+Markdown is the human-readable agent output. Review copy in `reports/editorial/YYYY-MM-DD.md`; never make editorial wording changes directly in compiled frontend JSON.
 
 ## Principles
 
@@ -14,7 +12,6 @@ Treat generated Markdown as a draft brief, not publishable copy. The generator s
 - Rewrite Chinese and English in separate passes from the same evidence.
 - Do not use either finished language version as input for the other.
 - Use `fact_bank.zh.json` as the Chinese input and `brief.en.json` as the English input.
-- Keep `brief.zh.json` for compatibility checks only; it is not the Chinese writing base.
 - Vary the angle for each pick; do not reuse the same sentence frame across multiple players.
 - Translate metrics into football language:
   - `goals >= 3`: hat-trick / 帽子戏法
@@ -70,4 +67,4 @@ Before publishing, check:
 - Run an editorial review pass: serious football analysis, light public-facing tone, distinct angle per player, and no translationese.
 - Chinese has passed the from-scratch Chinese sports editor -> `qu-ai-wei` reviewer -> optional `humanizer-zh` repair loop.
 - No external match observation is implied unless an external source was actually checked.
-- After Markdown edits, run `scripts/render_editorial.py --date YYYY-MM-DD`.
+- If a card fails review, repair prompts/style packs or rerun `scripts/run_editorial_agent.py --date YYYY-MM-DD`.

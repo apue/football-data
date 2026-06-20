@@ -71,6 +71,8 @@ def test_run_editorial_queue_cli_with_fake_backend_publishes_pending_date(tmp_pa
 
     assert run["status"] == "success"
     assert run["published_dates"] == ["2026-06-18"]
+    assert run["runs"][0]["agent_status"] == "success"
+    assert "loop_status" not in run["runs"][0]
     assert choices["match_date"] == "2026-06-18"
 
 

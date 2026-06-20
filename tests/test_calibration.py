@@ -57,7 +57,7 @@ def test_keypool_env_and_firecrawl_search_result_parsing(tmp_path):
     ]
 
 
-def test_potm_calibration_report_flags_large_rank_misses(tmp_path):
+def test_potm_calibration_report_uses_current_scoring_config(tmp_path):
     labels_path = tmp_path / "potm-labels.json"
     labels_path.write_text(
         json.dumps(
@@ -90,18 +90,16 @@ def test_potm_calibration_report_flags_large_rank_misses(tmp_path):
         db_path="data/latest.sqlite",
         labels_path=labels_path,
         match_date="2026-06-17",
-        scoring_config_path="config/scoring/v0.1.json",
         top_n=3,
     )
 
     assert report["summary"]["label_count"] == 2
-    assert report["summary"]["top3_hit_rate"] == 0.5
+    assert report["summary"]["top3_hit_rate"] == 1.0
 
     caleb = next(item for item in report["items"] if item["potm_player_name"] == "Caleb YIRENKYI")
-    assert caleb["model_rank"] == 7
-    assert caleb["rank_diff"] == 6
-    assert caleb["status"] == "red_flag"
-    assert any("late" in signal for signal in caleb["possible_missing_signals"])
+    assert caleb["model_rank"] == 1
+    assert caleb["rank_diff"] == 0
+    assert caleb["status"] == "ok"
 
     diaz = next(item for item in report["items"] if item["potm_player_name"] == "Luis DIAZ")
     assert diaz["model_rank"] == 1

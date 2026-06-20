@@ -604,7 +604,7 @@ def _complete_with_timeout(
 
     previous_handler = signal.getsignal(signal.SIGALRM)
 
-    def _handle_timeout(signum: int, frame: Any) -> None:
+    def _handle_timeout(_signum: int, _frame: Any) -> None:
         raise AgentCallTimeout(f"{role} timed out after {timeout_seconds:g} seconds")
 
     signal.signal(signal.SIGALRM, _handle_timeout)
@@ -744,8 +744,19 @@ def _choice_key(choice: dict[str, Any]) -> tuple[str, str]:
 
 
 def _fallback_copy(choice: dict[str, Any], language: str) -> dict[str, str]:
-    draft = choice["draft"][language]
-    return {"title": draft["title"], "body": draft["body"]}
+    draft = choice.get("draft", {}).get(language)
+    if isinstance(draft, dict) and draft.get("title") and draft.get("body"):
+        return {"title": str(draft["title"]), "body": str(draft["body"])}
+    if language == "zh":
+        chips = "，".join(str(chip) for chip in choice.get("evidence_chips", {}).get("zh", []))
+        return {
+            "title": f"{choice['player_name']}：{choice['award_label']['zh']}",
+            "body": f"结构化证据显示他值得入选：{chips or '详见 fact_bank.zh.json'}。",
+        }
+    return {
+        "title": f"{choice['player_name']}: {choice['award_label']['en']}",
+        "body": "Structured evidence supports this selection.",
+    }
 
 
 def _match_label(choice: dict[str, Any], match: dict[str, Any] | None) -> str:

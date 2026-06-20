@@ -1,7 +1,13 @@
 import pytest
 
 from football_data.discovery import parse_hub_sources, resolve_active_sources
-from football_data.pipeline import PipelineError, build_update_events, validate_discovery_regression
+from football_data.model import DiscoveredSource
+from football_data.pipeline import (
+    PipelineError,
+    build_update_events,
+    ensure_source_pdfs,
+    validate_discovery_regression,
+)
 
 
 BASE_URL = "https://www.fifatrainingcentre.com/en/fifa-world-cup-2026/match-report-hub.php"
@@ -60,3 +66,35 @@ def test_validate_discovery_regression_blocks_unexpected_count_drop():
 
     with pytest.raises(PipelineError, match="discovery_regression"):
         validate_discovery_regression(current, previous)
+
+
+def test_ensure_source_pdfs_ignores_legacy_root_cache(tmp_path, monkeypatch):
+    source = DiscoveredSource(
+        source_id="fifa-world-cup-2026-pmsr-m01-mex-rsa-v1",
+        competition="fifa-world-cup-2026",
+        report_type="pmsr",
+        match_no=1,
+        home_code="MEX",
+        away_code="RSA",
+        version=1,
+        source_url="https://example.test/PMSR-M01%20MEX%20V%20RSA.pdf",
+        file_name="PMSR-M01 MEX V RSA.pdf",
+        discovered_at="2026-06-17T04:00:00+00:00",
+    )
+    legacy_path = tmp_path / source.file_name
+    legacy_path.write_text("legacy root cache", encoding="utf-8")
+    downloaded_paths = []
+
+    def fake_download(source_url: str, destination):
+        downloaded_paths.append(destination)
+        destination.write_text(f"downloaded from {source_url}", encoding="utf-8")
+
+    monkeypatch.setattr("football_data.pipeline._download", fake_download)
+
+    paths, downloaded = ensure_source_pdfs([source], raw_dir=tmp_path)
+
+    expected_path = tmp_path / source.competition / source.file_name
+    assert paths[source.source_id] == expected_path
+    assert downloaded == [source.source_id]
+    assert downloaded_paths == [expected_path]
+    assert expected_path.read_text(encoding="utf-8").startswith("downloaded")

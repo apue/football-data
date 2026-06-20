@@ -1,9 +1,0 @@
-{
-  "status": "pass",
-  "reviewer": "chinese_copy_reviewer",
-  "method": "rubric_placeholder",
-  "findings": [],
-  "notes": [
-    "Copy review is an explicit loop phase. The default local reviewer only records the phase; model-backed rubric review can replace it without changing the orchestrator contract."
-  ]
-}

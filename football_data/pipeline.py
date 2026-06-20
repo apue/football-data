@@ -80,12 +80,8 @@ def ensure_source_pdfs(
     downloaded: list[str] = []
     for source in sources:
         destination = raw_path / source.competition / source.file_name
-        legacy_destination = raw_path / source.file_name
         if destination.exists():
             paths[source.source_id] = destination
-            continue
-        if legacy_destination.exists():
-            paths[source.source_id] = legacy_destination
             continue
         destination.parent.mkdir(parents=True, exist_ok=True)
         _download(source.source_url, destination)

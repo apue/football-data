@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-06-20 - Editorial Path Cleanup
+
+Removed obsolete editorial code paths after the agent workflow became the single publication path:
+
+- Removed the placeholder `editorial_loop` layer and its CLI/tests.
+- Removed manual `generate_editorial` and `render_editorial` CLI wrappers.
+- Removed `brief.zh.json` generation and legacy Chinese draft helpers; Chinese generation now uses `fact_bank.zh.json`.
+- Removed early `v0.1`/`v0.2` scoring configs and tightened runtime scoring to the current `v0.3` config.
+- Removed root-level raw-PDF fallback logic so active sources use competition-scoped raw cache paths.
+
 ## 2026-06-19 - Autonomous Editorial Workflow
 
 Added CI automation for Editor's Choices after dataset updates:
