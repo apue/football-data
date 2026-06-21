@@ -1,30 +1,13 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-06-21T15:55:42+00:00",
+  "generated_at": "2026-06-21T16:07:35+00:00",
   "status": "up_to_date",
   "latest_data_date": "2026-06-20",
   "latest_editorial_date": "2026-06-20",
   "pending_dates": [],
   "pending_items": [],
   "pending_matches": [],
-  "new_matches": [
-    {
-      "match_no": 33,
-      "source_id": "fifa-world-cup-2026-pmsr-m33-ger-civ-v1"
-    },
-    {
-      "match_no": 34,
-      "source_id": "fifa-world-cup-2026-pmsr-m34-ecu-cuw-v1"
-    },
-    {
-      "match_no": 35,
-      "source_id": "fifa-world-cup-2026-pmsr-m35-ned-swe-v1"
-    },
-    {
-      "match_no": 36,
-      "source_id": "fifa-world-cup-2026-pmsr-m36-tun-jpn-v1"
-    }
-  ],
+  "new_matches": [],
   "version_updates": [],
   "failures": [],
   "reason": "editorial_up_to_date"
