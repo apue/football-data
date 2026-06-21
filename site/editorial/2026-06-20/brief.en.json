@@ -1,0 +1,385 @@
+{
+  "schema_version": 1,
+  "language": "en",
+  "generated_at": "2026-06-21T15:43:17+00:00",
+  "match_date": "2026-06-20",
+  "scoring_version": "v0.4",
+  "editorial_voice": "A data-aware football analyst writing for a general audience: clear, light, and grounded in the evidence without sounding like a table.",
+  "choices": [
+    {
+      "award_type": "player_of_the_day",
+      "award_label": "Player of the Day",
+      "player_name": "Deniz UNDAV",
+      "team": "Germany",
+      "opponent": "Côte d'Ivoire",
+      "match_no": 33,
+      "score": 191.9,
+      "why_selected": "Lead with the comeback: he equalised, then scored the stoppage-time winner.",
+      "title_candidates": [
+        "The comeback finisher",
+        "Level, then winner",
+        "Two goals that turned it"
+      ],
+      "action_notes": [
+        "Germany came from behind to win 2-1",
+        "67' equaliser",
+        "93' stoppage-time winner",
+        "comeback winner"
+      ],
+      "flow_notes": [
+        "Germany came from behind to win 2-1",
+        "67' equaliser",
+        "93' stoppage-time winner",
+        "comeback winner"
+      ],
+      "allowed_claims": [
+        "comeback win",
+        "equaliser",
+        "comeback equaliser",
+        "67' equaliser",
+        "go-ahead goal",
+        "match-winning goal",
+        "stoppage-time goal",
+        "late winner",
+        "comeback winner",
+        "93' stoppage-time winner"
+      ],
+      "key_metrics": [
+        {
+          "metric": "late_match_winning_goal",
+          "label": "late winner",
+          "value": 1,
+          "unit": ""
+        },
+        {
+          "metric": "goals",
+          "label": "goals",
+          "value": 2,
+          "unit": ""
+        },
+        {
+          "metric": "match_winning_goal",
+          "label": "match-winning goal",
+          "value": 1,
+          "unit": ""
+        },
+        {
+          "metric": "comeback_winner",
+          "label": "comeback winner",
+          "value": 1,
+          "unit": ""
+        },
+        {
+          "metric": "brace",
+          "label": "brace",
+          "value": 1,
+          "unit": ""
+        }
+      ],
+      "evidence_chips": [
+        "brace",
+        "substitute brace",
+        "comeback winner",
+        "late winner"
+      ],
+      "avoid": [
+        "metric dumps",
+        "generic AI phrasing",
+        "claims that imply video review"
+      ]
+    },
+    {
+      "award_type": "player_of_the_day",
+      "award_label": "Player of the Day",
+      "player_name": "Ayase UEDA",
+      "team": "Japan",
+      "opponent": "Tunisia",
+      "match_no": 36,
+      "score": 102.1,
+      "why_selected": "Goals matter, but frame the repeated threat behind the line.",
+      "title_candidates": [
+        "The finisher between the lines",
+        "Two goals from constant movement",
+        "The runner Japan kept finding"
+      ],
+      "action_notes": [
+        "30' winner",
+        "scored the match-winning goal",
+        "kept attacking the space behind the line",
+        "kept appearing between the lines"
+      ],
+      "flow_notes": [
+        "30' winner"
+      ],
+      "allowed_claims": [
+        "go-ahead goal",
+        "match-winning goal",
+        "30' winner"
+      ],
+      "key_metrics": [
+        {
+          "metric": "in_behind",
+          "label": "in-behind offers",
+          "value": 28,
+          "unit": ""
+        },
+        {
+          "metric": "goals",
+          "label": "goals",
+          "value": 2,
+          "unit": ""
+        },
+        {
+          "metric": "match_winning_goal",
+          "label": "match-winning goal",
+          "value": 1,
+          "unit": ""
+        },
+        {
+          "metric": "total_distance_m",
+          "label": "distance",
+          "value": 9059.2,
+          "unit": "m"
+        },
+        {
+          "metric": "in_between",
+          "label": "between-line offers",
+          "value": 22,
+          "unit": ""
+        }
+      ],
+      "evidence_chips": [
+        "brace",
+        "match-winning goal",
+        "high shot quality",
+        "between-line presence"
+      ],
+      "avoid": [
+        "metric dumps",
+        "generic AI phrasing",
+        "claims that imply video review"
+      ]
+    },
+    {
+      "award_type": "player_of_the_day",
+      "award_label": "Player of the Day",
+      "player_name": "Brian BROBBEY",
+      "team": "Netherlands",
+      "opponent": "Sweden",
+      "match_no": 35,
+      "score": 86.3,
+      "why_selected": "Goals matter, but frame the repeated threat behind the line.",
+      "title_candidates": [
+        "Two goals behind the line",
+        "The runner behind Sweden",
+        "The early brace that opened it up"
+      ],
+      "action_notes": [
+        "16' winner",
+        "scored the match-winning goal",
+        "kept attacking the space behind the line"
+      ],
+      "flow_notes": [
+        "16' winner"
+      ],
+      "allowed_claims": [
+        "go-ahead goal",
+        "match-winning goal",
+        "16' winner"
+      ],
+      "key_metrics": [
+        {
+          "metric": "goals",
+          "label": "goals",
+          "value": 2,
+          "unit": ""
+        },
+        {
+          "metric": "in_behind",
+          "label": "in-behind offers",
+          "value": 21,
+          "unit": ""
+        },
+        {
+          "metric": "match_winning_goal",
+          "label": "match-winning goal",
+          "value": 1,
+          "unit": ""
+        },
+        {
+          "metric": "brace",
+          "label": "brace",
+          "value": 1,
+          "unit": ""
+        },
+        {
+          "metric": "total_distance_m",
+          "label": "distance",
+          "value": 7193.4,
+          "unit": "m"
+        }
+      ],
+      "evidence_chips": [
+        "brace",
+        "match-winning goal"
+      ],
+      "avoid": [
+        "metric dumps",
+        "generic AI phrasing",
+        "claims that imply video review"
+      ]
+    },
+    {
+      "award_type": "progression_pick",
+      "award_label": "Progression Pick",
+      "player_name": "Joshua KIMMICH",
+      "team": "Germany",
+      "opponent": "Côte d'Ivoire",
+      "match_no": 33,
+      "score": 53.4,
+      "why_selected": "Focus on the forward passing that helped the team recover from a trailing position.",
+      "title_candidates": [
+        "The route back into it",
+        "Forward passing under pressure",
+        "Progression in the comeback"
+      ],
+      "action_notes": [
+        "Germany came from behind to win 2-1",
+        "repeatedly broke the opponent's lines"
+      ],
+      "flow_notes": [
+        "Germany came from behind to win 2-1"
+      ],
+      "allowed_claims": [
+        "comeback win"
+      ],
+      "key_metrics": [
+        {
+          "metric": "line_breaks_completed",
+          "label": "completed line breaks",
+          "value": 26,
+          "unit": ""
+        }
+      ],
+      "evidence_chips": [
+        "repeated line breaks",
+        "ball-winning profile"
+      ],
+      "avoid": [
+        "metric dumps",
+        "generic AI phrasing",
+        "claims that imply video review"
+      ]
+    },
+    {
+      "award_type": "hidden_gem",
+      "award_label": "Hidden Gem",
+      "player_name": "Pedro VITE",
+      "team": "Ecuador",
+      "opponent": "Curaçao",
+      "match_no": 34,
+      "score": 80.1,
+      "why_selected": "Explain the quieter linking work that kept possession connected.",
+      "title_candidates": [
+        "The quiet connector",
+        "The link behind the highlights",
+        "A useful game between the lines"
+      ],
+      "action_notes": [
+        "kept giving teammates a passing option",
+        "kept appearing between the lines"
+      ],
+      "flow_notes": [],
+      "allowed_claims": [],
+      "key_metrics": [
+        {
+          "metric": "offers_received",
+          "label": "received offers",
+          "value": 51,
+          "unit": ""
+        },
+        {
+          "metric": "in_between",
+          "label": "between-line offers",
+          "value": 33,
+          "unit": ""
+        },
+        {
+          "metric": "in_behind",
+          "label": "in-behind offers",
+          "value": 7,
+          "unit": ""
+        }
+      ],
+      "evidence_chips": [
+        "repeated line breaks",
+        "found again and again",
+        "between-line presence"
+      ],
+      "avoid": [
+        "metric dumps",
+        "generic AI phrasing",
+        "claims that imply video review"
+      ]
+    },
+    {
+      "award_type": "defensive_pick",
+      "award_label": "Defensive Pick",
+      "player_name": "Felix NMECHA",
+      "team": "Germany",
+      "opponent": "Côte d'Ivoire",
+      "match_no": 33,
+      "score": 46.2,
+      "why_selected": "Focus on stopping attacks and forcing resets.",
+      "title_candidates": [
+        "The stubborn stopper",
+        "Breaking the flow",
+        "The defender who kept resetting attacks"
+      ],
+      "action_notes": [
+        "Germany came from behind to win 2-1",
+        "won possession back repeatedly"
+      ],
+      "flow_notes": [
+        "Germany came from behind to win 2-1"
+      ],
+      "allowed_claims": [
+        "comeback win"
+      ],
+      "key_metrics": [
+        {
+          "metric": "possession_regains",
+          "label": "possession regains",
+          "value": 14,
+          "unit": ""
+        },
+        {
+          "metric": "possession_interrupted",
+          "label": "interruptions",
+          "value": 4,
+          "unit": ""
+        },
+        {
+          "metric": "blocks",
+          "label": "blocks",
+          "value": 3,
+          "unit": ""
+        }
+      ],
+      "evidence_chips": [
+        "ball-winning profile"
+      ],
+      "avoid": [
+        "metric dumps",
+        "generic AI phrasing",
+        "claims that imply video review"
+      ]
+    }
+  ],
+  "review_checklist": [
+    "Title reads like natural English sports copy.",
+    "Each pick has a distinct football angle.",
+    "Evidence supports the claim without metric dumping.",
+    "No implied video review or outside rating source."
+  ]
+}

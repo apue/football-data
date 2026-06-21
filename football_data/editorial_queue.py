@@ -91,7 +91,11 @@ def _pending_items(
         reason: str | None = None
         if latest_editorial_date is None or match_date > latest_editorial_date:
             reason = "data_date_ahead_of_editorial"
-        elif published_hash and published_hash != fingerprint["input_hash"]:
+        elif (
+            match_date == latest_editorial_date
+            and published_hash
+            and published_hash != fingerprint["input_hash"]
+        ):
             reason = "editorial_input_changed"
 
         if reason is not None:

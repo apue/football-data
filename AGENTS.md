@@ -49,7 +49,7 @@ Use `scripts/run_editorial_queue.py` as the default publication entrypoint. It r
 
 The editor agent produces `evidence.json`, `fact_bank.zh.json`, `brief.en.json`, `reports/editorial/YYYY-MM-DD.md`, compiled `choices.json`, and an `agent-runs/YYYY-MM-DD.json` audit. The workflow order is evidence -> optional research -> writer draft -> draft fact check -> final editor -> deterministic validation -> final fact-check warning gate -> compile/publish. Write Chinese from `fact_bank.zh.json` as a from-scratch Chinese sports editor. Write English from `brief.en.json` and `evidence.json`; do not use either finished language version as input for the other. Do not reintroduce `brief.zh.json`, manual render/generate entrypoints, or direct Chat Completions fallback paths.
 
-Default Editor's Choices scoring uses `config/scoring/v0.3.json`. The impact layer is derived from PMSR goals, lineup status, and final scoreline only; it can reward opening, equalizing, go-ahead, match-winning, late, stoppage-time, late match-winning goals, only-goal winners, braces, hat-tricks, and substitute scoring bursts. Hidden-gem and progression review should use detailed line-break splits when available so pass-only line-break volume is not treated the same as pressure-breaking carries or deeper attacking-third breaks. Do not use POTM labels, media ratings, or social reactions as direct scoring inputs.
+Default Editor's Choices scoring uses `config/scoring/v0.4.json`. The impact layer is derived from PMSR goals, lineup status, final scoreline, and deterministic match-flow reconstruction; it can reward opening, equalizing, go-ahead, match-winning, late, stoppage-time, late match-winning goals, comeback equalisers, comeback winners, only-goal winners, braces, hat-tricks, and substitute scoring bursts. Hidden-gem and progression review should use detailed line-break splits when available so pass-only line-break volume is not treated the same as pressure-breaking carries or deeper attacking-third breaks. Do not use POTM labels, media ratings, or social reactions as direct scoring inputs.
 
 The editorial workflow generates opinionated content, so prefer a PR branch over direct pushes to `main` unless the user explicitly asks for direct publication.
 
@@ -59,7 +59,7 @@ When the user asks to calibrate weights, inspect Player of the Match alignment, 
 
 Treat POTM as a weak label. Use `scripts/discover_potm_evidence.py --date YYYY-MM-DD` for match-day candidate discovery, `scripts/search_potm_evidence.py` for targeted follow-up searches, write only confirmed labels to `calibration/potm-labels.json`, and run `scripts/calibrate_potm.py --date YYYY-MM-DD` to produce rank-diff reports. Do not feed POTM directly into Editor's Choices scoring; use repeated misses as prompts for scoring experiments.
 
-Current POTM calibration defaults to `config/scoring/v0.3.json`. Do not preserve old scoring configs unless a new scoring experiment explicitly needs a committed comparison file.
+Current POTM calibration defaults to `config/scoring/v0.4.json`. Do not preserve old scoring configs unless a new scoring experiment explicitly needs a committed comparison file.
 
 When the user asks to evaluate the POTM workflow, Firecrawl evidence quality, source quality, noise ratio, or calibration readiness, use the repo-scoped skill at `.agents/skills/evaluate-potm-workflow/SKILL.md`. Run `scripts/evaluate_potm_workflow.py --date YYYY-MM-DD`; pass `--discover` only when candidate evidence needs to be fetched first.
 

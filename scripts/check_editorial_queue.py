@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import json
 
+from football_data.editorial_fingerprint import DEFAULT_SCORING_CONFIG
 from football_data.editorial_queue import build_editorial_queue, write_editorial_queue
 
 
@@ -12,7 +13,7 @@ def main() -> int:
     parser.add_argument("--db", default="data/latest.sqlite", help="SQLite database path.")
     parser.add_argument("--site-dir", default="site", help="Site output directory.")
     parser.add_argument("--manifests-dir", default="manifests", help="Manifests directory.")
-    parser.add_argument("--scoring-config", default="config/scoring/v0.3.json")
+    parser.add_argument("--scoring-config", default=DEFAULT_SCORING_CONFIG)
     parser.add_argument(
         "--out",
         default="manifests/editorial-queue.json",

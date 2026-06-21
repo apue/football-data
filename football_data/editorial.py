@@ -10,10 +10,11 @@ from typing import Any
 
 from football_data.editorial_fingerprint import editorial_input_fingerprint
 from football_data.flags import format_player, format_team
+from football_data.match_flow import build_match_flows, player_flow_impacts
 from football_data.metric_benchmarks import hidden_gem_profile, progression_benchmark
 
 
-DEFAULT_SCORING_CONFIG = Path("config/scoring/v0.3.json")
+DEFAULT_SCORING_CONFIG = Path("config/scoring/v0.4.json")
 
 
 AWARD_LABELS = {
@@ -80,12 +81,18 @@ ZH_TEAM_NAMES = {
 ZH_PLAYER_NAMES = {
     "ABDALLAH NASIB": "纳西布",
     "Andres ANDRADE": "安德烈斯·安德拉德",
+    "Ayase UEDA": "上田绮世",
+    "Brian BROBBEY": "布罗比",
     "BRUNO FERNANDES": "布鲁诺·费尔南德斯",
+    "Deniz UNDAV": "恩达夫",
+    "Felix NMECHA": "恩梅查",
     "JOAO NEVES": "若昂·内维斯",
     "Jonas ADJETEY": "乔纳斯·阿杰泰",
+    "Joshua KIMMICH": "基米希",
     "Kylian MBAPPE": "姆巴佩",
     "Lionel MESSI": "梅西",
     "Nicolas SEIWALD": "塞瓦尔德",
+    "Pedro VITE": "维特",
     "Rayan AIT-NOURI": "艾特-努里",
     "Rodrigo DE PAUL": "德保罗",
     "TOMAS ARAUJO": "托马斯·阿劳若",
@@ -104,7 +111,13 @@ def build_editorial_report(
     try:
         selected_date = match_date or _latest_match_date(conn)
         matches = _matches_for_date(conn, selected_date)
-        players = [_score_player(row, scoring) for row in _player_rows_for_date(conn, selected_date)]
+        match_flows = build_match_flows(db_path, match_date=selected_date)
+        flow_impacts = player_flow_impacts(match_flows)
+        players = [
+            _score_player(row, scoring, flow_impacts=flow_impacts)
+            for row in _player_rows_for_date(conn, selected_date)
+        ]
+        _attach_flow_contexts(players, match_flows)
     finally:
         conn.close()
 
@@ -123,6 +136,7 @@ def build_editorial_report(
         "editorial_input_hash": input_fingerprint["input_hash"],
         "editorial_input": input_fingerprint,
         "matches": matches,
+        "match_flows": match_flows,
         "choices": choices,
         "selection_review": selection_result["review"],
         "audit": _build_audit(players, choices, selected_date),
@@ -244,6 +258,7 @@ def compile_editorial_markdown(
         "editorial_input": evidence.get("editorial_input"),
         "source_markdown_path": source_markdown_path,
         "matches": evidence["matches"],
+        "match_flows": evidence.get("match_flows", {}),
         "choices": compiled_choices,
         "selection_review": evidence.get("selection_review"),
         "audit": evidence["audit"],
@@ -252,7 +267,7 @@ def compile_editorial_markdown(
 
 def _load_scoring_config(path: str | Path) -> dict[str, Any]:
     config = json.loads(Path(path).read_text(encoding="utf-8"))
-    if config.get("version") != "v0.3":
+    if config.get("version") not in {"v0.3", "v0.4"}:
         raise ValueError(f"Unsupported scoring config version: {config.get('version')}")
     return config
 
@@ -459,8 +474,20 @@ def _player_rows_for_date(conn: sqlite3.Connection, match_date: str) -> list[sql
     ).fetchall()
 
 
-def _score_player(row: sqlite3.Row, scoring: dict[str, Any]) -> dict[str, Any]:
+def _score_player(
+    row: sqlite3.Row,
+    scoring: dict[str, Any],
+    *,
+    flow_impacts: dict[tuple[str, str, str], dict[str, int]] | None = None,
+) -> dict[str, Any]:
     features = _row_dict(row)
+    if flow_impacts:
+        key = (
+            str(features["match_key"]),
+            str(features["team"]),
+            str(features["player_name"]).upper(),
+        )
+        features.update(flow_impacts.get(key, {}))
     role_scores: dict[str, float] = {}
     component_map: dict[str, list[dict[str, Any]]] = {}
     for score_name, weights in scoring["scores"].items():
@@ -501,6 +528,94 @@ def _score_player(row: sqlite3.Row, scoring: dict[str, Any]) -> dict[str, Any]:
     features["progression_benchmark"] = progression_benchmark(features)
     features["hidden_gem_profile"] = hidden_gem_profile(features)
     return features
+
+
+def _attach_flow_contexts(
+    players: list[dict[str, Any]],
+    match_flows: dict[str, dict[str, Any]],
+) -> None:
+    for player in players:
+        player["flow_context"] = _player_flow_context(
+            player,
+            match_flows.get(str(player["match_key"])),
+        )
+
+
+def _player_flow_context(
+    player: dict[str, Any],
+    match_flow: dict[str, Any] | None,
+) -> dict[str, Any]:
+    if not match_flow:
+        return {
+            "goals": [],
+            "allowed_claims": {"en": [], "zh": []},
+            "team_came_from_behind_to_win": False,
+        }
+    player_name = str(player["player_name"]).upper()
+    team = str(player["team"])
+    goals = [
+        goal
+        for goal in match_flow.get("goals", [])
+        if str(goal.get("team")) == team and str(goal.get("player_name", "")).upper() == player_name
+    ]
+    en_claims: list[str] = []
+    zh_claims: list[str] = []
+    team_came_from_behind_to_win = _team_came_from_behind_to_win(match_flow, team)
+    if team_came_from_behind_to_win:
+        _append_unique(en_claims, "comeback win")
+        _append_unique(zh_claims, "逆转取胜")
+    for goal in goals:
+        tags = {str(tag) for tag in goal.get("tags", [])}
+        minute = int(goal.get("minute") or 0)
+        if "equalizer" in tags:
+            _append_unique(en_claims, "equaliser")
+            _append_unique(zh_claims, "扳平")
+        if "go_ahead_goal" in tags:
+            _append_unique(en_claims, "go-ahead goal")
+            _append_unique(zh_claims, "取得领先")
+        if "match_winning_goal" in tags:
+            _append_unique(en_claims, "match-winning goal")
+            _append_unique(zh_claims, "制胜球")
+        if "stoppage_time_goal" in tags:
+            _append_unique(en_claims, "stoppage-time goal")
+            _append_unique(zh_claims, "补时进球")
+        if "late_match_winning_goal" in tags:
+            _append_unique(en_claims, "late winner")
+            _append_unique(zh_claims, "补时制胜")
+        if "comeback_winner" in tags:
+            _append_unique(en_claims, "comeback winner")
+            _append_unique(zh_claims, "逆转制胜")
+        if "comeback_equalizer" in tags:
+            _append_unique(en_claims, "comeback equaliser")
+            _append_unique(zh_claims, "逆转过程中的扳平球")
+            _append_unique(zh_claims, "逆转扳平")
+        if "stoppage_time_goal" in tags and "match_winning_goal" in tags:
+            _append_unique(en_claims, f"{minute}' stoppage-time winner")
+            _append_unique(zh_claims, f"{minute}' 补时制胜")
+        elif "match_winning_goal" in tags:
+            _append_unique(en_claims, f"{minute}' winner")
+            _append_unique(zh_claims, f"{minute}' 制胜")
+        elif "equalizer" in tags:
+            _append_unique(en_claims, f"{minute}' equaliser")
+            _append_unique(zh_claims, f"{minute}' 扳平")
+    return {
+        "match_key": match_flow["match_key"],
+        "team_came_from_behind_to_win": team_came_from_behind_to_win,
+        "allowed_claims": {"en": en_claims, "zh": zh_claims},
+        "goals": goals,
+        "decisive_goal": next(
+            (goal for goal in goals if "match_winning_goal" in goal.get("tags", [])),
+            None,
+        ),
+    }
+
+
+def _team_came_from_behind_to_win(match_flow: dict[str, Any], team: str) -> bool:
+    if team == match_flow.get("home_team"):
+        return bool(match_flow.get("home_came_from_behind_to_win"))
+    if team == match_flow.get("away_team"):
+        return bool(match_flow.get("away_came_from_behind_to_win"))
+    return False
 
 
 def _select_choices_with_review(
@@ -623,9 +738,33 @@ def _choice(
         "role_scores": player["role_scores"],
         "progression_benchmark": player.get("progression_benchmark"),
         "hidden_gem_profile": player.get("hidden_gem_profile"),
+        "flow_context": player.get("flow_context"),
+        "metrics": _choice_metrics(player),
         "score_components": components[:6],
         "evidence_chips": _evidence_chips(player, award_type),
         "draft": _draft_brief(player, award_type),
+    }
+
+
+def _choice_metrics(player: dict[str, Any]) -> dict[str, int | float]:
+    metric_names = [
+        "shots",
+        "on_target",
+        "goals",
+        "offers_received",
+        "in_behind",
+        "in_between",
+        "line_breaks_completed",
+        "ball_progressions",
+        "possession_regains",
+        "possession_interrupted",
+        "blocks",
+        "total_distance_m",
+    ]
+    return {
+        metric: _clean_number(float(player.get(metric) or 0))
+        for metric in metric_names
+        if float(player.get(metric) or 0) > 0
     }
 
 
@@ -967,6 +1106,13 @@ def _evidence_chips(player: dict[str, Any], award_type: str) -> dict[str, list[s
         en.append("only goal")
         zh.append("全场唯一进球")
 
+    if int(player.get("comeback_winner") or 0) > 0:
+        en.append("comeback winner")
+        zh.append("逆转制胜")
+    elif int(player.get("comeback_equalizer") or 0) > 0:
+        en.append("comeback equaliser")
+        zh.append("逆转扳平")
+
     if int(player.get("late_match_winning_goal") or 0) > 0:
         en.append("late winner")
         zh.append("补时制胜")
@@ -1055,6 +1201,9 @@ def _metric_summary_items(player: dict[str, Any]) -> list[dict[str, str]]:
         "late_goal": ("late goal", "晚段进球"),
         "stoppage_time_goal": ("stoppage-time goal", "补时进球"),
         "late_match_winning_goal": ("late winner", "补时制胜球"),
+        "team_came_from_behind_goal": ("comeback goal", "逆转进程进球"),
+        "comeback_equalizer": ("comeback equaliser", "逆转扳平球"),
+        "comeback_winner": ("comeback winner", "逆转制胜球"),
         "attempts": ("attempts", "射门"),
         "on_target": ("on target", "射正"),
         "line_breaks_completed": ("line breaks", "打穿防线"),
@@ -1235,8 +1384,35 @@ def _zh_fact_bank_facts(choice: dict[str, Any]) -> list[str]:
     facts: list[str] = []
     for chip in choice["evidence_chips"]["zh"]:
         _append_unique(facts, chip)
+    for fact in _zh_flow_facts(choice):
+        _append_unique(facts, fact)
     for item in _choice_metric_items(choice, "zh"):
         _append_unique(facts, _zh_metric_fact(item))
+    return facts
+
+
+def _zh_flow_facts(choice: dict[str, Any]) -> list[str]:
+    facts: list[str] = []
+    flow_context = choice.get("flow_context") or {}
+    if flow_context.get("team_came_from_behind_to_win"):
+        _append_unique(
+            facts,
+            (
+                f"{_zh_team_name(choice['team'])} 0-1 落后后 "
+                f"{choice['team_final_goals']}-{choice['opponent_final_goals']} 逆转取胜"
+            ),
+        )
+    for goal in flow_context.get("goals", []):
+        minute = int(goal.get("minute") or 0)
+        tags = {str(tag) for tag in goal.get("tags", [])}
+        if "equalizer" in tags:
+            _append_unique(facts, f"{minute}' 扳平")
+        if "stoppage_time_goal" in tags and "match_winning_goal" in tags:
+            _append_unique(facts, f"{minute}' 补时制胜")
+        elif "match_winning_goal" in tags:
+            _append_unique(facts, f"{minute}' 制胜")
+        if "comeback_winner" in tags:
+            _append_unique(facts, "完成逆转制胜球")
     return facts
 
 
@@ -1265,8 +1441,12 @@ def _append_unique(items: list[str], item: str) -> None:
 
 def _zh_allowed_angles(choice: dict[str, Any]) -> list[str]:
     goals = _metric_value(choice, "goals")
+    flow_context = choice.get("flow_context") or {}
+    allowed = list(flow_context.get("allowed_claims", {}).get("zh", []))
+    if _metric_value(choice, "comeback_winner") > 0:
+        return [*allowed[:3], "逆转过程中的决定性人物", "补时制胜要写清楚来龙去脉"]
     if _metric_value(choice, "substitute_brace") > 0:
-        return ["替补双响", "改变比赛走势", "不用包装得太复杂"]
+        return [*allowed[:2], "替补双响", "改变比赛走势", "不用包装得太复杂"]
     if _metric_value(choice, "only_goal_winner") > 0:
         return ["全场唯一进球", "决定比分", "直接写关键性"]
     if goals >= 3:
@@ -1278,7 +1458,11 @@ def _zh_allowed_angles(choice: dict[str, Any]) -> list[str]:
     if _metric_value(choice, "match_winning_goal") > 0:
         return ["制胜球", "决定比分走势", "不只靠最后一脚"]
     if choice["award_type"] == "progression_pick":
-        return ["输球方亮点", "把球从压力里带出来", "推进出口"]
+        if _choice_goal_difference(choice) < 0:
+            return ["输球方亮点", "把球从压力里带出来", "推进出口"]
+        if (choice.get("flow_context") or {}).get("team_came_from_behind_to_win"):
+            return ["落后阶段保持向前路线", "把球从压力里带出来", "推进出口"]
+        return ["把球从压力里带出来", "推进出口", "帮助球队持续向前处理"]
     if choice["award_type"] == "defensive_pick":
         return ["承压局防守", "让对手进攻停下来", "脏活和硬活"]
     if choice["award_type"] == "hidden_gem":
@@ -1314,6 +1498,8 @@ def _english_choice_brief(choice: dict[str, Any]) -> dict[str, Any]:
         "why_selected": _en_selection_angle(choice),
         "title_candidates": _en_title_candidates(choice),
         "action_notes": _en_action_notes(choice),
+        "flow_notes": _en_flow_notes(choice),
+        "allowed_claims": (choice.get("flow_context") or {}).get("allowed_claims", {}).get("en", []),
         "key_metrics": _choice_metric_items(choice, "en"),
         "evidence_chips": choice["evidence_chips"]["en"],
         "avoid": [
@@ -1342,6 +1528,8 @@ def _english_review_checklist() -> list[str]:
 
 def _en_selection_angle(choice: dict[str, Any]) -> str:
     goals = _metric_value(choice, "goals")
+    if _metric_value(choice, "comeback_winner") > 0:
+        return "Lead with the comeback: he equalised, then scored the stoppage-time winner."
     if _metric_value(choice, "substitute_brace") > 0:
         return "Lead with the substitute brace and the way it changed the match."
     if _metric_value(choice, "only_goal_winner") > 0:
@@ -1355,6 +1543,10 @@ def _en_selection_angle(choice: dict[str, Any]) -> str:
     if _metric_value(choice, "match_winning_goal") > 0:
         return "Lead with the decisive goal, then support it with the broader match profile."
     if choice["award_type"] == "progression_pick":
+        if _choice_goal_difference(choice) < 0:
+            return "Focus on moving the ball through pressure from a losing side."
+        if (choice.get("flow_context") or {}).get("team_came_from_behind_to_win"):
+            return "Focus on the forward passing that helped the team recover from a trailing position."
         return "Focus on moving the ball through pressure and into territory."
     if choice["award_type"] == "defensive_pick":
         return "Focus on stopping attacks and forcing resets."
@@ -1365,6 +1557,8 @@ def _en_selection_angle(choice: dict[str, Any]) -> str:
 
 def _en_title_candidates(choice: dict[str, Any]) -> list[str]:
     goals = _metric_value(choice, "goals")
+    if _metric_value(choice, "comeback_winner") > 0:
+        return ["The comeback finisher", "Level, then winner", "Two goals that turned it"]
     if _metric_value(choice, "substitute_brace") > 0:
         return ["The substitute who changed it", "Two goals off the bench", "The bench answer"]
     if _metric_value(choice, "only_goal_winner") > 0:
@@ -1372,13 +1566,21 @@ def _en_title_candidates(choice: dict[str, Any]) -> list[str]:
     if goals >= 3:
         return ["The hat-trick was enough", "Three goals, no debate", "The obvious top pick"]
     if goals >= 2:
+        if _metric_value(choice, "in_between") >= 15:
+            return ["The finisher between the lines", "Two goals from constant movement", "The runner Japan kept finding"]
+        if _metric_value(choice, "in_behind") >= 15:
+            return ["Two goals behind the line", "The runner behind Sweden", "The early brace that opened it up"]
         return ["The constant threat behind", "Two goals and a deeper problem", "Always stretching the line"]
     if _metric_value(choice, "late_match_winning_goal") > 0:
         return ["The late answer", "The winner at the end", "One finish that changed the day"]
     if _metric_value(choice, "match_winning_goal") > 0:
         return ["The decisive touch", "The goal that tilted it", "The moment that mattered"]
     if choice["award_type"] == "progression_pick":
-        return ["The best route forward", "Carrying through pressure", "Progression from a losing side"]
+        if _choice_goal_difference(choice) < 0:
+            return ["Progression from a losing side", "Carrying through pressure", "The best route forward"]
+        if (choice.get("flow_context") or {}).get("team_came_from_behind_to_win"):
+            return ["The route back into it", "Forward passing under pressure", "Progression in the comeback"]
+        return ["The best route forward", "Carrying through pressure", "Forward passing under control"]
     if choice["award_type"] == "defensive_pick":
         return ["The stubborn stopper", "Breaking the flow", "The defender who kept resetting attacks"]
     if choice["award_type"] == "hidden_gem":
@@ -1388,6 +1590,8 @@ def _en_title_candidates(choice: dict[str, Any]) -> list[str]:
 
 def _en_action_notes(choice: dict[str, Any]) -> list[str]:
     notes: list[str] = []
+    for note in _en_flow_notes(choice):
+        _append_unique(notes, note)
     if _metric_value(choice, "substitute_brace") > 0:
         notes.append("scored twice after coming off the bench")
     if _metric_value(choice, "only_goal_winner") > 0:
@@ -1415,6 +1619,35 @@ def _en_action_notes(choice: dict[str, Any]) -> list[str]:
     return notes[:4]
 
 
+def _en_flow_notes(choice: dict[str, Any]) -> list[str]:
+    notes: list[str] = []
+    flow_context = choice.get("flow_context") or {}
+    if flow_context.get("team_came_from_behind_to_win"):
+        _append_unique(
+            notes,
+            (
+                f"{choice['team']} came from behind to win "
+                f"{choice['team_final_goals']}-{choice['opponent_final_goals']}"
+            ),
+        )
+    for goal in flow_context.get("goals", []):
+        minute = int(goal.get("minute") or 0)
+        tags = {str(tag) for tag in goal.get("tags", [])}
+        if "equalizer" in tags:
+            _append_unique(notes, f"{minute}' equaliser")
+        if "stoppage_time_goal" in tags and "match_winning_goal" in tags:
+            _append_unique(notes, f"{minute}' stoppage-time winner")
+        elif "match_winning_goal" in tags:
+            _append_unique(notes, f"{minute}' winner")
+        if "comeback_winner" in tags:
+            _append_unique(notes, "comeback winner")
+    return notes
+
+
+def _choice_goal_difference(choice: dict[str, Any]) -> int:
+    return int(choice.get("team_final_goals") or 0) - int(choice.get("opponent_final_goals") or 0)
+
+
 def _choice_metric_items(choice: dict[str, Any], language: str) -> list[dict[str, Any]]:
     labels = {
         "goals": {"en": "goals", "zh": "进球"},
@@ -1430,6 +1663,9 @@ def _choice_metric_items(choice: dict[str, Any], language: str) -> list[dict[str
         "late_goal": {"en": "late goal", "zh": "晚段进球"},
         "stoppage_time_goal": {"en": "stoppage-time goal", "zh": "补时进球"},
         "late_match_winning_goal": {"en": "late winner", "zh": "补时制胜球"},
+        "team_came_from_behind_goal": {"en": "comeback goal", "zh": "逆转进程进球"},
+        "comeback_equalizer": {"en": "comeback equaliser", "zh": "逆转扳平球"},
+        "comeback_winner": {"en": "comeback winner", "zh": "逆转制胜球"},
         "on_target": {"en": "shots on target", "zh": "射正"},
         "line_breaks_completed": {"en": "completed line breaks", "zh": "打穿防线"},
         "ball_progressions": {"en": "ball progressions", "zh": "推进"},

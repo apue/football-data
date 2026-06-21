@@ -196,10 +196,21 @@ class RenamingEditorialClient(FakeEditorialClient):
         if role.endswith("fact_check"):
             return json.dumps({"status": "pass", "warnings": []})
         language = payload["language"]
+        player_name = payload["choices"][0]["player_name"]
         if language == "zh":
-            item = {"award_type": "changed", "player_name": "改名", "title": "中文标题", "body": "中文正文。"}
+            item = {
+                "award_type": "changed",
+                "player_name": "改名",
+                "title": f"{player_name} 中文标题",
+                "body": "中文正文。",
+            }
         else:
-            item = {"award_type": "changed", "player_name": "Renamed", "title": "English title", "body": "English body."}
+            item = {
+                "award_type": "changed",
+                "player_name": "Renamed",
+                "title": f"{player_name} English title",
+                "body": "English body.",
+            }
         return json.dumps({"items": [item], "warnings": []}, ensure_ascii=False)
 
 
@@ -327,7 +338,58 @@ def test_deterministic_fact_check_blocks_unsupported_comeback_claim():
         "Johan MANZAMBI 替补出场之后打进反超进球。",
     )
 
-    assert any("comeback" in warning for warning in warnings)
+    assert any("go-ahead" in warning or "反超" in warning for warning in warnings)
+
+
+def test_deterministic_fact_check_allows_supported_comeback_claim():
+    evidence = {
+        "matches": [
+            {
+                "match_key": "FIFA-2026-M33-GER-CIV",
+                "home_team": "Germany",
+                "away_team": "Côte d'Ivoire",
+                "home_score": 2,
+                "away_score": 1,
+            }
+        ],
+        "match_flows": {
+            "FIFA-2026-M33-GER-CIV": {
+                "home_came_from_behind_to_win": True,
+                "away_came_from_behind_to_win": False,
+            }
+        },
+        "choices": [
+            {
+                "match_key": "FIFA-2026-M33-GER-CIV",
+                "player_name": "Deniz UNDAV",
+                "team": "Germany",
+                "flow_context": {
+                    "allowed_claims": {
+                        "en": ["comeback win", "comeback winner", "93' stoppage-time winner"],
+                        "zh": ["逆转取胜", "逆转制胜", "93' 补时制胜"],
+                    }
+                },
+                "score_components": [
+                    {"metric": "comeback_winner", "value": 1},
+                    {"metric": "late_match_winning_goal", "value": 1},
+                ],
+            }
+        ],
+    }
+
+    warnings = _deterministic_fact_check(
+        evidence,
+        "\n".join(
+            [
+                "### Player of the Day: Deniz UNDAV",
+                "Undav scored both goals in a 2-1 comeback win.",
+                "#### 中文",
+                "恩达夫补时制胜，德国完成逆转取胜。",
+            ]
+        ),
+    )
+
+    assert not any("comeback" in warning for warning in warnings)
 
 
 def test_deterministic_fact_check_catches_overbroad_editorial_claims():
@@ -337,6 +399,98 @@ def test_deterministic_fact_check_catches_overbroad_editorial_claims():
     )
 
     assert any("overbroad" in warning for warning in warnings)
+
+
+def test_deterministic_fact_check_catches_all_chances_converted_overclaim():
+    evidence = {
+        "matches": [],
+        "choices": [
+            {
+                "player_name": "Ayase UEDA",
+                "metrics": {"shots": 5, "goals": 2},
+                "score_components": [{"metric": "goals", "value": 2}],
+            }
+        ],
+    }
+
+    warnings = _deterministic_fact_check(
+        evidence,
+        "\n".join(
+            [
+                "### Player of the Day: Ayase UEDA",
+                "#### 中文",
+                "两次机会全部打进，射门质量够硬。",
+            ]
+        ),
+    )
+
+    assert any("all chances" in warning for warning in warnings)
+
+
+def test_deterministic_fact_check_catches_unsupported_tactical_overreads():
+    warnings = _deterministic_fact_check(
+        {"matches": [], "choices": [{"player_name": "Joshua KIMMICH"}]},
+        "\n".join(
+            [
+                "### Progression Pick: Joshua KIMMICH",
+                "#### 中文",
+                "他反复把球从压力里带出来，是球队最稳定的推进出口。",
+            ]
+        ),
+    )
+
+    assert any("unsupported tactical detail" in warning for warning in warnings)
+
+
+def test_deterministic_fact_check_catches_position_overclaim():
+    evidence = {
+        "matches": [],
+        "choices": [
+            {
+                "player_name": "Felix NMECHA",
+                "position": "MF",
+            }
+        ],
+    }
+
+    warnings = _deterministic_fact_check(
+        evidence,
+        "\n".join(
+            [
+                "### Defensive Pick: Felix NMECHA",
+                "#### English",
+                "The defender who kept resetting attacks.",
+            ]
+        ),
+    )
+
+    assert any("position" in warning for warning in warnings)
+
+
+def test_deterministic_fact_check_catches_duplicate_choice_titles():
+    warnings = _deterministic_fact_check(
+        {"matches": [], "choices": [{"player_name": "A"}, {"player_name": "B"}]},
+        "\n".join(
+            [
+                "### Player of the Day: A",
+                "#### English",
+                "**The constant threat behind**",
+                "A body.",
+                "#### 中文",
+                "**甲**",
+                "正文。",
+                "### Player of the Day: B",
+                "#### English",
+                "**The constant threat behind**",
+                "B body.",
+                "#### 中文",
+                "**乙**",
+                "正文。",
+            ]
+        ),
+    )
+
+    assert any("Duplicate English title" in warning for warning in warnings)
 
 
 def test_editorial_agent_prompts_explicitly_reject_overbroad_claims():

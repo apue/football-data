@@ -1,7 +1,6 @@
 {
-  "schema_version": 2,
+  "schema_version": 1,
   "generated_at": "2026-06-21T15:43:17+00:00",
-  "compiled_at": "2026-06-21T15:52:36+00:00",
   "match_date": "2026-06-20",
   "scoring_version": "v0.4",
   "editorial_input_hash": "501c81dad2211310dfe35b8e2eead91ef98c50a120e270129cf587912073d807",
@@ -92,7 +91,6 @@
     ],
     "input_hash": "501c81dad2211310dfe35b8e2eead91ef98c50a120e270129cf587912073d807"
   },
-  "source_markdown_path": "reports/editorial/2026-06-20.md",
   "matches": [
     {
       "match_key": "FIFA-2026-M33-GER-CIV",
@@ -461,6 +459,16 @@
       "team_final_goals": 2,
       "opponent_final_goals": 1,
       "position": "FW",
+      "score": 191.9,
+      "primary_score": "headline_score",
+      "role_scores": {
+        "attacking_threat": 26.05,
+        "impact": 91.0,
+        "progressor": 0.14,
+        "off_ball": 9.0,
+        "defensive": 1.75,
+        "physical": 9.57
+      },
       "progression_benchmark": {
         "score": 0.0,
         "quality": "thin",
@@ -573,6 +581,50 @@
         "in_between": 1,
         "total_distance_m": 3791.7
       },
+      "score_components": [
+        {
+          "metric": "late_match_winning_goal",
+          "value": 1,
+          "weight": 20.0,
+          "contribution": 20.0,
+          "score": "impact"
+        },
+        {
+          "metric": "goals",
+          "value": 2,
+          "weight": 8.0,
+          "contribution": 16.0,
+          "score": "attacking_threat"
+        },
+        {
+          "metric": "match_winning_goal",
+          "value": 1,
+          "weight": 12.0,
+          "contribution": 12.0,
+          "score": "impact"
+        },
+        {
+          "metric": "comeback_winner",
+          "value": 1,
+          "weight": 12.0,
+          "contribution": 12.0,
+          "score": "impact"
+        },
+        {
+          "metric": "brace",
+          "value": 1,
+          "weight": 8.0,
+          "contribution": 8.0,
+          "score": "impact"
+        },
+        {
+          "metric": "substitute_goal",
+          "value": 2,
+          "weight": 4.0,
+          "contribution": 8.0,
+          "score": "impact"
+        }
+      ],
       "evidence_chips": {
         "en": [
           "brace",
@@ -586,16 +638,6 @@
           "逆转制胜",
           "补时制胜"
         ]
-      },
-      "content": {
-        "en": {
-          "title": "The comeback finisher",
-          "html": "<p>Undav turned the match around with a 67th-minute equaliser and a stoppage-time winner in the 93rd minute, giving Germany a 2-1 comeback victory over Côte d'Ivoire.</p>"
-        },
-        "zh": {
-          "title": "替补双响，恩达夫补时绝杀科特迪瓦",
-          "html": "<p>德国0比1落后，替补登场的恩达夫梅开二度，帮助球队2比1逆转取胜。第67分钟，恩达夫扳平比分。第93分钟，他在补时阶段打入制胜球。</p>"
-        }
       }
     },
     {
@@ -616,6 +658,16 @@
       "team_final_goals": 4,
       "opponent_final_goals": 0,
       "position": "FW",
+      "score": 102.1,
+      "primary_score": "headline_score",
+      "role_scores": {
+        "attacking_threat": 33.6,
+        "impact": 28.0,
+        "progressor": 3.7,
+        "off_ball": 39.4,
+        "defensive": 3.35,
+        "physical": 15.56
+      },
       "progression_benchmark": {
         "score": 3.0,
         "quality": "thin",
@@ -706,6 +758,50 @@
         "possession_regains": 1,
         "total_distance_m": 9059.2
       },
+      "score_components": [
+        {
+          "metric": "in_behind",
+          "value": 28,
+          "weight": 0.6,
+          "contribution": 16.8,
+          "score": "off_ball"
+        },
+        {
+          "metric": "goals",
+          "value": 2,
+          "weight": 8.0,
+          "contribution": 16.0,
+          "score": "attacking_threat"
+        },
+        {
+          "metric": "match_winning_goal",
+          "value": 1,
+          "weight": 12.0,
+          "contribution": 12.0,
+          "score": "impact"
+        },
+        {
+          "metric": "total_distance_m",
+          "value": 9059.2,
+          "weight": 0.001,
+          "contribution": 9.06,
+          "score": "physical"
+        },
+        {
+          "metric": "in_between",
+          "value": 22,
+          "weight": 0.4,
+          "contribution": 8.8,
+          "score": "off_ball"
+        },
+        {
+          "metric": "brace",
+          "value": 1,
+          "weight": 8.0,
+          "contribution": 8.0,
+          "score": "impact"
+        }
+      ],
       "evidence_chips": {
         "en": [
           "brace",
@@ -719,16 +815,6 @@
           "射门质量突出",
           "在防线之间活跃"
         ]
-      },
-      "content": {
-        "en": {
-          "title": "The finisher between the lines",
-          "html": "<p>Ueda's constant movement behind and between the lines produced two goals, including the 30' match-winner, as Japan beat Tunisia 4-0. He made 28 in-behind runs and 22 between-line offers, repeatedly threatening the defence.</p>"
-        },
-        "zh": {
-          "title": "上田绮世：两球定胜局，九公里跑动打穿防线",
-          "html": "<p>日本4-0大胜突尼斯，上田绮世梅开二度。第30分钟他首开纪录，这粒进球也是制胜球。</p><p>全场比赛他在防线之间活跃，28次在身后接应，22次在两线间接应，跑动距离9.06公里。</p><p>除了两粒进球，他的射门质量同样突出，用跑动和持续冲击打穿了突尼斯的防守。</p>"
-        }
       }
     },
     {
@@ -749,6 +835,16 @@
       "team_final_goals": 5,
       "opponent_final_goals": 1,
       "position": "FW",
+      "score": 86.3,
+      "primary_score": "headline_score",
+      "role_scores": {
+        "attacking_threat": 27.25,
+        "impact": 27.0,
+        "progressor": 0.08,
+        "off_ball": 21.8,
+        "defensive": 4.1,
+        "physical": 13.55
+      },
       "progression_benchmark": {
         "score": 0.0,
         "quality": "thin",
@@ -835,6 +931,50 @@
         "blocks": 2,
         "total_distance_m": 7193.4
       },
+      "score_components": [
+        {
+          "metric": "goals",
+          "value": 2,
+          "weight": 8.0,
+          "contribution": 16.0,
+          "score": "attacking_threat"
+        },
+        {
+          "metric": "in_behind",
+          "value": 21,
+          "weight": 0.6,
+          "contribution": 12.6,
+          "score": "off_ball"
+        },
+        {
+          "metric": "match_winning_goal",
+          "value": 1,
+          "weight": 12.0,
+          "contribution": 12.0,
+          "score": "impact"
+        },
+        {
+          "metric": "brace",
+          "value": 1,
+          "weight": 8.0,
+          "contribution": 8.0,
+          "score": "impact"
+        },
+        {
+          "metric": "total_distance_m",
+          "value": 7193.4,
+          "weight": 0.001,
+          "contribution": 7.19,
+          "score": "physical"
+        },
+        {
+          "metric": "top_speed_kmh",
+          "value": 31.8,
+          "weight": 0.2,
+          "contribution": 6.36,
+          "score": "physical"
+        }
+      ],
       "evidence_chips": {
         "en": [
           "brace",
@@ -844,16 +984,6 @@
           "梅开二度",
           "打入制胜球"
         ]
-      },
-      "content": {
-        "en": {
-          "title": "The runner behind Sweden",
-          "html": "<p>Brobbey's brace gave the Netherlands an early route. He scored the 16' winner and kept attacking the space behind Sweden's back line, making 21 in-behind runs.</p>"
-        },
-        "zh": {
-          "title": "布罗比两球定局，反复冲击身后空间",
-          "html": "<p>第16分钟，布罗比打入制胜球。随后他完成梅开二度，荷兰5-1大胜瑞典。全场比赛他21次在防线身后接应，跑动超过7.2公里，反复前插拉扯纵深。</p>"
-        }
       }
     },
     {
@@ -874,6 +1004,16 @@
       "team_final_goals": 2,
       "opponent_final_goals": 1,
       "position": "DF",
+      "score": 53.4,
+      "primary_score": "progressor",
+      "role_scores": {
+        "attacking_threat": 2.2,
+        "impact": 0.0,
+        "progressor": 53.44,
+        "off_ball": 12.8,
+        "defensive": 25.1,
+        "physical": 18.47
+      },
       "progression_benchmark": {
         "score": 12.49,
         "quality": "thin",
@@ -907,6 +1047,20 @@
         "blocks": 1,
         "total_distance_m": 12194.2
       },
+      "score_components": [
+        {
+          "metric": "line_breaks_completed",
+          "value": 26,
+          "weight": 2.0,
+          "contribution": 52.0
+        },
+        {
+          "metric": "passes_completed",
+          "value": 72,
+          "weight": 0.02,
+          "contribution": 1.44
+        }
+      ],
       "evidence_chips": {
         "en": [
           "repeated line breaks",
@@ -916,16 +1070,6 @@
           "持续打穿防线",
           "夺回球权能力突出"
         ]
-      },
-      "content": {
-        "en": {
-          "title": "The route back into it",
-          "html": "<p>With Germany trailing, Kimmich’s forward passing gave his side a route back into the match. He completed 26 line breaks, repeatedly breaking the opponent’s lines, and helped Germany complete a comeback from 1–0 down to win 2–1.</p>"
-        },
-        "zh": {
-          "title": "落后时还在向前，基米希26次打穿防线",
-          "html": "<p>德国0-1落后科特迪瓦，基米希在落后阶段仍然坚持向前。他全场26次打穿对方防线，反复抢回球权，德国在追分时始终能往前推。德国最终2-1逆转取胜。</p>"
-        }
       }
     },
     {
@@ -946,6 +1090,16 @@
       "team_final_goals": 0,
       "opponent_final_goals": 0,
       "position": "MF",
+      "score": 80.1,
+      "primary_score": "off_ball",
+      "role_scores": {
+        "attacking_threat": 15.15,
+        "impact": 0.0,
+        "progressor": 46.72,
+        "off_ball": 80.1,
+        "defensive": 8.7,
+        "physical": 15.78
+      },
       "progression_benchmark": {
         "score": 16.5,
         "quality": "thin",
@@ -979,6 +1133,32 @@
         "possession_interrupted": 1,
         "total_distance_m": 10197.1
       },
+      "score_components": [
+        {
+          "metric": "offers_received",
+          "value": 51,
+          "weight": 1.0,
+          "contribution": 51.0
+        },
+        {
+          "metric": "in_between",
+          "value": 33,
+          "weight": 0.4,
+          "contribution": 13.2
+        },
+        {
+          "metric": "total_offers",
+          "value": 117,
+          "weight": 0.1,
+          "contribution": 11.7
+        },
+        {
+          "metric": "in_behind",
+          "value": 7,
+          "weight": 0.6,
+          "contribution": 4.2
+        }
+      ],
       "evidence_chips": {
         "en": [
           "repeated line breaks",
@@ -990,16 +1170,6 @@
           "持续接应",
           "在防线之间活跃"
         ]
-      },
-      "content": {
-        "en": {
-          "title": "The quiet connector",
-          "html": "<p>Pedro VITE repeatedly offered himself between the lines, giving Ecuador a steady outlet to link play. He received 51 offers from teammates, 33 in those zones.</p>"
-        },
-        "zh": {
-          "title": "防线之间反复接应，维特让前场不断线",
-          "html": "<p>厄瓜多尔0比0库拉索，维特在中场反复接应，让前场不断线。全场51次接应里，33次在两线之间，7次是身后接应。他在防线之间活跃，持续打穿防线向前递送，给球队提供了一条向前的路线。不抢镜，但前场一直有球可接。</p>"
-        }
       }
     },
     {
@@ -1020,6 +1190,16 @@
       "team_final_goals": 2,
       "opponent_final_goals": 1,
       "position": "MF",
+      "score": 46.2,
+      "primary_score": "defensive",
+      "role_scores": {
+        "attacking_threat": 5.85,
+        "impact": 0.0,
+        "progressor": 31.14,
+        "off_ball": 20.9,
+        "defensive": 46.25,
+        "physical": 18.88
+      },
       "progression_benchmark": {
         "score": 22.1,
         "quality": "useful",
@@ -1057,6 +1237,44 @@
         "blocks": 3,
         "total_distance_m": 11884.9
       },
+      "score_components": [
+        {
+          "metric": "possession_regains",
+          "value": 14,
+          "weight": 1.3,
+          "contribution": 18.2
+        },
+        {
+          "metric": "tackles_won",
+          "value": 6,
+          "weight": 1.5,
+          "contribution": 9.0
+        },
+        {
+          "metric": "interceptions",
+          "value": 3,
+          "weight": 1.5,
+          "contribution": 4.5
+        },
+        {
+          "metric": "possession_interrupted",
+          "value": 4,
+          "weight": 1.0,
+          "contribution": 4.0
+        },
+        {
+          "metric": "pressing_direct",
+          "value": 11,
+          "weight": 0.3,
+          "contribution": 3.3
+        },
+        {
+          "metric": "blocks",
+          "value": 3,
+          "weight": 1.0,
+          "contribution": 3.0
+        }
+      ],
       "evidence_chips": {
         "en": [
           "ball-winning profile"
@@ -1064,16 +1282,6 @@
         "zh": [
           "夺回球权能力突出"
         ]
-      },
-      "content": {
-        "en": {
-          "title": "The stubborn stopper",
-          "html": "<p>Felix Nmecha helped Germany's comeback win by repeatedly winning the ball. He made 14 possession regains, forced 4 interruptions, and added 3 blocks to break Côte d'Ivoire's momentum.</p>"
-        },
-        "zh": {
-          "title": "14 次抢回球权，恩梅查扛下德国中场硬活",
-          "html": "<p>德国 0-1 落后科特迪瓦，恩梅查在中场把对抗和拦截的脏活扛了起来。单场 14 次夺回球权，4 次破坏进攻，3 次封堵，科特迪瓦的进攻反复在中场停下。这种反复抢回球权的硬活，是德国 2-1 逆转的基础。</p>"
-        }
       }
     }
   ],

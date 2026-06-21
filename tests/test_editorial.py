@@ -18,8 +18,9 @@ def test_build_editorial_report_for_match_day():
 
     assert report["schema_version"] == 1
     assert report["match_date"] == "2026-06-16"
-    assert report["scoring_version"] == "v0.3"
+    assert report["scoring_version"] == "v0.4"
     assert report["matches"]
+    assert report["match_flows"]
     assert report["choices"]
 
     first_choice = report["choices"][0]
@@ -141,6 +142,59 @@ def test_chinese_fact_bank_does_not_label_ordinary_go_ahead_goal_as_comeback():
     fact_bank_text = json.dumps(report, ensure_ascii=False)
 
     assert "反超进球" not in fact_bank_text
+
+
+def test_editorial_evidence_exposes_match_flow_for_comeback_winner(tmp_path):
+    report = build_editorial_report("data/latest.sqlite", match_date="2026-06-20")
+    write_editorial_artifacts(
+        report,
+        site_dir=tmp_path / "site",
+        reports_dir=tmp_path / "reports",
+    )
+
+    flow = report["match_flows"]["FIFA-2026-M33-GER-CIV"]
+    assert flow["home_came_from_behind_to_win"] is True
+    assert flow["decisive_goal"]["player_name"] == "Deniz UNDAV"
+    assert "comeback_winner" in flow["decisive_goal"]["tags"]
+
+    choices_by_name = {choice["player_name"]: choice for choice in report["choices"]}
+    undav = choices_by_name["Deniz UNDAV"]
+    assert undav["flow_context"]["team_came_from_behind_to_win"] is True
+    assert "comeback win" in undav["flow_context"]["allowed_claims"]["en"]
+    assert "逆转取胜" in undav["flow_context"]["allowed_claims"]["zh"]
+    assert any(
+        component["metric"] == "comeback_winner"
+        for component in undav["score_components"]
+    )
+
+    evidence = json.loads(
+        (tmp_path / "site" / "editorial" / "2026-06-20" / "evidence.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    fact_bank = json.loads(
+        (
+            tmp_path
+            / "site"
+            / "editorial"
+            / "2026-06-20"
+            / "fact_bank.zh.json"
+        ).read_text(encoding="utf-8")
+    )
+    brief = json.loads(
+        (tmp_path / "site" / "editorial" / "2026-06-20" / "brief.en.json").read_text(
+            encoding="utf-8"
+        )
+    )
+
+    assert evidence["match_flows"]["FIFA-2026-M33-GER-CIV"]["home_came_from_behind_to_win"] is True
+    fact_bank_text = json.dumps(fact_bank, ensure_ascii=False)
+    brief_text = json.dumps(brief, ensure_ascii=False)
+    assert "德国 0-1 落后后 2-1 逆转取胜" in fact_bank_text
+    assert "67' 扳平" in fact_bank_text
+    assert "93' 补时制胜" in fact_bank_text
+    assert "Germany came from behind to win 2-1" in brief_text
+    assert "93' stoppage-time winner" in brief_text
 
 
 def test_write_editorial_artifacts(tmp_path):

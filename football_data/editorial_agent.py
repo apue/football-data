@@ -20,6 +20,7 @@ from football_data.editorial import (
     render_editorial_markdown_file,
     write_editorial_artifacts,
 )
+from football_data.editorial_fingerprint import DEFAULT_SCORING_CONFIG
 from football_data.firecrawl import search_firecrawl
 
 
@@ -846,7 +847,7 @@ def run_editorial_agent(
     reports_dir: str | Path = "reports",
     manifests_dir: str | Path = "manifests",
     agent_runs_dir: str | Path = "agent-runs",
-    scoring_config_path: str | Path = "config/scoring/v0.3.json",
+    scoring_config_path: str | Path = DEFAULT_SCORING_CONFIG,
     style_dir: str | Path = ".agents/editorial-skills",
     env_path: str | Path = ".env.local",
     client: AgentTextClient | None = None,
@@ -1298,11 +1299,17 @@ def _deterministic_fact_check(evidence: dict[str, Any], markdown_text: str) -> l
     warnings: list[str] = []
     if re.search(r"\bassist(s|ed)?\b|助攻", markdown_text, flags=re.IGNORECASE):
         warnings.append("Copy mentions assists, which are not available in current PMSR evidence.")
-    if re.search(r"\bcome(?:s)? from behind\b|\bcomeback\b|反超|逆转", markdown_text, flags=re.IGNORECASE):
+    unsupported_flow_claims = _unsupported_flow_claims(evidence, markdown_text)
+    if unsupported_flow_claims:
         warnings.append(
-            "Copy makes a comeback or come-from-behind claim, but current evidence does not "
-            "carry an explicit comeback-goal field."
+            "Copy makes a match-flow claim that current evidence does not support: "
+            + "; ".join(unsupported_flow_claims)
         )
+    conversion_warnings = _unsupported_conversion_claims(evidence, markdown_text)
+    warnings.extend(conversion_warnings)
+    warnings.extend(_unsupported_tactical_detail_claims(markdown_text))
+    warnings.extend(_unsupported_position_claims(evidence, markdown_text))
+    warnings.extend(_duplicate_title_warnings(markdown_text))
     if re.search(r"几乎每一次|每一次向前|几乎都|全由他|从头到尾|绝非运气|会更早被", markdown_text):
         warnings.append(
             "Copy uses overbroad attribution that would need video review or stronger evidence."
@@ -1331,6 +1338,185 @@ def _deterministic_fact_check(evidence: dict[str, Any], markdown_text: str) -> l
                     f"but evidence has {player_goals:g} of {team_goals:g} team goals."
                 )
     return warnings
+
+
+def _duplicate_title_warnings(markdown_text: str) -> list[str]:
+    warnings: list[str] = []
+    for language, titles in _choice_titles_by_language(markdown_text).items():
+        seen: set[str] = set()
+        duplicates: set[str] = set()
+        for title in titles:
+            normalized = title.strip().lower()
+            if not normalized:
+                continue
+            if normalized in seen:
+                duplicates.add(title.strip())
+            seen.add(normalized)
+        for title in sorted(duplicates):
+            warnings.append(f"Duplicate {language} title in editorial choices: {title}")
+    return warnings
+
+
+def _choice_titles_by_language(markdown_text: str) -> dict[str, list[str]]:
+    titles = {"English": [], "Chinese": []}
+    sections = _markdown_choice_sections(markdown_text)
+    for section in sections:
+        en_match = re.search(r"#### English\s+\*\*(.*?)\*\*", section, flags=re.DOTALL)
+        zh_match = re.search(r"#### 中文\s+\*\*(.*?)\*\*", section, flags=re.DOTALL)
+        if en_match:
+            titles["English"].append(en_match.group(1).strip())
+        if zh_match:
+            titles["Chinese"].append(zh_match.group(1).strip())
+    return titles
+
+
+def _unsupported_tactical_detail_claims(markdown_text: str) -> list[str]:
+    patterns = [
+        r"禁区.{0,8}(抢到|落点)",
+        r"防线身前接应",
+        r"不敢.{0,6}前压",
+        r"压力里带出来",
+        r"最稳定的推进出口",
+        r"组织反扑",
+        r"\bdefen[cs]e unbalanced\b",
+        r"\bsliced through\b.{0,40}\bshape\b",
+    ]
+    warnings: list[str] = []
+    for pattern in patterns:
+        if re.search(pattern, markdown_text, flags=re.IGNORECASE):
+            warnings.append(
+                "Copy uses unsupported tactical detail that would need event/location/tracking evidence."
+            )
+            break
+    return warnings
+
+
+def _unsupported_position_claims(evidence: dict[str, Any], markdown_text: str) -> list[str]:
+    warnings: list[str] = []
+    sections = _markdown_choice_sections(markdown_text)
+    choices = evidence.get("choices", [])
+    if not sections or len(sections) != len(choices):
+        return warnings
+    for choice, section in zip(choices, sections, strict=True):
+        position = str(choice.get("position") or "")
+        if re.search(r"\bdefender\b", section, flags=re.IGNORECASE) and not position.startswith("DF"):
+            warnings.append(
+                f"Copy calls {choice.get('player_name')} a defender, but evidence position is {position or 'unknown'}."
+            )
+    return warnings
+
+
+def _unsupported_conversion_claims(evidence: dict[str, Any], markdown_text: str) -> list[str]:
+    warnings: list[str] = []
+    sections = _markdown_choice_sections(markdown_text)
+    choices = evidence.get("choices", [])
+    if not sections or len(sections) != len(choices):
+        sections = [markdown_text for _ in choices]
+    for choice, section in zip(choices, sections, strict=False):
+        if not _mentions_all_chances_converted(section):
+            continue
+        metrics = choice.get("metrics") or {}
+        shots = float(metrics.get("shots") or _choice_component_value(choice, "shots") or 0)
+        goals = float(metrics.get("goals") or _choice_component_value(choice, "goals") or 0)
+        if shots > goals:
+            warnings.append(
+                f"Copy claims all chances/shots were converted for {choice.get('player_name')}, "
+                f"but evidence has {goals:g} goals from {shots:g} shots."
+            )
+    return warnings
+
+
+def _mentions_all_chances_converted(text: str) -> bool:
+    return bool(
+        re.search(r"(机会|射门).{0,8}(全部|全都|都).{0,8}(打进|转化|把握)", text)
+        or re.search(
+            r"\ball\s+(?:chances|shots).{0,40}(?:converted|scored|finished)\b",
+            text,
+            flags=re.IGNORECASE,
+        )
+    )
+
+
+def _unsupported_flow_claims(evidence: dict[str, Any], markdown_text: str) -> list[str]:
+    unsupported: list[str] = []
+    sections = _markdown_choice_sections(markdown_text)
+    choices = evidence.get("choices", [])
+    if sections and len(sections) == len(choices):
+        for choice, section in zip(choices, sections, strict=True):
+            unsupported.extend(_unsupported_flow_claims_for_choice(choice, section))
+        return unsupported
+    allowed_claims = _all_allowed_flow_claims(evidence)
+    if _mentions_comeback_claim(markdown_text) and not _allows_any(
+        allowed_claims,
+        ["comeback win", "comeback winner", "comeback equaliser", "逆转取胜", "逆转制胜", "逆转扳平"],
+    ):
+        unsupported.append("comeback/逆转")
+    if _mentions_go_ahead_claim(markdown_text) and not _allows_any(
+        allowed_claims,
+        ["go-ahead goal", "comeback winner", "取得领先", "逆转制胜"],
+    ):
+        unsupported.append("go-ahead/反超")
+    return unsupported
+
+
+def _markdown_choice_sections(markdown_text: str) -> list[str]:
+    matches = list(re.finditer(r"(?m)^###\s+", markdown_text))
+    sections: list[str] = []
+    for index, match in enumerate(matches):
+        start = match.start()
+        end = matches[index + 1].start() if index + 1 < len(matches) else len(markdown_text)
+        sections.append(markdown_text[start:end])
+    return sections
+
+
+def _unsupported_flow_claims_for_choice(choice: dict[str, Any], section: str) -> list[str]:
+    allowed_claims = _choice_allowed_flow_claims(choice)
+    unsupported: list[str] = []
+    if _mentions_comeback_claim(section) and not _allows_any(
+        allowed_claims,
+        ["comeback win", "comeback winner", "comeback equaliser", "逆转取胜", "逆转制胜", "逆转扳平"],
+    ):
+        unsupported.append(f"{choice.get('player_name', 'unknown player')}: comeback/逆转")
+    if _mentions_go_ahead_claim(section) and not _allows_any(
+        allowed_claims,
+        ["go-ahead goal", "comeback winner", "取得领先", "逆转制胜"],
+    ):
+        unsupported.append(f"{choice.get('player_name', 'unknown player')}: go-ahead/反超")
+    return unsupported
+
+
+def _mentions_comeback_claim(text: str) -> bool:
+    return bool(re.search(r"\bcome(?:s)?[- ]from[- ]behind\b|\bcomeback\b|逆转", text, flags=re.IGNORECASE))
+
+
+def _mentions_go_ahead_claim(text: str) -> bool:
+    return bool(re.search(r"\bgo[- ]ahead\b|反超", text, flags=re.IGNORECASE))
+
+
+def _all_allowed_flow_claims(evidence: dict[str, Any]) -> list[str]:
+    claims: list[str] = []
+    for choice in evidence.get("choices", []):
+        claims.extend(_choice_allowed_flow_claims(choice))
+    return claims
+
+
+def _choice_allowed_flow_claims(choice: dict[str, Any]) -> list[str]:
+    flow_context = choice.get("flow_context") or {}
+    allowed = flow_context.get("allowed_claims") or {}
+    claims: list[str] = []
+    for language_claims in allowed.values():
+        if isinstance(language_claims, list):
+            claims.extend(str(claim) for claim in language_claims)
+    return claims
+
+
+def _allows_any(allowed_claims: list[str], needles: list[str]) -> bool:
+    lowered = [claim.lower() for claim in allowed_claims]
+    for needle in needles:
+        needle_lower = needle.lower()
+        if any(needle_lower in claim or claim in needle_lower for claim in lowered):
+            return True
+    return False
 
 
 def _choice_component_value(choice: dict[str, Any], metric: str) -> float:

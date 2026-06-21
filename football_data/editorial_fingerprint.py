@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Any
 
 
-DEFAULT_SCORING_CONFIG = "config/scoring/v0.3.json"
+DEFAULT_SCORING_CONFIG = "config/scoring/v0.4.json"
 
 
 def editorial_input_fingerprint(

@@ -1,0 +1,297 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-06-21T15:52:36+00:00",
+  "status": "success",
+  "match_date": "2026-06-20",
+  "scoring_version": "v0.4",
+  "research": {
+    "enabled": false,
+    "status": "skipped",
+    "result_count": 0
+  },
+  "selection_review": {
+    "status": "publishable",
+    "alerts": [
+      {
+        "level": "info",
+        "code": "same_team_multiple_picks",
+        "message": "Multiple picks can still come from one team when roles are clearly distinct.",
+        "teams": [
+          {
+            "team": "Germany",
+            "count": 3
+          }
+        ]
+      }
+    ],
+    "iterations": [
+      {
+        "iteration": 1,
+        "status": "publishable",
+        "alerts": [
+          {
+            "level": "info",
+            "code": "same_team_multiple_picks",
+            "message": "Multiple picks can still come from one team when roles are clearly distinct.",
+            "teams": [
+              {
+                "team": "Germany",
+                "count": 3
+              }
+            ]
+          }
+        ],
+        "choice_names": [
+          "Deniz UNDAV",
+          "Ayase UEDA",
+          "Brian BROBBEY",
+          "Joshua KIMMICH",
+          "Pedro VITE",
+          "Felix NMECHA"
+        ]
+      }
+    ]
+  },
+  "models": {
+    "en_editor": "deepseek-ai/DeepSeek-V4-Flash",
+    "en_writer": "deepseek-ai/DeepSeek-V4-Flash",
+    "fact_check": "deepseek-ai/DeepSeek-V4-Flash",
+    "zh_editor": "zai-org/GLM-5.2",
+    "zh_writer": "zai-org/GLM-5.2"
+  },
+  "workflow": {
+    "name": "editorial_state_graph",
+    "version": 1,
+    "nodes": [
+      {
+        "id": "build_evidence",
+        "kind": "python",
+        "status": "success",
+        "max_attempts": 1,
+        "warnings": [],
+        "summary": {
+          "choices": 6,
+          "scoring_version": "v0.4"
+        }
+      },
+      {
+        "id": "external_research",
+        "kind": "python",
+        "status": "success",
+        "max_attempts": 1,
+        "warnings": [],
+        "summary": {
+          "enabled": false,
+          "status": "skipped",
+          "result_count": 0
+        }
+      },
+      {
+        "id": "zh_writer",
+        "kind": "agent",
+        "status": "success",
+        "max_attempts": 2,
+        "model": "zai-org/GLM-5.2",
+        "skills": [
+          "human-writing-zh",
+          "anti-translationese",
+          "football-editor-style"
+        ],
+        "warnings": [
+          "zh_writer failed: zh_writer timed out after 90 seconds"
+        ],
+        "summary": {
+          "items": 6,
+          "agent_calls": 6,
+          "max_concurrency": 3
+        }
+      },
+      {
+        "id": "zh_draft_fact_check",
+        "kind": "agent",
+        "status": "success",
+        "max_attempts": 2,
+        "model": "deepseek-ai/DeepSeek-V4-Flash",
+        "skills": [
+          "football-editor-style"
+        ],
+        "warnings": [
+          "第三条（Brian BROBBEY）body中“让瑞典始终需要警戒身后”属于对对手心理的主观臆测，无结构化证据支撑，建议删除或改为基于数据的描述（如“他21次在防线身后接应”）。"
+        ],
+        "summary": {
+          "status": "pass"
+        }
+      },
+      {
+        "id": "zh_final_editor",
+        "kind": "agent",
+        "status": "success",
+        "max_attempts": 2,
+        "model": "zai-org/GLM-5.2",
+        "skills": [
+          "human-writing-zh",
+          "anti-translationese",
+          "football-editor-style"
+        ],
+        "warnings": [
+          "第三条（Brian BROBBEY）body中“让瑞典始终需要警戒身后”属于对对手心理的主观臆测，无结构化证据支撑，建议删除或改为基于数据的描述（如“他21次在防线身后接应”）。"
+        ],
+        "summary": {
+          "items": 6,
+          "agent_calls": 6,
+          "max_concurrency": 3
+        }
+      },
+      {
+        "id": "en_writer",
+        "kind": "agent",
+        "status": "success",
+        "max_attempts": 2,
+        "model": "deepseek-ai/DeepSeek-V4-Flash",
+        "skills": [
+          "football-editor-style"
+        ],
+        "warnings": [],
+        "summary": {
+          "items": 6,
+          "agent_calls": 6,
+          "max_concurrency": 3
+        }
+      },
+      {
+        "id": "en_draft_fact_check",
+        "kind": "agent",
+        "status": "success",
+        "max_attempts": 2,
+        "model": "deepseek-ai/DeepSeek-V4-Flash",
+        "skills": [
+          "football-editor-style"
+        ],
+        "warnings": [
+          "The draft says 'Undav turned the match around' with a 'stoppage-time winner in the 93rd minute' and 'giving Germany a 2-1 comeback victory'; that is supported by evidence.  However, the draft says 'keeping Japan on the front foot'; the evidence does not contain any tactical or momentum claim such as 'keeping Japan on the front foot'.",
+          "The draft says 'kept Ecuador's possession connected'; the evidence does not state that the player kept possession connected or maintained control; those are invented tactical claims.",
+          "The draft says 'forcing 4 attack resets'; the evidence shows 'possession_interrupted: 4' but does not call those 'attack resets'; the term 'attack resets' is not supported in the structured evidence.",
+          "The draft says 'repeatedly threatened Sweden'; the evidence does not support that overbroad claim; it shows 21 in-behind runs and 2 goals but does not say 'repeatedly threatened'.",
+          "The draft says 'gave his side a reliable passing option to maintain control'; the evidence has no such qualitative description about being reliable or maintaining control.",
+          "The draft says 'helped Germany overcome a deficit'; that is supported by evidence.  However, the claim 'repeatedly cutting through the opposition to help turn a 1–0 deficit into a 2–1 win' is overbroad; the evidence shows 26 line breaks but does not say those cuts led to turning the deficit directly."
+        ],
+        "summary": {
+          "status": "fail"
+        }
+      },
+      {
+        "id": "en_final_editor",
+        "kind": "agent",
+        "status": "success",
+        "max_attempts": 2,
+        "model": "deepseek-ai/DeepSeek-V4-Flash",
+        "skills": [
+          "football-editor-style"
+        ],
+        "warnings": [
+          "Removed unsupported phrase 'keeping Japan on the front foot'.",
+          "Removed unsupported timing 'inside 30 minutes'; only the match-winner is timed at 30'.",
+          "The draft has been corrected: removed the unsupported claim 'repeatedly threatened' and replaced with the evidence-backed 'kept attacking the space behind the back line'.",
+          "The draft says 'Undav turned the match around' with a 'stoppage-time winner in the 93rd minute' and 'giving Germany a 2-1 comeback victory'; that is supported by evidence.  However, the draft says 'keeping Japan on the front foot'; the evidence does not contain any tactical or momentum claim such as 'keeping Japan on the front foot'.",
+          "The draft says 'kept Ecuador's possession connected'; the evidence does not state that the player kept possession connected or maintained control; those are invented tactical claims.",
+          "The draft says 'forcing 4 attack resets'; the evidence shows 'possession_interrupted: 4' but does not call those 'attack resets'; the term 'attack resets' is not supported in the structured evidence.",
+          "The draft says 'repeatedly threatened Sweden'; the evidence does not support that overbroad claim; it shows 21 in-behind runs and 2 goals but does not say 'repeatedly threatened'.",
+          "The draft says 'gave his side a reliable passing option to maintain control'; the evidence has no such qualitative description about being reliable or maintaining control.",
+          "The draft says 'helped Germany overcome a deficit'; that is supported by evidence.  However, the claim 'repeatedly cutting through the opposition to help turn a 1–0 deficit into a 2–1 win' is overbroad; the evidence shows 26 line breaks but does not say those cuts led to turning the deficit directly."
+        ],
+        "summary": {
+          "items": 6,
+          "agent_calls": 6,
+          "max_concurrency": 3
+        }
+      },
+      {
+        "id": "render_markdown",
+        "kind": "python",
+        "status": "success",
+        "max_attempts": 1,
+        "warnings": [],
+        "summary": {
+          "markdown_chars": 3333
+        }
+      },
+      {
+        "id": "final_deterministic_validation",
+        "kind": "validator",
+        "status": "success",
+        "max_attempts": 1,
+        "warnings": [],
+        "summary": {
+          "status": "pass"
+        }
+      },
+      {
+        "id": "final_fact_check",
+        "kind": "agent",
+        "status": "success",
+        "max_attempts": 2,
+        "model": "deepseek-ai/DeepSeek-V4-Flash",
+        "skills": [
+          "football-editor-style"
+        ],
+        "warnings": [],
+        "summary": {
+          "status": "pass"
+        }
+      },
+      {
+        "id": "compile_publish",
+        "kind": "python",
+        "status": "success",
+        "max_attempts": 1,
+        "warnings": [],
+        "summary": {
+          "choices": 6
+        }
+      }
+    ]
+  },
+  "fact_check": {
+    "status": "pass",
+    "deterministic_status": "pass",
+    "llm_status": "pass",
+    "warnings": []
+  },
+  "artifacts": {
+    "markdown": "reports/editorial/2026-06-20.md",
+    "choices": "site/editorial/2026-06-20/choices.json",
+    "external_evidence": "site/editorial/2026-06-20/external_evidence.json"
+  },
+  "choices": [
+    {
+      "award_type": "player_of_the_day",
+      "player_name": "Deniz UNDAV",
+      "team": "Germany"
+    },
+    {
+      "award_type": "player_of_the_day",
+      "player_name": "Ayase UEDA",
+      "team": "Japan"
+    },
+    {
+      "award_type": "player_of_the_day",
+      "player_name": "Brian BROBBEY",
+      "team": "Netherlands"
+    },
+    {
+      "award_type": "progression_pick",
+      "player_name": "Joshua KIMMICH",
+      "team": "Germany"
+    },
+    {
+      "award_type": "hidden_gem",
+      "player_name": "Pedro VITE",
+      "team": "Ecuador"
+    },
+    {
+      "award_type": "defensive_pick",
+      "player_name": "Felix NMECHA",
+      "team": "Germany"
+    }
+  ]
+}

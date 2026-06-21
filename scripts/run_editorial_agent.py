@@ -8,6 +8,7 @@ from football_data.editorial_agent import (
     FakeEditorialAgentClient,
     run_editorial_agent,
 )
+from football_data.editorial_fingerprint import DEFAULT_SCORING_CONFIG
 
 
 def main() -> int:
@@ -20,7 +21,7 @@ def main() -> int:
     parser.add_argument("--agent-runs-dir", default="agent-runs", help="Agent run audit directory.")
     parser.add_argument("--env", default=".env.local", help="Local env file.")
     parser.add_argument("--style-dir", default=".agents/editorial-skills", help="Style pack directory.")
-    parser.add_argument("--scoring-config", default="config/scoring/v0.3.json")
+    parser.add_argument("--scoring-config", default=DEFAULT_SCORING_CONFIG)
     parser.add_argument("--no-research", action="store_true", help="Skip Firecrawl research.")
     parser.add_argument("--no-homepage", action="store_true", help="Do not rebuild site/index.html.")
     parser.add_argument("--fake", action="store_true", help="Use deterministic fake agent backend.")

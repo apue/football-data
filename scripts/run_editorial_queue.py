@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import json
 
+from football_data.editorial_fingerprint import DEFAULT_SCORING_CONFIG
 from football_data.editorial_queue_runner import run_editorial_queue
 
 
@@ -18,7 +19,7 @@ def main() -> int:
     parser.add_argument("--agent-runs-dir", default="agent-runs", help="Agent audit directory.")
     parser.add_argument("--style-dir", default=".agents/editorial-skills", help="Style pack directory.")
     parser.add_argument("--env", default=".env.local", help="Local env file.")
-    parser.add_argument("--scoring-config", default="config/scoring/v0.3.json")
+    parser.add_argument("--scoring-config", default=DEFAULT_SCORING_CONFIG)
     parser.add_argument(
         "--out",
         default="manifests/editorial-run.json",

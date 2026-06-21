@@ -9,6 +9,7 @@ from football_data.calibration import (
     build_potm_calibration_report,
     discover_potm_evidence_candidates,
 )
+from football_data.editorial_fingerprint import DEFAULT_SCORING_CONFIG
 from football_data.firecrawl import search_firecrawl
 from football_data.potm_evaluation import (
     evaluate_potm_workflow,
@@ -23,7 +24,7 @@ def main() -> None:
     parser.add_argument("--labels", default="calibration/potm-labels.json", help="POTM labels JSON.")
     parser.add_argument(
         "--scoring-config",
-        default="config/scoring/v0.3.json",
+        default=DEFAULT_SCORING_CONFIG,
         help="Scoring configuration JSON.",
     )
     parser.add_argument("--evidence", default=None, help="Existing evidence candidate JSON.")

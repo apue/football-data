@@ -66,6 +66,32 @@ def test_build_editorial_queue_detects_stale_editorial_input_hash(tmp_path):
     assert queue["pending_items"][0]["current_input_hash"] != "stale-hash"
 
 
+def test_build_editorial_queue_ignores_historical_hash_changes_when_latest_is_current(tmp_path):
+    db_path = _queue_db(tmp_path)
+    site_dir = _site_with_latest_editorial(tmp_path, "2026-06-18")
+    dated_dir = site_dir / "editorial" / "2026-06-17"
+    dated_dir.mkdir(parents=True)
+    (dated_dir / "choices.json").write_text(
+        json.dumps(
+            {
+                "match_date": "2026-06-17",
+                "editorial_input_hash": "old-scoring-hash",
+                "choices": [],
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    queue = build_editorial_queue(
+        db_path=db_path,
+        site_dir=site_dir,
+        manifests_dir=tmp_path / "manifests",
+    )
+
+    assert queue["pending_dates"] == []
+    assert queue["status"] == "up_to_date"
+
+
 def test_check_editorial_queue_cli_writes_json(tmp_path):
     db_path = _queue_db(tmp_path)
     out_path = tmp_path / "editorial-queue.json"
@@ -133,9 +159,10 @@ def _queue_db(tmp_path: Path) -> Path:
             """
         )
         conn.execute("insert into meta values (?, ?)", ("schema_version", "test"))
-        for match_no in range(25, 29):
+        for match_no in range(21, 29):
             match_key = f"m{match_no:02d}"
             source_id = f"test-pmsr-{match_key}"
+            match_date = "2026-06-17" if match_no < 25 else "2026-06-18"
             conn.execute(
                 """
                 insert into matches values (?, ?, ?, ?, ?, ?, ?, ?)
@@ -144,7 +171,7 @@ def _queue_db(tmp_path: Path) -> Path:
                     match_key,
                     source_id,
                     match_no,
-                    "2026-06-18",
+                    match_date,
                     f"Home {match_no}",
                     f"Away {match_no}",
                     match_no % 3,

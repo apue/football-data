@@ -9,6 +9,7 @@ from football_data.calibration import (
     build_potm_calibration_report,
     render_potm_calibration_markdown,
 )
+from football_data.editorial_fingerprint import DEFAULT_SCORING_CONFIG
 
 
 def main() -> None:
@@ -26,7 +27,7 @@ def main() -> None:
     )
     parser.add_argument(
         "--scoring-config",
-        default="config/scoring/v0.3.json",
+        default=DEFAULT_SCORING_CONFIG,
         help="Scoring configuration JSON.",
     )
     parser.add_argument(
