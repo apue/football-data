@@ -123,10 +123,11 @@ EDITORIAL_EN_EDITOR_MODEL
 EDITORIAL_FACT_CHECK_MODEL
 EDITORIAL_AGENT_TIMEOUT_SECONDS
 EDITORIAL_AGENT_MAX_CONCURRENCY
+EDITORIAL_AGENT_MAX_ATTEMPTS
 KEYPOOL_URL
 ```
 
-Missing OpenAI credentials do not publish drafts; the workflow writes `manifests/editorial-run.json` with `needs_credentials` and exits cleanly so the data update pipeline stays healthy. `KEYPOOL_URL` is your KeyPool base URL and is required only for Firecrawl-backed evidence discovery; missing Firecrawl configuration does not block PMSR-only publishing.
+Missing OpenAI credentials do not publish drafts; the workflow writes `manifests/editorial-run.json` with `needs_credentials` and exits cleanly so the data update pipeline stays healthy. Per-card writer/editor calls retry with `EDITORIAL_AGENT_MAX_ATTEMPTS`; if a single card still fails, the workflow records a warning and falls back to the latest available draft for that card instead of blocking the whole match day. `KEYPOOL_URL` is your KeyPool base URL and is required only for Firecrawl-backed evidence discovery; missing Firecrawl configuration does not block PMSR-only publishing.
 
 ## POTM Calibration
 

@@ -26,6 +26,7 @@ from football_data.firecrawl import search_firecrawl
 DEFAULT_OPENAI_BASE_URL = "https://api.siliconflow.cn/v1"
 DEFAULT_AGENT_TIMEOUT_SECONDS = "90"
 DEFAULT_AGENT_MAX_CONCURRENCY = "3"
+DEFAULT_AGENT_MAX_ATTEMPTS = "2"
 
 DEFAULT_MODELS = {
     "zh_writer": "zai-org/GLM-5.2",
@@ -47,6 +48,7 @@ MODEL_ENV_KEYS = {
 CONTROL_ENV_KEYS = [
     "EDITORIAL_AGENT_TIMEOUT_SECONDS",
     "EDITORIAL_AGENT_MAX_CONCURRENCY",
+    "EDITORIAL_AGENT_MAX_ATTEMPTS",
 ]
 
 
@@ -59,6 +61,7 @@ class EditorialAgentConfig:
     tracing_disabled: bool = True
     timeout_seconds: float = 90.0
     max_concurrency: int = 3
+    max_attempts: int = 2
 
 
 @dataclass(frozen=True)
@@ -68,6 +71,16 @@ class AgentCompletionRequest:
     instructions: str
     user_input: str
     output_type: type[Any] | None = None
+
+
+@dataclass(frozen=True)
+class AgentCompletionOutcome:
+    response: str | None = None
+    error: str | None = None
+
+
+class AgentCallError(RuntimeError):
+    pass
 
 
 class AgentTextClient:
@@ -88,16 +101,39 @@ class AgentTextClient:
         *,
         max_concurrency: int = 1,
     ) -> list[str]:
-        return [
-            self.complete(
-                role=request.role,
-                model=request.model,
-                instructions=request.instructions,
-                user_input=request.user_input,
-                output_type=request.output_type,
-            )
-            for request in requests
-        ]
+        outcomes = self.complete_many_settled(requests, max_concurrency=max_concurrency)
+        responses: list[str] = []
+        for outcome in outcomes:
+            if outcome.error:
+                raise AgentCallError(outcome.error)
+            if outcome.response is None:
+                raise AgentCallError("Agent returned no response")
+            responses.append(outcome.response)
+        return responses
+
+    def complete_many_settled(
+        self,
+        requests: list[AgentCompletionRequest],
+        *,
+        max_concurrency: int = 1,
+    ) -> list[AgentCompletionOutcome]:
+        outcomes: list[AgentCompletionOutcome] = []
+        for request in requests:
+            try:
+                outcomes.append(
+                    AgentCompletionOutcome(
+                        response=self.complete(
+                            role=request.role,
+                            model=request.model,
+                            instructions=request.instructions,
+                            user_input=request.user_input,
+                            output_type=request.output_type,
+                        )
+                    )
+                )
+            except Exception as exc:
+                outcomes.append(AgentCompletionOutcome(error=str(exc)[:1000]))
+        return outcomes
 
 
 class AgentCallTimeout(TimeoutError):
@@ -162,19 +198,35 @@ class AgentsSdkTextClient(AgentTextClient):
         *,
         max_concurrency: int = 1,
     ) -> list[str]:
+        outcomes = self.complete_many_settled(requests, max_concurrency=max_concurrency)
+        responses: list[str] = []
+        for outcome in outcomes:
+            if outcome.error:
+                raise AgentCallError(outcome.error)
+            if outcome.response is None:
+                raise AgentCallError("Agent returned no response")
+            responses.append(outcome.response)
+        return responses
+
+    def complete_many_settled(
+        self,
+        requests: list[AgentCompletionRequest],
+        *,
+        max_concurrency: int = 1,
+    ) -> list[AgentCompletionOutcome]:
         return asyncio.run(
-            self._complete_many_async(
+            self._complete_many_settled_async(
                 requests,
                 max_concurrency=max_concurrency,
             )
         )
 
-    async def _complete_many_async(
+    async def _complete_many_settled_async(
         self,
         requests: list[AgentCompletionRequest],
         *,
         max_concurrency: int,
-    ) -> list[str]:
+    ) -> list[AgentCompletionOutcome]:
         from agents import Agent, OpenAIChatCompletionsModel, Runner, set_tracing_disabled
         from openai import AsyncOpenAI
 
@@ -187,7 +239,7 @@ class AgentsSdkTextClient(AgentTextClient):
             timeout=self.config.timeout_seconds,
         ) as client:
             tasks = [
-                self._run_request(
+                self._run_request_with_retry(
                     request,
                     client=client,
                     semaphore=semaphore,
@@ -197,7 +249,42 @@ class AgentsSdkTextClient(AgentTextClient):
                 )
                 for request in requests
             ]
-            return await asyncio.gather(*tasks)
+            results = await asyncio.gather(*tasks, return_exceptions=True)
+        outcomes: list[AgentCompletionOutcome] = []
+        for result in results:
+            if isinstance(result, Exception):
+                outcomes.append(AgentCompletionOutcome(error=str(result)[:1000]))
+            else:
+                outcomes.append(AgentCompletionOutcome(response=str(result)))
+        return outcomes
+
+    async def _run_request_with_retry(
+        self,
+        request: AgentCompletionRequest,
+        *,
+        client: Any,
+        semaphore: asyncio.Semaphore,
+        Agent: Any,
+        OpenAIChatCompletionsModel: Any,
+        Runner: Any,
+    ) -> str:
+        last_exc: Exception | None = None
+        for attempt in range(1, max(1, self.config.max_attempts) + 1):
+            try:
+                return await self._run_request(
+                    request,
+                    client=client,
+                    semaphore=semaphore,
+                    Agent=Agent,
+                    OpenAIChatCompletionsModel=OpenAIChatCompletionsModel,
+                    Runner=Runner,
+                )
+            except Exception as exc:
+                last_exc = exc
+                if attempt >= max(1, self.config.max_attempts):
+                    break
+                await asyncio.sleep(min(2.0, 0.5 * attempt))
+        raise last_exc or AgentCallError(f"{request.role} failed")
 
     async def _run_request(
         self,
@@ -293,6 +380,7 @@ def load_editorial_agent_config(
         if key in env
     ]
     max_concurrency = int(env.get("EDITORIAL_AGENT_MAX_CONCURRENCY", DEFAULT_AGENT_MAX_CONCURRENCY))
+    max_attempts = int(env.get("EDITORIAL_AGENT_MAX_ATTEMPTS", DEFAULT_AGENT_MAX_ATTEMPTS))
     return EditorialAgentConfig(
         api_key=api_key,
         base_url=base_url,
@@ -300,6 +388,7 @@ def load_editorial_agent_config(
         loaded_keys=loaded_keys,
         timeout_seconds=float(env.get("EDITORIAL_AGENT_TIMEOUT_SECONDS", DEFAULT_AGENT_TIMEOUT_SECONDS)),
         max_concurrency=max(1, max_concurrency),
+        max_attempts=max(1, max_attempts),
     )
 
 
@@ -438,7 +527,7 @@ class EditorialWorkflowRunner:
             "id": node.id,
             "kind": node.kind,
             "status": "running",
-            "max_attempts": node.max_attempts,
+            "max_attempts": self.config.max_attempts if node.kind == "agent" else node.max_attempts,
         }
         if node.model_key:
             trace["model"] = self.config.models[node.model_key]
@@ -663,7 +752,20 @@ class EditorialWorkflowRunner:
             requests,
             max_concurrency=self.config.max_concurrency,
         )
-        for edited, identity_choice in zip(edits, state["report"]["choices"], strict=True):
+        for index, (edited, identity_choice) in enumerate(zip(edits, state["report"]["choices"], strict=True)):
+            if not edited.get("items") and index < len(draft_items):
+                draft_item = draft_items[index]
+                edited = {
+                    "items": [
+                        {
+                            "award_type": identity_choice["award_type"],
+                            "player_name": identity_choice["player_name"],
+                            "title": str(draft_item.get("title") or ""),
+                            "body": str(draft_item.get("body") or ""),
+                        }
+                    ],
+                    "warnings": edited.get("warnings", []),
+                }
             bound = _copy_output_bound_to_choices(edited, [identity_choice], language)
             items.extend(bound["items"])
             warnings.extend(str(warning) for warning in edited.get("warnings", []))
@@ -984,11 +1086,23 @@ def _call_json_many(
                 output_type=request.get("output_type"),
             )
         )
-    responses = client.complete_many(
+    outcomes = client.complete_many_settled(
         completion_requests,
         max_concurrency=max_concurrency,
     )
-    return [_extract_json_object(response) for response in responses]
+    payloads: list[dict[str, Any]] = []
+    for request, outcome in zip(completion_requests, outcomes, strict=True):
+        if outcome.error:
+            payloads.append({"items": [], "warnings": [f"{request.role} failed: {outcome.error}"]})
+            continue
+        if outcome.response is None:
+            payloads.append({"items": [], "warnings": [f"{request.role} failed: empty response"]})
+            continue
+        try:
+            payloads.append(_extract_json_object(outcome.response))
+        except Exception as exc:
+            payloads.append({"items": [], "warnings": [f"{request.role} returned invalid JSON: {exc}"]})
+    return payloads
 
 
 def _complete_with_timeout(

@@ -5,6 +5,7 @@ import time
 from pathlib import Path
 
 from football_data.editorial_agent import (
+    AgentCompletionOutcome,
     AgentCompletionRequest,
     AgentTextClient,
     _deterministic_fact_check,
@@ -62,24 +63,60 @@ class BatchEditorialClient(FakeEditorialClient):
         self.batch_roles: list[list[str]] = []
         self.batch_concurrency: list[int] = []
 
-    def complete_many(
+    def complete_many_settled(
         self,
         requests: list[AgentCompletionRequest],
         *,
         max_concurrency: int = 1,
-    ) -> list[str]:
+    ) -> list[AgentCompletionOutcome]:
         self.batch_roles.append([request.role for request in requests])
         self.batch_concurrency.append(max_concurrency)
         return [
-            self.complete(
-                role=request.role,
-                model=request.model,
-                instructions=request.instructions,
-                user_input=request.user_input,
-                output_type=request.output_type,
+            AgentCompletionOutcome(
+                response=self.complete(
+                    role=request.role,
+                    model=request.model,
+                    instructions=request.instructions,
+                    user_input=request.user_input,
+                    output_type=request.output_type,
+                )
             )
             for request in requests
         ]
+
+
+class FailingFinalEditorBatchClient(BatchEditorialClient):
+    def complete_many_settled(
+        self,
+        requests: list[AgentCompletionRequest],
+        *,
+        max_concurrency: int = 1,
+    ) -> list[AgentCompletionOutcome]:
+        self.batch_roles.append([request.role for request in requests])
+        self.batch_concurrency.append(max_concurrency)
+        outcomes: list[AgentCompletionOutcome] = []
+        for index, request in enumerate(requests):
+            if request.role == "zh_final_editor" and index == 0:
+                self.calls.append((request.role, request.model))
+                self.payloads.setdefault(request.role, []).append(json.loads(request.user_input))
+                outcomes.append(
+                    AgentCompletionOutcome(
+                        error="zh_final_editor timed out after 90 seconds"
+                    )
+                )
+                continue
+            outcomes.append(
+                AgentCompletionOutcome(
+                    response=self.complete(
+                        role=request.role,
+                        model=request.model,
+                        instructions=request.instructions,
+                        user_input=request.user_input,
+                        output_type=request.output_type,
+                    )
+                )
+            )
+        return outcomes
 
 
 class WarningFactCheckClient(FakeEditorialClient):
@@ -176,6 +213,7 @@ def test_load_editorial_agent_config_uses_openai_base_url_only(tmp_path):
                 "OPEN_BASE_URL=https://wrong.example.test/v1",
                 "EDITORIAL_ZH_WRITER_MODEL=zh-writer",
                 "EDITORIAL_AGENT_MAX_CONCURRENCY=5",
+                "EDITORIAL_AGENT_MAX_ATTEMPTS=4",
             ]
         ),
         encoding="utf-8",
@@ -187,6 +225,7 @@ def test_load_editorial_agent_config_uses_openai_base_url_only(tmp_path):
     assert config.base_url == "https://api.example.test/v1"
     assert config.models["zh_writer"] == "zh-writer"
     assert config.max_concurrency == 5
+    assert config.max_attempts == 4
     assert "OPEN_BASE_URL" not in config.loaded_keys
 
 
@@ -196,6 +235,7 @@ def test_load_editorial_agent_config_reads_process_environment(tmp_path, monkeyp
     monkeypatch.setenv("OPENAI_BASE_URL", "https://api.example.test/v1")
     monkeypatch.setenv("EDITORIAL_EN_WRITER_MODEL", "env-en-writer")
     monkeypatch.setenv("EDITORIAL_AGENT_MAX_CONCURRENCY", "4")
+    monkeypatch.setenv("EDITORIAL_AGENT_MAX_ATTEMPTS", "3")
 
     config = load_editorial_agent_config(env_path)
 
@@ -203,6 +243,7 @@ def test_load_editorial_agent_config_reads_process_environment(tmp_path, monkeyp
     assert config.base_url == "https://api.example.test/v1"
     assert config.models["en_writer"] == "env-en-writer"
     assert config.max_concurrency == 4
+    assert config.max_attempts == 3
 
 
 def test_load_editorial_agent_config_uses_default_base_url_and_models(tmp_path):
@@ -215,6 +256,7 @@ def test_load_editorial_agent_config_uses_default_base_url_and_models(tmp_path):
     assert config.models["zh_writer"] == "zai-org/GLM-5.2"
     assert config.models["fact_check"] == "deepseek-ai/DeepSeek-V4-Pro"
     assert config.max_concurrency == 3
+    assert config.max_attempts == 2
 
 
 def test_filter_llm_fact_check_warnings_drops_absent_assist_claims():
@@ -420,6 +462,37 @@ def test_editorial_agent_batches_per_card_writer_and_editor_calls(tmp_path):
     }
     assert node_summaries["zh_writer"]["agent_calls"] == 6
     assert node_summaries["zh_writer"]["max_concurrency"] == 4
+
+
+def test_per_card_final_editor_failure_falls_back_to_draft(tmp_path):
+    client = FailingFinalEditorBatchClient()
+
+    result = run_editorial_agent(
+        match_date="2026-06-18",
+        db_path="data/latest.sqlite",
+        site_dir=tmp_path / "site",
+        reports_dir=tmp_path / "reports",
+        manifests_dir="manifests",
+        agent_runs_dir=tmp_path / "agent-runs",
+        client=client,
+        research=False,
+        rebuild_homepage=False,
+    )
+
+    assert result["status"] == "success"
+    zh_final_node = next(
+        node for node in result["workflow"]["nodes"] if node["id"] == "zh_final_editor"
+    )
+    assert zh_final_node["status"] == "success"
+    assert any("zh_final_editor failed" in warning for warning in zh_final_node["warnings"])
+
+    choices = json.loads(
+        (tmp_path / "site" / "editorial" / "2026-06-18" / "choices.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    assert choices["choices"]
+    assert len(choices["choices"]) == len(result["choices"])
 
 
 def test_llm_fact_check_warnings_are_advisory_without_deterministic_failures(tmp_path):

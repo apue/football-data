@@ -19,6 +19,7 @@ def test_editorial_workflow_runs_after_dataset_update_and_exposes_secret_env():
     assert "OPENAI_BASE_URL: ${{ vars.OPENAI_BASE_URL || 'https://api.siliconflow.cn/v1' }}" in text
     assert "EDITORIAL_ZH_WRITER_MODEL: ${{ vars.EDITORIAL_ZH_WRITER_MODEL || 'zai-org/GLM-5.2' }}" in text
     assert "EDITORIAL_AGENT_MAX_CONCURRENCY: ${{ vars.EDITORIAL_AGENT_MAX_CONCURRENCY || '3' }}" in text
+    assert "EDITORIAL_AGENT_MAX_ATTEMPTS: ${{ vars.EDITORIAL_AGENT_MAX_ATTEMPTS || '2' }}" in text
     assert "KEYPOOL_KEY: ${{ secrets.KEYPOOL_KEY }}" in text
     assert "KEYPOOL_URL: ${{ vars.KEYPOOL_URL || secrets.KEYPOOL_URL }}" in text
     assert "agent-runs" in text
@@ -42,6 +43,7 @@ def test_env_example_lists_editorial_agent_and_firecrawl_placeholders():
         "EDITORIAL_FACT_CHECK_MODEL=deepseek-ai/DeepSeek-V4-Pro",
         "EDITORIAL_AGENT_TIMEOUT_SECONDS=90",
         "EDITORIAL_AGENT_MAX_CONCURRENCY=3",
+        "EDITORIAL_AGENT_MAX_ATTEMPTS=2",
         "KEYPOOL_KEY=",
         "KEYPOOL_URL=",
     ]:
