@@ -49,6 +49,22 @@ def editorial_input_fingerprint(
                 (match_date,),
             )
         ]
+        goal_involvements = []
+        if _table_exists(conn, "goal_involvements"):
+            goal_involvements = [
+                dict(row)
+                for row in conn.execute(
+                    """
+                    select g.match_key, g.goal_order, g.minute_display,
+                           g.scorer_name, g.assister_name, g.source
+                    from goal_involvements g
+                    join matches m on m.match_key = g.match_key
+                    where m.match_date = ?
+                    order by g.match_key, g.goal_order
+                    """,
+                    (match_date,),
+                )
+            ]
     finally:
         conn.close()
 
@@ -59,6 +75,7 @@ def editorial_input_fingerprint(
         "scoring_config_sha256": hashlib.sha256(scoring_text.encode("utf-8")).hexdigest(),
         "matches": matches,
         "source_documents": source_documents,
+        "goal_involvements": goal_involvements,
     }
     encoded = json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
     return {
@@ -70,3 +87,11 @@ def editorial_input_fingerprint(
 def _meta_value(conn: sqlite3.Connection, key: str) -> str | None:
     row = conn.execute("select value from meta where key = ?", (key,)).fetchone()
     return str(row[0]) if row and row[0] is not None else None
+
+
+def _table_exists(conn: sqlite3.Connection, table_name: str) -> bool:
+    row = conn.execute(
+        "select 1 from sqlite_master where type = 'table' and name = ?",
+        (table_name,),
+    ).fetchone()
+    return row is not None

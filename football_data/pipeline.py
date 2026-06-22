@@ -14,6 +14,7 @@ from football_data.discovery import (
     source_from_filename,
 )
 from football_data.extract import extract_pdf
+from football_data.fifa_timeline import backfill_fifa_timelines
 from football_data.model import DiscoveredSource, ExtractedMatch
 
 
@@ -106,6 +107,7 @@ def update_dataset(
     downloaded: list[str] = []
     failures: list[dict[str, object]] = []
     records: list[ExtractedMatch] = []
+    supplemental: dict[str, object] | None = None
 
     try:
         discovered_sources = discover_hub_sources(hub_url, discovered_at=generated_at)
@@ -130,12 +132,14 @@ def update_dataset(
         if not records:
             raise PipelineError("sqlite_validation_failed", "No active PMSR records were parsed")
         build_database(db_path, records)
+        supplemental = {"fifa_timeline": backfill_fifa_timelines(db_path)}
         write_manifests(
             records=records,
             discovered_sources=discovered_sources,
             events=events,
             downloaded=downloaded,
             failures=failures,
+            supplemental=supplemental,
             manifests_dir=manifests_dir,
             generated_at=generated_at,
             status="success",
@@ -150,6 +154,7 @@ def update_dataset(
             events=events,
             downloaded=downloaded,
             failures=failures,
+            supplemental=supplemental,
             manifests_dir=manifests_dir,
             generated_at=generated_at,
             status="failed",
@@ -164,6 +169,7 @@ def update_dataset(
             events=events,
             downloaded=downloaded,
             failures=failures,
+            supplemental=supplemental,
             manifests_dir=manifests_dir,
             generated_at=generated_at,
             status="failed",
@@ -212,6 +218,7 @@ def write_manifests(
     status: str,
     failure_code: str | None,
     message: str,
+    supplemental: dict[str, object] | None = None,
 ) -> None:
     manifest_path = Path(manifests_dir)
     manifest_path.mkdir(parents=True, exist_ok=True)
@@ -244,6 +251,7 @@ def write_manifests(
                 "generated_at": generated_at,
                 **events,
                 "downloaded": downloaded,
+                "supplemental": supplemental or {},
                 "failures": failures,
             },
             indent=2,
@@ -266,6 +274,7 @@ def write_manifests(
                 "matches": len(records),
                 "source_documents": len(records),
                 **events,
+                "supplemental": supplemental or {},
                 "failures": failures,
                 "message": message,
             },

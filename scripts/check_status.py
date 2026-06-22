@@ -70,6 +70,14 @@ def _sqlite_counts(path: Path) -> dict[str, object]:
             "source_documents": _count(conn, "source_documents"),
             "shots": _count(conn, "shots"),
             "player_physical_stats": _count(conn, "player_physical_stats"),
+            "fifa_match_links": _count_if_exists(conn, "fifa_match_links"),
+            "official_match_events": _count_if_exists(conn, "official_match_events"),
+            "goal_involvements": _count_if_exists(conn, "goal_involvements"),
+            "assists": _scalar_if_exists(
+                conn,
+                "goal_involvements",
+                "select count(*) from goal_involvements where assister_name is not null",
+            ),
         }
     finally:
         conn.close()
@@ -77,6 +85,26 @@ def _sqlite_counts(path: Path) -> dict[str, object]:
 
 def _count(conn: sqlite3.Connection, table: str) -> int:
     return int(conn.execute(f"select count(*) from {table}").fetchone()[0])
+
+
+def _count_if_exists(conn: sqlite3.Connection, table: str) -> int | None:
+    if not _table_exists(conn, table):
+        return None
+    return _count(conn, table)
+
+
+def _scalar_if_exists(conn: sqlite3.Connection, table: str, sql: str) -> int | None:
+    if not _table_exists(conn, table):
+        return None
+    return int(conn.execute(sql).fetchone()[0])
+
+
+def _table_exists(conn: sqlite3.Connection, table: str) -> bool:
+    row = conn.execute(
+        "select 1 from sqlite_master where type = 'table' and name = ?",
+        (table,),
+    ).fetchone()
+    return row is not None
 
 
 def _pages_health(url: str) -> dict[str, object]:

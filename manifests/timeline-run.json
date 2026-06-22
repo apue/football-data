@@ -1,0 +1,13 @@
+{
+  "generated_at": "2026-06-22T06:55:38+00:00",
+  "source": "fifa_timeline_api",
+  "status": "success",
+  "matches": 36,
+  "linked_matches": 36,
+  "timeline_matches": 36,
+  "events": 3199,
+  "goals": 96,
+  "assists": 74,
+  "goal_involvements": 96,
+  "failures": []
+}

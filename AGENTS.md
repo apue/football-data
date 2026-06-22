@@ -8,7 +8,7 @@ Keep the pipeline reproducible. Agents may repair discovery, fetching, parsing, 
 
 ## Data Architecture Constraint
 
-Treat FIFA PMSR source documents and their manifests as the canonical source. SQLite databases, demo pages, notebooks with outputs, and update summaries are rebuildable artifacts.
+Treat FIFA PMSR source documents and their manifests as the canonical source for PMSR-derived technical, physical, and tactical data. FIFA public match timeline API data is an official supplemental event source for goals, assists, and goal involvements that PMSR PDFs do not expose as structured fields. SQLite databases, demo pages, notebooks with outputs, and update summaries are rebuildable artifacts.
 
 Breaking schema changes are allowed when they improve correctness or analysis quality, especially early in the project. When this happens:
 
@@ -36,6 +36,7 @@ Expected generated outputs:
 
 - `data/latest.sqlite`
 - `manifests/latest-run.json`
+- `manifests/timeline-run.json` when timeline backfill is run directly
 - `manifests/sources.json`
 - `manifests/discovered-sources.json`
 - `manifests/update-events.json`
@@ -49,7 +50,7 @@ Use `scripts/run_editorial_queue.py` as the default publication entrypoint. It r
 
 The editor agent produces `evidence.json`, `fact_bank.zh.json`, `brief.en.json`, `reports/editorial/YYYY-MM-DD.md`, compiled `choices.json`, and an `agent-runs/YYYY-MM-DD.json` audit. The workflow order is evidence -> optional research -> writer draft -> draft fact check -> final editor -> deterministic validation -> final fact-check warning gate -> compile/publish. Write Chinese from `fact_bank.zh.json` as a from-scratch Chinese sports editor. Write English from `brief.en.json` and `evidence.json`; do not use either finished language version as input for the other. Do not reintroduce `brief.zh.json`, manual render/generate entrypoints, or direct Chat Completions fallback paths.
 
-Default Editor's Choices scoring uses `config/scoring/v0.4.json`. The impact layer is derived from PMSR goals, lineup status, final scoreline, and deterministic match-flow reconstruction; it can reward opening, equalizing, go-ahead, match-winning, late, stoppage-time, late match-winning goals, comeback equalisers, comeback winners, only-goal winners, braces, hat-tricks, and substitute scoring bursts. Hidden-gem and progression review should use detailed line-break splits when available so pass-only line-break volume is not treated the same as pressure-breaking carries or deeper attacking-third breaks. Do not use POTM labels, media ratings, or social reactions as direct scoring inputs.
+Default Editor's Choices scoring uses `config/scoring/v0.4.json`. The impact layer is derived from PMSR goals, lineup status, final scoreline, deterministic match-flow reconstruction, and supplemental FIFA timeline goal-involvement evidence when explicitly wired into a scoring experiment; it can reward opening, equalizing, go-ahead, match-winning, late, stoppage-time, late match-winning goals, comeback equalisers, comeback winners, only-goal winners, braces, hat-tricks, and substitute scoring bursts. Hidden-gem and progression review should use detailed line-break splits when available so pass-only line-break volume is not treated the same as pressure-breaking carries or deeper attacking-third breaks. Do not use POTM labels, media ratings, or social reactions as direct scoring inputs.
 
 The editorial workflow generates opinionated content, so prefer a PR branch over direct pushes to `main` unless the user explicitly asks for direct publication.
 
@@ -67,6 +68,7 @@ When the user asks to evaluate the POTM workflow, Firecrawl evidence quality, so
 
 - Do not commit `raw/*.pdf` or `raw/**/*.pdf`.
 - Do keep source URLs, hashes, filenames, and timestamps in manifests and SQLite.
+- Do keep FIFA timeline event provenance in `fifa_match_links`, `official_match_events`, and `goal_involvements` when assists or official event timelines are used.
 - Do not bypass login, CAPTCHA, rate limits, or access controls.
 - If GitHub Actions fetching fails with 403/429, record the failure and use local assisted recovery instead of aggressive retrying.
 

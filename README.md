@@ -4,7 +4,7 @@ Daily-refreshable SQLite data and reproducible examples extracted from publicly 
 
 ## What This Is
 
-This project turns FIFA Training Centre PMSR reports into a structured SQLite database for football analysis. The goal is to make cross-game analysis easy: fastest players, longest-running players, shot lists, team comparison funnels, and hidden contribution candidates such as off-ball receivers, line-breaking progressors, attacking threats, and defensive contributors.
+This project turns FIFA Training Centre PMSR reports into a structured SQLite database for football analysis. The goal is to make cross-game analysis easy: fastest players, longest-running players, shot lists, team comparison funnels, and hidden contribution candidates such as off-ball receivers, line-breaking progressors, attacking threats, and defensive contributors. FIFA public match timeline data is used as a supplemental official source for event-level goals and assists that are not present in the PMSR PDFs.
 
 ## Data Source and Attribution
 
@@ -21,6 +21,8 @@ Each extracted record is traceable through source metadata stored in SQLite and 
 - extraction timestamp
 
 By default this repository does not redistribute original PDF files. Local PDF caches under `raw/**/*.pdf` are ignored by git.
+
+Assists are not available as structured fields in the PMSR PDFs. The pipeline supplements them from FIFA's public match timeline API and stores the raw event provenance separately from PMSR-derived tables.
 
 ## Outputs
 
@@ -61,6 +63,7 @@ The generated database currently includes:
 - detailed player line-break splits by unit line, direction, and distribution type
 - player offers and receptions, including offer movement types
 - player out-of-possession actions, including tackles, blocks, interceptions, pressing, duels, regains, and interruptions
+- FIFA public match timeline mappings, raw events, and `goal_involvements` with scorer/assister pairs
 
 ## Quick Start
 
@@ -69,8 +72,10 @@ python -m venv .venv
 source .venv/bin/activate
 python -m pip install -e ".[dev]"
 python scripts/update_dataset.py
+python scripts/backfill_fifa_timelines.py
 sqlite3 data/latest.sqlite < examples/top_fastest_players.sql
 sqlite3 data/latest.sqlite < examples/top_attacking_threats.sql
+sqlite3 data/latest.sqlite < examples/top_goal_involvements.sql
 python scripts/run_editorial_queue.py --fake --no-research --max-dates 1
 python scripts/check_status.py
 ```
@@ -154,9 +159,10 @@ The intended automated update schedule is daily around 12:00 Asia/Shanghai. The 
 4. downloads only missing active documents,
 5. extracts structured records,
 6. rebuilds `data/latest.sqlite`,
-7. validates outputs,
-8. regenerates demo pages and update status,
-9. triggers the editorial workflow after the update workflow succeeds.
+7. backfills FIFA public match timeline events for goals and assists,
+8. validates outputs,
+9. regenerates demo pages and update status,
+10. triggers the editorial workflow after the update workflow succeeds.
 
 Failures are reported in `manifests/latest-run.json`, `manifests/update-events.json`, `manifests/editorial-run.json`, and GitHub Actions logs. A Codex/agent-assisted recovery flow can inspect failures, use browser diagnostics when static discovery breaks, update discovery/parser code, and push a corrective change.
 
@@ -167,6 +173,7 @@ Failures are reported in `manifests/latest-run.json`, `manifests/update-events.j
 - Which teams generated the most xG?
 - Which shots were goals or on target?
 - Which players created the strongest combined attacking threat?
+- Which players have the most goals plus assists?
 - Which players were the best line-breaking progressors?
 - Which players were the most active off-ball receivers?
 - Which players made the strongest defensive contribution?

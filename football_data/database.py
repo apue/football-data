@@ -7,7 +7,7 @@ from football_data.extract import extraction_timestamp, parser_version
 from football_data.model import ExtractedMatch
 
 
-SCHEMA_VERSION = 4
+SCHEMA_VERSION = 5
 
 
 def build_database(path: str | Path, records: list[ExtractedMatch]) -> None:
@@ -279,11 +279,81 @@ def _create_schema(conn: sqlite3.Connection) -> None:
           foreign key(source_id) references source_documents(source_id)
         );
 
+        create table fifa_match_links (
+          match_key text primary key,
+          fifa_match_id text,
+          fifa_competition_id text,
+          fifa_season_id text,
+          fifa_stage_id text,
+          fifa_group_id text,
+          fifa_home_team_id text,
+          fifa_away_team_id text,
+          api_url text,
+          fetched_at text not null,
+          status text not null,
+          raw_json text,
+          foreign key(match_key) references matches(match_key)
+        );
+
+        create table official_match_events (
+          match_key text not null,
+          fifa_match_id text not null,
+          event_id text not null,
+          event_type integer,
+          event_type_name text,
+          period integer,
+          match_minute text,
+          minute integer,
+          stoppage_minute integer,
+          absolute_minute integer,
+          team_id text,
+          team_name text,
+          player_id text,
+          player_name text,
+          related_player_id text,
+          home_goals integer,
+          away_goals integer,
+          description text,
+          raw_json text not null,
+          primary key(match_key, event_id),
+          foreign key(match_key) references matches(match_key)
+        );
+
+        create table goal_involvements (
+          match_key text not null,
+          fifa_match_id text not null,
+          goal_event_id text not null,
+          goal_order integer not null,
+          team_id text,
+          team_name text,
+          minute_display text,
+          minute integer,
+          stoppage_minute integer,
+          absolute_minute integer,
+          scorer_player_id text,
+          scorer_name text not null,
+          assist_event_id text,
+          assister_player_id text,
+          assister_name text,
+          home_goals_after integer,
+          away_goals_after integer,
+          source text not null,
+          raw_json text not null,
+          primary key(match_key, goal_event_id),
+          foreign key(match_key) references matches(match_key)
+        );
+
         create index idx_player_appearances_name
           on player_appearances(player_name, team);
 
         create index idx_player_physical_identity
           on player_physical_stats(match_key, team, player_no);
+
+        create index idx_official_match_events_type
+          on official_match_events(match_key, event_type);
+
+        create index idx_goal_involvements_assister
+          on goal_involvements(match_key, assister_name);
         """
     )
     conn.executemany(
@@ -291,6 +361,7 @@ def _create_schema(conn: sqlite3.Connection) -> None:
         [
             ("schema_version", str(SCHEMA_VERSION)),
             ("parser_version", parser_version()),
+            ("fifa_timeline_schema_version", "1"),
         ],
     )
 
