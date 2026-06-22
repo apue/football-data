@@ -1,60 +1,13 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-06-22T11:11:19+00:00",
-  "status": "success",
+  "generated_at": "2026-06-22T11:23:34+00:00",
+  "status": "up_to_date",
   "queue_status": "up_to_date",
   "queue_reason": "editorial_up_to_date",
   "latest_data_date": "2026-06-21",
   "latest_editorial_date": "2026-06-21",
-  "pending_dates": [
-    "2026-06-21"
-  ],
-  "published_dates": [
-    "2026-06-21"
-  ],
+  "pending_dates": [],
+  "published_dates": [],
   "failures": [],
-  "runs": [
-    {
-      "match_date": "2026-06-21",
-      "agent_status": "success",
-      "fact_check": "pass",
-      "choices": [
-        {
-          "award_type": "player_of_the_day",
-          "player_name": "MOHAMED SALAH",
-          "team": "Egypt"
-        },
-        {
-          "award_type": "player_of_the_day",
-          "player_name": "Mikel OYARZABAL",
-          "team": "Spain"
-        },
-        {
-          "award_type": "player_of_the_day",
-          "player_name": "Maxi ARAUJO",
-          "team": "Uruguay"
-        },
-        {
-          "award_type": "impact_pick",
-          "player_name": "MOSTAFA ZICO",
-          "team": "Egypt"
-        },
-        {
-          "award_type": "progression_pick",
-          "player_name": "MARAWAN ATTIA",
-          "team": "Egypt"
-        },
-        {
-          "award_type": "hidden_gem",
-          "player_name": "Kevin DE BRUYNE",
-          "team": "Belgium"
-        },
-        {
-          "award_type": "defensive_pick",
-          "player_name": "PICO LOPES",
-          "team": "Cabo Verde"
-        }
-      ]
-    }
-  ]
+  "runs": []
 }
