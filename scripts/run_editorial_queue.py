@@ -31,6 +31,12 @@ def main() -> int:
         help="Editorial queue manifest path.",
     )
     parser.add_argument("--max-dates", type=int, default=None, help="Limit pending dates processed.")
+    parser.add_argument(
+        "--date",
+        action="append",
+        dest="match_dates",
+        help="Publish a specific match date. Can be passed multiple times for manual backfills.",
+    )
     parser.add_argument("--no-research", action="store_true", help="Skip Firecrawl research.")
     parser.add_argument("--fake", action="store_true", help="Use deterministic fake agent backend.")
     parser.add_argument("--json", action="store_true", help="Print run JSON.")
@@ -50,6 +56,7 @@ def main() -> int:
         research=not args.no_research,
         fake=args.fake,
         max_dates=args.max_dates,
+        match_dates=args.match_dates,
     )
     if args.json:
         print(json.dumps(result, ensure_ascii=False, indent=2))

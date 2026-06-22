@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "language": "en",
-  "generated_at": "2026-06-22T10:36:04+00:00",
+  "generated_at": "2026-06-22T11:03:35+00:00",
   "match_date": "2026-06-21",
   "scoring_version": "v0.4",
   "editorial_voice": "A data-aware football analyst writing for a general audience: clear, light, and grounded in the evidence without sounding like a table.",
@@ -13,7 +13,7 @@
       "team": "Egypt",
       "opponent": "New Zealand",
       "match_no": 40,
-      "score": 103.7,
+      "score": 123.7,
       "why_selected": "Lead with the comeback: he equalised, then scored the stoppage-time winner.",
       "title_candidates": [
         "The comeback finisher",
@@ -73,7 +73,8 @@
       "evidence_chips": [
         "comeback winner",
         "match-winning goal",
-        "goal scorer"
+        "goal scorer",
+        "assist"
       ],
       "avoid": [
         "metric dumps",
@@ -84,64 +85,58 @@
     {
       "award_type": "player_of_the_day",
       "award_label": "Player of the Day",
-      "player_name": "Lamine YAMAL",
+      "player_name": "Mikel OYARZABAL",
       "team": "Spain",
       "opponent": "Saudi Arabia",
       "match_no": 38,
-      "score": 79.6,
-      "why_selected": "Lead with the decisive goal, then support it with the broader match profile.",
+      "score": 86.0,
+      "why_selected": "Goals matter, but frame the repeated threat behind the line.",
       "title_candidates": [
-        "The decisive touch",
-        "The goal that tilted it",
-        "The moment that mattered"
+        "Two goals behind the line",
+        "The runner behind Sweden",
+        "The early brace that opened it up"
       ],
       "action_notes": [
-        "9' winner",
-        "scored the match-winning goal"
+        "kept attacking the space behind the line"
       ],
-      "flow_notes": [
-        "9' winner"
-      ],
-      "allowed_claims": [
-        "go-ahead goal",
-        "match-winning goal",
-        "9' winner"
-      ],
+      "flow_notes": [],
+      "allowed_claims": [],
       "key_metrics": [
         {
-          "metric": "offers_received",
-          "label": "received offers",
-          "value": 14,
-          "unit": ""
-        },
-        {
-          "metric": "match_winning_goal",
-          "label": "match-winning goal",
-          "value": 1,
-          "unit": ""
-        },
-        {
-          "metric": "line_breaks_completed",
-          "label": "completed line breaks",
-          "value": 5,
+          "metric": "goals",
+          "label": "goals",
+          "value": 2,
           "unit": ""
         },
         {
           "metric": "in_behind",
           "label": "in-behind offers",
-          "value": 14,
+          "value": 25,
           "unit": ""
         },
         {
-          "metric": "goals",
-          "label": "goals",
+          "metric": "offers_received",
+          "label": "received offers",
+          "value": 9,
+          "unit": ""
+        },
+        {
+          "metric": "brace",
+          "label": "brace",
           "value": 1,
+          "unit": ""
+        },
+        {
+          "metric": "on_target",
+          "label": "shots on target",
+          "value": 3,
           "unit": ""
         }
       ],
       "evidence_chips": [
-        "match-winning goal",
-        "goal scorer"
+        "brace",
+        "assist",
+        "high shot quality"
       ],
       "avoid": [
         "metric dumps",
@@ -152,45 +147,39 @@
     {
       "award_type": "player_of_the_day",
       "award_label": "Player of the Day",
-      "player_name": "Agustin CANOBBIO",
+      "player_name": "Maxi ARAUJO",
       "team": "Uruguay",
       "opponent": "Cabo Verde",
       "match_no": 37,
-      "score": 70.3,
+      "score": 82.0,
       "why_selected": "Focus on the connective midfield role.",
       "title_candidates": [
         "The midfield connector",
         "The link in possession",
         "A quiet route through midfield"
       ],
-      "action_notes": [],
-      "flow_notes": [],
+      "action_notes": [
+        "43' equaliser"
+      ],
+      "flow_notes": [
+        "43' equaliser"
+      ],
       "allowed_claims": [
-        "go-ahead goal"
+        "equaliser",
+        "comeback equaliser",
+        "43' equaliser"
       ],
       "key_metrics": [
         {
-          "metric": "line_breaks_completed",
-          "label": "completed line breaks",
-          "value": 10,
-          "unit": ""
-        },
-        {
           "metric": "in_behind",
           "label": "in-behind offers",
-          "value": 30,
-          "unit": ""
-        },
-        {
-          "metric": "offers_received",
-          "label": "received offers",
-          "value": 16,
+          "value": 32,
           "unit": ""
         },
         {
           "metric": "total_distance_m",
           "label": "distance",
-          "value": 11280.1,
+          "value": 8974.1,
           "unit": "m"
         },
         {
@@ -198,11 +187,97 @@
           "label": "goals",
           "value": 1,
           "unit": ""
+        },
+        {
+          "metric": "offers_received",
+          "label": "received offers",
+          "value": 8,
+          "unit": ""
+        },
+        {
+          "metric": "comeback_equalizer",
+          "label": "comeback equaliser",
+          "value": 1,
+          "unit": ""
         }
       ],
       "evidence_chips": [
-        "go-ahead goal",
-        "goal scorer"
+        "comeback equaliser",
+        "equaliser",
+        "goal scorer",
+        "assist"
+      ],
+      "avoid": [
+        "metric dumps",
+        "generic AI phrasing",
+        "claims that imply video review"
+      ]
+    },
+    {
+      "award_type": "impact_pick",
+      "award_label": "Impact Pick",
+      "player_name": "MOSTAFA ZICO",
+      "team": "Egypt",
+      "opponent": "New Zealand",
+      "match_no": 40,
+      "score": 20.0,
+      "why_selected": "Focus on the connective midfield role.",
+      "title_candidates": [
+        "The midfield connector",
+        "The link in possession",
+        "A quiet route through midfield"
+      ],
+      "action_notes": [
+        "Egypt came from behind to win 3-1",
+        "57' equaliser"
+      ],
+      "flow_notes": [
+        "Egypt came from behind to win 3-1",
+        "57' equaliser"
+      ],
+      "allowed_claims": [
+        "comeback win",
+        "equaliser",
+        "comeback equaliser",
+        "57' equaliser"
+      ],
+      "key_metrics": [
+        {
+          "metric": "comeback_equalizer",
+          "label": "comeback equaliser",
+          "value": 1,
+          "unit": ""
+        },
+        {
+          "metric": "assists",
+          "label": "assists",
+          "value": 1,
+          "unit": ""
+        },
+        {
+          "metric": "equalizing_goal",
+          "label": "equaliser",
+          "value": 1,
+          "unit": ""
+        },
+        {
+          "metric": "goal_involvements",
+          "label": "goal involvements",
+          "value": 2,
+          "unit": ""
+        },
+        {
+          "metric": "team_came_from_behind_goal",
+          "label": "comeback goal",
+          "value": 1,
+          "unit": ""
+        }
+      ],
+      "evidence_chips": [
+        "comeback equaliser",
+        "equaliser",
+        "goal scorer",
+        "assist"
       ],
       "avoid": [
         "metric dumps",

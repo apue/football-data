@@ -58,6 +58,10 @@ def test_editorial_impact_layer_surfaces_decisive_goal_players():
         for component in caleb["score_components"]
     )
 
+    luis = next(choice for choice in players_of_day if choice["player_name"] == "Luis DIAZ")
+    assert luis["metrics"]["assists"] == 1
+    assert any(component["metric"] == "assists" for component in luis["score_components"])
+
 
 def test_editorial_headline_impact_surfaces_goal_stories_for_latest_day():
     report = build_editorial_report("data/latest.sqlite", match_date="2026-06-18")
@@ -197,6 +201,24 @@ def test_editorial_evidence_exposes_match_flow_for_comeback_winner(tmp_path):
     assert "93' stoppage-time winner" in brief_text
 
 
+def test_editorial_evidence_keeps_blowout_goals_out_of_winner_claims():
+    report = build_editorial_report("data/latest.sqlite", match_date="2026-06-21")
+    spain_choices = [choice for choice in report["choices"] if choice["team"] == "Spain"]
+
+    assert spain_choices
+    for choice in spain_choices:
+        assert not any(
+            "winner" in claim or "match-winning" in claim
+            for claim in choice["flow_context"]["allowed_claims"]["en"]
+        )
+        assert "match-winning goal" not in choice["evidence_chips"]["en"]
+        assert "打入制胜球" not in choice["evidence_chips"]["zh"]
+        assert not any(
+            component["metric"] == "match_winning_goal"
+            for component in choice["score_components"]
+        )
+
+
 def test_write_editorial_artifacts(tmp_path):
     report = build_editorial_report("data/latest.sqlite", match_date="2026-06-16")
 
@@ -212,6 +234,7 @@ def test_write_editorial_artifacts(tmp_path):
     zh_fact_bank_json = tmp_path / "site" / "editorial" / "2026-06-16" / "fact_bank.zh.json"
     en_brief_json = tmp_path / "site" / "editorial" / "2026-06-16" / "brief.en.json"
     dated_html = tmp_path / "site" / "editorial" / "2026-06-16" / "index.html"
+    archive_html = tmp_path / "site" / "editorial" / "index.html"
     report_md = tmp_path / "reports" / "editorial" / "2026-06-16.md"
 
     assert latest.exists()
@@ -221,6 +244,7 @@ def test_write_editorial_artifacts(tmp_path):
     assert not (tmp_path / "site" / "editorial" / "2026-06-16" / "brief.zh.json").exists()
     assert en_brief_json.exists()
     assert dated_html.exists()
+    assert archive_html.exists()
     assert report_md.exists()
 
     saved = json.loads(latest.read_text(encoding="utf-8"))
@@ -228,11 +252,13 @@ def test_write_editorial_artifacts(tmp_path):
     zh_fact_bank = json.loads(zh_fact_bank_json.read_text(encoding="utf-8"))
     en_brief = json.loads(en_brief_json.read_text(encoding="utf-8"))
     html = dated_html.read_text(encoding="utf-8")
+    archive = archive_html.read_text(encoding="utf-8")
     markdown = report_md.read_text(encoding="utf-8")
     first_choice = saved["choices"][0]
 
     assert saved["schema_version"] == 2
     assert saved["match_date"] == "2026-06-16"
+    assert saved["editorial_generation"]["uses_official_assists"] is True
     assert saved["source_markdown_path"] == "reports/editorial/2026-06-16.md"
     assert "narrative" not in first_choice
     assert "score" not in first_choice
@@ -252,7 +278,8 @@ def test_write_editorial_artifacts(tmp_path):
     assert zh_fact_bank["choices"][0]["match_scoreline"] == "阿根廷 3-0 阿尔及利亚"
     assert any("帽子戏法" in fact for fact in zh_fact_bank["choices"][0]["facts"])
     assert any("3 个进球" in fact for fact in zh_fact_bank["choices"][0]["facts"])
-    assert any("制胜进球" in fact for fact in zh_fact_bank["choices"][0]["facts"])
+    assert not any("制胜进球" in fact for fact in zh_fact_bank["choices"][0]["facts"])
+    assert any("首开纪录" in fact for fact in zh_fact_bank["choices"][0]["facts"])
     progression_choice = next(
         choice
         for choice in zh_fact_bank["choices"]
@@ -268,6 +295,9 @@ def test_write_editorial_artifacts(tmp_path):
     assert "帽子戏法" not in json.dumps(en_brief, ensure_ascii=False)
     assert "Editor's Choices" in html
     assert "Editor&apos;s Choices" not in html
+    assert 'href="2026-06-16/"' in archive
+    assert "official assists" in archive
+    assert "Lionel MESSI turned the day" not in archive
     assert "🇦🇷 Lionel MESSI" in html
     assert "🇦🇷 Argentina vs 🇩🇿 Algeria" in html
     assert "<span>score</span>" not in html

@@ -165,6 +165,7 @@ def _build_match_flow(match: sqlite3.Row, goals: list[sqlite3.Row]) -> dict[str,
             opponent_before=opponent_before,
             team_after=team_after,
             opponent_after=opponent_after,
+            team_final=home_final if team == home_team else away_final,
             opponent_final=away_final if team == home_team else home_final,
             team_trailing_seen=team_trailing_seen[team],
         )
@@ -216,6 +217,7 @@ def _goal_tags(
     opponent_before: int,
     team_after: int,
     opponent_after: int,
+    team_final: int,
     opponent_final: int,
     team_trailing_seen: bool,
 ) -> list[str]:
@@ -227,7 +229,9 @@ def _goal_tags(
         tags.append("comeback_equalizer")
     if team_before <= opponent_before and team_after > opponent_after:
         tags.append("go_ahead_goal")
-    if winner_team == team and team_after == opponent_final + 1:
+    final_margin = team_final - opponent_final
+    is_contextual_winner = final_margin == 1 or team_trailing_seen
+    if winner_team == team and team_after == opponent_final + 1 and is_contextual_winner:
         tags.append("match_winning_goal")
     if minute >= 75:
         tags.append("late_goal")

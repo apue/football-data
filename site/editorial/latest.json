@@ -1,15 +1,21 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-06-22T10:36:04+00:00",
-  "compiled_at": "2026-06-22T10:45:54+00:00",
+  "generated_at": "2026-06-22T11:03:35+00:00",
+  "compiled_at": "2026-06-22T11:17:22+00:00",
   "match_date": "2026-06-21",
   "scoring_version": "v0.4",
-  "editorial_input_hash": "f599f95037ddb1535d9ec8cab939593d84fd4a8d7efe2e60c888ea73a7910972",
+  "editorial_generation": {
+    "scoring_version": "v0.4",
+    "uses_official_assists": true,
+    "uses_goal_involvements": true,
+    "event_source": "fifa_timeline_api"
+  },
+  "editorial_input_hash": "e8a8cb0360281a854203f78ed9e6c829a2704cf209ec18f6950bef5deb6abbdd",
   "editorial_input": {
     "schema_version": "5",
     "match_date": "2026-06-21",
     "scoring_version": "v0.4",
-    "scoring_config_sha256": "f8ae7177bd9d5ecb2af9c703b236c2b87a75b29c99a2e529e30ea2209f53786e",
+    "scoring_config_sha256": "2c1ec1b83f4f8aefa0f37c215f87d8ebf34c227596f3bd55dae1fad71322169a",
     "matches": [
       {
         "match_key": "FIFA-2026-M37-URU-CPV",
@@ -180,7 +186,7 @@
         "source": "fifa_timeline_api"
       }
     ],
-    "input_hash": "f599f95037ddb1535d9ec8cab939593d84fd4a8d7efe2e60c888ea73a7910972"
+    "input_hash": "e8a8cb0360281a854203f78ed9e6c829a2704cf209ec18f6950bef5deb6abbdd"
   },
   "source_markdown_path": "reports/editorial/2026-06-21.md",
   "matches": [
@@ -337,8 +343,7 @@
           "opponent_score_after": 0,
           "tags": [
             "opening_goal",
-            "go_ahead_goal",
-            "match_winning_goal"
+            "go_ahead_goal"
           ]
         },
         {
@@ -368,23 +373,7 @@
           "tags": []
         }
       ],
-      "decisive_goal": {
-        "goal_order": 1,
-        "minute": 9,
-        "team": "Spain",
-        "player_name": "Lamine YAMAL",
-        "score_before": "0-0",
-        "score_after": "1-0",
-        "team_score_before": 0,
-        "opponent_score_before": 0,
-        "team_score_after": 1,
-        "opponent_score_after": 0,
-        "tags": [
-          "opening_goal",
-          "go_ahead_goal",
-          "match_winning_goal"
-        ]
-      }
+      "decisive_goal": null
     },
     "FIFA-2026-M39-BEL-IRN": {
       "match_key": "FIFA-2026-M39-BEL-IRN",
@@ -596,6 +585,8 @@
         "shots": 5,
         "on_target": 2,
         "goals": 1,
+        "assists": 1,
+        "goal_involvements": 2,
         "offers_received": 16,
         "in_behind": 16,
         "in_between": 9,
@@ -610,22 +601,24 @@
         "en": [
           "comeback winner",
           "match-winning goal",
-          "goal scorer"
+          "goal scorer",
+          "assist"
         ],
         "zh": [
           "逆转制胜",
           "打入制胜球",
-          "取得进球"
+          "取得进球",
+          "送出助攻"
         ]
       },
       "content": {
         "en": {
           "title": "The comeback finisher",
-          "html": "<p>Salah struck the 66th-minute winner to seal a 3-1 comeback win for Egypt. He offered himself 16 times as a passing option and completed seven line-breaking passes.</p>"
+          "html": "<p>Mohamed Salah turned the match for Egypt, scoring the go-ahead goal that proved decisive in a 3-1 comeback win over New Zealand. He also added an assist, completed seven line breaks, and was found 16 times after offering in behind.</p>"
         },
         "zh": {
-          "title": "萨拉赫 66 分钟制胜，埃及 3-1 逆转新西兰",
-          "html": "<p>埃及 0-1 落后新西兰，最终 3-1 逆转取胜。</p><p>萨拉赫第 66 分钟打入制胜球。全场 16 次接应成功，7 次打穿防线，持续威胁新西兰防线。</p>"
+          "title": "萨拉赫66分钟制胜，埃及3-1逆转新西兰",
+          "html": "<p>埃及 0-1 落后，最终 3-1 逆转新西兰。萨拉赫第 66 分钟打入制胜球，并送出一次助攻，一球一助直接参与逆转。</p><p>全场比赛他 7 次打穿防线、16 次接应成功，跑动接近 9.66 公里。</p>"
         }
       }
     },
@@ -638,8 +631,8 @@
       "rank": 2,
       "match_key": "FIFA-2026-M38-ESP-KSA",
       "match_no": 38,
-      "player_no": 19,
-      "player_name": "Lamine YAMAL",
+      "player_no": 21,
+      "player_name": "Mikel OYARZABAL",
       "team": "Spain",
       "opponent": "Saudi Arabia",
       "home_score": 4,
@@ -648,99 +641,86 @@
       "opponent_final_goals": 0,
       "position": "FW",
       "progression_benchmark": {
-        "score": 27.4,
-        "quality": "strong",
-        "support_actions": 16.0,
+        "score": 3.7,
+        "quality": "thin",
+        "support_actions": 2.0,
         "pass_only_line_break_volume": false
       },
       "hidden_gem_profile": {
-        "eligible": true,
-        "profile": "progression_engine",
-        "score": 27.4
+        "eligible": false,
+        "profile": "insufficient_evidence",
+        "score": 31.0
       },
       "flow_context": {
         "match_key": "FIFA-2026-M38-ESP-KSA",
         "team_came_from_behind_to_win": false,
         "allowed_claims": {
-          "en": [
-            "go-ahead goal",
-            "match-winning goal",
-            "9' winner"
-          ],
-          "zh": [
-            "取得领先",
-            "制胜球",
-            "9' 制胜"
-          ]
+          "en": [],
+          "zh": []
         },
         "goals": [
           {
-            "goal_order": 1,
-            "minute": 9,
+            "goal_order": 2,
+            "minute": 20,
             "team": "Spain",
-            "player_name": "Lamine YAMAL",
-            "score_before": "0-0",
-            "score_after": "1-0",
-            "team_score_before": 0,
+            "player_name": "Mikel OYARZABAL",
+            "score_before": "1-0",
+            "score_after": "2-0",
+            "team_score_before": 1,
             "opponent_score_before": 0,
-            "team_score_after": 1,
+            "team_score_after": 2,
             "opponent_score_after": 0,
-            "tags": [
-              "opening_goal",
-              "go_ahead_goal",
-              "match_winning_goal"
-            ]
+            "tags": []
+          },
+          {
+            "goal_order": 3,
+            "minute": 23,
+            "team": "Spain",
+            "player_name": "Mikel OYARZABAL",
+            "score_before": "2-0",
+            "score_after": "3-0",
+            "team_score_before": 2,
+            "opponent_score_before": 0,
+            "team_score_after": 3,
+            "opponent_score_after": 0,
+            "tags": []
           }
         ],
-        "decisive_goal": {
-          "goal_order": 1,
-          "minute": 9,
-          "team": "Spain",
-          "player_name": "Lamine YAMAL",
-          "score_before": "0-0",
-          "score_after": "1-0",
-          "team_score_before": 0,
-          "opponent_score_before": 0,
-          "team_score_after": 1,
-          "opponent_score_after": 0,
-          "tags": [
-            "opening_goal",
-            "go_ahead_goal",
-            "match_winning_goal"
-          ]
-        }
+        "decisive_goal": null
       },
       "metrics": {
         "shots": 5,
-        "on_target": 2,
-        "goals": 1,
-        "offers_received": 14,
-        "in_behind": 14,
-        "in_between": 3,
-        "line_breaks_completed": 5,
-        "ball_progressions": 7,
-        "possession_regains": 2,
-        "blocks": 3,
-        "total_distance_m": 4933.6
+        "on_target": 3,
+        "goals": 2,
+        "assists": 1,
+        "goal_involvements": 3,
+        "offers_received": 9,
+        "in_behind": 25,
+        "in_between": 8,
+        "ball_progressions": 1,
+        "possession_interrupted": 1,
+        "total_distance_m": 5111.8
       },
       "evidence_chips": {
         "en": [
-          "match-winning goal",
-          "goal scorer"
+          "brace",
+          "assist",
+          "high shot quality"
         ],
         "zh": [
-          "打入制胜球",
-          "取得进球"
+          "梅开二度",
+          "送出助攻",
+          "射门质量突出"
         ]
       },
       "content": {
         "en": {
-          "title": "The goal that tilted it",
-          "html": "<p>Lamine Yamal struck the go-ahead goal in the 9th minute, giving Spain an early edge in a 4-0 win. He got in behind Saudi Arabia's defence 14 times and completed 5 line breaks, providing a constant route forward.</p>"
+          "title": "Two goals behind the line",
+          "html": "<p>Oyarzabal gave Spain a constant threat in behind the Saudi defence. He scored two goals, made 25 runs behind the back line, and was found 9 times by teammates.</p>"
         },
         "zh": {
-          "title": "9 分钟首开纪录，亚马尔 5 次打穿防线",
-          "html": "<p>第 9 分钟，亚马尔为西班牙首开纪录。 全场比赛，他完成 14 次接应，5 次打穿沙特防线。 西班牙最终 4-0 拿下比赛。</p>"
+          "title": "两球一助，身后冲击拉动防线",
+          "html": "<p>梅开二度并送出助攻，3次射正体现了他本场把握机会的效率。再加上25次身后接应、9次接应成功，他的威胁不只停在最后一脚。</p>"
         }
       }
     },
@@ -753,8 +733,8 @@
       "rank": 3,
       "match_key": "FIFA-2026-M37-URU-CPV",
       "match_no": 37,
-      "player_no": 14,
-      "player_name": "Agustin CANOBBIO",
+      "player_no": 20,
+      "player_name": "Maxi ARAUJO",
       "team": "Uruguay",
       "opponent": "Cabo Verde",
       "home_score": 2,
@@ -763,41 +743,47 @@
       "opponent_final_goals": 2,
       "position": "MF",
       "progression_benchmark": {
-        "score": 23.3,
-        "quality": "useful",
-        "support_actions": 14.0,
+        "score": 9.95,
+        "quality": "thin",
+        "support_actions": 6.0,
         "pass_only_line_break_volume": false
       },
       "hidden_gem_profile": {
         "eligible": false,
         "profile": "insufficient_evidence",
-        "score": 44.1
+        "score": 34.1
       },
       "flow_context": {
         "match_key": "FIFA-2026-M37-URU-CPV",
         "team_came_from_behind_to_win": false,
         "allowed_claims": {
           "en": [
-            "go-ahead goal"
+            "equaliser",
+            "comeback equaliser",
+            "43' equaliser"
           ],
           "zh": [
-            "取得领先"
+            "扳平",
+            "逆转过程中的扳平球",
+            "逆转扳平",
+            "43' 扳平"
           ]
         },
         "goals": [
           {
-            "goal_order": 3,
-            "minute": 50,
+            "goal_order": 2,
+            "minute": 43,
             "team": "Uruguay",
-            "player_name": "Agustin CANOBBIO",
-            "score_before": "1-1",
-            "score_after": "2-1",
-            "team_score_before": 1,
+            "player_name": "Maxi ARAUJO",
+            "score_before": "0-1",
+            "score_after": "1-1",
+            "team_score_before": 0,
             "opponent_score_before": 1,
-            "team_score_after": 2,
+            "team_score_after": 1,
             "opponent_score_after": 1,
             "tags": [
-              "go_ahead_goal"
+              "equalizer",
+              "comeback_equalizer"
             ]
           }
         ],
@@ -807,33 +793,148 @@
         "shots": 2,
         "on_target": 1,
         "goals": 1,
-        "offers_received": 16,
-        "in_behind": 30,
-        "in_between": 8,
-        "line_breaks_completed": 10,
-        "ball_progressions": 6,
-        "possession_regains": 3,
-        "possession_interrupted": 4,
-        "total_distance_m": 11280.1
+        "assists": 1,
+        "goal_involvements": 2,
+        "offers_received": 8,
+        "in_behind": 32,
+        "in_between": 6,
+        "line_breaks_completed": 2,
+        "ball_progressions": 3,
+        "possession_regains": 2,
+        "possession_interrupted": 2,
+        "blocks": 2,
+        "total_distance_m": 8974.1
       },
       "evidence_chips": {
         "en": [
-          "go-ahead goal",
-          "goal scorer"
+          "comeback equaliser",
+          "equaliser",
+          "goal scorer",
+          "assist"
         ],
         "zh": [
-          "取得领先",
-          "取得进球"
+          "逆转扳平",
+          "扳平进球",
+          "取得进球",
+          "送出助攻"
         ]
       },
       "content": {
         "en": {
           "title": "The midfield connector",
-          "html": "<p>Canobbio helped Uruguay connect through midfield with his constant movement and vertical running. He scored the go-ahead goal, completed 10 line-breaking passes and made 30 in-behind offers. Covering over 11 km, his work off the ball kept the team linked in possession.</p>"
+          "html": "<p>Maxi Araujo pulled Uruguay level with a 43rd-minute equaliser and later added an assist. His 32 in-behind offers gave Uruguay a repeated option in a 2-2 draw.</p>"
         },
         "zh": {
-          "title": "卡诺比奥：跑动 11 公里，中场接应打穿防线",
-          "html": "<p>卡诺比奥本场打入一球，帮助乌拉圭取得领先。他在中场充当连接点，拿球后帮助球队持续向前处理。</p><p>全场他 30 次身后接应，10 次打穿防线。跑动距离达到 11.28 公里。</p><p>即便比分最终被佛得角追成 2-2，他的接应和转移帮助球队保持向前处理。</p>"
+          "title": "阿劳霍一球一助，乌拉圭2-2战平佛得角",
+          "html": "<p>乌拉圭2-2战平佛得角，Maxi ARAUJO是追平比分的关键。第43分钟他打入扳平球，随后又送出一次助攻。全场32次身后接应、8次接应成功，他这场的一球一助之外，还有足够多的无球参与。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "impact_pick",
+      "award_label": {
+        "en": "Impact Pick",
+        "zh": "影响力精选"
+      },
+      "rank": 1,
+      "match_key": "FIFA-2026-M40-NZL-EGY",
+      "match_no": 40,
+      "player_no": 11,
+      "player_name": "MOSTAFA ZICO",
+      "team": "Egypt",
+      "opponent": "New Zealand",
+      "home_score": 1,
+      "away_score": 3,
+      "team_final_goals": 3,
+      "opponent_final_goals": 1,
+      "position": "MF",
+      "progression_benchmark": {
+        "score": 3.0,
+        "quality": "thin",
+        "support_actions": 0.0,
+        "pass_only_line_break_volume": false
+      },
+      "hidden_gem_profile": {
+        "eligible": false,
+        "profile": "insufficient_evidence",
+        "score": 18.9
+      },
+      "flow_context": {
+        "match_key": "FIFA-2026-M40-NZL-EGY",
+        "team_came_from_behind_to_win": true,
+        "allowed_claims": {
+          "en": [
+            "comeback win",
+            "equaliser",
+            "comeback equaliser",
+            "57' equaliser"
+          ],
+          "zh": [
+            "逆转取胜",
+            "扳平",
+            "逆转过程中的扳平球",
+            "逆转扳平",
+            "57' 扳平"
+          ]
+        },
+        "goals": [
+          {
+            "goal_order": 2,
+            "minute": 57,
+            "team": "Egypt",
+            "player_name": "MOSTAFA ZICO",
+            "score_before": "1-0",
+            "score_after": "1-1",
+            "team_score_before": 0,
+            "opponent_score_before": 1,
+            "team_score_after": 1,
+            "opponent_score_after": 1,
+            "tags": [
+              "equalizer",
+              "comeback_equalizer",
+              "team_came_from_behind_goal"
+            ]
+          }
+        ],
+        "decisive_goal": null
+      },
+      "metrics": {
+        "shots": 4,
+        "on_target": 1,
+        "goals": 1,
+        "assists": 1,
+        "goal_involvements": 2,
+        "offers_received": 5,
+        "in_behind": 15,
+        "in_between": 4,
+        "line_breaks_completed": 5,
+        "possession_regains": 2,
+        "possession_interrupted": 3,
+        "blocks": 2,
+        "total_distance_m": 9630.4
+      },
+      "evidence_chips": {
+        "en": [
+          "comeback equaliser",
+          "equaliser",
+          "goal scorer",
+          "assist"
+        ],
+        "zh": [
+          "逆转扳平",
+          "扳平进球",
+          "取得进球",
+          "送出助攻"
+        ]
+      },
+      "content": {
+        "en": {
+          "title": "The link in possession",
+          "html": "<p>Mostafa Zico scored the 57th-minute equaliser that turned the match for Egypt, who were 1-0 down against New Zealand. He then added an assist, giving his side the platform to complete a 3-1 comeback win.</p>"
+        },
+        "zh": {
+          "title": "MOSTAFA ZICO一球一助，埃及3-1逆转新西兰",
+          "html": "<p>埃及0-1落后新西兰。第57分钟，MOSTAFA ZICO扳平比分。此后他又送出一次助攻。埃及最终3-1逆转取胜。</p>"
         }
       }
     },
@@ -903,11 +1004,11 @@
       "content": {
         "en": {
           "title": "The route back into it",
-          "html": "<p>Marawan Attia gave Egypt a route back into the match, repeatedly breaking New Zealand's lines with forward passing. He completed 31 line breaks as Egypt came from behind to win 3-1.</p>"
+          "html": "<p>Egypt trailed 1-0 before recovering to win 3-1, and Marawan Attia stood out in the work that moved the ball forward. His 31 completed line breaks gave Egypt a steady progression profile in the comeback.</p>"
         },
         "zh": {
-          "title": "阿蒂亚 31 次打穿防线，埃及 3-1 逆转新西兰",
-          "html": "<p>埃及 0-1 落后新西兰。中场阿蒂亚持续接应，全场 31 次打穿防线。落后阶段他坚持向前传球，帮助埃及 3-1 逆转取胜。</p>"
+          "title": "落后时不退，阿蒂亚用向前输送撑住埃及推进",
+          "html": "<p>埃及0-1落后新西兰时，马拉万·阿蒂亚仍然在中场持续向前处理球。全场31次打穿防线、40次接应成功，这种不抢镜的推进量，是埃及能够把比赛重新推回前场的重要支撑。</p>"
         }
       }
     },
@@ -974,11 +1075,11 @@
       "content": {
         "en": {
           "title": "The quiet connector",
-          "html": "<p>Kevin De Bruyne kept giving teammates a passing option throughout the 0-0 draw with Iran, connecting play without the spotlight. He offered himself between the lines 11 times and received 29 offers, constantly being found to keep possession flowing.</p>"
+          "html": "<p>Kevin De Bruyne kept giving his teammates a passing option in a tight 0-0 draw. He was found 29 times, including 11 between-line receptions, which is exactly the kind of quiet linking work that can disappear from the headline.</p>"
         },
         "zh": {
-          "title": "德布劳内频繁接应，比利时前场连线未断",
-          "html": "<p>比利时 0-0 伊朗，德布劳内全场反复跑动接应。</p><p>他完成 29 次接应成功，另有 31 次身后接应与 11 次两线间接应。</p><p>这些跑动不抢镜，但持续提供了接应角度。比利时前场在比赛中保持连接，靠的是这些跑位。</p>"
+          "title": "零比零里的接应枢纽",
+          "html": "<p>比利时0比0战平伊朗，德布劳内没有进球，但他一直在给队友提供接应角度。全场29次接应成功，其中11次在两线之间接应。这类表现很难写进标题，却能解释为什么他仍然是这场的隐藏亮点。</p>"
         }
       }
     },
@@ -1043,11 +1144,11 @@
       "content": {
         "en": {
           "title": "The stubborn stopper",
-          "html": "<p>The defender repeatedly broke up Uruguay's rhythm by winning possession 15 times and forcing five resets, helping Cabo Verde stay level until the final whistle.</p>"
+          "html": "<p>Pico Lopes gave Cabo Verde a clear defensive footprint in the 2-2 draw with Uruguay: 15 possession regains, five interruptions, and three blocks.</p>"
         },
         "zh": {
-          "title": "顶住乌拉圭冲击，PICO LOPES 把防守脏活做到位",
-          "html": "<p>佛得角 2-2 战平乌拉圭，后防全线承压。 PICO LOPES 把防守端的脏活做到位了。全场 15 次夺回球权，5 次破坏进攻，另有 3 次封堵。 多次让乌拉圭的推进停下来，帮助球队守住平局。</p>"
+          "title": "十五次夺回球权，他把乌拉圭的进攻一次次拦下来",
+          "html": "<p>佛得角2比2乌拉圭，PICO LOPES的入选理由很直接：15次夺回球权、5次破坏进攻、3次封堵。防守端这些重复动作，比一个漂亮标题更能说明问题。</p>"
         }
       }
     }
@@ -1062,7 +1163,7 @@
         "teams": [
           {
             "team": "Egypt",
-            "count": 2
+            "count": 3
           }
         ]
       }
@@ -1079,15 +1180,16 @@
             "teams": [
               {
                 "team": "Egypt",
-                "count": 2
+                "count": 3
               }
             ]
           }
         ],
         "choice_names": [
           "MOHAMED SALAH",
-          "Lamine YAMAL",
-          "Agustin CANOBBIO",
+          "Mikel OYARZABAL",
+          "Maxi ARAUJO",
+          "MOSTAFA ZICO",
           "MARAWAN ATTIA",
           "Kevin DE BRUYNE",
           "PICO LOPES"

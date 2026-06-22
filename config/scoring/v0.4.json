@@ -3,6 +3,8 @@
   "scores": {
     "attacking_threat": {
       "goals": 8.0,
+      "assists": 3.5,
+      "goal_involvements": 1.0,
       "on_target": 2.0,
       "shots": 0.6,
       "offers_received": 0.2,
@@ -19,6 +21,8 @@
       "team_came_from_behind_goal": 2.0,
       "comeback_equalizer": 6.0,
       "comeback_winner": 12.0,
+      "assists": 5.0,
+      "goal_involvements": 1.5,
       "only_goal_winner": 6.0,
       "brace": 8.0,
       "hat_trick": 12.0,

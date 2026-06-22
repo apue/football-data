@@ -85,6 +85,47 @@ def test_run_editorial_queue_cli_with_fake_backend_publishes_pending_date(tmp_pa
     assert choices["match_date"] == latest_date
 
 
+def test_run_editorial_queue_cli_date_backfill_does_not_replace_latest(tmp_path):
+    latest_date, previous_date = _latest_and_previous_data_dates()
+    site_dir = _site_with_latest_editorial(tmp_path, latest_date)
+    run_path = tmp_path / "editorial-run.json"
+
+    subprocess.run(
+        [
+            sys.executable,
+            "scripts/run_editorial_queue.py",
+            "--site-dir",
+            str(site_dir),
+            "--reports-dir",
+            str(tmp_path / "reports"),
+            "--agent-runs-dir",
+            str(tmp_path / "agent-runs"),
+            "--out",
+            str(run_path),
+            "--queue-out",
+            str(tmp_path / "editorial-queue.json"),
+            "--date",
+            previous_date,
+            "--no-research",
+            "--fake",
+        ],
+        check=True,
+    )
+
+    run = json.loads(run_path.read_text(encoding="utf-8"))
+    latest = json.loads((site_dir / "editorial" / "latest.json").read_text(encoding="utf-8"))
+    choices = json.loads(
+        (site_dir / "editorial" / previous_date / "choices.json").read_text(
+            encoding="utf-8"
+        )
+    )
+
+    assert run["status"] == "success"
+    assert run["published_dates"] == [previous_date]
+    assert latest["match_date"] == latest_date
+    assert choices["match_date"] == previous_date
+
+
 def _site_with_latest_editorial(tmp_path: Path, match_date: str) -> Path:
     site_dir = tmp_path / f"site-{match_date}"
     editorial_dir = site_dir / "editorial"

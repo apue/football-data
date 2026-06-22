@@ -17,10 +17,16 @@ def build_editorial_queue(
 ) -> dict[str, Any]:
     latest_data_date = _latest_data_date(db_path)
     latest_editorial_date = _latest_editorial_date(site_dir)
-    pending_items = _pending_items(
+    stale_items = _stale_items(
         db_path=db_path,
         site_dir=site_dir,
+        scoring_config_path=scoring_config_path,
+    )
+    pending_items = _daily_pending_items(
+        db_path=db_path,
+        latest_data_date=latest_data_date,
         latest_editorial_date=latest_editorial_date,
+        stale_items=stale_items,
         scoring_config_path=scoring_config_path,
     )
     pending_dates = [item["match_date"] for item in pending_items]
@@ -35,6 +41,8 @@ def build_editorial_queue(
         "latest_editorial_date": latest_editorial_date,
         "pending_dates": pending_dates,
         "pending_items": pending_items,
+        "stale_dates": [item["match_date"] for item in stale_items],
+        "stale_items": stale_items,
         "pending_matches": _matches_for_dates(db_path, pending_dates),
         "new_matches": update_events.get("new_matches", latest_run.get("new_matches", [])),
         "version_updates": update_events.get(
@@ -77,32 +85,50 @@ def _latest_editorial_date(site_dir: str | Path) -> str | None:
     return str(value) if value else None
 
 
-def _pending_items(
+def _daily_pending_items(
+    *,
+    db_path: str | Path,
+    latest_data_date: str | None,
+    latest_editorial_date: str | None,
+    stale_items: list[dict[str, Any]],
+    scoring_config_path: str | Path,
+) -> list[dict[str, Any]]:
+    if latest_data_date is None:
+        return []
+    if latest_editorial_date == latest_data_date:
+        return []
+
+    fingerprint = editorial_input_fingerprint(db_path, latest_data_date, scoring_config_path)
+    return [
+        {
+            "match_date": latest_data_date,
+            "reason": "data_date_ahead_of_editorial",
+            "current_input_hash": fingerprint["input_hash"],
+            "published_input_hash": _published_hash_from_items(stale_items, latest_data_date),
+            "scoring_version": fingerprint.get("scoring_version"),
+            "source_ids": [
+                source["source_id"]
+                for source in fingerprint.get("source_documents", [])
+            ],
+        }
+    ]
+
+
+def _stale_items(
     *,
     db_path: str | Path,
     site_dir: str | Path,
-    latest_editorial_date: str | None,
     scoring_config_path: str | Path,
 ) -> list[dict[str, Any]]:
     items: list[dict[str, Any]] = []
     for match_date in _data_dates(db_path):
         fingerprint = editorial_input_fingerprint(db_path, match_date, scoring_config_path)
         published_hash = _published_input_hash(site_dir, match_date)
-        reason: str | None = None
-        if latest_editorial_date is None or match_date > latest_editorial_date:
-            reason = "data_date_ahead_of_editorial"
-        elif (
-            match_date == latest_editorial_date
-            and published_hash
-            and published_hash != fingerprint["input_hash"]
-        ):
-            reason = "editorial_input_changed"
-
-        if reason is not None:
+        if published_hash and published_hash != fingerprint["input_hash"]:
             items.append(
                 {
                     "match_date": match_date,
-                    "reason": reason,
+                    "reason": "editorial_input_changed",
                     "current_input_hash": fingerprint["input_hash"],
                     "published_input_hash": published_hash,
                     "scoring_version": fingerprint.get("scoring_version"),
@@ -113,6 +139,14 @@ def _pending_items(
                 }
             )
     return items
+
+
+def _published_hash_from_items(items: list[dict[str, Any]], match_date: str) -> str | None:
+    for item in items:
+        if item.get("match_date") == match_date:
+            value = item.get("published_input_hash")
+            return str(value) if value else None
+    return None
 
 
 def _data_dates(db_path: str | Path) -> list[str]:
@@ -170,8 +204,6 @@ def _reason(
         return "editorial_up_to_date"
     new_matches = update_events.get("new_matches") or latest_run.get("new_matches") or []
     version_updates = update_events.get("version_updates") or latest_run.get("version_updates") or []
-    if any(item.get("reason") == "editorial_input_changed" for item in pending_items):
-        return "editorial_input_changed"
     if new_matches and version_updates:
         return "new_matches_and_version_updates"
     if new_matches:

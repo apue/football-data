@@ -61,9 +61,38 @@ def test_build_editorial_queue_detects_stale_editorial_input_hash(tmp_path):
         manifests_dir=tmp_path / "manifests",
     )
 
+    assert queue["pending_dates"] == []
+    assert queue["stale_dates"] == ["2026-06-18"]
+    assert queue["stale_items"][0]["reason"] == "editorial_input_changed"
+    assert queue["stale_items"][0]["current_input_hash"] != "stale-hash"
+    assert queue["status"] == "up_to_date"
+
+
+def test_build_editorial_queue_prioritizes_latest_data_over_stale_previous_day(tmp_path):
+    db_path = _queue_db(tmp_path)
+    site_dir = _site_with_latest_editorial(tmp_path, "2026-06-17")
+    dated_dir = site_dir / "editorial" / "2026-06-17"
+    dated_dir.mkdir(parents=True)
+    (dated_dir / "choices.json").write_text(
+        json.dumps(
+            {
+                "match_date": "2026-06-17",
+                "editorial_input_hash": "old-scoring-hash",
+                "choices": [],
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    queue = build_editorial_queue(
+        db_path=db_path,
+        site_dir=site_dir,
+        manifests_dir=tmp_path / "manifests",
+    )
+
     assert queue["pending_dates"] == ["2026-06-18"]
-    assert queue["pending_items"][0]["reason"] == "editorial_input_changed"
-    assert queue["pending_items"][0]["current_input_hash"] != "stale-hash"
+    assert queue["pending_items"][0]["reason"] == "data_date_ahead_of_editorial"
+    assert queue["stale_dates"] == ["2026-06-17"]
 
 
 def test_build_editorial_queue_ignores_historical_hash_changes_when_latest_is_current(tmp_path):

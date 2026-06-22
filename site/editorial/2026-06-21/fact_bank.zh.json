@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "language": "zh",
-  "generated_at": "2026-06-22T10:36:04+00:00",
+  "generated_at": "2026-06-22T11:03:35+00:00",
   "match_date": "2026-06-21",
   "scoring_version": "v0.4",
   "editorial_process": "from_scratch_chinese_sports_editor",
@@ -31,6 +31,7 @@
         "逆转制胜",
         "打入制胜球",
         "取得进球",
+        "送出助攻",
         "埃及 0-1 落后后 3-1 逆转取胜",
         "66' 制胜",
         "完成逆转制胜球",
@@ -50,55 +51,60 @@
       "evidence_chips": [
         "逆转制胜",
         "打入制胜球",
-        "取得进球"
+        "取得进球",
+        "送出助攻"
       ]
     },
     {
       "award_type": "player_of_the_day",
       "award_label": "每日最佳球员",
-      "player_name": "Lamine YAMAL",
+      "player_name": "Mikel OYARZABAL",
       "team": "西班牙",
       "opponent": "沙特阿拉伯",
       "match_no": 38,
       "match_scoreline": "西班牙 4-0 沙特阿拉伯",
       "position": "FW",
       "facts": [
-        "打入制胜球",
-        "取得进球",
-        "9' 制胜",
-        "14 次接应成功",
-        "1 次制胜进球",
-        "5 次打穿防线",
-        "14 次身后接应",
-        "1 个进球"
+        "梅开二度",
+        "送出助攻",
+        "射门质量突出",
+        "2 个进球",
+        "25 次身后接应",
+        "9 次接应成功",
+        "1 次梅开二度",
+        "3 次射正"
       ],
       "allowed_angles": [
-        "制胜球",
-        "决定比分走势",
-        "不只靠最后一脚"
+        "进球很醒目",
+        "持续冲击身后空间",
+        "让对手防线不敢前压"
       ],
       "evidence_chips": [
-        "打入制胜球",
-        "取得进球"
+        "梅开二度",
+        "送出助攻",
+        "射门质量突出"
       ]
     },
     {
       "award_type": "player_of_the_day",
       "award_label": "每日最佳球员",
-      "player_name": "Agustin CANOBBIO",
+      "player_name": "Maxi ARAUJO",
       "team": "乌拉圭",
       "opponent": "佛得角",
       "match_no": 37,
       "match_scoreline": "乌拉圭 2-2 佛得角",
       "position": "MF",
       "facts": [
-        "取得领先",
+        "逆转扳平",
+        "扳平进球",
         "取得进球",
-        "10 次打穿防线",
-        "30 次身后接应",
-        "16 次接应成功",
-        "跑动距离 11280.1 米",
-        "1 个进球"
+        "送出助攻",
+        "43' 扳平",
+        "32 次身后接应",
+        "跑动距离 8974.1 米",
+        "1 个进球",
+        "8 次接应成功",
+        "1 次逆转扳平球"
       ],
       "allowed_angles": [
         "中场连接点",
@@ -106,8 +112,44 @@
         "帮助球队持续向前处理"
       ],
       "evidence_chips": [
-        "取得领先",
-        "取得进球"
+        "逆转扳平",
+        "扳平进球",
+        "取得进球",
+        "送出助攻"
+      ]
+    },
+    {
+      "award_type": "impact_pick",
+      "award_label": "影响力精选",
+      "player_name": "MOSTAFA ZICO",
+      "team": "埃及",
+      "opponent": "新西兰",
+      "match_no": 40,
+      "match_scoreline": "埃及 3-1 新西兰",
+      "position": "MF",
+      "facts": [
+        "逆转扳平",
+        "扳平进球",
+        "取得进球",
+        "送出助攻",
+        "埃及 0-1 落后后 3-1 逆转取胜",
+        "57' 扳平",
+        "1 次逆转扳平球",
+        "1 次助攻",
+        "1 次扳平进球",
+        "2 次参与进球",
+        "1 次逆转进程进球"
+      ],
+      "allowed_angles": [
+        "中场连接点",
+        "接应和转移",
+        "帮助球队持续向前处理"
+      ],
+      "evidence_chips": [
+        "逆转扳平",
+        "扳平进球",
+        "取得进球",
+        "送出助攻"
       ]
     },
     {

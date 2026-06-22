@@ -1,12 +1,12 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-06-22T10:45:54+00:00",
+  "generated_at": "2026-06-22T11:11:19+00:00",
   "status": "success",
   "match_date": "2026-06-21",
   "scoring_version": "v0.4",
   "research": {
-    "enabled": true,
-    "status": "failed",
+    "enabled": false,
+    "status": "skipped",
     "result_count": 0
   },
   "selection_review": {
@@ -19,7 +19,7 @@
         "teams": [
           {
             "team": "Egypt",
-            "count": 2
+            "count": 3
           }
         ]
       }
@@ -36,15 +36,16 @@
             "teams": [
               {
                 "team": "Egypt",
-                "count": 2
+                "count": 3
               }
             ]
           }
         ],
         "choice_names": [
           "MOHAMED SALAH",
-          "Lamine YAMAL",
-          "Agustin CANOBBIO",
+          "Mikel OYARZABAL",
+          "Maxi ARAUJO",
+          "MOSTAFA ZICO",
           "MARAWAN ATTIA",
           "Kevin DE BRUYNE",
           "PICO LOPES"
@@ -53,10 +54,10 @@
     ]
   },
   "models": {
-    "en_editor": "deepseek-ai/DeepSeek-V4-Pro",
+    "en_editor": "deepseek-ai/DeepSeek-V4-Flash",
     "en_writer": "deepseek-ai/DeepSeek-V4-Flash",
-    "fact_check": "deepseek-ai/DeepSeek-V4-Pro",
-    "zh_editor": "Qwen/Qwen3.5-397B-A17B",
+    "fact_check": "deepseek-ai/DeepSeek-V4-Flash",
+    "zh_editor": "zai-org/GLM-5.2",
     "zh_writer": "zai-org/GLM-5.2"
   },
   "workflow": {
@@ -70,7 +71,7 @@
         "max_attempts": 1,
         "warnings": [],
         "summary": {
-          "choices": 6,
+          "choices": 7,
           "scoring_version": "v0.4"
         }
       },
@@ -81,8 +82,8 @@
         "max_attempts": 1,
         "warnings": [],
         "summary": {
-          "enabled": true,
-          "status": "failed",
+          "enabled": false,
+          "status": "skipped",
           "result_count": 0
         }
       },
@@ -90,31 +91,34 @@
         "id": "zh_writer",
         "kind": "agent",
         "status": "success",
-        "max_attempts": 2,
+        "max_attempts": 1,
         "model": "zai-org/GLM-5.2",
         "skills": [
           "human-writing-zh",
           "anti-translationese",
           "football-editor-style"
         ],
-        "warnings": [],
+        "warnings": [
+          "zh_writer failed: zh_writer timed out after 90 seconds",
+          "zh_writer failed: zh_writer timed out after 90 seconds"
+        ],
         "summary": {
-          "items": 6,
-          "agent_calls": 6,
-          "max_concurrency": 3
+          "items": 7,
+          "agent_calls": 7,
+          "max_concurrency": 6
         }
       },
       {
         "id": "zh_draft_fact_check",
         "kind": "agent",
         "status": "success",
-        "max_attempts": 2,
-        "model": "deepseek-ai/DeepSeek-V4-Pro",
+        "max_attempts": 1,
+        "model": "deepseek-ai/DeepSeek-V4-Flash",
         "skills": [
           "football-editor-style"
         ],
         "warnings": [
-          "Agustin CANOBBIO 被描述为“为乌拉圭首开纪录”，但根据证据，乌拉圭的首个进球由 Maxi ARAUJO 在第 44 分钟打入，CANOBBIO 的进球是乌拉圭的第二球，并非首开纪录。"
+          "Maxi ARAUJO的正文中“他先送出助攻，又在第43分钟完成逆转扳平”顺序错误，证据显示他先在第44分钟（或43分钟，看具体来源）打入扳平球，随后在第50分钟助攻Canobbio，应调整为先扳平再助攻。"
         ],
         "summary": {
           "status": "fail"
@@ -124,50 +128,63 @@
         "id": "zh_final_editor",
         "kind": "agent",
         "status": "success",
-        "max_attempts": 2,
-        "model": "Qwen/Qwen3.5-397B-A17B",
+        "max_attempts": 1,
+        "model": "zai-org/GLM-5.2",
         "skills": [
           "human-writing-zh",
           "anti-translationese",
           "football-editor-style"
         ],
         "warnings": [
-          "未涉及进球球员描述，规避了事实风险"
+          "draft_fact_check 的警告涉及 Maxi ARAUJO，与本条萨拉赫稿件无关，已忽略；同时已删除草稿中无证据支撑的",
+          "次身后接应\"，仅保留证据中的",
+          "次接应成功\"。",
+          "zh_final_editor failed: zh_final_editor timed out after 90 seconds",
+          "draft中\"5次打穿防线，5次接应成功，15次身后接应\"无结构化证据支撑，已删除。",
+          "draft中\"让他的贡献不只停在一个标签上\"属空话，已删除。",
+          "evidence仅含逆转扳平、扳平进球、取得进球、送出助攻，正文严格据此撰写，不新增任何事实。",
+          "zh_final_editor failed: zh_final_editor timed out after 90 seconds"
         ],
         "summary": {
-          "items": 6,
-          "agent_calls": 6,
-          "max_concurrency": 3
+          "items": 7,
+          "agent_calls": 7,
+          "max_concurrency": 6
         }
       },
       {
         "id": "en_writer",
         "kind": "agent",
         "status": "success",
-        "max_attempts": 2,
+        "max_attempts": 1,
         "model": "deepseek-ai/DeepSeek-V4-Flash",
         "skills": [
           "football-editor-style"
         ],
         "warnings": [],
         "summary": {
-          "items": 6,
-          "agent_calls": 6,
-          "max_concurrency": 3
+          "items": 7,
+          "agent_calls": 7,
+          "max_concurrency": 6
         }
       },
       {
         "id": "en_draft_fact_check",
         "kind": "agent",
         "status": "success",
-        "max_attempts": 2,
-        "model": "deepseek-ai/DeepSeek-V4-Pro",
+        "max_attempts": 1,
+        "model": "deepseek-ai/DeepSeek-V4-Flash",
         "skills": [
           "football-editor-style"
         ],
         "warnings": [
-          "MOHAMED SALAH draft error: Salah did not pull Egypt level; MOSTAFA ZICO scored the equalizer at 58'. The draft claims Salah pulled Egypt level before scoring the winner, which is not supported by evidence.",
-          "MOHAMED SALAH draft unsupported metric: '16 received passes' is unsupported; the evidence shows offers_received (16), not received passes."
+          "The draft claims Salah 'equalised to level the score' but the evidence shows his goal (66') made it 1-2 (go-ahead), not an equaliser; the equaliser was scored by MOSTAFA ZICO at 57'.",
+          "The draft claims Salah 'struck the stoppage-time winner' – his goal was at 66', not stoppage time. The final goal was by TREZEGUET at 82'.",
+          "The draft says Salah 'completed seven line-breaking passes' – evidence shows 7 'line_breaks_completed', not 'line-breaking passes'; passes and line breaks are distinct metrics.",
+          "The draft: Oyarzabal 'made 25 runs off the back line, with 9 of those passes reaching him' – evidence shows 'in_behind: 25' and 'offers_received: 9', but 'offers_received' is not described as passes reaching him; also 'runs off the back line' is an invented tactical description.",
+          "Maxi ARAUJO: 'kept the attack moving with 32 in-behind runs and 8 received passes into dangerous areas' – evidence has 'in_behind: 32' and 'offers_received: 8', but 'received passes into dangerous areas' is over-interpretation.",
+          "MOSTAFA ZICO: 'set up a teammate's goal' – evidence shows he assisted MOHAMED SALAH (goal at 66'), which is supported. No other issues for that item.",
+          "MARAWAN ATTIA: '31 line breaks' – evidence confirms 'line_breaks_completed: 31'. 'Repeatedly piercing New Zealand's defense' is a permissible summary; no strict violation.",
+          "Kevin DE BRUYNE: '29 passes and made 31 runs in behind' – evidence shows 'offers_received: 29' and 'in_behind: 31', but 'passes' is not equivalent to 'offers_received'; also 'quiet connector' and 'holding possession' are not explicitly supported."
         ],
         "summary": {
           "status": "fail"
@@ -177,20 +194,26 @@
         "id": "en_final_editor",
         "kind": "agent",
         "status": "success",
-        "max_attempts": 2,
-        "model": "deepseek-ai/DeepSeek-V4-Pro",
+        "max_attempts": 1,
+        "model": "deepseek-ai/DeepSeek-V4-Flash",
         "skills": [
           "football-editor-style"
         ],
         "warnings": [
-          "Draft corrected: Salah did not equalise – that was Mostafa Zico – so the body now describes only his winner.",
-          "Metric 'offers_received' reinterpreted as 16 times he offered himself; 'received passes' removed.",
-          "Two hard numbers used: 16 offers and 7 line breaks."
+          "The draft's 'received passes into dangerous areas' has been replaced with 'runs in behind' to avoid over-interpretation of offers_received.",
+          "The draft claims Salah 'equalised to level the score' but the evidence shows his goal (66') made it 1-2 (go-ahead), not an equaliser; the equaliser was scored by MOSTAFA ZICO at 57'.",
+          "The draft claims Salah 'struck the stoppage-time winner' – his goal was at 66', not stoppage time. The final goal was by TREZEGUET at 82'.",
+          "The draft says Salah 'completed seven line-breaking passes' – evidence shows 7 'line_breaks_completed', not 'line-breaking passes'; passes and line breaks are distinct metrics.",
+          "The draft: Oyarzabal 'made 25 runs off the back line, with 9 of those passes reaching him' – evidence shows 'in_behind: 25' and 'offers_received: 9', but 'offers_received' is not described as passes reaching him; also 'runs off the back line' is an invented tactical description.",
+          "Maxi ARAUJO: 'kept the attack moving with 32 in-behind runs and 8 received passes into dangerous areas' – evidence has 'in_behind: 32' and 'offers_received: 8', but 'received passes into dangerous areas' is over-interpretation.",
+          "MOSTAFA ZICO: 'set up a teammate's goal' – evidence shows he assisted MOHAMED SALAH (goal at 66'), which is supported. No other issues for that item.",
+          "MARAWAN ATTIA: '31 line breaks' – evidence confirms 'line_breaks_completed: 31'. 'Repeatedly piercing New Zealand's defense' is a permissible summary; no strict violation.",
+          "Kevin DE BRUYNE: '29 passes and made 31 runs in behind' – evidence shows 'offers_received: 29' and 'in_behind: 31', but 'passes' is not equivalent to 'offers_received'; also 'quiet connector' and 'holding possession' are not explicitly supported."
         ],
         "summary": {
-          "items": 6,
-          "agent_calls": 6,
-          "max_concurrency": 3
+          "items": 7,
+          "agent_calls": 7,
+          "max_concurrency": 6
         }
       },
       {
@@ -200,7 +223,8 @@
         "max_attempts": 1,
         "warnings": [],
         "summary": {
-          "markdown_chars": 3341
+          "markdown_chars": 3834,
+          "repairs": 0
         }
       },
       {
@@ -217,8 +241,8 @@
         "id": "final_fact_check",
         "kind": "agent",
         "status": "success",
-        "max_attempts": 2,
-        "model": "deepseek-ai/DeepSeek-V4-Pro",
+        "max_attempts": 1,
+        "model": "deepseek-ai/DeepSeek-V4-Flash",
         "skills": [
           "football-editor-style"
         ],
@@ -234,7 +258,7 @@
         "max_attempts": 1,
         "warnings": [],
         "summary": {
-          "choices": 6
+          "choices": 7
         }
       }
     ]
@@ -258,13 +282,18 @@
     },
     {
       "award_type": "player_of_the_day",
-      "player_name": "Lamine YAMAL",
+      "player_name": "Mikel OYARZABAL",
       "team": "Spain"
     },
     {
       "award_type": "player_of_the_day",
-      "player_name": "Agustin CANOBBIO",
+      "player_name": "Maxi ARAUJO",
       "team": "Uruguay"
+    },
+    {
+      "award_type": "impact_pick",
+      "player_name": "MOSTAFA ZICO",
+      "team": "Egypt"
     },
     {
       "award_type": "progression_pick",

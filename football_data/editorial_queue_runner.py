@@ -29,6 +29,7 @@ def run_editorial_queue(
     research: bool = True,
     fake: bool = False,
     max_dates: int | None = None,
+    match_dates: list[str] | None = None,
 ) -> dict[str, Any]:
     queue = build_editorial_queue(
         db_path=db_path,
@@ -37,7 +38,7 @@ def run_editorial_queue(
         scoring_config_path=scoring_config_path,
     )
     write_editorial_queue(queue, queue_out_path)
-    pending_dates = list(queue.get("pending_dates", []))
+    pending_dates = list(match_dates or queue.get("pending_dates", []))
     if max_dates is not None:
         pending_dates = pending_dates[:max_dates]
 

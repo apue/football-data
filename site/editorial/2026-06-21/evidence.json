@@ -1,14 +1,14 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-06-22T10:36:04+00:00",
+  "generated_at": "2026-06-22T11:03:35+00:00",
   "match_date": "2026-06-21",
   "scoring_version": "v0.4",
-  "editorial_input_hash": "f599f95037ddb1535d9ec8cab939593d84fd4a8d7efe2e60c888ea73a7910972",
+  "editorial_input_hash": "e8a8cb0360281a854203f78ed9e6c829a2704cf209ec18f6950bef5deb6abbdd",
   "editorial_input": {
     "schema_version": "5",
     "match_date": "2026-06-21",
     "scoring_version": "v0.4",
-    "scoring_config_sha256": "f8ae7177bd9d5ecb2af9c703b236c2b87a75b29c99a2e529e30ea2209f53786e",
+    "scoring_config_sha256": "2c1ec1b83f4f8aefa0f37c215f87d8ebf34c227596f3bd55dae1fad71322169a",
     "matches": [
       {
         "match_key": "FIFA-2026-M37-URU-CPV",
@@ -179,7 +179,7 @@
         "source": "fifa_timeline_api"
       }
     ],
-    "input_hash": "f599f95037ddb1535d9ec8cab939593d84fd4a8d7efe2e60c888ea73a7910972"
+    "input_hash": "e8a8cb0360281a854203f78ed9e6c829a2704cf209ec18f6950bef5deb6abbdd"
   },
   "matches": [
     {
@@ -335,8 +335,7 @@
           "opponent_score_after": 0,
           "tags": [
             "opening_goal",
-            "go_ahead_goal",
-            "match_winning_goal"
+            "go_ahead_goal"
           ]
         },
         {
@@ -366,23 +365,7 @@
           "tags": []
         }
       ],
-      "decisive_goal": {
-        "goal_order": 1,
-        "minute": 9,
-        "team": "Spain",
-        "player_name": "Lamine YAMAL",
-        "score_before": "0-0",
-        "score_after": "1-0",
-        "team_score_before": 0,
-        "opponent_score_before": 0,
-        "team_score_after": 1,
-        "opponent_score_after": 0,
-        "tags": [
-          "opening_goal",
-          "go_ahead_goal",
-          "match_winning_goal"
-        ]
-      }
+      "decisive_goal": null
     },
     "FIFA-2026-M39-BEL-IRN": {
       "match_key": "FIFA-2026-M39-BEL-IRN",
@@ -521,11 +504,11 @@
       "team_final_goals": 3,
       "opponent_final_goals": 1,
       "position": "FW",
-      "score": 103.7,
+      "score": 123.7,
       "primary_score": "headline_score",
       "role_scores": {
-        "attacking_threat": 22.2,
-        "impact": 31.0,
+        "attacking_threat": 27.7,
+        "impact": 39.0,
         "progressor": 20.54,
         "off_ball": 32.8,
         "defensive": 6.8,
@@ -604,6 +587,8 @@
         "shots": 5,
         "on_target": 2,
         "goals": 1,
+        "assists": 1,
+        "goal_involvements": 2,
         "offers_received": 16,
         "in_behind": 16,
         "in_between": 9,
@@ -656,18 +641,48 @@
           "weight": 0.6,
           "contribution": 9.6,
           "score": "off_ball"
+        },
+        {
+          "metric": "goals",
+          "value": 1,
+          "weight": 8.0,
+          "contribution": 8.0,
+          "score": "attacking_threat"
+        },
+        {
+          "metric": "top_speed_kmh",
+          "value": 33.1,
+          "weight": 0.2,
+          "contribution": 6.62,
+          "score": "physical"
+        },
+        {
+          "metric": "go_ahead_goal",
+          "value": 1,
+          "weight": 5.0,
+          "contribution": 5.0,
+          "score": "impact"
+        },
+        {
+          "metric": "assists",
+          "value": 1,
+          "weight": 5.0,
+          "contribution": 5.0,
+          "score": "impact"
         }
       ],
       "evidence_chips": {
         "en": [
           "comeback winner",
           "match-winning goal",
-          "goal scorer"
+          "goal scorer",
+          "assist"
         ],
         "zh": [
           "逆转制胜",
           "打入制胜球",
-          "取得进球"
+          "取得进球",
+          "送出助攻"
         ]
       }
     },
@@ -680,8 +695,8 @@
       "rank": 2,
       "match_key": "FIFA-2026-M38-ESP-KSA",
       "match_no": 38,
-      "player_no": 19,
-      "player_name": "Lamine YAMAL",
+      "player_no": 21,
+      "player_name": "Mikel OYARZABAL",
       "team": "Spain",
       "opponent": "Saudi Arabia",
       "home_score": 4,
@@ -689,144 +704,152 @@
       "team_final_goals": 4,
       "opponent_final_goals": 0,
       "position": "FW",
-      "score": 79.6,
+      "score": 86.0,
       "primary_score": "headline_score",
       "role_scores": {
-        "attacking_threat": 21.3,
-        "impact": 19.0,
-        "progressor": 21.08,
-        "off_ball": 26.6,
-        "defensive": 6.2,
-        "physical": 11.39
+        "attacking_threat": 39.55,
+        "impact": 17.5,
+        "progressor": 1.62,
+        "off_ball": 31.0,
+        "defensive": 2.4,
+        "physical": 11.37
       },
       "progression_benchmark": {
-        "score": 27.4,
-        "quality": "strong",
-        "support_actions": 16.0,
+        "score": 3.7,
+        "quality": "thin",
+        "support_actions": 2.0,
         "pass_only_line_break_volume": false
       },
       "hidden_gem_profile": {
-        "eligible": true,
-        "profile": "progression_engine",
-        "score": 27.4
+        "eligible": false,
+        "profile": "insufficient_evidence",
+        "score": 31.0
       },
       "flow_context": {
         "match_key": "FIFA-2026-M38-ESP-KSA",
         "team_came_from_behind_to_win": false,
         "allowed_claims": {
-          "en": [
-            "go-ahead goal",
-            "match-winning goal",
-            "9' winner"
-          ],
-          "zh": [
-            "取得领先",
-            "制胜球",
-            "9' 制胜"
-          ]
+          "en": [],
+          "zh": []
         },
         "goals": [
           {
-            "goal_order": 1,
-            "minute": 9,
+            "goal_order": 2,
+            "minute": 20,
             "team": "Spain",
-            "player_name": "Lamine YAMAL",
-            "score_before": "0-0",
-            "score_after": "1-0",
-            "team_score_before": 0,
+            "player_name": "Mikel OYARZABAL",
+            "score_before": "1-0",
+            "score_after": "2-0",
+            "team_score_before": 1,
             "opponent_score_before": 0,
-            "team_score_after": 1,
+            "team_score_after": 2,
             "opponent_score_after": 0,
-            "tags": [
-              "opening_goal",
-              "go_ahead_goal",
-              "match_winning_goal"
-            ]
+            "tags": []
+          },
+          {
+            "goal_order": 3,
+            "minute": 23,
+            "team": "Spain",
+            "player_name": "Mikel OYARZABAL",
+            "score_before": "2-0",
+            "score_after": "3-0",
+            "team_score_before": 2,
+            "opponent_score_before": 0,
+            "team_score_after": 3,
+            "opponent_score_after": 0,
+            "tags": []
           }
         ],
-        "decisive_goal": {
-          "goal_order": 1,
-          "minute": 9,
-          "team": "Spain",
-          "player_name": "Lamine YAMAL",
-          "score_before": "0-0",
-          "score_after": "1-0",
-          "team_score_before": 0,
-          "opponent_score_before": 0,
-          "team_score_after": 1,
-          "opponent_score_after": 0,
-          "tags": [
-            "opening_goal",
-            "go_ahead_goal",
-            "match_winning_goal"
-          ]
-        }
+        "decisive_goal": null
       },
       "metrics": {
         "shots": 5,
-        "on_target": 2,
-        "goals": 1,
-        "offers_received": 14,
-        "in_behind": 14,
-        "in_between": 3,
-        "line_breaks_completed": 5,
-        "ball_progressions": 7,
-        "possession_regains": 2,
-        "blocks": 3,
-        "total_distance_m": 4933.6
+        "on_target": 3,
+        "goals": 2,
+        "assists": 1,
+        "goal_involvements": 3,
+        "offers_received": 9,
+        "in_behind": 25,
+        "in_between": 8,
+        "ball_progressions": 1,
+        "possession_interrupted": 1,
+        "total_distance_m": 5111.8
       },
       "score_components": [
         {
-          "metric": "offers_received",
-          "value": 14,
-          "weight": 1.0,
-          "contribution": 14.0,
-          "score": "off_ball"
-        },
-        {
-          "metric": "match_winning_goal",
-          "value": 1,
-          "weight": 12.0,
-          "contribution": 12.0,
-          "score": "impact"
-        },
-        {
-          "metric": "line_breaks_completed",
-          "value": 5,
-          "weight": 2.0,
-          "contribution": 10.0,
-          "score": "progressor"
-        },
-        {
-          "metric": "in_behind",
-          "value": 14,
-          "weight": 0.6,
-          "contribution": 8.4,
-          "score": "off_ball"
-        },
-        {
           "metric": "goals",
-          "value": 1,
+          "value": 2,
           "weight": 8.0,
-          "contribution": 8.0,
+          "contribution": 16.0,
           "score": "attacking_threat"
         },
         {
-          "metric": "ball_progressions",
-          "value": 7,
+          "metric": "in_behind",
+          "value": 25,
+          "weight": 0.6,
+          "contribution": 15.0,
+          "score": "off_ball"
+        },
+        {
+          "metric": "offers_received",
+          "value": 9,
           "weight": 1.0,
-          "contribution": 7.0,
-          "score": "progressor"
+          "contribution": 9.0,
+          "score": "off_ball"
+        },
+        {
+          "metric": "brace",
+          "value": 1,
+          "weight": 8.0,
+          "contribution": 8.0,
+          "score": "impact"
+        },
+        {
+          "metric": "top_speed_kmh",
+          "value": 31.3,
+          "weight": 0.2,
+          "contribution": 6.26,
+          "score": "physical"
+        },
+        {
+          "metric": "on_target",
+          "value": 3,
+          "weight": 2.0,
+          "contribution": 6.0,
+          "score": "attacking_threat"
+        },
+        {
+          "metric": "total_distance_m",
+          "value": 5111.8,
+          "weight": 0.001,
+          "contribution": 5.11,
+          "score": "physical"
+        },
+        {
+          "metric": "assists",
+          "value": 1,
+          "weight": 5.0,
+          "contribution": 5.0,
+          "score": "impact"
+        },
+        {
+          "metric": "goal_involvements",
+          "value": 3,
+          "weight": 1.5,
+          "contribution": 4.5,
+          "score": "impact"
         }
       ],
       "evidence_chips": {
         "en": [
-          "match-winning goal",
-          "goal scorer"
+          "brace",
+          "assist",
+          "high shot quality"
         ],
         "zh": [
-          "打入制胜球",
-          "取得进球"
+          "梅开二度",
+          "送出助攻",
+          "射门质量突出"
         ]
       }
     },
@@ -839,8 +862,8 @@
       "rank": 3,
       "match_key": "FIFA-2026-M37-URU-CPV",
       "match_no": 37,
-      "player_no": 14,
-      "player_name": "Agustin CANOBBIO",
+      "player_no": 20,
+      "player_name": "Maxi ARAUJO",
       "team": "Uruguay",
       "opponent": "Cabo Verde",
       "home_score": 2,
@@ -848,52 +871,58 @@
       "team_final_goals": 2,
       "opponent_final_goals": 2,
       "position": "MF",
-      "score": 70.3,
+      "score": 82.0,
       "primary_score": "headline_score",
       "role_scores": {
-        "attacking_threat": 21.9,
-        "impact": 5.0,
-        "progressor": 29.6,
-        "off_ball": 44.1,
-        "defensive": 15.8,
-        "physical": 17.82
+        "attacking_threat": 26.3,
+        "impact": 18.0,
+        "progressor": 8.74,
+        "off_ball": 34.1,
+        "defensive": 12.75,
+        "physical": 15.41
       },
       "progression_benchmark": {
-        "score": 23.3,
-        "quality": "useful",
-        "support_actions": 14.0,
+        "score": 9.95,
+        "quality": "thin",
+        "support_actions": 6.0,
         "pass_only_line_break_volume": false
       },
       "hidden_gem_profile": {
         "eligible": false,
         "profile": "insufficient_evidence",
-        "score": 44.1
+        "score": 34.1
       },
       "flow_context": {
         "match_key": "FIFA-2026-M37-URU-CPV",
         "team_came_from_behind_to_win": false,
         "allowed_claims": {
           "en": [
-            "go-ahead goal"
+            "equaliser",
+            "comeback equaliser",
+            "43' equaliser"
           ],
           "zh": [
-            "取得领先"
+            "扳平",
+            "逆转过程中的扳平球",
+            "逆转扳平",
+            "43' 扳平"
           ]
         },
         "goals": [
           {
-            "goal_order": 3,
-            "minute": 50,
+            "goal_order": 2,
+            "minute": 43,
             "team": "Uruguay",
-            "player_name": "Agustin CANOBBIO",
-            "score_before": "1-1",
-            "score_after": "2-1",
-            "team_score_before": 1,
+            "player_name": "Maxi ARAUJO",
+            "score_before": "0-1",
+            "score_after": "1-1",
+            "team_score_before": 0,
             "opponent_score_before": 1,
-            "team_score_after": 2,
+            "team_score_after": 1,
             "opponent_score_after": 1,
             "tags": [
-              "go_ahead_goal"
+              "equalizer",
+              "comeback_equalizer"
             ]
           }
         ],
@@ -903,42 +932,31 @@
         "shots": 2,
         "on_target": 1,
         "goals": 1,
-        "offers_received": 16,
-        "in_behind": 30,
-        "in_between": 8,
-        "line_breaks_completed": 10,
-        "ball_progressions": 6,
-        "possession_regains": 3,
-        "possession_interrupted": 4,
-        "total_distance_m": 11280.1
+        "assists": 1,
+        "goal_involvements": 2,
+        "offers_received": 8,
+        "in_behind": 32,
+        "in_between": 6,
+        "line_breaks_completed": 2,
+        "ball_progressions": 3,
+        "possession_regains": 2,
+        "possession_interrupted": 2,
+        "blocks": 2,
+        "total_distance_m": 8974.1
       },
       "score_components": [
         {
-          "metric": "line_breaks_completed",
-          "value": 10,
-          "weight": 2.0,
-          "contribution": 20.0,
-          "score": "progressor"
-        },
-        {
           "metric": "in_behind",
-          "value": 30,
+          "value": 32,
           "weight": 0.6,
-          "contribution": 18.0,
-          "score": "off_ball"
-        },
-        {
-          "metric": "offers_received",
-          "value": 16,
-          "weight": 1.0,
-          "contribution": 16.0,
+          "contribution": 19.2,
           "score": "off_ball"
         },
         {
           "metric": "total_distance_m",
-          "value": 11280.1,
+          "value": 8974.1,
           "weight": 0.001,
-          "contribution": 11.28,
+          "contribution": 8.97,
           "score": "physical"
         },
         {
@@ -949,21 +967,214 @@
           "score": "attacking_threat"
         },
         {
-          "metric": "in_behind",
-          "value": 30,
-          "weight": 0.25,
-          "contribution": 7.5,
+          "metric": "offers_received",
+          "value": 8,
+          "weight": 1.0,
+          "contribution": 8.0,
+          "score": "off_ball"
+        },
+        {
+          "metric": "top_speed_kmh",
+          "value": 32.2,
+          "weight": 0.2,
+          "contribution": 6.44,
+          "score": "physical"
+        },
+        {
+          "metric": "comeback_equalizer",
+          "value": 1,
+          "weight": 6.0,
+          "contribution": 6.0,
+          "score": "impact"
+        },
+        {
+          "metric": "assists",
+          "value": 1,
+          "weight": 5.0,
+          "contribution": 5.0,
+          "score": "impact"
+        },
+        {
+          "metric": "total_offers",
+          "value": 45,
+          "weight": 0.1,
+          "contribution": 4.5,
+          "score": "off_ball"
+        },
+        {
+          "metric": "equalizing_goal",
+          "value": 1,
+          "weight": 4.0,
+          "contribution": 4.0,
+          "score": "impact"
+        },
+        {
+          "metric": "goal_involvements",
+          "value": 2,
+          "weight": 1.5,
+          "contribution": 3.0,
+          "score": "impact"
+        }
+      ],
+      "evidence_chips": {
+        "en": [
+          "comeback equaliser",
+          "equaliser",
+          "goal scorer",
+          "assist"
+        ],
+        "zh": [
+          "逆转扳平",
+          "扳平进球",
+          "取得进球",
+          "送出助攻"
+        ]
+      }
+    },
+    {
+      "award_type": "impact_pick",
+      "award_label": {
+        "en": "Impact Pick",
+        "zh": "影响力精选"
+      },
+      "rank": 1,
+      "match_key": "FIFA-2026-M40-NZL-EGY",
+      "match_no": 40,
+      "player_no": 11,
+      "player_name": "MOSTAFA ZICO",
+      "team": "Egypt",
+      "opponent": "New Zealand",
+      "home_score": 1,
+      "away_score": 3,
+      "team_final_goals": 3,
+      "opponent_final_goals": 1,
+      "position": "MF",
+      "score": 20.0,
+      "primary_score": "impact",
+      "role_scores": {
+        "attacking_threat": 22.65,
+        "impact": 20.0,
+        "progressor": 10.4,
+        "off_ball": 18.9,
+        "defensive": 12.95,
+        "physical": 15.83
+      },
+      "progression_benchmark": {
+        "score": 3.0,
+        "quality": "thin",
+        "support_actions": 0.0,
+        "pass_only_line_break_volume": false
+      },
+      "hidden_gem_profile": {
+        "eligible": false,
+        "profile": "insufficient_evidence",
+        "score": 18.9
+      },
+      "flow_context": {
+        "match_key": "FIFA-2026-M40-NZL-EGY",
+        "team_came_from_behind_to_win": true,
+        "allowed_claims": {
+          "en": [
+            "comeback win",
+            "equaliser",
+            "comeback equaliser",
+            "57' equaliser"
+          ],
+          "zh": [
+            "逆转取胜",
+            "扳平",
+            "逆转过程中的扳平球",
+            "逆转扳平",
+            "57' 扳平"
+          ]
+        },
+        "goals": [
+          {
+            "goal_order": 2,
+            "minute": 57,
+            "team": "Egypt",
+            "player_name": "MOSTAFA ZICO",
+            "score_before": "1-0",
+            "score_after": "1-1",
+            "team_score_before": 0,
+            "opponent_score_before": 1,
+            "team_score_after": 1,
+            "opponent_score_after": 1,
+            "tags": [
+              "equalizer",
+              "comeback_equalizer",
+              "team_came_from_behind_goal"
+            ]
+          }
+        ],
+        "decisive_goal": null
+      },
+      "metrics": {
+        "shots": 4,
+        "on_target": 1,
+        "goals": 1,
+        "assists": 1,
+        "goal_involvements": 2,
+        "offers_received": 5,
+        "in_behind": 15,
+        "in_between": 4,
+        "line_breaks_completed": 5,
+        "possession_regains": 2,
+        "possession_interrupted": 3,
+        "blocks": 2,
+        "total_distance_m": 9630.4
+      },
+      "score_components": [
+        {
+          "metric": "comeback_equalizer",
+          "value": 1,
+          "weight": 6.0,
+          "contribution": 6.0
+        },
+        {
+          "metric": "assists",
+          "value": 1,
+          "weight": 5.0,
+          "contribution": 5.0
+        },
+        {
+          "metric": "equalizing_goal",
+          "value": 1,
+          "weight": 4.0,
+          "contribution": 4.0
+        },
+        {
+          "metric": "goal_involvements",
+          "value": 2,
+          "weight": 1.5,
+          "contribution": 3.0
+        },
+        {
+          "metric": "team_came_from_behind_goal",
+          "value": 1,
+          "weight": 2.0,
+          "contribution": 2.0
+        },
+        {
+          "metric": "goals",
+          "value": 1,
+          "weight": 8.0,
+          "contribution": 8.0,
           "score": "attacking_threat"
         }
       ],
       "evidence_chips": {
         "en": [
-          "go-ahead goal",
-          "goal scorer"
+          "comeback equaliser",
+          "equaliser",
+          "goal scorer",
+          "assist"
         ],
         "zh": [
-          "取得领先",
-          "取得进球"
+          "逆转扳平",
+          "扳平进球",
+          "取得进球",
+          "送出助攻"
         ]
       }
     },
@@ -1260,6 +1471,18 @@
           "value": 3,
           "weight": 1.0,
           "contribution": 3.0
+        },
+        {
+          "metric": "pressing_direct",
+          "value": 5,
+          "weight": 0.3,
+          "contribution": 1.5
+        },
+        {
+          "metric": "pressing_indirect",
+          "value": 3,
+          "weight": 0.05,
+          "contribution": 0.15
         }
       ],
       "evidence_chips": {
@@ -1282,7 +1505,7 @@
         "teams": [
           {
             "team": "Egypt",
-            "count": 2
+            "count": 3
           }
         ]
       }
@@ -1299,15 +1522,16 @@
             "teams": [
               {
                 "team": "Egypt",
-                "count": 2
+                "count": 3
               }
             ]
           }
         ],
         "choice_names": [
           "MOHAMED SALAH",
-          "Lamine YAMAL",
-          "Agustin CANOBBIO",
+          "Mikel OYARZABAL",
+          "Maxi ARAUJO",
+          "MOSTAFA ZICO",
           "MARAWAN ATTIA",
           "Kevin DE BRUYNE",
           "PICO LOPES"

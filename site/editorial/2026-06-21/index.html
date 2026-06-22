@@ -22,7 +22,15 @@
     .meta { margin: 0; color: #59677c; }
     .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
     .chips span { background: #edf2fa; border: 1px solid #dce5f2; border-radius: 999px; padding: 5px 9px; font-size: 12px; }
+    .archive-list { display: grid; gap: 10px; margin-top: 22px; }
+    .archive-row { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; align-items: center; gap: 12px; padding: 14px 16px; color: inherit; text-decoration: none; background: #fff; border: 1px solid #dde3ee; border-radius: 8px; }
+    .archive-row:hover { border-color: #b7c4d4; }
+    .archive-row span { color: #59677c; font-size: 13px; }
+    .badge { justify-self: end; border-radius: 999px; padding: 4px 9px; border: 1px solid #dce5f2; background: #edf2fa; color: #35465d; font-size: 12px; }
+    .badge.official { border-color: #b7dfd4; background: #e7f7f1; color: #0f766e; }
+    .badge.legacy { border-color: #e7d8ad; background: #fff7df; color: #806215; }
     @media (max-width: 720px) { .choice-card { grid-template-columns: 1fr; } .choice-card aside { border-left: 0; border-top: 1px solid #e8edf5; padding-left: 0; padding-top: 14px; } }
+    @media (max-width: 720px) { .archive-row { grid-template-columns: 1fr; align-items: start; } .badge { justify-self: start; } }
     </style>
 </head>
 <body>
@@ -30,54 +38,70 @@
     <p class="eyebrow">FIFA PMSR Data</p>
     <h1>Editor's Choices · 2026-06-21</h1>
     <p class="lede">Data-informed selections from the latest structured PMSR dataset. These are not official awards.</p>
-    
+
     <article class="choice-card">
       <div>
         <p class="award">Player of the Day</p>
         <h2>🇪🇬 MOHAMED SALAH</h2>
         <p class="meta">🇪🇬 Egypt vs 🇳🇿 New Zealand · Match 40</p>
         <h3>The comeback finisher</h3>
-        <p>Salah struck the 66th-minute winner to seal a 3-1 comeback win for Egypt. He offered himself 16 times as a passing option and completed seven line-breaking passes.</p>
-        <h3>萨拉赫 66 分钟制胜，埃及 3-1 逆转新西兰</h3>
-        <p>埃及 0-1 落后新西兰，最终 3-1 逆转取胜。</p><p>萨拉赫第 66 分钟打入制胜球。全场 16 次接应成功，7 次打穿防线，持续威胁新西兰防线。</p>
+        <p>Mohamed Salah turned the match for Egypt, scoring the go-ahead goal that proved decisive in a 3-1 comeback win over New Zealand. He also added an assist, completed seven line breaks, and was found 16 times after offering in behind.</p>
+        <h3>萨拉赫66分钟制胜，埃及3-1逆转新西兰</h3>
+        <p>埃及 0-1 落后，最终 3-1 逆转新西兰。萨拉赫第 66 分钟打入制胜球，并送出一次助攻，一球一助直接参与逆转。</p><p>全场比赛他 7 次打穿防线、16 次接应成功，跑动接近 9.66 公里。</p>
       </div>
       <aside>
-        <div class="chips"><span>comeback winner</span><span>match-winning goal</span><span>goal scorer</span></div>
+        <div class="chips"><span>comeback winner</span><span>match-winning goal</span><span>goal scorer</span><span>assist</span></div>
       </aside>
     </article>
-            
+
 
     <article class="choice-card">
       <div>
         <p class="award">Player of the Day</p>
-        <h2>🇪🇸 Lamine YAMAL</h2>
+        <h2>🇪🇸 Mikel OYARZABAL</h2>
         <p class="meta">🇪🇸 Spain vs 🇸🇦 Saudi Arabia · Match 38</p>
-        <h3>The goal that tilted it</h3>
-        <p>Lamine Yamal struck the go-ahead goal in the 9th minute, giving Spain an early edge in a 4-0 win. He got in behind Saudi Arabia's defence 14 times and completed 5 line breaks, providing a constant route forward.</p>
-        <h3>9 分钟首开纪录，亚马尔 5 次打穿防线</h3>
-        <p>第 9 分钟，亚马尔为西班牙首开纪录。 全场比赛，他完成 14 次接应，5 次打穿沙特防线。 西班牙最终 4-0 拿下比赛。</p>
+        <h3>Two goals behind the line</h3>
+        <p>Oyarzabal gave Spain a constant threat in behind the Saudi defence. He scored two goals, made 25 runs behind the back line, and was found 9 times by teammates.</p>
+        <h3>两球一助，身后冲击拉动防线</h3>
+        <p>梅开二度并送出助攻，3次射正体现了他本场把握机会的效率。再加上25次身后接应、9次接应成功，他的威胁不只停在最后一脚。</p>
       </div>
       <aside>
-        <div class="chips"><span>match-winning goal</span><span>goal scorer</span></div>
+        <div class="chips"><span>brace</span><span>assist</span><span>high shot quality</span></div>
       </aside>
     </article>
-            
+
 
     <article class="choice-card">
       <div>
         <p class="award">Player of the Day</p>
-        <h2>🇺🇾 Agustin CANOBBIO</h2>
+        <h2>🇺🇾 Maxi ARAUJO</h2>
         <p class="meta">🇺🇾 Uruguay vs 🇨🇻 Cabo Verde · Match 37</p>
         <h3>The midfield connector</h3>
-        <p>Canobbio helped Uruguay connect through midfield with his constant movement and vertical running. He scored the go-ahead goal, completed 10 line-breaking passes and made 30 in-behind offers. Covering over 11 km, his work off the ball kept the team linked in possession.</p>
-        <h3>卡诺比奥：跑动 11 公里，中场接应打穿防线</h3>
-        <p>卡诺比奥本场打入一球，帮助乌拉圭取得领先。他在中场充当连接点，拿球后帮助球队持续向前处理。</p><p>全场他 30 次身后接应，10 次打穿防线。跑动距离达到 11.28 公里。</p><p>即便比分最终被佛得角追成 2-2，他的接应和转移帮助球队保持向前处理。</p>
+        <p>Maxi Araujo pulled Uruguay level with a 43rd-minute equaliser and later added an assist. His 32 in-behind offers gave Uruguay a repeated option in a 2-2 draw.</p>
+        <h3>阿劳霍一球一助，乌拉圭2-2战平佛得角</h3>
+        <p>乌拉圭2-2战平佛得角，Maxi ARAUJO是追平比分的关键。第43分钟他打入扳平球，随后又送出一次助攻。全场32次身后接应、8次接应成功，他这场的一球一助之外，还有足够多的无球参与。</p>
       </div>
       <aside>
-        <div class="chips"><span>go-ahead goal</span><span>goal scorer</span></div>
+        <div class="chips"><span>comeback equaliser</span><span>equaliser</span><span>goal scorer</span><span>assist</span></div>
       </aside>
     </article>
-            
+
+
+    <article class="choice-card">
+      <div>
+        <p class="award">Impact Pick</p>
+        <h2>🇪🇬 MOSTAFA ZICO</h2>
+        <p class="meta">🇪🇬 Egypt vs 🇳🇿 New Zealand · Match 40</p>
+        <h3>The link in possession</h3>
+        <p>Mostafa Zico scored the 57th-minute equaliser that turned the match for Egypt, who were 1-0 down against New Zealand. He then added an assist, giving his side the platform to complete a 3-1 comeback win.</p>
+        <h3>MOSTAFA ZICO一球一助，埃及3-1逆转新西兰</h3>
+        <p>埃及0-1落后新西兰。第57分钟，MOSTAFA ZICO扳平比分。此后他又送出一次助攻。埃及最终3-1逆转取胜。</p>
+      </div>
+      <aside>
+        <div class="chips"><span>comeback equaliser</span><span>equaliser</span><span>goal scorer</span><span>assist</span></div>
+      </aside>
+    </article>
+
 
     <article class="choice-card">
       <div>
@@ -85,15 +109,15 @@
         <h2>🇪🇬 MARAWAN ATTIA</h2>
         <p class="meta">🇪🇬 Egypt vs 🇳🇿 New Zealand · Match 40</p>
         <h3>The route back into it</h3>
-        <p>Marawan Attia gave Egypt a route back into the match, repeatedly breaking New Zealand's lines with forward passing. He completed 31 line breaks as Egypt came from behind to win 3-1.</p>
-        <h3>阿蒂亚 31 次打穿防线，埃及 3-1 逆转新西兰</h3>
-        <p>埃及 0-1 落后新西兰。中场阿蒂亚持续接应，全场 31 次打穿防线。落后阶段他坚持向前传球，帮助埃及 3-1 逆转取胜。</p>
+        <p>Egypt trailed 1-0 before recovering to win 3-1, and Marawan Attia stood out in the work that moved the ball forward. His 31 completed line breaks gave Egypt a steady progression profile in the comeback.</p>
+        <h3>落后时不退，阿蒂亚用向前输送撑住埃及推进</h3>
+        <p>埃及0-1落后新西兰时，马拉万·阿蒂亚仍然在中场持续向前处理球。全场31次打穿防线、40次接应成功，这种不抢镜的推进量，是埃及能够把比赛重新推回前场的重要支撑。</p>
       </div>
       <aside>
         <div class="chips"><span>repeated line breaks</span><span>found again and again</span></div>
       </aside>
     </article>
-            
+
 
     <article class="choice-card">
       <div>
@@ -101,15 +125,15 @@
         <h2>🇧🇪 Kevin DE BRUYNE</h2>
         <p class="meta">🇧🇪 Belgium vs 🇮🇷 IR Iran · Match 39</p>
         <h3>The quiet connector</h3>
-        <p>Kevin De Bruyne kept giving teammates a passing option throughout the 0-0 draw with Iran, connecting play without the spotlight. He offered himself between the lines 11 times and received 29 offers, constantly being found to keep possession flowing.</p>
-        <h3>德布劳内频繁接应，比利时前场连线未断</h3>
-        <p>比利时 0-0 伊朗，德布劳内全场反复跑动接应。</p><p>他完成 29 次接应成功，另有 31 次身后接应与 11 次两线间接应。</p><p>这些跑动不抢镜，但持续提供了接应角度。比利时前场在比赛中保持连接，靠的是这些跑位。</p>
+        <p>Kevin De Bruyne kept giving his teammates a passing option in a tight 0-0 draw. He was found 29 times, including 11 between-line receptions, which is exactly the kind of quiet linking work that can disappear from the headline.</p>
+        <h3>零比零里的接应枢纽</h3>
+        <p>比利时0比0战平伊朗，德布劳内没有进球，但他一直在给队友提供接应角度。全场29次接应成功，其中11次在两线之间接应。这类表现很难写进标题，却能解释为什么他仍然是这场的隐藏亮点。</p>
       </div>
       <aside>
         <div class="chips"><span>found again and again</span></div>
       </aside>
     </article>
-            
+
 
     <article class="choice-card">
       <div>
@@ -117,15 +141,15 @@
         <h2>🇨🇻 PICO LOPES</h2>
         <p class="meta">🇨🇻 Cabo Verde vs 🇺🇾 Uruguay · Match 37</p>
         <h3>The stubborn stopper</h3>
-        <p>The defender repeatedly broke up Uruguay's rhythm by winning possession 15 times and forcing five resets, helping Cabo Verde stay level until the final whistle.</p>
-        <h3>顶住乌拉圭冲击，PICO LOPES 把防守脏活做到位</h3>
-        <p>佛得角 2-2 战平乌拉圭，后防全线承压。 PICO LOPES 把防守端的脏活做到位了。全场 15 次夺回球权，5 次破坏进攻，另有 3 次封堵。 多次让乌拉圭的推进停下来，帮助球队守住平局。</p>
+        <p>Pico Lopes gave Cabo Verde a clear defensive footprint in the 2-2 draw with Uruguay: 15 possession regains, five interruptions, and three blocks.</p>
+        <h3>十五次夺回球权，他把乌拉圭的进攻一次次拦下来</h3>
+        <p>佛得角2比2乌拉圭，PICO LOPES的入选理由很直接：15次夺回球权、5次破坏进攻、3次封堵。防守端这些重复动作，比一个漂亮标题更能说明问题。</p>
       </div>
       <aside>
         <div class="chips"><span>ball-winning profile</span></div>
       </aside>
     </article>
-            
+
   </main>
 </body>
 </html>

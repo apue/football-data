@@ -216,10 +216,18 @@ def write_compiled_editorial_artifacts(
     editorial_path.mkdir(parents=True, exist_ok=True)
 
     json_text = json.dumps(compiled, ensure_ascii=False, indent=2) + "\n"
-    (editorial_path / "latest.json").write_text(json_text, encoding="utf-8")
     (dated_path / "choices.json").write_text(json_text, encoding="utf-8")
     (dated_path / "index.html").write_text(_render_editorial_page(compiled), encoding="utf-8")
-    (editorial_path / "index.html").write_text(_render_editorial_index(compiled), encoding="utf-8")
+    latest = _latest_editorial_report(editorial_path, compiled)
+    (editorial_path / "latest.json").write_text(
+        json.dumps(latest, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    archive_items = _editorial_archive_items(editorial_path, compiled)
+    (editorial_path / "index.html").write_text(
+        _render_editorial_index(archive_items),
+        encoding="utf-8",
+    )
 
 
 def compile_editorial_markdown(
@@ -254,6 +262,7 @@ def compile_editorial_markdown(
         "compiled_at": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
         "match_date": evidence["match_date"],
         "scoring_version": evidence["scoring_version"],
+        "editorial_generation": _editorial_generation(evidence),
         "editorial_input_hash": evidence.get("editorial_input_hash"),
         "editorial_input": evidence.get("editorial_input"),
         "source_markdown_path": source_markdown_path,
@@ -263,6 +272,68 @@ def compile_editorial_markdown(
         "selection_review": evidence.get("selection_review"),
         "audit": evidence["audit"],
     }
+
+
+def _editorial_generation(evidence: dict[str, Any]) -> dict[str, Any]:
+    editorial_input = evidence.get("editorial_input")
+    uses_goal_involvements = (
+        isinstance(editorial_input, dict)
+        and "goal_involvements" in editorial_input
+    )
+    return {
+        "scoring_version": evidence.get("scoring_version"),
+        "uses_official_assists": uses_goal_involvements,
+        "uses_goal_involvements": uses_goal_involvements,
+        "event_source": "fifa_timeline_api" if uses_goal_involvements else None,
+    }
+
+
+def _latest_editorial_report(editorial_path: Path, current: dict[str, Any]) -> dict[str, Any]:
+    reports = [current]
+    latest = _load_json(editorial_path / "latest.json")
+    if latest:
+        reports.append(latest)
+    for choices_path in editorial_path.glob("*/choices.json"):
+        report = _load_json(choices_path)
+        if report:
+            reports.append(report)
+    return max(reports, key=lambda report: str(report.get("match_date") or ""))
+
+
+def _editorial_archive_items(
+    editorial_path: Path,
+    current: dict[str, Any],
+) -> list[dict[str, Any]]:
+    by_date: dict[str, dict[str, Any]] = {}
+    for choices_path in editorial_path.glob("*/choices.json"):
+        report = _load_json(choices_path)
+        match_date = str(report.get("match_date") or "")
+        if match_date:
+            by_date[match_date] = _archive_item(report)
+    by_date[str(current["match_date"])] = _archive_item(current)
+    return [by_date[match_date] for match_date in sorted(by_date, reverse=True)]
+
+
+def _archive_item(report: dict[str, Any]) -> dict[str, Any]:
+    generation = report.get("editorial_generation")
+    if not isinstance(generation, dict):
+        generation = {}
+    matches = report.get("matches")
+    return {
+        "match_date": str(report.get("match_date") or ""),
+        "match_count": len(matches) if isinstance(matches, list) else 0,
+        "generated_at": report.get("generated_at"),
+        "compiled_at": report.get("compiled_at"),
+        "scoring_version": report.get("scoring_version"),
+        "uses_official_assists": bool(generation.get("uses_official_assists")),
+        "uses_goal_involvements": bool(generation.get("uses_goal_involvements")),
+    }
+
+
+def _load_json(path: Path) -> dict[str, Any]:
+    if not path.exists():
+        return {}
+    return json.loads(path.read_text(encoding="utf-8"))
 
 
 def _load_scoring_config(path: str | Path) -> dict[str, Any]:
@@ -303,6 +374,15 @@ def _player_rows_for_date(conn: sqlite3.Connection, match_date: str) -> list[sql
                  sum(case when outcome like '% - Goal' then 1 else 0 end) as goals
           from shots
           group by match_key, team, upper(player_name)
+        ),
+        assist_totals as (
+          select match_key,
+                 team_name as team,
+                 upper(assister_name) as player_name,
+                 count(*) as assists
+          from goal_involvements
+          where assister_name is not null
+          group by match_key, team_name, upper(assister_name)
         ),
         goal_rows as (
           select
@@ -358,10 +438,31 @@ def _player_rows_for_date(conn: sqlite3.Connection, match_date: str) -> list[sql
             sum(case when team_goals_before = 0 and opponent_goals_before = 0 then 1 else 0 end) as opening_goal,
             sum(case when team_goals_before < opponent_goals_before and team_goals_before + 1 = opponent_goals_before then 1 else 0 end) as equalizing_goal,
             sum(case when team_goals_before <= opponent_goals_before and team_goals_before + 1 > opponent_goals_before then 1 else 0 end) as go_ahead_goal,
-            sum(case when team_final_goals > opponent_final_goals and team_goals_before + 1 = opponent_final_goals + 1 then 1 else 0 end) as match_winning_goal,
+            sum(
+              case
+                when team_final_goals > opponent_final_goals
+                 and team_goals_before + 1 = opponent_final_goals + 1
+                 and (
+                   team_final_goals - opponent_final_goals = 1
+                   or team_goals_before < opponent_goals_before
+                 )
+                then 1 else 0
+              end
+            ) as match_winning_goal,
             sum(case when minute >= 75 then 1 else 0 end) as late_goal,
             sum(case when minute >= 90 then 1 else 0 end) as stoppage_time_goal,
-            sum(case when minute >= 85 and team_final_goals > opponent_final_goals and team_goals_before + 1 = opponent_final_goals + 1 then 1 else 0 end) as late_match_winning_goal
+            sum(
+              case
+                when minute >= 85
+                 and team_final_goals > opponent_final_goals
+                 and team_goals_before + 1 = opponent_final_goals + 1
+                 and (
+                   team_final_goals - opponent_final_goals = 1
+                   or team_goals_before < opponent_goals_before
+                 )
+                then 1 else 0
+              end
+            ) as late_match_winning_goal
           from goal_states
           group by match_key, team, player_name
         )
@@ -385,6 +486,8 @@ def _player_rows_for_date(conn: sqlite3.Connection, match_date: str) -> list[sql
           coalesce(s.shots, d.attempts_at_goal, 0) as shots,
           coalesce(s.on_target, 0) as on_target,
           coalesce(s.goals, d.goals, 0) as goals,
+          coalesce(ast.assists, 0) as assists,
+          coalesce(s.goals, d.goals, 0) + coalesce(ast.assists, 0) as goal_involvements,
           case when coalesce(s.goals, d.goals, 0) >= 2 then 1 else 0 end as brace,
           case when coalesce(s.goals, d.goals, 0) >= 3 then 1 else 0 end as hat_trick,
           case when a.started = 0 then coalesce(s.goals, d.goals, 0) else 0 end as substitute_goal,
@@ -464,6 +567,10 @@ def _player_rows_for_date(conn: sqlite3.Connection, match_date: str) -> list[sql
           on s.match_key = a.match_key
          and s.team = a.team
          and s.player_name = upper(a.player_name)
+        left join assist_totals ast
+          on ast.match_key = a.match_key
+         and ast.team = a.team
+         and ast.player_name = upper(a.player_name)
         left join goal_impacts g
           on g.match_key = a.match_key
          and g.team = a.team
@@ -567,6 +674,9 @@ def _player_flow_context(
     for goal in goals:
         tags = {str(tag) for tag in goal.get("tags", [])}
         minute = int(goal.get("minute") or 0)
+        if "opening_goal" in tags:
+            _append_unique(en_claims, "opening goal")
+            _append_unique(zh_claims, "首开纪录")
         if "equalizer" in tags:
             _append_unique(en_claims, "equaliser")
             _append_unique(zh_claims, "扳平")
@@ -718,6 +828,7 @@ def _choice(
     else:
         score = player["role_scores"][primary_score]
         components = player["score_components"].get(primary_score, [])
+    audit_components = _audit_score_components(player, components)
     return {
         "award_type": award_type,
         "award_label": AWARD_LABELS[award_type],
@@ -740,10 +851,56 @@ def _choice(
         "hidden_gem_profile": player.get("hidden_gem_profile"),
         "flow_context": player.get("flow_context"),
         "metrics": _choice_metrics(player),
-        "score_components": components[:6],
+        "score_components": audit_components,
         "evidence_chips": _evidence_chips(player, award_type),
         "draft": _draft_brief(player, award_type),
     }
+
+
+def _audit_score_components(
+    player: dict[str, Any],
+    base_components: list[dict[str, Any]],
+    *,
+    limit: int = 10,
+) -> list[dict[str, Any]]:
+    important_metrics = {
+        "goals",
+        "assists",
+        "goal_involvements",
+        "only_goal_winner",
+        "opening_goal",
+        "equalizing_goal",
+        "go_ahead_goal",
+        "match_winning_goal",
+        "late_match_winning_goal",
+        "comeback_equalizer",
+        "comeback_winner",
+        "brace",
+        "hat_trick",
+        "substitute_goal",
+        "substitute_brace",
+    }
+    selected: list[dict[str, Any]] = []
+    seen_metrics: set[str] = set()
+
+    def add(item: dict[str, Any]) -> None:
+        metric = str(item.get("metric") or "")
+        if metric and metric not in seen_metrics:
+            selected.append(item)
+            seen_metrics.add(metric)
+
+    for item in base_components:
+        if len(selected) >= min(8, limit):
+            break
+        add(item)
+
+    for item in _top_components_across_roles(player):
+        if len(selected) >= limit:
+            break
+        if str(item.get("metric") or "") in important_metrics:
+            add(item)
+
+    return selected
 
 
 def _choice_metrics(player: dict[str, Any]) -> dict[str, int | float]:
@@ -751,6 +908,8 @@ def _choice_metrics(player: dict[str, Any]) -> dict[str, int | float]:
         "shots",
         "on_target",
         "goals",
+        "assists",
+        "goal_involvements",
         "offers_received",
         "in_behind",
         "in_between",
@@ -1130,6 +1289,7 @@ def _evidence_chips(player: dict[str, Any], award_type: str) -> dict[str, list[s
         zh.append("扳平进球")
 
     goals = int(player.get("goals") or 0)
+    assists = int(player.get("assists") or 0)
     if goals >= 3 and "hat-trick" not in en:
         en.append("hat-trick")
         zh.append("帽子戏法")
@@ -1139,6 +1299,12 @@ def _evidence_chips(player: dict[str, Any], award_type: str) -> dict[str, list[s
     elif goals == 1:
         en.append("goal scorer")
         zh.append("取得进球")
+    if assists >= 2:
+        en.append("multiple assists")
+        zh.append("多次助攻")
+    elif assists == 1:
+        en.append("assist")
+        zh.append("送出助攻")
 
     _append_if(en, zh, player, "on_target", 3, "high shot quality", "射门质量突出")
     _append_if(en, zh, player, "line_breaks_completed", 15, "repeated line breaks", "持续打穿防线")
@@ -1189,6 +1355,8 @@ def _english_metric_summary(player: dict[str, Any]) -> str:
 def _metric_summary_items(player: dict[str, Any]) -> list[dict[str, str]]:
     labels = {
         "goals": ("goals", "进球"),
+        "assists": ("assists", "助攻"),
+        "goal_involvements": ("goal involvements", "参与进球"),
         "brace": ("brace", "梅开二度"),
         "hat_trick": ("hat-trick", "帽子戏法"),
         "substitute_goal": ("substitute goals", "替补进球"),
@@ -1651,6 +1819,8 @@ def _choice_goal_difference(choice: dict[str, Any]) -> int:
 def _choice_metric_items(choice: dict[str, Any], language: str) -> list[dict[str, Any]]:
     labels = {
         "goals": {"en": "goals", "zh": "进球"},
+        "assists": {"en": "assists", "zh": "助攻"},
+        "goal_involvements": {"en": "goal involvements", "zh": "参与进球"},
         "brace": {"en": "brace", "zh": "梅开二度"},
         "hat_trick": {"en": "hat-trick", "zh": "帽子戏法"},
         "substitute_goal": {"en": "substitute goals", "zh": "替补进球"},
@@ -1814,8 +1984,17 @@ def _render_editorial_page(report: dict[str, Any]) -> str:
 """
 
 
-def _render_editorial_index(report: dict[str, Any]) -> str:
-    match_date = html.escape(report["match_date"], quote=False)
+def _render_editorial_index(items: list[dict[str, Any]]) -> str:
+    latest = items[0] if items else {}
+    latest_date = html.escape(str(latest.get("match_date") or ""), quote=False)
+    latest_line = (
+        f'Latest available match-day editorial picks: <a href="{latest_date}/">{latest_date}</a>.'
+        if latest_date
+        else "No editorial reports have been published yet."
+    )
+    links = "\n".join(_archive_item_html(item) for item in items)
+    if not links:
+        links = '<p class="lede">Run the editorial workflow to publish the first report.</p>'
     return f"""<!doctype html>
 <html lang="en">
 <head>
@@ -1829,12 +2008,30 @@ def _render_editorial_index(report: dict[str, Any]) -> str:
   <main>
     <p class="eyebrow">FIFA PMSR Data</p>
     <h1>Editor's Choices</h1>
-    <p class="lede">Latest available match-day editorial picks: <a href="{match_date}/">{match_date}</a>.</p>
-    {_choices_html(report["choices"])}
+    <p class="lede">{latest_line}</p>
+    <section class="archive-list" aria-label="Editorial archive">
+      {links}
+    </section>
   </main>
 </body>
 </html>
 """
+
+
+def _archive_item_html(item: dict[str, Any]) -> str:
+    match_date = html.escape(str(item["match_date"]), quote=False)
+    badge_class = "badge official" if item["uses_official_assists"] else "badge legacy"
+    badge_label = "official assists" if item["uses_official_assists"] else "legacy: no official assists"
+    match_count = int(item.get("match_count") or 0)
+    match_label = "match" if match_count == 1 else "matches"
+    return (
+        '<a class="archive-row" href="'
+        f'{match_date}/">'
+        f"<strong>{match_date}</strong>"
+        f'<span>{match_count} {match_label}</span>'
+        f'<span class="{badge_class}">{html.escape(badge_label, quote=False)}</span>'
+        "</a>"
+    )
 
 
 def _choices_html(choices: list[dict[str, Any]]) -> str:
@@ -1946,7 +2143,15 @@ def _editorial_css() -> str:
     .meta { margin: 0; color: #59677c; }
     .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
     .chips span { background: #edf2fa; border: 1px solid #dce5f2; border-radius: 999px; padding: 5px 9px; font-size: 12px; }
+    .archive-list { display: grid; gap: 10px; margin-top: 22px; }
+    .archive-row { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; align-items: center; gap: 12px; padding: 14px 16px; color: inherit; text-decoration: none; background: #fff; border: 1px solid #dde3ee; border-radius: 8px; }
+    .archive-row:hover { border-color: #b7c4d4; }
+    .archive-row span { color: #59677c; font-size: 13px; }
+    .badge { justify-self: end; border-radius: 999px; padding: 4px 9px; border: 1px solid #dce5f2; background: #edf2fa; color: #35465d; font-size: 12px; }
+    .badge.official { border-color: #b7dfd4; background: #e7f7f1; color: #0f766e; }
+    .badge.legacy { border-color: #e7d8ad; background: #fff7df; color: #806215; }
     @media (max-width: 720px) { .choice-card { grid-template-columns: 1fr; } .choice-card aside { border-left: 0; border-top: 1px solid #e8edf5; padding-left: 0; padding-top: 14px; } }
+    @media (max-width: 720px) { .archive-row { grid-template-columns: 1fr; align-items: start; } .badge { justify-self: start; } }
     """
 
 

@@ -233,6 +233,7 @@ def build_demo_site(
             latest_run=latest_run,
             update_events=update_events,
             latest_editorial=latest_editorial,
+            latest_data_date=_latest_match_date(matches),
             matches=matches,
             leaderboard_payload=_leaderboard_payload(player_records),
         ),
@@ -244,12 +245,18 @@ def _query(conn: sqlite3.Connection, sql: str) -> list[sqlite3.Row]:
     return list(conn.execute(sql))
 
 
+def _latest_match_date(matches: list[sqlite3.Row]) -> str | None:
+    dates = [str(match["match_date"]) for match in matches if match["match_date"]]
+    return max(dates) if dates else None
+
+
 def _page(
     *,
     coverage: list[sqlite3.Row],
     latest_run: dict[str, object],
     update_events: dict[str, object],
     latest_editorial: dict[str, object],
+    latest_data_date: str | None,
     matches: list[sqlite3.Row],
     leaderboard_payload: dict[str, Any],
 ) -> str:
@@ -408,7 +415,7 @@ def _page(
         </section>
       </div>
     </section>
-    {_editorial_section(latest_editorial)}
+    {_editorial_section(latest_editorial, latest_data_date=latest_data_date)}
     <details class="panel collapsible">
       <summary><h2>Loaded Matches</h2><span>{len(matches)} rows</span></summary>
       {_table(matches)}
@@ -749,10 +756,27 @@ def _coverage_metrics(rows: list[sqlite3.Row], latest_run: dict[str, object]) ->
     )
 
 
-def _editorial_section(report: dict[str, object]) -> str:
+def _editorial_section(report: dict[str, object], *, latest_data_date: str | None) -> str:
+    report_date = str(report.get("match_date") or "") if report else ""
+    if latest_data_date and report_date != latest_data_date:
+        latest_label = html.escape(latest_data_date, quote=False)
+        published_label = html.escape(report_date or "none", quote=False)
+        return (
+            '<section class="summary">'
+            '<h2><span data-lang-panel="en">Editor\'s Choices</span><span data-lang-panel="zh">编辑精选</span></h2>'
+            f'<p data-lang-panel="en">Latest data is {latest_label}. Editorial for that match day has not been published yet. Last published: {published_label}. <a href="editorial/">Open archive</a>.</p>'
+            f'<p data-lang-panel="zh">最新数据日是 {latest_label}，当天编辑精选尚未发布。最近已发布：{published_label}。<a href="editorial/">查看归档</a>。</p>'
+            "</section>"
+        )
     choices = report.get("choices")
     if not isinstance(choices, list) or not choices:
-        return ""
+        return (
+            '<section class="summary">'
+            '<h2><span data-lang-panel="en">Editor\'s Choices</span><span data-lang-panel="zh">编辑精选</span></h2>'
+            '<p data-lang-panel="en"><a href="editorial/">Open the editorial archive</a>.</p>'
+            '<p data-lang-panel="zh"><a href="editorial/">查看编辑精选归档</a>。</p>'
+            "</section>"
+        )
     cards = []
     for choice in choices:
         if not isinstance(choice, Mapping):
@@ -775,8 +799,8 @@ def _editorial_section(report: dict[str, object]) -> str:
     return (
         '<section class="summary">'
         '<h2><span data-lang-panel="en">Editor\'s Choices</span><span data-lang-panel="zh">编辑精选</span></h2>'
-        f'<p data-lang-panel="en">Latest editorial picks for local match day {match_date}.</p>'
-        f'<p data-lang-panel="zh">当前最新比赛日 {match_date} 的编辑精选。</p>'
+        f'<p data-lang-panel="en">Latest editorial picks for local match day {match_date}. <a href="editorial/">Open archive</a>.</p>'
+        f'<p data-lang-panel="zh">当前最新比赛日 {match_date} 的编辑精选。<a href="editorial/">查看归档</a>。</p>'
         + "".join(cards)
         + "</section>"
     )

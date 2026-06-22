@@ -6,6 +6,10 @@ on:
     types: [completed]
   workflow_dispatch:
     inputs:
+      match_date:
+        description: "Optional YYYY-MM-DD match date for manual backfill."
+        required: false
+        type: string
       fake:
         description: "Use deterministic fake editor backend for workflow smoke testing."
         required: false
@@ -56,14 +60,17 @@ jobs:
           EDITORIAL_EN_EDITOR_MODEL: ${{ vars.EDITORIAL_EN_EDITOR_MODEL || 'deepseek-ai/DeepSeek-V4-Pro' }}
           EDITORIAL_FACT_CHECK_MODEL: ${{ vars.EDITORIAL_FACT_CHECK_MODEL || 'deepseek-ai/DeepSeek-V4-Pro' }}
           EDITORIAL_AGENT_TIMEOUT_SECONDS: ${{ vars.EDITORIAL_AGENT_TIMEOUT_SECONDS || '90' }}
-          EDITORIAL_AGENT_MAX_CONCURRENCY: ${{ vars.EDITORIAL_AGENT_MAX_CONCURRENCY || '3' }}
-          EDITORIAL_AGENT_MAX_ATTEMPTS: ${{ vars.EDITORIAL_AGENT_MAX_ATTEMPTS || '2' }}
+          EDITORIAL_AGENT_MAX_CONCURRENCY: ${{ vars.EDITORIAL_AGENT_MAX_CONCURRENCY || '6' }}
+          EDITORIAL_AGENT_MAX_ATTEMPTS: ${{ vars.EDITORIAL_AGENT_MAX_ATTEMPTS || '1' }}
           KEYPOOL_KEY: ${{ secrets.KEYPOOL_KEY }}
           KEYPOOL_URL: ${{ vars.KEYPOOL_URL || secrets.KEYPOOL_URL }}
         run: |
           EXTRA_ARGS=""
+          if [ -n "${{ github.event.inputs.match_date }}" ]; then
+            EXTRA_ARGS="${EXTRA_ARGS} --date ${{ github.event.inputs.match_date }}"
+          fi
           if [ "${{ github.event.inputs.fake }}" = "true" ]; then
-            EXTRA_ARGS="--fake --no-research"
+            EXTRA_ARGS="${EXTRA_ARGS} --fake --no-research"
           fi
           python scripts/run_editorial_queue.py --json ${EXTRA_ARGS}
 

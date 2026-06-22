@@ -35,3 +35,17 @@ def test_match_flow_keeps_scoreless_draw_empty():
     assert flow["winner_team"] is None
     assert flow["home_came_from_behind_to_win"] is False
     assert flow["away_came_from_behind_to_win"] is False
+
+
+def test_match_flow_does_not_label_routine_blowout_opener_as_winner():
+    flows = build_match_flows("data/latest.sqlite", match_date="2026-06-21")
+    flow = flows["FIFA-2026-M38-ESP-KSA"]
+
+    assert flow["winner_team"] == "Spain"
+    assert flow["decisive_goal"] is None
+
+    first_goal = flow["goals"][0]
+    assert first_goal["player_name"] == "Lamine YAMAL"
+    assert "opening_goal" in first_goal["tags"]
+    assert "go_ahead_goal" in first_goal["tags"]
+    assert "match_winning_goal" not in first_goal["tags"]

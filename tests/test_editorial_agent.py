@@ -5,6 +5,7 @@ import time
 from pathlib import Path
 
 from football_data.editorial_agent import (
+    AgentCallError,
     AgentCompletionOutcome,
     AgentCompletionRequest,
     AgentTextClient,
@@ -119,6 +120,27 @@ class FailingFinalEditorBatchClient(BatchEditorialClient):
         return outcomes
 
 
+class ErrorFactCheckClient(FakeEditorialClient):
+    def complete(
+        self,
+        *,
+        role: str,
+        model: str,
+        instructions: str,
+        user_input: str,
+        output_type: type[object] | None = None,
+    ) -> str:
+        if role == "final_fact_check":
+            raise AgentCallError("final_fact_check timed out after 90 seconds")
+        return super().complete(
+            role=role,
+            model=model,
+            instructions=instructions,
+            user_input=user_input,
+            output_type=output_type,
+        )
+
+
 class WarningFactCheckClient(FakeEditorialClient):
     def complete(
         self,
@@ -138,6 +160,40 @@ class WarningFactCheckClient(FakeEditorialClient):
             user_input=user_input,
             output_type=output_type,
         )
+
+
+class BadFlowCopyClient(FakeEditorialClient):
+    def complete(
+        self,
+        *,
+        role: str,
+        model: str,
+        instructions: str,
+        user_input: str,
+        output_type: type[object] | None = None,
+    ) -> str:
+        if role.endswith("fact_check"):
+            return json.dumps({"status": "pass", "warnings": []})
+        payload = json.loads(user_input)
+        language = payload["language"]
+        items = []
+        for choice in payload["choices"]:
+            player_name = choice["player_name"]
+            title = "The midfield connector" if language == "en" else "中场连接点"
+            body = (
+                f"{player_name} scored twice and added a stoppage-time winner."
+                if language == "en"
+                else f"{player_name} 两球一助，并在补时打入制胜球。"
+            )
+            items.append(
+                {
+                    "award_type": choice["award_type"],
+                    "player_name": player_name,
+                    "title": title,
+                    "body": body,
+                }
+            )
+        return json.dumps({"items": items, "warnings": []}, ensure_ascii=False)
 
 
 class FilteredFactCheckClient(FakeEditorialClient):
@@ -266,8 +322,8 @@ def test_load_editorial_agent_config_uses_default_base_url_and_models(tmp_path):
     assert config.base_url == "https://api.siliconflow.cn/v1"
     assert config.models["zh_writer"] == "zai-org/GLM-5.2"
     assert config.models["fact_check"] == "deepseek-ai/DeepSeek-V4-Pro"
-    assert config.max_concurrency == 3
-    assert config.max_attempts == 2
+    assert config.max_concurrency == 6
+    assert config.max_attempts == 1
 
 
 def test_filter_llm_fact_check_warnings_drops_absent_assist_claims():
@@ -339,6 +395,54 @@ def test_deterministic_fact_check_blocks_unsupported_comeback_claim():
     )
 
     assert any("go-ahead" in warning or "反超" in warning for warning in warnings)
+
+
+def test_deterministic_fact_check_blocks_unsupported_opening_goal_claim():
+    evidence = {
+        "choices": [
+            {
+                "player_name": "Agustin CANOBBIO",
+                "team": "Uruguay",
+                "flow_context": {
+                    "allowed_claims": {
+                        "en": ["go-ahead goal"],
+                        "zh": ["取得领先"],
+                    }
+                },
+            }
+        ],
+    }
+
+    warnings = _deterministic_fact_check(
+        evidence,
+        "### Player of the Day: Agustin CANOBBIO\n\n卡诺比奥为乌拉圭首开纪录。",
+    )
+
+    assert any("opening goal" in warning or "首开纪录" in warning for warning in warnings)
+
+
+def test_deterministic_fact_check_blocks_unsupported_winner_claim():
+    evidence = {
+        "choices": [
+            {
+                "player_name": "Lamine YAMAL",
+                "team": "Spain",
+                "flow_context": {
+                    "allowed_claims": {
+                        "en": ["opening goal", "go-ahead goal"],
+                        "zh": ["首开纪录", "取得领先"],
+                    }
+                },
+            }
+        ],
+    }
+
+    warnings = _deterministic_fact_check(
+        evidence,
+        "### Player of the Day: Lamine YAMAL\n\n第10分钟，亚马尔打入制胜球。",
+    )
+
+    assert any("winner" in warning or "制胜" in warning for warning in warnings)
 
 
 def test_deterministic_fact_check_allows_supported_comeback_claim():
@@ -649,6 +753,38 @@ def test_per_card_final_editor_failure_falls_back_to_draft(tmp_path):
     assert len(choices["choices"]) == len(result["choices"])
 
 
+def test_render_repair_replaces_factually_invalid_copy(tmp_path):
+    result = run_editorial_agent(
+        match_date="2026-06-21",
+        db_path="data/latest.sqlite",
+        site_dir=tmp_path / "site",
+        reports_dir=tmp_path / "reports",
+        manifests_dir="manifests",
+        agent_runs_dir=tmp_path / "agent-runs",
+        client=BadFlowCopyClient(),
+        research=False,
+        rebuild_homepage=False,
+    )
+
+    markdown = (tmp_path / "reports" / "editorial" / "2026-06-21.md").read_text(
+        encoding="utf-8"
+    )
+    evidence = json.loads(
+        (tmp_path / "site" / "editorial" / "2026-06-21" / "evidence.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    render_node = next(
+        node for node in result["workflow"]["nodes"] if node["id"] == "render_markdown"
+    )
+
+    assert result["status"] == "success"
+    assert "scored twice and added a stoppage-time winner" not in markdown
+    assert "两球一助，并在补时打入制胜球" not in markdown
+    assert _deterministic_fact_check(evidence, markdown) == []
+    assert render_node["summary"]["repairs"] > 0
+
+
 def test_llm_fact_check_warnings_are_advisory_without_deterministic_failures(tmp_path):
     result = run_editorial_agent(
         match_date="2026-06-18",
@@ -708,6 +844,25 @@ def test_llm_fact_check_timeout_is_advisory_when_deterministic_checks_pass(tmp_p
         agent_runs_dir=tmp_path / "agent-runs",
         env_path=env_path,
         client=TimeoutFactCheckClient(),
+        research=False,
+        rebuild_homepage=False,
+    )
+
+    assert result["status"] == "success"
+    assert result["fact_check"]["status"] == "warning"
+    assert result["fact_check"]["llm_status"] == "timeout"
+    assert any("timed out" in warning for warning in result["fact_check"]["warnings"])
+
+
+def test_llm_fact_check_agent_call_error_is_advisory(tmp_path):
+    result = run_editorial_agent(
+        match_date="2026-06-18",
+        db_path="data/latest.sqlite",
+        site_dir=tmp_path / "site",
+        reports_dir=tmp_path / "reports",
+        manifests_dir="manifests",
+        agent_runs_dir=tmp_path / "agent-runs",
+        client=ErrorFactCheckClient(),
         research=False,
         rebuild_homepage=False,
     )

@@ -1,8 +1,7 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-06-22T10:36:04+00:00",
+  "generated_at": "2026-06-22T11:03:35+00:00",
   "match_date": "2026-06-21",
-  "status": "failed",
-  "error": "Missing env file: .env.local",
+  "status": "skipped",
   "matches": []
 }

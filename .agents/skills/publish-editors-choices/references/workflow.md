@@ -28,10 +28,10 @@ sqlite3 data/latest.sqlite \
 python scripts/run_editorial_queue.py
 ```
 
-For a targeted local run on one date:
+For a targeted local backfill on one date:
 
 ```bash
-python scripts/run_editorial_agent.py --date YYYY-MM-DD
+python scripts/run_editorial_queue.py --date YYYY-MM-DD
 ```
 
 Outputs:
@@ -67,7 +67,7 @@ build_evidence
 
 LLM working nodes use the OpenAI Agents SDK with structured JSON outputs. The queue, evidence generation, selection, deterministic validation, and publishing remain Python-owned.
 
-The queue runner uses `editorial_input_hash` to detect new match dates, scoring changes, and source-document changes. Missing OpenAI credentials should produce `needs_credentials` in `manifests/editorial-run.json`, not a draft publication.
+The automatic queue publishes only the latest data match date. Older `editorial_input_hash` changes are recorded as stale and should be backfilled explicitly with `--date`, so historical regeneration never blocks the newest match day. Missing OpenAI credentials should produce `needs_credentials` in `manifests/editorial-run.json`, not a draft publication.
 
 5. Read `agent-runs/YYYY-MM-DD.json`, `site/editorial/YYYY-MM-DD/evidence.json`, `site/editorial/YYYY-MM-DD/fact_bank.zh.json`, `site/editorial/YYYY-MM-DD/brief.en.json`, `site/editorial/YYYY-MM-DD/external_evidence.json`, and `reports/editorial/YYYY-MM-DD.md`.
 

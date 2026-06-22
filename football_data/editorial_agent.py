@@ -26,8 +26,8 @@ from football_data.firecrawl import search_firecrawl
 
 DEFAULT_OPENAI_BASE_URL = "https://api.siliconflow.cn/v1"
 DEFAULT_AGENT_TIMEOUT_SECONDS = "90"
-DEFAULT_AGENT_MAX_CONCURRENCY = "3"
-DEFAULT_AGENT_MAX_ATTEMPTS = "2"
+DEFAULT_AGENT_MAX_CONCURRENCY = "6"
+DEFAULT_AGENT_MAX_ATTEMPTS = "1"
 
 DEFAULT_MODELS = {
     "zh_writer": "zai-org/GLM-5.2",
@@ -686,21 +686,24 @@ class EditorialWorkflowRunner:
         draft_key: str,
         output_key: str,
     ) -> dict[str, Any]:
-        result = _call_json(
-            self.text_client,
-            role=role,
-            model=self.config.models["fact_check"],
-            instructions=_draft_fact_check_instructions(language, state["style_packs"]),
-            payload={
-                "language": language,
-                "match_date": self.match_date,
-                "evidence": state["evidence"],
-                "external_evidence": state["external_evidence"],
-                "draft": state[draft_key],
-            },
-            output_type=EditorialFactCheckOutput,
-            timeout_seconds=self.config.timeout_seconds,
-        )
+        try:
+            result = _call_json(
+                self.text_client,
+                role=role,
+                model=self.config.models["fact_check"],
+                instructions=_draft_fact_check_instructions(language, state["style_packs"]),
+                payload={
+                    "language": language,
+                    "match_date": self.match_date,
+                    "evidence": state["evidence"],
+                    "external_evidence": state["external_evidence"],
+                    "draft": state[draft_key],
+                },
+                output_type=EditorialFactCheckOutput,
+                timeout_seconds=self.config.timeout_seconds,
+            )
+        except (AgentCallTimeout, AgentCallError) as exc:
+            result = {"status": "warning", "warnings": [str(exc)]}
         state[output_key] = {
             "status": result.get("status", "pass"),
             "warnings": result.get("warnings", []),
@@ -781,14 +784,23 @@ class EditorialWorkflowRunner:
         }
 
     def _render_markdown(self, state: dict[str, Any]) -> dict[str, Any]:
-        markdown_text = _render_agent_markdown(
+        en_copy, zh_copy, markdown_text, repair_warnings = _render_repaired_markdown(
             report=state["report"],
+            evidence=state["evidence"],
             en_copy=state["en_final"],
             zh_copy=state["zh_final"],
         )
+        state["en_final"] = en_copy
+        state["zh_final"] = zh_copy
         state["markdown_text"] = markdown_text
         state["paths"]["markdown"].write_text(markdown_text, encoding="utf-8")
-        return {"summary": {"markdown_chars": len(markdown_text)}}
+        return {
+            "warnings": repair_warnings,
+            "summary": {
+                "markdown_chars": len(markdown_text),
+                "repairs": len(repair_warnings),
+            },
+        }
 
     def _final_deterministic_validation(self, state: dict[str, Any]) -> dict[str, Any]:
         warnings = _deterministic_fact_check(state["evidence"], state["markdown_text"])
@@ -814,7 +826,7 @@ class EditorialWorkflowRunner:
                 output_type=EditorialFactCheckOutput,
                 timeout_seconds=self.config.timeout_seconds,
             )
-        except AgentCallTimeout as exc:
+        except (AgentCallTimeout, AgentCallError) as exc:
             llm_fact_check = {"status": "timeout", "warnings": [str(exc)]}
         llm_warnings = _filter_llm_warnings(state["markdown_text"], llm_fact_check.get("warnings", []))
         llm_status = llm_fact_check.get("status", "pass") if llm_warnings else "pass"
@@ -1136,6 +1148,10 @@ def _writer_instructions(language: str, style_packs: dict[str, str]) -> str:
                 "你是中文足球数据编辑。只根据输入 JSON 写作，不要编造助攻、视频观察或外部评价。",
                 "返回严格 JSON：{\"items\":[{\"award_type\":\"...\",\"player_name\":\"...\",\"title\":\"...\",\"body\":\"...\"}],\"warnings\":[]}",
                 "每个 body 只写一段，最多带 2-3 个关键数字。不要翻译英文句式。",
+                "严格区分“取得领先”和“首开纪录”：只有 allowed_claims 明确包含“首开纪录”时才能写首开纪录、首球。",
+                "严格区分“取得领先”和“制胜”：只有 allowed_claims 明确包含“制胜球”“补时制胜”或“逆转制胜”时才能写制胜。",
+                "不要把“一球一助”写成“两球”“梅开二度”或“双响”。",
+                "`offers_received` 写作“接应成功/被队友找到”，不要写成传球次数。",
                 "不要写需要看录像才能证明的总括句，例如“几乎都从他脚下经过”“完全掌控”“没有办法限制他”。",
                 _style_subset(style_packs, ["human-writing-zh", "anti-translationese", "football-editor-style"]).get("joined", ""),
             ]
@@ -1145,6 +1161,10 @@ def _writer_instructions(language: str, style_packs: dict[str, str]) -> str:
             "You are a football data editor. Write compact English editorial copy from the input JSON only.",
             "Return strict JSON: {\"items\":[{\"award_type\":\"...\",\"player_name\":\"...\",\"title\":\"...\",\"body\":\"...\"}],\"warnings\":[]}",
             "One paragraph per body. Use at most 2-3 key numbers. Do not invent assists, video observations, or outside ratings.",
+            "Distinguish go-ahead goals from opening goals. Only write opened the scoring/opening goal when allowed_claims explicitly supports it.",
+            "Distinguish go-ahead/opening goals from winners. Only write winner/match-winning when allowed_claims explicitly supports a winner claim.",
+            "Do not turn one goal plus one assist into two goals, a brace, or scored twice.",
+            "Treat offers_received as successful receptions/being found, not as passes.",
             "Avoid unsupported totalizing phrases such as \"no answer\", \"all afternoon\", \"controlled everything\", or \"every attack\".",
             style_packs.get("football-editor-style", ""),
         ]
@@ -1157,6 +1177,10 @@ def _editor_instructions(language: str, style_packs: dict[str, str]) -> str:
             [
                 "你是终审中文体育编辑。根据输入 draft、draft_fact_check 和 evidence 定稿，不新增事实。",
                 "返回同样 JSON schema。必须修复 draft_fact_check 指出的事实问题，再删掉翻译腔、空话和过度数据罗列。",
+                "严格区分“取得领先”和“首开纪录”：没有 allowed_claims 明确支持时，必须删掉首开纪录、首球等说法。",
+                "严格区分“取得领先”和“制胜”：没有 allowed_claims 明确支持时，必须删掉制胜球、补时制胜等说法。",
+                "如果 evidence 是一球一助，必须写一球一助，不得改写成两球、梅开二度或双响。",
+                "`offers_received` 必须写作接应成功或被队友找到，不得改写成传球次数。",
                 "删掉“几乎都”“完全掌控”“没有办法限制他”等没有结构化证据支撑的总括句。",
                 _style_subset(style_packs, ["human-writing-zh", "anti-translationese"]).get("joined", ""),
             ]
@@ -1165,6 +1189,10 @@ def _editor_instructions(language: str, style_packs: dict[str, str]) -> str:
         [
             "You are the final English editor. Finalize the copy from the draft, draft_fact_check, and evidence without adding facts.",
             "Return the same JSON schema. Fix any fact-check issues first, then keep the copy compact and editorial.",
+            "Distinguish go-ahead goals from opening goals. Remove opened-the-scoring claims unless allowed_claims explicitly supports them.",
+            "Remove winner/match-winning claims unless allowed_claims explicitly supports them.",
+            "If evidence says one goal and one assist, write one goal and one assist, not two goals, a brace, or scored twice.",
+            "Keep offers_received as successful receptions/being found; do not rewrite it as passes received.",
             "Remove unsupported totalizing phrases such as \"no answer\", \"all afternoon\", \"controlled everything\", or \"every attack\".",
             style_packs.get("football-editor-style", ""),
         ]
@@ -1258,6 +1286,148 @@ def _render_agent_markdown(
     return "\n".join(lines).rstrip() + "\n"
 
 
+def _render_repaired_markdown(
+    *,
+    report: dict[str, Any],
+    evidence: dict[str, Any],
+    en_copy: dict[str, Any],
+    zh_copy: dict[str, Any],
+) -> tuple[dict[str, Any], dict[str, Any], str, list[str]]:
+    en_repaired = _clone_copy_payload(en_copy)
+    zh_repaired = _clone_copy_payload(zh_copy)
+    repair_warnings: list[str] = []
+
+    for _iteration in range(3):
+        markdown_text = _render_agent_markdown(
+            report=report,
+            en_copy=en_repaired,
+            zh_copy=zh_repaired,
+        )
+        warnings = _deterministic_fact_check(evidence, markdown_text)
+        if not warnings:
+            return en_repaired, zh_repaired, markdown_text, repair_warnings
+
+        changed = False
+        sections = _markdown_choice_sections(markdown_text)
+        for choice, section in zip(report["choices"], sections, strict=False):
+            section_warnings = _choice_section_hard_warnings(choice, section)
+            if not section_warnings:
+                continue
+            _set_copy_item(en_repaired, choice, _fallback_copy(choice, "en"))
+            _set_copy_item(zh_repaired, choice, _fallback_copy(choice, "zh"))
+            changed = True
+            repair_warnings.append(
+                f"Replaced {choice['player_name']} copy with deterministic fallback: "
+                + "; ".join(section_warnings)
+            )
+
+        if _dedupe_titles(en_repaired, report, "en"):
+            changed = True
+            repair_warnings.append("Repaired duplicate English titles.")
+        if _dedupe_titles(zh_repaired, report, "zh"):
+            changed = True
+            repair_warnings.append("Repaired duplicate Chinese titles.")
+
+        if not changed:
+            break
+
+    markdown_text = _render_agent_markdown(
+        report=report,
+        en_copy=en_repaired,
+        zh_copy=zh_repaired,
+    )
+    return en_repaired, zh_repaired, markdown_text, repair_warnings
+
+
+def _choice_section_hard_warnings(choice: dict[str, Any], section: str) -> list[str]:
+    warnings: list[str] = []
+    warnings.extend(_unsupported_flow_claims_for_choice(choice, section))
+    warnings.extend(_unsupported_goal_count_claims_for_choice(choice, section))
+    warnings.extend(_unsupported_tactical_detail_claims(section))
+    if _mentions_all_chances_converted(section):
+        shots = _choice_metric_value(choice, "shots")
+        goals = _choice_metric_value(choice, "goals")
+        if shots > goals:
+            warnings.append(
+                f"{choice.get('player_name', 'unknown player')}: all chances converted"
+            )
+    return warnings
+
+
+def _clone_copy_payload(payload: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "items": [
+            dict(item)
+            for item in payload.get("items", [])
+            if isinstance(item, dict)
+        ],
+        "warnings": list(payload.get("warnings", [])),
+    }
+
+
+def _set_copy_item(
+    payload: dict[str, Any],
+    choice: dict[str, Any],
+    copy_item: dict[str, str],
+) -> None:
+    key = _choice_key(choice)
+    items = payload.setdefault("items", [])
+    replacement = {
+        "award_type": choice["award_type"],
+        "player_name": choice["player_name"],
+        "title": str(copy_item.get("title") or ""),
+        "body": str(copy_item.get("body") or ""),
+    }
+    for index, item in enumerate(items):
+        if (
+            str(item.get("award_type") or ""),
+            str(item.get("player_name") or ""),
+        ) == key:
+            items[index] = replacement
+            return
+    items.append(replacement)
+
+
+def _dedupe_titles(payload: dict[str, Any], report: dict[str, Any], language: str) -> bool:
+    seen: set[str] = set()
+    changed = False
+    by_key = _copy_item_refs_by_choice(payload)
+    for choice in report["choices"]:
+        key = _choice_key(choice)
+        item = by_key.get(key)
+        if not item:
+            continue
+        normalized = _normalize_title(str(item.get("title") or ""))
+        if normalized and normalized not in seen:
+            seen.add(normalized)
+            continue
+        fallback = _fallback_copy(choice, language)
+        title = str(fallback["title"])
+        normalized = _normalize_title(title)
+        if not normalized or normalized in seen:
+            if language == "zh":
+                title = f"{choice['player_name']}：{title}"
+            else:
+                title = f"{title}: {choice['player_name']}"
+            normalized = _normalize_title(title)
+        item["title"] = title
+        seen.add(normalized)
+        changed = True
+    return changed
+
+
+def _copy_item_refs_by_choice(payload: dict[str, Any]) -> dict[tuple[str, str], dict[str, Any]]:
+    by_key: dict[tuple[str, str], dict[str, Any]] = {}
+    for item in payload.get("items", []):
+        if isinstance(item, dict):
+            by_key[(str(item.get("award_type") or ""), str(item.get("player_name") or ""))] = item
+    return by_key
+
+
+def _normalize_title(title: str) -> str:
+    return re.sub(r"\s+", " ", title.strip().lower())
+
+
 def _copy_by_choice(payload: dict[str, Any]) -> dict[tuple[str, str], dict[str, str]]:
     items = payload.get("items", [])
     by_key: dict[tuple[str, str], dict[str, str]] = {}
@@ -1278,14 +1448,93 @@ def _choice_key(choice: dict[str, Any]) -> tuple[str, str]:
 
 def _fallback_copy(choice: dict[str, Any], language: str) -> dict[str, str]:
     if language == "zh":
-        chips = "，".join(str(chip) for chip in choice.get("evidence_chips", {}).get("zh", []))
+        return _fallback_zh_copy(choice)
+    return _fallback_en_copy(choice)
+
+
+def _fallback_zh_copy(choice: dict[str, Any]) -> dict[str, str]:
+    player = str(choice["player_name"])
+    award_type = str(choice.get("award_type") or "")
+    metrics = choice.get("metrics") if isinstance(choice.get("metrics"), dict) else {}
+    chips = [str(chip) for chip in choice.get("evidence_chips", {}).get("zh", [])]
+    goals = int(float(metrics.get("goals") or 0))
+    line_breaks = int(float(metrics.get("line_breaks_completed") or 0))
+    regains = int(float(metrics.get("possession_regains") or 0))
+    offers = int(float(metrics.get("offers_received") or 0))
+    in_behind = int(float(metrics.get("in_behind") or 0))
+    in_between = int(float(metrics.get("in_between") or 0))
+    scoreline = f"{choice['team']} {choice['team_final_goals']}-{choice['opponent_final_goals']} {choice['opponent']}"
+
+    if "逆转制胜" in chips:
+        title = f"{player}打进逆转制胜球"
+        body = f"{scoreline}，{player}的进球直接改变了比赛结果。"
+    elif goals >= 2:
+        title = f"{player}梅开二度"
+        body = f"{scoreline}，{player}用两粒进球把自己的存在感写得很清楚。"
+    elif goals:
+        title = f"{player}打进关键进球"
+        body = f"{scoreline}，{player}取得进球，是这张卡片最直接的理由。"
+    elif award_type == "progression_pick" and line_breaks:
+        title = f"{line_breaks}次打穿防线，{player}撑起向前路线"
+        body = f"{scoreline}，{player}全场{line_breaks}次打穿防线，是球队向前推进里最稳定的出口。"
+    elif award_type == "defensive_pick" and regains:
+        title = f"{regains}次夺回球权，{player}守住防线"
+        body = f"{scoreline}，{player}全场{regains}次夺回球权，在防守端反复把球权抢回来。"
+    elif offers:
+        title = f"{offers}次接应成功，{player}把进攻串起来"
+        body = f"{scoreline}，{player}全场{offers}次接应成功。"
+    else:
+        title = f"{player}入选{choice['award_label']['zh']}"
+        body = f"{scoreline}，{player}的关键贡献来自{('、'.join(chips[:2]) if chips else '这场比赛里的稳定表现')}。"
+
+    extras = []
+    if line_breaks and award_type != "progression_pick":
+        extras.append(f"{line_breaks}次打穿防线")
+    if offers and award_type != "defensive_pick":
+        extras.append(f"{offers}次接应成功")
+    if in_behind:
+        extras.append(f"{in_behind}次身后接应")
+    if in_between:
+        extras.append(f"{in_between}次两线间接应")
+    if regains and award_type != "defensive_pick":
+        extras.append(f"{regains}次夺回球权")
+    if extras:
+        body += " " + "，".join(extras[:3]) + "，让他的贡献不只停在一个标签上。"
+    return {"title": title, "body": body}
+
+
+def _fallback_en_copy(choice: dict[str, Any]) -> dict[str, str]:
+    player = str(choice["player_name"])
+    award = str(choice["award_label"]["en"])
+    metrics = choice.get("metrics") if isinstance(choice.get("metrics"), dict) else {}
+    goals = int(float(metrics.get("goals") or 0))
+    line_breaks = int(float(metrics.get("line_breaks_completed") or 0))
+    regains = int(float(metrics.get("possession_regains") or 0))
+    offers = int(float(metrics.get("offers_received") or 0))
+    scoreline = f"{choice['team']} {choice['team_final_goals']}-{choice['opponent_final_goals']} {choice['opponent']}"
+    if goals:
         return {
-            "title": f"{choice['player_name']}：{choice['award_label']['zh']}",
-            "body": f"结构化证据显示他值得入选：{chips or '详见 fact_bank.zh.json'}。",
+            "title": f"{player}'s decisive touch",
+            "body": f"{player} scored in {scoreline}, giving this selection a direct match-impact case.",
+        }
+    if line_breaks:
+        return {
+            "title": f"The forward route",
+            "body": f"{player} completed {line_breaks} line breaks in {scoreline}, giving his side a repeated way forward.",
+        }
+    if regains:
+        return {
+            "title": "The ball-winner",
+            "body": f"{player} made {regains} possession regains in {scoreline}, a clear defensive footprint.",
+        }
+    if offers:
+        return {
+            "title": "The connector",
+            "body": f"{player} received {offers} offers in {scoreline}, keeping himself available as a passing option.",
         }
     return {
-        "title": f"{choice['player_name']}: {choice['award_label']['en']}",
-        "body": "Structured evidence supports this selection.",
+        "title": f"{player}: {award}",
+        "body": f"{player}'s evidence profile supports this selection.",
     }
 
 
@@ -1297,7 +1546,10 @@ def _match_label(choice: dict[str, Any], match: dict[str, Any] | None) -> str:
 
 def _deterministic_fact_check(evidence: dict[str, Any], markdown_text: str) -> list[str]:
     warnings: list[str] = []
-    if re.search(r"\bassist(s|ed)?\b|助攻", markdown_text, flags=re.IGNORECASE):
+    if (
+        re.search(r"\bassist(s|ed)?\b|助攻", markdown_text, flags=re.IGNORECASE)
+        and not _evidence_has_official_assists(evidence)
+    ):
         warnings.append("Copy mentions assists, which are not available in current PMSR evidence.")
     unsupported_flow_claims = _unsupported_flow_claims(evidence, markdown_text)
     if unsupported_flow_claims:
@@ -1307,6 +1559,7 @@ def _deterministic_fact_check(evidence: dict[str, Any], markdown_text: str) -> l
         )
     conversion_warnings = _unsupported_conversion_claims(evidence, markdown_text)
     warnings.extend(conversion_warnings)
+    warnings.extend(_unsupported_goal_count_claims(evidence, markdown_text))
     warnings.extend(_unsupported_tactical_detail_claims(markdown_text))
     warnings.extend(_unsupported_position_claims(evidence, markdown_text))
     warnings.extend(_duplicate_title_warnings(markdown_text))
@@ -1338,6 +1591,11 @@ def _deterministic_fact_check(evidence: dict[str, Any], markdown_text: str) -> l
                     f"but evidence has {player_goals:g} of {team_goals:g} team goals."
                 )
     return warnings
+
+
+def _evidence_has_official_assists(evidence: dict[str, Any]) -> bool:
+    editorial_input = evidence.get("editorial_input")
+    return isinstance(editorial_input, dict) and "goal_involvements" in editorial_input
 
 
 def _duplicate_title_warnings(markdown_text: str) -> list[str]:
@@ -1380,6 +1638,8 @@ def _unsupported_tactical_detail_claims(markdown_text: str) -> list[str]:
         r"组织反扑",
         r"\bdefen[cs]e unbalanced\b",
         r"\bsliced through\b.{0,40}\bshape\b",
+        r"\breceived\s+\d+\s+passes\b",
+        r"接到\s*\d+\s*(?:脚|次)?传球",
     ]
     warnings: list[str] = []
     for pattern in patterns:
@@ -1456,6 +1716,30 @@ def _unsupported_flow_claims(evidence: dict[str, Any], markdown_text: str) -> li
         ["go-ahead goal", "comeback winner", "取得领先", "逆转制胜"],
     ):
         unsupported.append("go-ahead/反超")
+    if _mentions_opening_goal_claim(markdown_text) and not _allows_any(
+        allowed_claims,
+        ["opening goal", "首开纪录"],
+    ):
+        unsupported.append("opening goal/首开纪录")
+    if _mentions_winner_claim(markdown_text) and not _allows_any(
+        allowed_claims,
+        [
+            "match-winning goal",
+            "winner",
+            "late winner",
+            "comeback winner",
+            "stoppage-time winner",
+            "制胜球",
+            "补时制胜",
+            "逆转制胜",
+        ],
+    ):
+        unsupported.append("winner/制胜")
+    if _mentions_stoppage_winner_claim(markdown_text) and not _allows_any(
+        allowed_claims,
+        ["stoppage-time winner", "补时制胜"],
+    ):
+        unsupported.append("stoppage-time winner/补时制胜")
     return unsupported
 
 
@@ -1482,6 +1766,30 @@ def _unsupported_flow_claims_for_choice(choice: dict[str, Any], section: str) ->
         ["go-ahead goal", "comeback winner", "取得领先", "逆转制胜"],
     ):
         unsupported.append(f"{choice.get('player_name', 'unknown player')}: go-ahead/反超")
+    if _mentions_opening_goal_claim(section) and not _allows_any(
+        allowed_claims,
+        ["opening goal", "首开纪录"],
+    ):
+        unsupported.append(f"{choice.get('player_name', 'unknown player')}: opening goal/首开纪录")
+    if _mentions_winner_claim(section) and not _allows_any(
+        allowed_claims,
+        [
+            "match-winning goal",
+            "winner",
+            "late winner",
+            "comeback winner",
+            "stoppage-time winner",
+            "制胜球",
+            "补时制胜",
+            "逆转制胜",
+        ],
+    ):
+        unsupported.append(f"{choice.get('player_name', 'unknown player')}: winner/制胜")
+    if _mentions_stoppage_winner_claim(section) and not _allows_any(
+        allowed_claims,
+        ["stoppage-time winner", "补时制胜"],
+    ):
+        unsupported.append(f"{choice.get('player_name', 'unknown player')}: stoppage-time winner/补时制胜")
     return unsupported
 
 
@@ -1491,6 +1799,72 @@ def _mentions_comeback_claim(text: str) -> bool:
 
 def _mentions_go_ahead_claim(text: str) -> bool:
     return bool(re.search(r"\bgo[- ]ahead\b|反超", text, flags=re.IGNORECASE))
+
+
+def _mentions_opening_goal_claim(text: str) -> bool:
+    return bool(
+        re.search(
+            r"\bopen(?:ed|s|ing)? the scoring\b|\bopening goal\b|首开纪录|首球",
+            text,
+            flags=re.IGNORECASE,
+        )
+    )
+
+
+def _mentions_winner_claim(text: str) -> bool:
+    return bool(
+        re.search(
+            r"\b(?:match[- ]winning|match[- ]winner|winner)\b|制胜球|制胜一击|补时制胜|逆转制胜",
+            text,
+            flags=re.IGNORECASE,
+        )
+    )
+
+
+def _mentions_stoppage_winner_claim(text: str) -> bool:
+    return bool(
+        re.search(
+            r"\b(?:stoppage[- ]time|90\+).*\bwinner\b|补时制胜",
+            text,
+            flags=re.IGNORECASE,
+        )
+    )
+
+
+def _unsupported_goal_count_claims(evidence: dict[str, Any], markdown_text: str) -> list[str]:
+    warnings: list[str] = []
+    sections = _markdown_choice_sections(markdown_text)
+    choices = evidence.get("choices", [])
+    if not sections or len(sections) != len(choices):
+        sections = [markdown_text for _ in choices]
+    for choice, section in zip(choices, sections, strict=False):
+        warnings.extend(_unsupported_goal_count_claims_for_choice(choice, section))
+    return warnings
+
+
+def _unsupported_goal_count_claims_for_choice(choice: dict[str, Any], section: str) -> list[str]:
+    goals = _choice_metric_value(choice, "goals")
+    player_name = str(choice.get("player_name") or "unknown player")
+    warnings: list[str] = []
+    if goals < 3 and _mentions_hat_trick_claim(section):
+        warnings.append(f"Copy claims a hat-trick/帽子戏法 for {player_name}, but evidence has {goals:g} goals.")
+    if goals < 2 and _mentions_two_goal_claim(section):
+        warnings.append(f"Copy claims a brace/two goals for {player_name}, but evidence has {goals:g} goals.")
+    return warnings
+
+
+def _mentions_hat_trick_claim(text: str) -> bool:
+    return bool(re.search(r"\bhat[- ]trick\b|帽子戏法", text, flags=re.IGNORECASE))
+
+
+def _mentions_two_goal_claim(text: str) -> bool:
+    return bool(
+        re.search(
+            r"\b(?:two goals|scored twice|brace)\b|梅开二度|双响|两球|2球",
+            text,
+            flags=re.IGNORECASE,
+        )
+    )
 
 
 def _all_allowed_flow_claims(evidence: dict[str, Any]) -> list[str]:
@@ -1524,6 +1898,13 @@ def _choice_component_value(choice: dict[str, Any], metric: str) -> float:
         if component.get("metric") == metric:
             return float(component.get("value") or 0)
     return 0.0
+
+
+def _choice_metric_value(choice: dict[str, Any], metric: str) -> float:
+    metrics = choice.get("metrics")
+    if isinstance(metrics, dict) and metric in metrics:
+        return float(metrics.get(metric) or 0)
+    return _choice_component_value(choice, metric)
 
 
 def _team_goals_for_choice(choice: dict[str, Any], match: dict[str, Any] | None) -> float:
