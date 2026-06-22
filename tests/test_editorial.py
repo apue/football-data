@@ -128,16 +128,33 @@ def test_editorial_selection_gate_rebalances_contextual_risks():
     assert "Oswin APPOLLIS" not in player_names
     assert "Ladislav KREJCI" not in player_names
 
-    hidden_gem = choices_by_award["hidden_gem"]
-    teams_before_hidden = {
-        choice["team"]
-        for choice in report["choices"]
-        if choice["award_type"] != "hidden_gem"
-    }
-    assert hidden_gem["team"] not in teams_before_hidden
-    assert hidden_gem["team"] == "Korea Republic"
-    assert hidden_gem["player_name"] == "LEE Gihyuk"
-    assert "defensive_pick" not in choices_by_award
+    defensive_pick = choices_by_award["defensive_pick"]
+    assert defensive_pick["team"] == "Korea Republic"
+    assert defensive_pick["player_name"] == "LEE Gihyuk"
+    assert "hidden_gem" not in choices_by_award
+
+
+def test_latest_day_allows_keeper_watch_and_optional_hidden_gem():
+    report = build_editorial_report("data/latest.sqlite", match_date="2026-06-21")
+    choices_by_award = {choice["award_type"]: choice for choice in report["choices"]}
+
+    assert "hidden_gem" not in choices_by_award
+
+    progression = choices_by_award["progression_pick"]
+    assert progression["award_label"]["en"] == "Progression Engine"
+    assert progression["award_label"]["zh"] == "进攻发动机"
+
+    defensive = choices_by_award["defensive_pick"]
+    assert defensive["player_name"] == "PICO LOPES"
+    assert defensive["team"] == "Cabo Verde"
+
+    keeper = choices_by_award["goalkeeper_watch"]
+    assert keeper["player_name"] == "Alireza BEIRANVAND"
+    assert keeper["team"] == "IR Iran"
+    assert keeper["metrics"]["clean_sheet"] == 1
+    assert keeper["metrics"]["opponent_xg"] == 1.48
+    assert keeper["metrics"]["opponent_attempts_on_target"] == 7
+    assert keeper["metrics"]["keeper_saved_shots"] == 8
 
 
 def test_chinese_fact_bank_does_not_label_ordinary_go_ahead_goal_as_comeback():

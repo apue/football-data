@@ -20,8 +20,9 @@ DEFAULT_SCORING_CONFIG = Path("config/scoring/v0.4.json")
 AWARD_LABELS = {
     "player_of_the_day": {"en": "Player of the Day", "zh": "每日最佳球员"},
     "impact_pick": {"en": "Impact Pick", "zh": "影响力精选"},
-    "progression_pick": {"en": "Progression Pick", "zh": "推进精选"},
+    "progression_pick": {"en": "Progression Engine", "zh": "进攻发动机"},
     "defensive_pick": {"en": "Defensive Pick", "zh": "防守精选"},
+    "goalkeeper_watch": {"en": "Goalkeeper Watch", "zh": "门将关注"},
     "hidden_gem": {"en": "Hidden Gem", "zh": "隐藏亮点"},
 }
 
@@ -465,6 +466,15 @@ def _player_rows_for_date(conn: sqlite3.Connection, match_date: str) -> list[sql
             ) as late_match_winning_goal
           from goal_states
           group by match_key, team, player_name
+        ),
+        saved_shot_totals as (
+          select
+            match_key,
+            team as shooting_team,
+            count(*) as saved_shots
+          from shots
+          where outcome like '%Saved%'
+          group by match_key, team
         )
         select
           m.match_key,
@@ -477,6 +487,14 @@ def _player_rows_for_date(conn: sqlite3.Connection, match_date: str) -> list[sql
           case when a.team = m.home_team then m.away_team else m.home_team end as opponent,
           case when a.team = m.home_team then m.home_score else m.away_score end as team_final_goals,
           case when a.team = m.home_team then m.away_score else m.home_score end as opponent_final_goals,
+          coalesce(ts.xg, 0) as team_xg,
+          coalesce(ts.attempts_total, 0) as team_attempts_total,
+          coalesce(ts.attempts_on_target, 0) as team_attempts_on_target,
+          coalesce(ots.xg, 0) as opponent_xg,
+          coalesce(ots.attempts_total, 0) as opponent_attempts_total,
+          coalesce(ots.attempts_on_target, 0) as opponent_attempts_on_target,
+          case when (case when a.team = m.home_team then m.away_score else m.home_score end) = 0 then 1 else 0 end as clean_sheet,
+          coalesce(kss.saved_shots, 0) as keeper_saved_shots,
           a.team,
           a.player_no,
           a.player_name,
@@ -575,6 +593,15 @@ def _player_rows_for_date(conn: sqlite3.Connection, match_date: str) -> list[sql
           on g.match_key = a.match_key
          and g.team = a.team
          and g.player_name = upper(a.player_name)
+        left join team_match_stats ts
+          on ts.match_key = a.match_key
+         and ts.team = a.team
+        left join team_match_stats ots
+          on ots.match_key = a.match_key
+         and ots.team = case when a.team = m.home_team then m.away_team else m.home_team end
+        left join saved_shot_totals kss
+          on kss.match_key = a.match_key
+         and kss.shooting_team = case when a.team = m.home_team then m.away_team else m.home_team end
         where m.match_date = ?
         """,
         (match_date,),
@@ -796,22 +823,25 @@ def _select_choices(
         choices.append(_choice("progression_pick", player, 1, primary_score="progressor"))
         used_keys.add(_player_key(player))
 
+    player = _top_unused_role_player(
+        players,
+        used_keys,
+        "defensive",
+        avoid_heavy_defensive_loss=apply_editorial_guards,
+    )
+    if player is not None:
+        choices.append(_choice("defensive_pick", player, 1, primary_score="defensive"))
+        used_keys.add(_player_key(player))
+
+    player = _top_goalkeeper_watch_player(players, used_keys, scoring)
+    if player is not None:
+        choices.append(_choice("goalkeeper_watch", player, 1, primary_score="goalkeeper"))
+        used_keys.add(_player_key(player))
+
     hidden_player = _top_hidden_gem_player(players, choices, used_keys, scoring, apply_editorial_guards)
-    hidden_profile = hidden_player.get("hidden_gem_profile", {}) if hidden_player is not None else {}
     if hidden_player is not None:
         choices.append(_choice("hidden_gem", hidden_player, 1, primary_score=_best_role_score(hidden_player)))
         used_keys.add(_player_key(hidden_player))
-
-    if hidden_profile.get("profile") != "defensive_resistance":
-        player = _top_unused_role_player(
-            players,
-            used_keys,
-            "defensive",
-            avoid_heavy_defensive_loss=apply_editorial_guards,
-        )
-        if player is not None:
-            choices.append(_choice("defensive_pick", player, 1, primary_score="defensive"))
-            used_keys.add(_player_key(player))
 
     return choices
 
@@ -850,7 +880,7 @@ def _choice(
         "progression_benchmark": player.get("progression_benchmark"),
         "hidden_gem_profile": player.get("hidden_gem_profile"),
         "flow_context": player.get("flow_context"),
-        "metrics": _choice_metrics(player),
+        "metrics": _choice_metrics(player, award_type),
         "score_components": audit_components,
         "evidence_chips": _evidence_chips(player, award_type),
         "draft": _draft_brief(player, award_type),
@@ -903,7 +933,7 @@ def _audit_score_components(
     return selected
 
 
-def _choice_metrics(player: dict[str, Any]) -> dict[str, int | float]:
+def _choice_metrics(player: dict[str, Any], award_type: str) -> dict[str, int | float]:
     metric_names = [
         "shots",
         "on_target",
@@ -920,6 +950,16 @@ def _choice_metrics(player: dict[str, Any]) -> dict[str, int | float]:
         "blocks",
         "total_distance_m",
     ]
+    if award_type == "goalkeeper_watch":
+        metric_names.extend(
+            [
+                "clean_sheet",
+                "opponent_xg",
+                "opponent_attempts_on_target",
+                "opponent_attempts_total",
+                "keeper_saved_shots",
+            ]
+        )
     return {
         metric: _clean_number(float(player.get(metric) or 0))
         for metric in metric_names
@@ -937,35 +977,61 @@ def _top_hidden_gem_player(
     if int(scoring["selection"].get("hidden_gems", 0)) <= 0:
         return None
     hidden_min = float(scoring["selection"]["minimum_hidden_gem_role_score"])
+    used_teams = {choice["team"] for choice in choices}
+    require_distinct_team = bool(scoring["selection"].get("require_hidden_gem_distinct_team", True))
     candidates = [
         player
         for player in players
         if _player_key(player) not in used_keys
+        and (not require_distinct_team or player["team"] not in used_teams)
         and int(player.get("goals") or 0) == 0
         and _hidden_selection_score(player) >= hidden_min
+        and _hidden_gem_profile_is_publishable(player, scoring)
+        and not _hidden_gem_contextual_risk(player)
     ]
     if not candidates:
         return None
-    if not apply_editorial_guards:
-        return max(candidates, key=_hidden_role_score)
-
-    used_teams = {choice["team"] for choice in choices}
-    eligible = [
-        player
-        for player in candidates
-        if player.get("hidden_gem_profile", {}).get("eligible")
-        and not _hidden_gem_contextual_risk(player)
-    ]
-    if not eligible:
-        return None
-    diverse = [player for player in eligible if player["team"] not in used_teams]
-    pool = diverse or eligible
     return max(
-        pool,
+        candidates,
         key=lambda player: (
             _hidden_profile_priority(player),
             float(player.get("hidden_gem_profile", {}).get("score") or 0),
             _hidden_role_score(player),
+        ),
+    )
+
+
+def _top_goalkeeper_watch_player(
+    players: list[dict[str, Any]],
+    used_keys: set[tuple[str, str, int]],
+    scoring: dict[str, Any],
+) -> dict[str, Any] | None:
+    selection = scoring.get("selection", {})
+    if int(selection.get("goalkeeper_watch", 0)) <= 0:
+        return None
+    min_xg = float(selection.get("minimum_goalkeeper_opponent_xg", 1.0))
+    min_on_target = float(selection.get("minimum_goalkeeper_opponent_on_target", 5))
+    min_score = float(selection.get("minimum_goalkeeper_score", 0))
+    require_clean_sheet = bool(selection.get("require_goalkeeper_clean_sheet", True))
+    candidates = [
+        player
+        for player in players
+        if _player_key(player) not in used_keys
+        and str(player.get("position") or "").upper() == "GK"
+        and int(player.get("started") or 0) == 1
+        and (not require_clean_sheet or int(player.get("clean_sheet") or 0) == 1)
+        and float(player.get("opponent_xg") or 0) >= min_xg
+        and float(player.get("opponent_attempts_on_target") or 0) >= min_on_target
+        and player["role_scores"].get("goalkeeper", 0) >= min_score
+    ]
+    if not candidates:
+        return None
+    return max(
+        candidates,
+        key=lambda player: (
+            player["role_scores"].get("goalkeeper", 0),
+            float(player.get("opponent_xg") or 0),
+            float(player.get("opponent_attempts_on_target") or 0),
         ),
     )
 
@@ -1174,7 +1240,7 @@ def _diverse_hidden_gem_replacement(
         and player["team"] not in used_teams
         and int(player.get("goals") or 0) == 0
         and _hidden_selection_score(player) >= minimum_role_score
-        and player.get("hidden_gem_profile", {}).get("eligible")
+        and _hidden_gem_profile_is_publishable(player, {"selection": {}})
         and not _hidden_gem_contextual_risk(player)
     ]
     if not candidates:
@@ -1191,13 +1257,37 @@ def _diverse_hidden_gem_replacement(
 
 def _hidden_profile_priority(player: dict[str, Any]) -> int:
     profile = player.get("hidden_gem_profile", {}).get("profile")
-    if profile == "defensive_resistance":
-        return 3
     if profile == "off_ball_threat":
+        return 3
+    if profile == "defensive_resistance":
         return 2
     if profile == "progression_engine":
         return 1
     return 0
+
+
+def _hidden_gem_profile_is_publishable(
+    player: dict[str, Any],
+    scoring: dict[str, Any],
+) -> bool:
+    profile = player.get("hidden_gem_profile", {})
+    if not profile.get("eligible"):
+        return False
+    profile_name = str(profile.get("profile") or "")
+    profile_score = float(profile.get("score") or 0)
+    selection = scoring.get("selection", {})
+    thresholds = (
+        selection.get("hidden_gem_profile_thresholds", {})
+        if isinstance(selection, dict)
+        else {}
+    )
+    default_thresholds = {
+        "off_ball_threat": 62.0,
+        "defensive_resistance": 55.0,
+        "progression_engine": 30.0,
+    }
+    threshold = float(thresholds.get(profile_name, default_thresholds.get(profile_name, 999.0)))
+    return profile_score >= threshold
 
 
 def _heavy_defensive_loss(player: dict[str, Any]) -> bool:
@@ -1205,7 +1295,7 @@ def _heavy_defensive_loss(player: dict[str, Any]) -> bool:
 
 
 def _hidden_gem_contextual_risk(player: dict[str, Any]) -> bool:
-    return _best_role_score(player) == "defensive" and _heavy_defensive_loss(player)
+    return _heavy_defensive_loss(player)
 
 
 def _team_goals_conceded(player: dict[str, Any]) -> int:
@@ -1239,6 +1329,8 @@ def _best_role_score(player: dict[str, Any]) -> str:
 def _top_components_across_roles(player: dict[str, Any]) -> list[dict[str, Any]]:
     components: list[dict[str, Any]] = []
     for score_name, items in player["score_components"].items():
+        if score_name == "goalkeeper" and str(player.get("position") or "").upper() != "GK":
+            continue
         for item in items:
             components.append({**item, "score": score_name})
     return sorted(components, key=lambda item: item["contribution"], reverse=True)
@@ -1247,6 +1339,24 @@ def _top_components_across_roles(player: dict[str, Any]) -> list[dict[str, Any]]
 def _evidence_chips(player: dict[str, Any], award_type: str) -> dict[str, list[str]]:
     en: list[str] = []
     zh: list[str] = []
+    if award_type == "goalkeeper_watch":
+        if int(player.get("clean_sheet") or 0) > 0:
+            en.append("clean sheet")
+            zh.append("零封")
+        if float(player.get("opponent_attempts_on_target") or 0) >= 5:
+            en.append("faced heavy on-target pressure")
+            zh.append("对手射正压力高")
+        if float(player.get("opponent_xg") or 0) >= 1.0:
+            en.append("xG pressure resisted")
+            zh.append("承受较高xG")
+        if float(player.get("keeper_saved_shots") or 0) >= 5:
+            en.append("Saved outcomes in shot log")
+            zh.append("射门记录Saved结果较多")
+        if not en:
+            en.append("clean-sheet profile")
+            zh.append("零封画像")
+        return {"en": en[:4], "zh": zh[:4]}
+
     if int(player.get("hat_trick") or 0) > 0:
         en.append("hat-trick")
         zh.append("帽子戏法")
@@ -1382,6 +1492,11 @@ def _metric_summary_items(player: dict[str, Any]) -> list[dict[str, str]]:
         "possession_regains": ("possession regains", "夺回球权"),
         "possession_interrupted": ("interruptions", "破坏进攻"),
         "blocks": ("blocks", "封堵"),
+        "clean_sheet": ("clean sheet", "零封"),
+        "opponent_xg": ("opponent xG", "对手xG"),
+        "opponent_attempts_on_target": ("opponent shots on target", "对手射正"),
+        "opponent_attempts_total": ("opponent attempts", "对手射门"),
+        "keeper_saved_shots": ("saved-shot outcomes", "Saved结果"),
         "total_distance_m": ("distance metres", "跑动米数"),
         "top_speed_kmh": ("top speed km/h", "最高速度km/h"),
     }
@@ -1591,6 +1706,16 @@ def _zh_metric_fact(item: dict[str, Any]) -> str:
     unit = str(item.get("unit") or "")
     if metric == "goals":
         return f"{value} 个进球"
+    if metric == "clean_sheet":
+        return "完成零封"
+    if metric == "opponent_xg":
+        return f"对手 xG {value}"
+    if metric == "opponent_attempts_on_target":
+        return f"对手 {value} 次射正"
+    if metric == "opponent_attempts_total":
+        return f"对手 {value} 次射门"
+    if metric == "keeper_saved_shots":
+        return f"对手射门有 {value} 次 Saved 结果"
     if metric == "total_distance_m":
         return f"跑动距离 {value} {unit}"
     return f"{value} 次{label}"
@@ -1620,7 +1745,7 @@ def _zh_allowed_angles(choice: dict[str, Any]) -> list[str]:
     if goals >= 3:
         return ["明显最佳", "不必绕远", "可以补充他不只负责最后一脚"]
     if goals >= 2:
-        return ["进球很醒目", "持续冲击身后空间", "让对手防线不敢前压"]
+        return ["进球很醒目", "优先写进球和助攻", "不要把身后接应和接应成功写成同一动作"]
     if _metric_value(choice, "late_match_winning_goal") > 0:
         return ["补时绝杀", "不只靠最后一脚", "全场贡献支撑这个瞬间"]
     if _metric_value(choice, "match_winning_goal") > 0:
@@ -1633,6 +1758,12 @@ def _zh_allowed_angles(choice: dict[str, Any]) -> list[str]:
         return ["把球从压力里带出来", "推进出口", "帮助球队持续向前处理"]
     if choice["award_type"] == "defensive_pick":
         return ["承压局防守", "让对手进攻停下来", "脏活和硬活"]
+    if choice["award_type"] == "goalkeeper_watch":
+        return [
+            "零封有压力",
+            "对手射正和xG说明防守承压",
+            "不要写成官方扑救、扑出或被他挡出",
+        ]
     if choice["award_type"] == "hidden_gem":
         return ["不抢镜", "持续提供接应角度", "让前场不断线"]
     return ["中场连接点", "接应和转移", "帮助球队持续向前处理"]
@@ -1705,7 +1836,7 @@ def _en_selection_angle(choice: dict[str, Any]) -> str:
     if goals >= 3:
         return "Obvious pick: the hat-trick decides the top-line argument."
     if goals >= 2:
-        return "Goals matter, but frame the repeated threat behind the line."
+        return "Lead with the goals and assists; use off-ball counts only as separate supporting evidence."
     if _metric_value(choice, "late_match_winning_goal") > 0:
         return "Lead with the stoppage-time winner, then support it with the rest of his match profile."
     if _metric_value(choice, "match_winning_goal") > 0:
@@ -1718,6 +1849,8 @@ def _en_selection_angle(choice: dict[str, Any]) -> str:
         return "Focus on moving the ball through pressure and into territory."
     if choice["award_type"] == "defensive_pick":
         return "Focus on stopping attacks and forcing resets."
+    if choice["award_type"] == "goalkeeper_watch":
+        return "Focus on the clean sheet under measurable shot pressure; avoid presenting saved-shot outcomes as an official goalkeeper saves table."
     if choice["award_type"] == "hidden_gem":
         return "Explain the quieter linking work that kept possession connected."
     return "Focus on the connective midfield role."
@@ -1734,11 +1867,9 @@ def _en_title_candidates(choice: dict[str, Any]) -> list[str]:
     if goals >= 3:
         return ["The hat-trick was enough", "Three goals, no debate", "The obvious top pick"]
     if goals >= 2:
-        if _metric_value(choice, "in_between") >= 15:
-            return ["The finisher between the lines", "Two goals from constant movement", "The runner Japan kept finding"]
-        if _metric_value(choice, "in_behind") >= 15:
-            return ["Two goals behind the line", "The runner behind Sweden", "The early brace that opened it up"]
-        return ["The constant threat behind", "Two goals and a deeper problem", "Always stretching the line"]
+        if _metric_value(choice, "assists") > 0:
+            return ["Two goals and an assist", "The direct scoring case", "The finisher with one more touch"]
+        return ["Two goals, clean argument", "The direct scoring case", "The brace that stood out"]
     if _metric_value(choice, "late_match_winning_goal") > 0:
         return ["The late answer", "The winner at the end", "One finish that changed the day"]
     if _metric_value(choice, "match_winning_goal") > 0:
@@ -1751,6 +1882,8 @@ def _en_title_candidates(choice: dict[str, Any]) -> list[str]:
         return ["The best route forward", "Carrying through pressure", "Forward passing under control"]
     if choice["award_type"] == "defensive_pick":
         return ["The stubborn stopper", "Breaking the flow", "The defender who kept resetting attacks"]
+    if choice["award_type"] == "goalkeeper_watch":
+        return ["The clean sheet under pressure", "A harder clean sheet than it looked", "The zero that mattered"]
     if choice["award_type"] == "hidden_gem":
         return ["The quiet connector", "The link behind the highlights", "A useful game between the lines"]
     return ["The midfield connector", "The link in possession", "A quiet route through midfield"]
@@ -1771,7 +1904,7 @@ def _en_action_notes(choice: dict[str, Any]) -> list[str]:
     if _metric_value(choice, "goals") >= 3:
         notes.append("scored a hat-trick")
     elif _metric_value(choice, "goals") >= 2:
-        notes.append("kept attacking the space behind the line")
+        notes.append("scored twice")
     if _metric_value(choice, "line_breaks_completed") >= 12:
         notes.append("repeatedly broke the opponent's lines")
     if _metric_value(choice, "ball_progressions") >= 10:
@@ -1784,6 +1917,13 @@ def _en_action_notes(choice: dict[str, Any]) -> list[str]:
         notes.append("won possession back repeatedly")
     if _metric_value(choice, "blocks") >= 8:
         notes.append("blocked attacks before they became cleaner chances")
+    if choice["award_type"] == "goalkeeper_watch":
+        if _metric_value(choice, "clean_sheet") > 0:
+            notes.append("kept a clean sheet")
+        if _metric_value(choice, "opponent_attempts_on_target") >= 5:
+            notes.append("faced sustained on-target pressure")
+        if _metric_value(choice, "opponent_xg") >= 1.0:
+            notes.append("held up against opponent xG pressure")
     return notes[:4]
 
 
@@ -1846,11 +1986,32 @@ def _choice_metric_items(choice: dict[str, Any], language: str) -> list[dict[str
         "possession_regains": {"en": "possession regains", "zh": "夺回球权"},
         "possession_interrupted": {"en": "interruptions", "zh": "破坏进攻"},
         "blocks": {"en": "blocks", "zh": "封堵"},
+        "clean_sheet": {"en": "clean sheet", "zh": "零封"},
+        "opponent_xg": {"en": "opponent xG", "zh": "对手xG"},
+        "opponent_attempts_on_target": {"en": "opponent shots on target", "zh": "对手射正"},
+        "opponent_attempts_total": {"en": "opponent attempts", "zh": "对手射门"},
+        "keeper_saved_shots": {"en": "saved-shot outcomes", "zh": "Saved结果"},
         "total_distance_m": {"en": "distance", "zh": "跑动距离"},
+    }
+    direct_goal_story = (
+        choice.get("award_type") in {"player_of_the_day", "impact_pick"}
+        and (
+            _metric_value(choice, "goals") > 0
+            or _metric_value(choice, "assists") > 0
+        )
+    )
+    direct_story_skip = {
+        "offers_received",
+        "in_between",
+        "in_behind",
+        "total_distance_m",
+        "top_speed_kmh",
     }
     items: list[dict[str, Any]] = []
     for component in choice.get("score_components", []):
         metric = str(component.get("metric"))
+        if direct_goal_story and metric in direct_story_skip:
+            continue
         if metric not in labels:
             continue
         value = _clean_number(float(component.get("value") or 0))
@@ -2043,8 +2204,7 @@ def _choices_html(choices: list[dict[str, Any]]) -> str:
             f"<span>{html.escape(chip, quote=False)}</span>"
             for chip in choice["evidence_chips"]["en"]
         )
-        cards.append(
-            f"""
+        card = f"""
     <article class="choice-card">
       <div>
         <p class="award">{html.escape(choice["award_label"]["en"], quote=False)}</p>
@@ -2059,8 +2219,8 @@ def _choices_html(choices: list[dict[str, Any]]) -> str:
         <div class="chips">{chips}</div>
       </aside>
     </article>
-            """
-        )
+        """
+        cards.append("\n".join(line.rstrip() for line in card.strip("\n").splitlines()))
     return "\n".join(cards) if cards else "<p>No editorial choices generated.</p>"
 
 

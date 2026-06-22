@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-06-22T11:11:19+00:00",
+  "generated_at": "2026-06-22T13:51:13+00:00",
   "status": "success",
   "match_date": "2026-06-21",
   "scoring_version": "v0.4",
@@ -47,8 +47,8 @@
           "Maxi ARAUJO",
           "MOSTAFA ZICO",
           "MARAWAN ATTIA",
-          "Kevin DE BRUYNE",
-          "PICO LOPES"
+          "PICO LOPES",
+          "Alireza BEIRANVAND"
         ]
       }
     ]
@@ -98,10 +98,7 @@
           "anti-translationese",
           "football-editor-style"
         ],
-        "warnings": [
-          "zh_writer failed: zh_writer timed out after 90 seconds",
-          "zh_writer failed: zh_writer timed out after 90 seconds"
-        ],
+        "warnings": [],
         "summary": {
           "items": 7,
           "agent_calls": 7,
@@ -117,11 +114,9 @@
         "skills": [
           "football-editor-style"
         ],
-        "warnings": [
-          "Maxi ARAUJO的正文中“他先送出助攻，又在第43分钟完成逆转扳平”顺序错误，证据显示他先在第44分钟（或43分钟，看具体来源）打入扳平球，随后在第50分钟助攻Canobbio，应调整为先扳平再助攻。"
-        ],
+        "warnings": [],
         "summary": {
-          "status": "fail"
+          "status": "pass"
         }
       },
       {
@@ -135,16 +130,7 @@
           "anti-translationese",
           "football-editor-style"
         ],
-        "warnings": [
-          "draft_fact_check 的警告涉及 Maxi ARAUJO，与本条萨拉赫稿件无关，已忽略；同时已删除草稿中无证据支撑的",
-          "次身后接应\"，仅保留证据中的",
-          "次接应成功\"。",
-          "zh_final_editor failed: zh_final_editor timed out after 90 seconds",
-          "draft中\"5次打穿防线，5次接应成功，15次身后接应\"无结构化证据支撑，已删除。",
-          "draft中\"让他的贡献不只停在一个标签上\"属空话，已删除。",
-          "evidence仅含逆转扳平、扳平进球、取得进球、送出助攻，正文严格据此撰写，不新增任何事实。",
-          "zh_final_editor failed: zh_final_editor timed out after 90 seconds"
-        ],
+        "warnings": [],
         "summary": {
           "items": 7,
           "agent_calls": 7,
@@ -176,18 +162,9 @@
         "skills": [
           "football-editor-style"
         ],
-        "warnings": [
-          "The draft claims Salah 'equalised to level the score' but the evidence shows his goal (66') made it 1-2 (go-ahead), not an equaliser; the equaliser was scored by MOSTAFA ZICO at 57'.",
-          "The draft claims Salah 'struck the stoppage-time winner' – his goal was at 66', not stoppage time. The final goal was by TREZEGUET at 82'.",
-          "The draft says Salah 'completed seven line-breaking passes' – evidence shows 7 'line_breaks_completed', not 'line-breaking passes'; passes and line breaks are distinct metrics.",
-          "The draft: Oyarzabal 'made 25 runs off the back line, with 9 of those passes reaching him' – evidence shows 'in_behind: 25' and 'offers_received: 9', but 'offers_received' is not described as passes reaching him; also 'runs off the back line' is an invented tactical description.",
-          "Maxi ARAUJO: 'kept the attack moving with 32 in-behind runs and 8 received passes into dangerous areas' – evidence has 'in_behind: 32' and 'offers_received: 8', but 'received passes into dangerous areas' is over-interpretation.",
-          "MOSTAFA ZICO: 'set up a teammate's goal' – evidence shows he assisted MOHAMED SALAH (goal at 66'), which is supported. No other issues for that item.",
-          "MARAWAN ATTIA: '31 line breaks' – evidence confirms 'line_breaks_completed: 31'. 'Repeatedly piercing New Zealand's defense' is a permissible summary; no strict violation.",
-          "Kevin DE BRUYNE: '29 passes and made 31 runs in behind' – evidence shows 'offers_received: 29' and 'in_behind: 31', but 'passes' is not equivalent to 'offers_received'; also 'quiet connector' and 'holding possession' are not explicitly supported."
-        ],
+        "warnings": [],
         "summary": {
-          "status": "fail"
+          "status": "pass"
         }
       },
       {
@@ -199,17 +176,7 @@
         "skills": [
           "football-editor-style"
         ],
-        "warnings": [
-          "The draft's 'received passes into dangerous areas' has been replaced with 'runs in behind' to avoid over-interpretation of offers_received.",
-          "The draft claims Salah 'equalised to level the score' but the evidence shows his goal (66') made it 1-2 (go-ahead), not an equaliser; the equaliser was scored by MOSTAFA ZICO at 57'.",
-          "The draft claims Salah 'struck the stoppage-time winner' – his goal was at 66', not stoppage time. The final goal was by TREZEGUET at 82'.",
-          "The draft says Salah 'completed seven line-breaking passes' – evidence shows 7 'line_breaks_completed', not 'line-breaking passes'; passes and line breaks are distinct metrics.",
-          "The draft: Oyarzabal 'made 25 runs off the back line, with 9 of those passes reaching him' – evidence shows 'in_behind: 25' and 'offers_received: 9', but 'offers_received' is not described as passes reaching him; also 'runs off the back line' is an invented tactical description.",
-          "Maxi ARAUJO: 'kept the attack moving with 32 in-behind runs and 8 received passes into dangerous areas' – evidence has 'in_behind: 32' and 'offers_received: 8', but 'received passes into dangerous areas' is over-interpretation.",
-          "MOSTAFA ZICO: 'set up a teammate's goal' – evidence shows he assisted MOHAMED SALAH (goal at 66'), which is supported. No other issues for that item.",
-          "MARAWAN ATTIA: '31 line breaks' – evidence confirms 'line_breaks_completed: 31'. 'Repeatedly piercing New Zealand's defense' is a permissible summary; no strict violation.",
-          "Kevin DE BRUYNE: '29 passes and made 31 runs in behind' – evidence shows 'offers_received: 29' and 'in_behind: 31', but 'passes' is not equivalent to 'offers_received'; also 'quiet connector' and 'holding possession' are not explicitly supported."
-        ],
+        "warnings": [],
         "summary": {
           "items": 7,
           "agent_calls": 7,
@@ -221,10 +188,15 @@
         "kind": "python",
         "status": "success",
         "max_attempts": 1,
-        "warnings": [],
+        "warnings": [
+          "Replaced Maxi ARAUJO copy with deterministic fallback: Copy uses unsupported tactical detail that would need event/location/tracking evidence.",
+          "Replaced MOSTAFA ZICO copy with deterministic fallback: Copy uses unsupported tactical detail that would need event/location/tracking evidence.",
+          "Replaced PICO LOPES copy with deterministic fallback: Copy uses unsupported tactical detail that would need event/location/tracking evidence.",
+          "Replaced Alireza BEIRANVAND copy with deterministic fallback: Copy treats shot-log Saved outcomes as official goalkeeper saves for Alireza BEIRANVAND."
+        ],
         "summary": {
-          "markdown_chars": 3834,
-          "repairs": 0
+          "markdown_chars": 3590,
+          "repairs": 4
         }
       },
       {
@@ -301,14 +273,14 @@
       "team": "Egypt"
     },
     {
-      "award_type": "hidden_gem",
-      "player_name": "Kevin DE BRUYNE",
-      "team": "Belgium"
-    },
-    {
       "award_type": "defensive_pick",
       "player_name": "PICO LOPES",
       "team": "Cabo Verde"
+    },
+    {
+      "award_type": "goalkeeper_watch",
+      "player_name": "Alireza BEIRANVAND",
+      "team": "IR Iran"
     }
   ]
 }

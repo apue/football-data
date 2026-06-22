@@ -1,14 +1,14 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-06-22T11:03:35+00:00",
+  "generated_at": "2026-06-22T13:45:00+00:00",
   "match_date": "2026-06-21",
   "scoring_version": "v0.4",
-  "editorial_input_hash": "e8a8cb0360281a854203f78ed9e6c829a2704cf209ec18f6950bef5deb6abbdd",
+  "editorial_input_hash": "848dd820d1eead32effb887a68ae5d1584cf0c150c373f9f062c3dda60d32926",
   "editorial_input": {
     "schema_version": "5",
     "match_date": "2026-06-21",
     "scoring_version": "v0.4",
-    "scoring_config_sha256": "2c1ec1b83f4f8aefa0f37c215f87d8ebf34c227596f3bd55dae1fad71322169a",
+    "scoring_config_sha256": "90f8bc8ce85a2d023f9d42b2dad34f8d77b8712e73fd92e312845573eb58ee88",
     "matches": [
       {
         "match_key": "FIFA-2026-M37-URU-CPV",
@@ -179,7 +179,7 @@
         "source": "fifa_timeline_api"
       }
     ],
-    "input_hash": "e8a8cb0360281a854203f78ed9e6c829a2704cf209ec18f6950bef5deb6abbdd"
+    "input_hash": "848dd820d1eead32effb887a68ae5d1584cf0c150c373f9f062c3dda60d32926"
   },
   "matches": [
     {
@@ -512,7 +512,8 @@
         "progressor": 20.54,
         "off_ball": 32.8,
         "defensive": 6.8,
-        "physical": 16.28
+        "physical": 16.28,
+        "goalkeeper": 26.52
       },
       "progression_benchmark": {
         "score": 19.65,
@@ -712,7 +713,8 @@
         "progressor": 1.62,
         "off_ball": 31.0,
         "defensive": 2.4,
-        "physical": 11.37
+        "physical": 11.37,
+        "goalkeeper": 17.32
       },
       "progression_benchmark": {
         "score": 3.7,
@@ -879,7 +881,8 @@
         "progressor": 8.74,
         "off_ball": 34.1,
         "defensive": 12.75,
-        "physical": 15.41
+        "physical": 15.41,
+        "goalkeeper": 18.48
       },
       "progression_benchmark": {
         "score": 9.95,
@@ -1057,7 +1060,8 @@
         "progressor": 10.4,
         "off_ball": 18.9,
         "defensive": 12.95,
-        "physical": 15.83
+        "physical": 15.83,
+        "goalkeeper": 26.52
       },
       "progression_benchmark": {
         "score": 3.0,
@@ -1181,8 +1185,8 @@
     {
       "award_type": "progression_pick",
       "award_label": {
-        "en": "Progression Pick",
-        "zh": "推进精选"
+        "en": "Progression Engine",
+        "zh": "进攻发动机"
       },
       "rank": 1,
       "match_key": "FIFA-2026-M40-NZL-EGY",
@@ -1204,7 +1208,8 @@
         "progressor": 65.18,
         "off_ball": 53.2,
         "defensive": 10.65,
-        "physical": 18.62
+        "physical": 18.62,
+        "goalkeeper": 26.52
       },
       "progression_benchmark": {
         "score": 24.25,
@@ -1279,103 +1284,6 @@
       }
     },
     {
-      "award_type": "hidden_gem",
-      "award_label": {
-        "en": "Hidden Gem",
-        "zh": "隐藏亮点"
-      },
-      "rank": 1,
-      "match_key": "FIFA-2026-M39-BEL-IRN",
-      "match_no": 39,
-      "player_no": 7,
-      "player_name": "Kevin DE BRUYNE",
-      "team": "Belgium",
-      "opponent": "IR Iran",
-      "home_score": 0,
-      "away_score": 0,
-      "team_final_goals": 0,
-      "opponent_final_goals": 0,
-      "position": "MF",
-      "score": 59.4,
-      "primary_score": "off_ball",
-      "role_scores": {
-        "attacking_threat": 18.55,
-        "impact": 0.0,
-        "progressor": 29.84,
-        "off_ball": 59.4,
-        "defensive": 9.5,
-        "physical": 16.15
-      },
-      "progression_benchmark": {
-        "score": 14.55,
-        "quality": "thin",
-        "support_actions": 4.0,
-        "pass_only_line_break_volume": false
-      },
-      "hidden_gem_profile": {
-        "eligible": true,
-        "profile": "off_ball_threat",
-        "score": 59.4
-      },
-      "flow_context": {
-        "match_key": "FIFA-2026-M39-BEL-IRN",
-        "team_came_from_behind_to_win": false,
-        "allowed_claims": {
-          "en": [],
-          "zh": []
-        },
-        "goals": [],
-        "decisive_goal": null
-      },
-      "metrics": {
-        "shots": 5,
-        "on_target": 1,
-        "offers_received": 29,
-        "in_behind": 31,
-        "in_between": 11,
-        "line_breaks_completed": 13,
-        "ball_progressions": 2,
-        "possession_regains": 2,
-        "possession_interrupted": 2,
-        "blocks": 2,
-        "total_distance_m": 10013.3
-      },
-      "score_components": [
-        {
-          "metric": "offers_received",
-          "value": 29,
-          "weight": 1.0,
-          "contribution": 29.0
-        },
-        {
-          "metric": "in_behind",
-          "value": 31,
-          "weight": 0.6,
-          "contribution": 18.6
-        },
-        {
-          "metric": "total_offers",
-          "value": 74,
-          "weight": 0.1,
-          "contribution": 7.4
-        },
-        {
-          "metric": "in_between",
-          "value": 11,
-          "weight": 0.4,
-          "contribution": 4.4
-        }
-      ],
-      "evidence_chips": {
-        "en": [
-          "found again and again"
-        ],
-        "zh": [
-          "持续接应"
-        ]
-      }
-    },
-    {
       "award_type": "defensive_pick",
       "award_label": {
         "en": "Defensive Pick",
@@ -1401,7 +1309,8 @@
         "progressor": 27.56,
         "off_ball": 12.9,
         "defensive": 42.15,
-        "physical": 16.28
+        "physical": 16.28,
+        "goalkeeper": 30.76
       },
       "progression_benchmark": {
         "score": 24.6,
@@ -1493,6 +1402,108 @@
           "夺回球权能力突出"
         ]
       }
+    },
+    {
+      "award_type": "goalkeeper_watch",
+      "award_label": {
+        "en": "Goalkeeper Watch",
+        "zh": "门将关注"
+      },
+      "rank": 1,
+      "match_key": "FIFA-2026-M39-BEL-IRN",
+      "match_no": 39,
+      "player_no": 1,
+      "player_name": "Alireza BEIRANVAND",
+      "team": "IR Iran",
+      "opponent": "Belgium",
+      "home_score": 0,
+      "away_score": 0,
+      "team_final_goals": 0,
+      "opponent_final_goals": 0,
+      "position": "GK",
+      "score": 55.8,
+      "primary_score": "goalkeeper",
+      "role_scores": {
+        "attacking_threat": 0.4,
+        "impact": 0.0,
+        "progressor": 24.42,
+        "off_ball": 2.5,
+        "defensive": 17.1,
+        "physical": 4.2,
+        "goalkeeper": 55.76
+      },
+      "progression_benchmark": {
+        "score": 9.35,
+        "quality": "thin",
+        "support_actions": 0.0,
+        "pass_only_line_break_volume": false
+      },
+      "hidden_gem_profile": {
+        "eligible": false,
+        "profile": "insufficient_evidence",
+        "score": 17.1
+      },
+      "flow_context": {
+        "match_key": "FIFA-2026-M39-BEL-IRN",
+        "team_came_from_behind_to_win": false,
+        "allowed_claims": {
+          "en": [],
+          "zh": []
+        },
+        "goals": [],
+        "decisive_goal": null
+      },
+      "metrics": {
+        "offers_received": 2,
+        "line_breaks_completed": 12,
+        "possession_regains": 12,
+        "total_distance_m": 4197.8,
+        "clean_sheet": 1,
+        "opponent_xg": 1.48,
+        "opponent_attempts_on_target": 7,
+        "opponent_attempts_total": 23,
+        "keeper_saved_shots": 8
+      },
+      "score_components": [
+        {
+          "metric": "opponent_xg",
+          "value": 1.48,
+          "weight": 12.0,
+          "contribution": 17.76
+        },
+        {
+          "metric": "keeper_saved_shots",
+          "value": 8,
+          "weight": 2.0,
+          "contribution": 16.0
+        },
+        {
+          "metric": "opponent_attempts_on_target",
+          "value": 7,
+          "weight": 2.0,
+          "contribution": 14.0
+        },
+        {
+          "metric": "clean_sheet",
+          "value": 1,
+          "weight": 8.0,
+          "contribution": 8.0
+        }
+      ],
+      "evidence_chips": {
+        "en": [
+          "clean sheet",
+          "faced heavy on-target pressure",
+          "xG pressure resisted",
+          "Saved outcomes in shot log"
+        ],
+        "zh": [
+          "零封",
+          "对手射正压力高",
+          "承受较高xG",
+          "射门记录Saved结果较多"
+        ]
+      }
     }
   ],
   "selection_review": {
@@ -1533,11 +1544,17 @@
           "Maxi ARAUJO",
           "MOSTAFA ZICO",
           "MARAWAN ATTIA",
-          "Kevin DE BRUYNE",
-          "PICO LOPES"
+          "PICO LOPES",
+          "Alireza BEIRANVAND"
         ]
       }
     ]
   },
-  "audit": []
+  "audit": [
+    {
+      "level": "info",
+      "code": "no_hidden_gem",
+      "message": "No hidden gem passed the current threshold."
+    }
+  ]
 }

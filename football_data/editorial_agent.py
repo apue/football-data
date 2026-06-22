@@ -1152,6 +1152,7 @@ def _writer_instructions(language: str, style_packs: dict[str, str]) -> str:
                 "严格区分“取得领先”和“制胜”：只有 allowed_claims 明确包含“制胜球”“补时制胜”或“逆转制胜”时才能写制胜。",
                 "不要把“一球一助”写成“两球”“梅开二度”或“双响”。",
                 "`offers_received` 写作“接应成功/被队友找到”，不要写成传球次数。",
+                "`in_behind` 是独立的 in-behind offer 计数；不要和 `offers_received` 写成包含关系，不要写“X次身后接应中Y次被找到”。",
                 "不要写需要看录像才能证明的总括句，例如“几乎都从他脚下经过”“完全掌控”“没有办法限制他”。",
                 _style_subset(style_packs, ["human-writing-zh", "anti-translationese", "football-editor-style"]).get("joined", ""),
             ]
@@ -1165,6 +1166,7 @@ def _writer_instructions(language: str, style_packs: dict[str, str]) -> str:
             "Distinguish go-ahead/opening goals from winners. Only write winner/match-winning when allowed_claims explicitly supports a winner claim.",
             "Do not turn one goal plus one assist into two goals, a brace, or scored twice.",
             "Treat offers_received as successful receptions/being found, not as passes.",
+            "Treat in_behind as a separate in-behind offer count. Do not combine it with offers_received, and do not call it passes or runs received in behind.",
             "Avoid unsupported totalizing phrases such as \"no answer\", \"all afternoon\", \"controlled everything\", or \"every attack\".",
             style_packs.get("football-editor-style", ""),
         ]
@@ -1181,6 +1183,7 @@ def _editor_instructions(language: str, style_packs: dict[str, str]) -> str:
                 "严格区分“取得领先”和“制胜”：没有 allowed_claims 明确支持时，必须删掉制胜球、补时制胜等说法。",
                 "如果 evidence 是一球一助，必须写一球一助，不得改写成两球、梅开二度或双响。",
                 "`offers_received` 必须写作接应成功或被队友找到，不得改写成传球次数。",
+                "`in_behind` 不得和 `offers_received` 写成包含关系；删除“X次身后接应中Y次被队友找到”这类句子。",
                 "删掉“几乎都”“完全掌控”“没有办法限制他”等没有结构化证据支撑的总括句。",
                 _style_subset(style_packs, ["human-writing-zh", "anti-translationese"]).get("joined", ""),
             ]
@@ -1193,6 +1196,7 @@ def _editor_instructions(language: str, style_packs: dict[str, str]) -> str:
             "Remove winner/match-winning claims unless allowed_claims explicitly supports them.",
             "If evidence says one goal and one assist, write one goal and one assist, not two goals, a brace, or scored twice.",
             "Keep offers_received as successful receptions/being found; do not rewrite it as passes received.",
+            "Keep in_behind separate from offers_received; do not write received passes/runs in behind unless the input says so explicitly.",
             "Remove unsupported totalizing phrases such as \"no answer\", \"all afternoon\", \"controlled everything\", or \"every attack\".",
             style_packs.get("football-editor-style", ""),
         ]
@@ -1343,6 +1347,7 @@ def _choice_section_hard_warnings(choice: dict[str, Any], section: str) -> list[
     warnings: list[str] = []
     warnings.extend(_unsupported_flow_claims_for_choice(choice, section))
     warnings.extend(_unsupported_goal_count_claims_for_choice(choice, section))
+    warnings.extend(_unsupported_goalkeeper_save_claims_for_choice(choice, section))
     warnings.extend(_unsupported_tactical_detail_claims(section))
     if _mentions_all_chances_converted(section):
         shots = _choice_metric_value(choice, "shots")
@@ -1435,11 +1440,18 @@ def _copy_by_choice(payload: dict[str, Any]) -> dict[tuple[str, str], dict[str, 
         if not isinstance(item, dict):
             continue
         key = (str(item.get("award_type") or ""), str(item.get("player_name") or ""))
-        title = str(item.get("title") or "").strip()
-        body = str(item.get("body") or "").strip()
+        title = _normalize_copy_text(item.get("title") or "")
+        body = _normalize_copy_text(item.get("body") or "")
         if key[0] and key[1] and title and body:
             by_key[key] = {"title": title, "body": body}
     return by_key
+
+
+def _normalize_copy_text(value: object) -> str:
+    text = str(value).strip()
+    text = text.replace("\\n\\n", "\n\n").replace("\\n", "\n")
+    text = re.sub(r"(?i)\bsuccess-\s+ful\b", "successful", text)
+    return text
 
 
 def _choice_key(choice: dict[str, Any]) -> tuple[str, str]:
@@ -1458,28 +1470,45 @@ def _fallback_zh_copy(choice: dict[str, Any]) -> dict[str, str]:
     metrics = choice.get("metrics") if isinstance(choice.get("metrics"), dict) else {}
     chips = [str(chip) for chip in choice.get("evidence_chips", {}).get("zh", [])]
     goals = int(float(metrics.get("goals") or 0))
+    assists = int(float(metrics.get("assists") or 0))
     line_breaks = int(float(metrics.get("line_breaks_completed") or 0))
     regains = int(float(metrics.get("possession_regains") or 0))
     offers = int(float(metrics.get("offers_received") or 0))
     in_behind = int(float(metrics.get("in_behind") or 0))
     in_between = int(float(metrics.get("in_between") or 0))
+    opponent_xg = float(metrics.get("opponent_xg") or 0)
+    opponent_on_target = int(float(metrics.get("opponent_attempts_on_target") or 0))
     scoreline = f"{choice['team']} {choice['team_final_goals']}-{choice['opponent_final_goals']} {choice['opponent']}"
 
     if "逆转制胜" in chips:
         title = f"{player}打进逆转制胜球"
         body = f"{scoreline}，{player}的进球直接改变了比赛结果。"
+    elif "扳平进球" in chips and assists:
+        title = f"{player}扳平又助攻"
+        body = f"{scoreline}，{player}打进扳平球，并送出一次助攻。"
     elif goals >= 2:
         title = f"{player}梅开二度"
-        body = f"{scoreline}，{player}用两粒进球把自己的存在感写得很清楚。"
+        assist_note = "，还送出一次助攻" if assists else ""
+        body = f"{scoreline}，{player}梅开二度{assist_note}。"
     elif goals:
         title = f"{player}打进关键进球"
         body = f"{scoreline}，{player}取得进球，是这张卡片最直接的理由。"
     elif award_type == "progression_pick" and line_breaks:
-        title = f"{line_breaks}次打穿防线，{player}撑起向前路线"
-        body = f"{scoreline}，{player}全场{line_breaks}次打穿防线，是球队向前推进里最稳定的出口。"
+        title = f"{line_breaks}次打穿防线，{player}负责向前"
+        body = f"{scoreline}，{player}全场{line_breaks}次打穿防线。"
     elif award_type == "defensive_pick" and regains:
         title = f"{regains}次夺回球权，{player}守住防线"
         body = f"{scoreline}，{player}全场{regains}次夺回球权，在防守端反复把球权抢回来。"
+    elif award_type == "goalkeeper_watch":
+        title = f"{player}守住零封"
+        details = []
+        if opponent_on_target:
+            details.append(f"对手{opponent_on_target}次射正")
+        if opponent_xg:
+            details.append(f"xG达到{opponent_xg:g}")
+        body = f"{scoreline}，{player}的零封不是轻松路过。"
+        if details:
+            body += " " + "，".join(details[:2]) + "，说明这张卡片有足够压力背景。"
     elif offers:
         title = f"{offers}次接应成功，{player}把进攻串起来"
         body = f"{scoreline}，{player}全场{offers}次接应成功。"
@@ -1488,16 +1517,17 @@ def _fallback_zh_copy(choice: dict[str, Any]) -> dict[str, str]:
         body = f"{scoreline}，{player}的关键贡献来自{('、'.join(chips[:2]) if chips else '这场比赛里的稳定表现')}。"
 
     extras = []
-    if line_breaks and award_type != "progression_pick":
-        extras.append(f"{line_breaks}次打穿防线")
-    if offers and award_type != "defensive_pick":
-        extras.append(f"{offers}次接应成功")
-    if in_behind:
-        extras.append(f"{in_behind}次身后接应")
-    if in_between:
-        extras.append(f"{in_between}次两线间接应")
-    if regains and award_type != "defensive_pick":
-        extras.append(f"{regains}次夺回球权")
+    if goals == 0 and award_type not in {"goalkeeper_watch", "defensive_pick", "progression_pick"}:
+        if line_breaks and award_type != "progression_pick":
+            extras.append(f"{line_breaks}次打穿防线")
+        if offers and award_type != "defensive_pick":
+            extras.append(f"{offers}次接应成功")
+        if in_behind:
+            extras.append(f"{in_behind}次身后接应")
+        if in_between:
+            extras.append(f"{in_between}次两线间接应")
+        if regains and award_type != "defensive_pick":
+            extras.append(f"{regains}次夺回球权")
     if extras:
         body += " " + "，".join(extras[:3]) + "，让他的贡献不只停在一个标签上。"
     return {"title": title, "body": body}
@@ -1507,15 +1537,45 @@ def _fallback_en_copy(choice: dict[str, Any]) -> dict[str, str]:
     player = str(choice["player_name"])
     award = str(choice["award_label"]["en"])
     metrics = choice.get("metrics") if isinstance(choice.get("metrics"), dict) else {}
+    chips = [str(chip) for chip in choice.get("evidence_chips", {}).get("en", [])]
     goals = int(float(metrics.get("goals") or 0))
+    assists = int(float(metrics.get("assists") or 0))
     line_breaks = int(float(metrics.get("line_breaks_completed") or 0))
     regains = int(float(metrics.get("possession_regains") or 0))
     offers = int(float(metrics.get("offers_received") or 0))
+    opponent_xg = float(metrics.get("opponent_xg") or 0)
+    opponent_on_target = int(float(metrics.get("opponent_attempts_on_target") or 0))
     scoreline = f"{choice['team']} {choice['team_final_goals']}-{choice['opponent_final_goals']} {choice['opponent']}"
+    if "equaliser" in chips and assists:
+        return {
+            "title": f"{player}'s equaliser and assist",
+            "body": f"{player} scored the equaliser and added an assist in {scoreline}, a direct impact case without needing extra tactical framing.",
+        }
+    if goals >= 2 and assists:
+        return {
+            "title": f"{player}'s two goals and assist",
+            "body": f"{player} scored twice and added an assist in {scoreline}. That is enough for a direct scoring case.",
+        }
     if goals:
         return {
             "title": f"{player}'s decisive touch",
             "body": f"{player} scored in {scoreline}, giving this selection a direct match-impact case.",
+        }
+    if str(choice.get("award_type") or "") == "goalkeeper_watch":
+        pressure = []
+        if opponent_on_target:
+            pressure.append(f"{opponent_on_target} opponent shots on target")
+        if opponent_xg:
+            pressure.append(f"{opponent_xg:g} opponent xG")
+        detail = f" against {' and '.join(pressure)}" if pressure else ""
+        return {
+            "title": "The clean sheet under pressure",
+            "body": f"{player} kept the clean sheet in {scoreline}{detail}, enough to make the zero more than a scoreline note.",
+        }
+    if str(choice.get("award_type") or "") == "defensive_pick" and regains:
+        return {
+            "title": "The ball-winner",
+            "body": f"{player} made {regains} possession regains in {scoreline}, a clear defensive footprint.",
         }
     if line_breaks:
         return {
@@ -1560,6 +1620,7 @@ def _deterministic_fact_check(evidence: dict[str, Any], markdown_text: str) -> l
     conversion_warnings = _unsupported_conversion_claims(evidence, markdown_text)
     warnings.extend(conversion_warnings)
     warnings.extend(_unsupported_goal_count_claims(evidence, markdown_text))
+    warnings.extend(_unsupported_goalkeeper_save_claims(evidence, markdown_text))
     warnings.extend(_unsupported_tactical_detail_claims(markdown_text))
     warnings.extend(_unsupported_position_claims(evidence, markdown_text))
     warnings.extend(_duplicate_title_warnings(markdown_text))
@@ -1629,6 +1690,11 @@ def _choice_titles_by_language(markdown_text: str) -> dict[str, list[str]]:
 
 
 def _unsupported_tactical_detail_claims(markdown_text: str) -> list[str]:
+    checked_text = "\n".join(
+        line
+        for line in markdown_text.splitlines()
+        if not line.startswith("Evidence:") and not line.startswith("依据：")
+    )
     patterns = [
         r"禁区.{0,8}(抢到|落点)",
         r"防线身前接应",
@@ -1636,14 +1702,41 @@ def _unsupported_tactical_detail_claims(markdown_text: str) -> list[str]:
         r"压力里带出来",
         r"最稳定的推进出口",
         r"组织反扑",
+        r"中场接应和转移",
+        r"中场连接点",
+        r"接应和转移",
+        r"帮助.{0,12}不断向前",
+        r"帮球队持续向前处理",
+        r"把球往前推",
+        r"出球点",
+        r"连接让球队稳住",
+        r"禁区前沿",
+        r"防线中段",
+        r"乌拉圭反复压上来攻",
+        r"推进路线",
+        r"前场中路",
+        r"空当",
+        r"防线之间",
+        r"找到通道",
+        r"长传或直塞",
+        r"脏活硬活包揽",
+        r"推进一次次停下来",
+        r"\d+\s*次身后接应中(?:有)?\d+\s*次被(?:队友)?找到",
         r"\bdefen[cs]e unbalanced\b",
+        r"\bforcing resets\b",
+        r"\bmidfield connector\b",
+        r"\bconnected\b.{0,40}\bmidfield\b",
+        r"\bconstant movement\b",
+        r"\bdangerous areas\b",
+        r"\b\d+\s+(?:runs?|passes?)\s+in\s+behind\b",
+        r"\b(?:received|receiving)\s+\w+\s+(?:passes?|offers?)\s+.{0,20}\bin\s+behind\b",
         r"\bsliced through\b.{0,40}\bshape\b",
         r"\breceived\s+\d+\s+passes\b",
         r"接到\s*\d+\s*(?:脚|次)?传球",
     ]
     warnings: list[str] = []
     for pattern in patterns:
-        if re.search(pattern, markdown_text, flags=re.IGNORECASE):
+        if re.search(pattern, checked_text, flags=re.IGNORECASE):
             warnings.append(
                 "Copy uses unsupported tactical detail that would need event/location/tracking evidence."
             )
@@ -1814,7 +1907,7 @@ def _mentions_opening_goal_claim(text: str) -> bool:
 def _mentions_winner_claim(text: str) -> bool:
     return bool(
         re.search(
-            r"\b(?:match[- ]winning|match[- ]winner|winner)\b|制胜球|制胜一击|补时制胜|逆转制胜",
+            r"\b(?:match[- ]winning|match[- ]winner|(?<!-)winner)\b|制胜球|制胜一击|补时制胜|逆转制胜",
             text,
             flags=re.IGNORECASE,
         )
@@ -1851,6 +1944,36 @@ def _unsupported_goal_count_claims_for_choice(choice: dict[str, Any], section: s
     if goals < 2 and _mentions_two_goal_claim(section):
         warnings.append(f"Copy claims a brace/two goals for {player_name}, but evidence has {goals:g} goals.")
     return warnings
+
+
+def _unsupported_goalkeeper_save_claims(evidence: dict[str, Any], markdown_text: str) -> list[str]:
+    warnings: list[str] = []
+    sections = _markdown_choice_sections(markdown_text)
+    choices = evidence.get("choices", [])
+    if not sections or len(sections) != len(choices):
+        sections = [markdown_text for _ in choices]
+    for choice, section in zip(choices, sections, strict=False):
+        warnings.extend(_unsupported_goalkeeper_save_claims_for_choice(choice, section))
+    return warnings
+
+
+def _unsupported_goalkeeper_save_claims_for_choice(choice: dict[str, Any], section: str) -> list[str]:
+    if str(choice.get("award_type") or "") != "goalkeeper_watch":
+        return []
+    number = r"(?:\d+|one|two|three|four|five|six|seven|eight|nine|ten)"
+    if re.search(
+        rf"\b(?:made|required)?\s*{number}\s+saves?\b|\bsaved\s+{number}\b|\bturned\s+aside\s+(?:all\s+)?{number}\b|\brepelled\s+(?:all\s+)?{number}\s+shots?\b",
+        section,
+        flags=re.IGNORECASE,
+    ):
+        return [
+            f"Copy treats shot-log Saved outcomes as official goalkeeper saves for {choice.get('player_name')}."
+        ]
+    if re.search(r"\d+\s*次.{0,10}(?:扑救|扑出|挡出|化解)|被他挡出", section):
+        return [
+            f"Copy treats shot-log Saved outcomes as official goalkeeper saves for {choice.get('player_name')}."
+        ]
+    return []
 
 
 def _mentions_hat_trick_claim(text: str) -> bool:

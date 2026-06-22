@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-06-22T11:23:34+00:00",
+  "generated_at": "2026-06-22T13:45:00+00:00",
   "status": "up_to_date",
   "latest_data_date": "2026-06-21",
   "latest_editorial_date": "2026-06-21",
@@ -15,7 +15,7 @@
     {
       "match_date": "2026-06-18",
       "reason": "editorial_input_changed",
-      "current_input_hash": "63d24b8ed4805bfc451dc4ff722a9b55b19be0743c6f0aa7df1d346798a80353",
+      "current_input_hash": "20924b9de22041b52864ba6e57156b6bf7ef17287b2e395569bd18296244e4e1",
       "published_input_hash": "46f47d3c0a14e3a28c434e84a4dbae6fc13885a86781129cd5e7ba7f2b459faf",
       "scoring_version": "v0.4",
       "source_ids": [
@@ -28,7 +28,7 @@
     {
       "match_date": "2026-06-19",
       "reason": "editorial_input_changed",
-      "current_input_hash": "63e74d8e14332cabd61952797cec77947f1b026032839039ad4eea1e3990e0a9",
+      "current_input_hash": "970eb40283d3192b3db9418b74c8e10ccb9f24563eaffb37be747df330b1412d",
       "published_input_hash": "a22023eadcb41bc608985a84a2bcdf43ad345ab99ec65e9c67892497af7ddea8",
       "scoring_version": "v0.4",
       "source_ids": [
@@ -41,7 +41,7 @@
     {
       "match_date": "2026-06-20",
       "reason": "editorial_input_changed",
-      "current_input_hash": "b915766381d604afee50b0db81fe24fcb584be8da904db0b45e0577f32fda247",
+      "current_input_hash": "18996924772536b3116c155f11d85b3c586b587cccf65134d6407bb12584c5cb",
       "published_input_hash": "56011ad4c335e7880a0f11e9e71d710c67c8d562ce559590ad2876e61414d028",
       "scoring_version": "v0.4",
       "source_ids": [

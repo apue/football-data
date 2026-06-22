@@ -536,9 +536,24 @@ def test_deterministic_fact_check_catches_unsupported_tactical_overreads():
         {"matches": [], "choices": [{"player_name": "Joshua KIMMICH"}]},
         "\n".join(
             [
-                "### Progression Pick: Joshua KIMMICH",
+                "### Progression Engine: Joshua KIMMICH",
                 "#### 中文",
                 "他反复把球从压力里带出来，是球队最稳定的推进出口。",
+            ]
+        ),
+    )
+
+    assert any("unsupported tactical detail" in warning for warning in warnings)
+
+
+def test_deterministic_fact_check_catches_generic_midfield_connector_overread():
+    warnings = _deterministic_fact_check(
+        {"matches": [], "choices": [{"player_name": "Maxi ARAUJO"}]},
+        "\n".join(
+            [
+                "### Player of the Day: Maxi ARAUJO",
+                "#### English",
+                "The midfield connector was found 8 times in dangerous areas.",
             ]
         ),
     )
@@ -569,6 +584,49 @@ def test_deterministic_fact_check_catches_position_overclaim():
     )
 
     assert any("position" in warning for warning in warnings)
+
+
+def test_deterministic_fact_check_catches_goalkeeper_saved_outcome_overclaim():
+    evidence = {
+        "matches": [],
+        "choices": [
+            {
+                "award_type": "goalkeeper_watch",
+                "player_name": "Alireza BEIRANVAND",
+                "position": "GK",
+            }
+        ],
+    }
+
+    warnings = _deterministic_fact_check(
+        evidence,
+        "\n".join(
+            [
+                "### Goalkeeper Watch: Alireza BEIRANVAND",
+                "#### English",
+                "He required eight saves and turned aside all seven shots on target.",
+                "#### 中文",
+                "8次射门被他挡出。",
+            ]
+        ),
+    )
+
+    assert any("goalkeeper saves" in warning for warning in warnings)
+
+
+def test_deterministic_fact_check_catches_in_behind_offer_conflation():
+    warnings = _deterministic_fact_check(
+        {"matches": [], "choices": [{"player_name": "Mikel OYARZABAL"}]},
+        "\n".join(
+            [
+                "### Player of the Day: Mikel OYARZABAL",
+                "#### 中文",
+                "25次身后接应中有9次被队友找到。",
+            ]
+        ),
+    )
+
+    assert any("unsupported tactical detail" in warning for warning in warnings)
 
 
 def test_deterministic_fact_check_catches_duplicate_choice_titles():

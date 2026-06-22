@@ -46,7 +46,7 @@ def test_demo_uses_player_first_bilingual_dashboard(tmp_path):
             },
             {
               "award_type": "progression_pick",
-              "award_label": {"en": "Progression Pick", "zh": "推进之选"},
+              "award_label": {"en": "Progression Engine", "zh": "进攻发动机"},
               "player_name": "Granit XHAKA",
               "team": "Switzerland",
               "opponent": "Bosnia and Herzegovina",

@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "language": "zh",
-  "generated_at": "2026-06-22T11:03:35+00:00",
+  "generated_at": "2026-06-22T13:45:00+00:00",
   "match_date": "2026-06-21",
   "scoring_version": "v0.4",
   "editorial_process": "from_scratch_chinese_sports_editor",
@@ -35,11 +35,11 @@
         "埃及 0-1 落后后 3-1 逆转取胜",
         "66' 制胜",
         "完成逆转制胜球",
-        "16 次接应成功",
         "7 次打穿防线",
         "1 次制胜进球",
         "1 次逆转制胜球",
-        "跑动距离 9658.2 米"
+        "1 个进球",
+        "1 次领先进球"
       ],
       "allowed_angles": [
         "逆转取胜",
@@ -69,15 +69,15 @@
         "送出助攻",
         "射门质量突出",
         "2 个进球",
-        "25 次身后接应",
-        "9 次接应成功",
         "1 次梅开二度",
-        "3 次射正"
+        "3 次射正",
+        "1 次助攻",
+        "3 次参与进球"
       ],
       "allowed_angles": [
         "进球很醒目",
-        "持续冲击身后空间",
-        "让对手防线不敢前压"
+        "优先写进球和助攻",
+        "不要把身后接应和接应成功写成同一动作"
       ],
       "evidence_chips": [
         "梅开二度",
@@ -100,11 +100,11 @@
         "取得进球",
         "送出助攻",
         "43' 扳平",
-        "32 次身后接应",
-        "跑动距离 8974.1 米",
         "1 个进球",
-        "8 次接应成功",
-        "1 次逆转扳平球"
+        "1 次逆转扳平球",
+        "1 次助攻",
+        "1 次扳平进球",
+        "2 次参与进球"
       ],
       "allowed_angles": [
         "中场连接点",
@@ -154,7 +154,7 @@
     },
     {
       "award_type": "progression_pick",
-      "award_label": "推进精选",
+      "award_label": "进攻发动机",
       "player_name": "MARAWAN ATTIA",
       "team": "埃及",
       "opponent": "新西兰",
@@ -175,30 +175,6 @@
       ],
       "evidence_chips": [
         "持续打穿防线",
-        "持续接应"
-      ]
-    },
-    {
-      "award_type": "hidden_gem",
-      "award_label": "隐藏亮点",
-      "player_name": "Kevin DE BRUYNE",
-      "team": "比利时",
-      "opponent": "伊朗",
-      "match_no": 39,
-      "match_scoreline": "比利时 0-0 伊朗",
-      "position": "MF",
-      "facts": [
-        "持续接应",
-        "29 次接应成功",
-        "31 次身后接应",
-        "11 次两线间接应"
-      ],
-      "allowed_angles": [
-        "不抢镜",
-        "持续提供接应角度",
-        "让前场不断线"
-      ],
-      "evidence_chips": [
         "持续接应"
       ]
     },
@@ -224,6 +200,37 @@
       ],
       "evidence_chips": [
         "夺回球权能力突出"
+      ]
+    },
+    {
+      "award_type": "goalkeeper_watch",
+      "award_label": "门将关注",
+      "player_name": "Alireza BEIRANVAND",
+      "team": "伊朗",
+      "opponent": "比利时",
+      "match_no": 39,
+      "match_scoreline": "伊朗 0-0 比利时",
+      "position": "GK",
+      "facts": [
+        "零封",
+        "对手射正压力高",
+        "承受较高xG",
+        "射门记录Saved结果较多",
+        "对手 xG 1.48",
+        "对手射门有 8 次 Saved 结果",
+        "对手 7 次射正",
+        "完成零封"
+      ],
+      "allowed_angles": [
+        "零封有压力",
+        "对手射正和xG说明防守承压",
+        "不要写成官方扑救、扑出或被他挡出"
+      ],
+      "evidence_chips": [
+        "零封",
+        "对手射正压力高",
+        "承受较高xG",
+        "射门记录Saved结果较多"
       ]
     }
   ]

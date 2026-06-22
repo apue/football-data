@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "language": "en",
-  "generated_at": "2026-06-22T11:03:35+00:00",
+  "generated_at": "2026-06-22T13:45:00+00:00",
   "match_date": "2026-06-21",
   "scoring_version": "v0.4",
   "editorial_voice": "A data-aware football analyst writing for a general audience: clear, light, and grounded in the evidence without sounding like a table.",
@@ -40,12 +40,6 @@
       ],
       "key_metrics": [
         {
-          "metric": "offers_received",
-          "label": "received offers",
-          "value": 16,
-          "unit": ""
-        },
-        {
           "metric": "line_breaks_completed",
           "label": "completed line breaks",
           "value": 7,
@@ -64,10 +58,16 @@
           "unit": ""
         },
         {
-          "metric": "total_distance_m",
-          "label": "distance",
-          "value": 9658.2,
-          "unit": "m"
+          "metric": "goals",
+          "label": "goals",
+          "value": 1,
+          "unit": ""
+        },
+        {
+          "metric": "go_ahead_goal",
+          "label": "go-ahead goal",
+          "value": 1,
+          "unit": ""
         }
       ],
       "evidence_chips": [
@@ -90,14 +90,14 @@
       "opponent": "Saudi Arabia",
       "match_no": 38,
       "score": 86.0,
-      "why_selected": "Goals matter, but frame the repeated threat behind the line.",
+      "why_selected": "Lead with the goals and assists; use off-ball counts only as separate supporting evidence.",
       "title_candidates": [
-        "Two goals behind the line",
-        "The runner behind Sweden",
-        "The early brace that opened it up"
+        "Two goals and an assist",
+        "The direct scoring case",
+        "The finisher with one more touch"
       ],
       "action_notes": [
-        "kept attacking the space behind the line"
+        "scored twice"
       ],
       "flow_notes": [],
       "allowed_claims": [],
@@ -109,18 +109,6 @@
           "unit": ""
         },
         {
-          "metric": "in_behind",
-          "label": "in-behind offers",
-          "value": 25,
-          "unit": ""
-        },
-        {
-          "metric": "offers_received",
-          "label": "received offers",
-          "value": 9,
-          "unit": ""
-        },
-        {
           "metric": "brace",
           "label": "brace",
           "value": 1,
@@ -129,6 +117,18 @@
         {
           "metric": "on_target",
           "label": "shots on target",
+          "value": 3,
+          "unit": ""
+        },
+        {
+          "metric": "assists",
+          "label": "assists",
+          "value": 1,
+          "unit": ""
+        },
+        {
+          "metric": "goal_involvements",
+          "label": "goal involvements",
           "value": 3,
           "unit": ""
         }
@@ -171,33 +171,33 @@
       ],
       "key_metrics": [
         {
-          "metric": "in_behind",
-          "label": "in-behind offers",
-          "value": 32,
-          "unit": ""
-        },
-        {
-          "metric": "total_distance_m",
-          "label": "distance",
-          "value": 8974.1,
-          "unit": "m"
-        },
-        {
           "metric": "goals",
           "label": "goals",
           "value": 1,
           "unit": ""
         },
         {
-          "metric": "offers_received",
-          "label": "received offers",
-          "value": 8,
-          "unit": ""
-        },
-        {
           "metric": "comeback_equalizer",
           "label": "comeback equaliser",
           "value": 1,
+          "unit": ""
+        },
+        {
+          "metric": "assists",
+          "label": "assists",
+          "value": 1,
+          "unit": ""
+        },
+        {
+          "metric": "equalizing_goal",
+          "label": "equaliser",
+          "value": 1,
+          "unit": ""
+        },
+        {
+          "metric": "goal_involvements",
+          "label": "goal involvements",
+          "value": 2,
           "unit": ""
         }
       ],
@@ -287,7 +287,7 @@
     },
     {
       "award_type": "progression_pick",
-      "award_label": "Progression Pick",
+      "award_label": "Progression Engine",
       "player_name": "MARAWAN ATTIA",
       "team": "Egypt",
       "opponent": "New Zealand",
@@ -325,54 +325,6 @@
       ],
       "evidence_chips": [
         "repeated line breaks",
-        "found again and again"
-      ],
-      "avoid": [
-        "metric dumps",
-        "generic AI phrasing",
-        "claims that imply video review"
-      ]
-    },
-    {
-      "award_type": "hidden_gem",
-      "award_label": "Hidden Gem",
-      "player_name": "Kevin DE BRUYNE",
-      "team": "Belgium",
-      "opponent": "IR Iran",
-      "match_no": 39,
-      "score": 59.4,
-      "why_selected": "Explain the quieter linking work that kept possession connected.",
-      "title_candidates": [
-        "The quiet connector",
-        "The link behind the highlights",
-        "A useful game between the lines"
-      ],
-      "action_notes": [
-        "kept giving teammates a passing option"
-      ],
-      "flow_notes": [],
-      "allowed_claims": [],
-      "key_metrics": [
-        {
-          "metric": "offers_received",
-          "label": "received offers",
-          "value": 29,
-          "unit": ""
-        },
-        {
-          "metric": "in_behind",
-          "label": "in-behind offers",
-          "value": 31,
-          "unit": ""
-        },
-        {
-          "metric": "in_between",
-          "label": "between-line offers",
-          "value": 11,
-          "unit": ""
-        }
-      ],
-      "evidence_chips": [
         "found again and again"
       ],
       "avoid": [
@@ -422,6 +374,65 @@
       ],
       "evidence_chips": [
         "ball-winning profile"
+      ],
+      "avoid": [
+        "metric dumps",
+        "generic AI phrasing",
+        "claims that imply video review"
+      ]
+    },
+    {
+      "award_type": "goalkeeper_watch",
+      "award_label": "Goalkeeper Watch",
+      "player_name": "Alireza BEIRANVAND",
+      "team": "IR Iran",
+      "opponent": "Belgium",
+      "match_no": 39,
+      "score": 55.8,
+      "why_selected": "Focus on the clean sheet under measurable shot pressure; avoid presenting saved-shot outcomes as an official goalkeeper saves table.",
+      "title_candidates": [
+        "The clean sheet under pressure",
+        "A harder clean sheet than it looked",
+        "The zero that mattered"
+      ],
+      "action_notes": [
+        "kept a clean sheet",
+        "faced sustained on-target pressure",
+        "held up against opponent xG pressure"
+      ],
+      "flow_notes": [],
+      "allowed_claims": [],
+      "key_metrics": [
+        {
+          "metric": "opponent_xg",
+          "label": "opponent xG",
+          "value": 1.48,
+          "unit": ""
+        },
+        {
+          "metric": "keeper_saved_shots",
+          "label": "saved-shot outcomes",
+          "value": 8,
+          "unit": ""
+        },
+        {
+          "metric": "opponent_attempts_on_target",
+          "label": "opponent shots on target",
+          "value": 7,
+          "unit": ""
+        },
+        {
+          "metric": "clean_sheet",
+          "label": "clean sheet",
+          "value": 1,
+          "unit": ""
+        }
+      ],
+      "evidence_chips": [
+        "clean sheet",
+        "faced heavy on-target pressure",
+        "xG pressure resisted",
+        "Saved outcomes in shot log"
       ],
       "avoid": [
         "metric dumps",
