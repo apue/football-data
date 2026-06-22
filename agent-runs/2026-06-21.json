@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-06-22T10:36:04+00:00",
+  "generated_at": "2026-06-22T10:45:54+00:00",
   "status": "success",
-  "match_date": "2026-06-20",
+  "match_date": "2026-06-21",
   "scoring_version": "v0.4",
   "research": {
     "enabled": true,
@@ -18,8 +18,8 @@
         "message": "Multiple picks can still come from one team when roles are clearly distinct.",
         "teams": [
           {
-            "team": "Germany",
-            "count": 3
+            "team": "Egypt",
+            "count": 2
           }
         ]
       }
@@ -35,19 +35,19 @@
             "message": "Multiple picks can still come from one team when roles are clearly distinct.",
             "teams": [
               {
-                "team": "Germany",
-                "count": 3
+                "team": "Egypt",
+                "count": 2
               }
             ]
           }
         ],
         "choice_names": [
-          "Deniz UNDAV",
-          "Ayase UEDA",
-          "Brian BROBBEY",
-          "Joshua KIMMICH",
-          "Pedro VITE",
-          "Felix NMECHA"
+          "MOHAMED SALAH",
+          "Lamine YAMAL",
+          "Agustin CANOBBIO",
+          "MARAWAN ATTIA",
+          "Kevin DE BRUYNE",
+          "PICO LOPES"
         ]
       }
     ]
@@ -97,9 +97,7 @@
           "anti-translationese",
           "football-editor-style"
         ],
-        "warnings": [
-          "外部证据抓取失败，仅依据结构化数据生成卡片；同日其他比赛无入选球员数据"
-        ],
+        "warnings": [],
         "summary": {
           "items": 6,
           "agent_calls": 6,
@@ -116,7 +114,7 @@
           "football-editor-style"
         ],
         "warnings": [
-          "布罗比描述中“第 16 分钟他打入制胜球，随后完成梅开二度”与比赛事实不符：他先在第 5 分钟打入第一球，然后在第 16 分钟打入制胜球（第二球）完成梅开二度，并非制胜球之后又进球。"
+          "Agustin CANOBBIO 被描述为“为乌拉圭首开纪录”，但根据证据，乌拉圭的首个进球由 Maxi ARAUJO 在第 44 分钟打入，CANOBBIO 的进球是乌拉圭的第二球，并非首开纪录。"
         ],
         "summary": {
           "status": "fail"
@@ -134,8 +132,7 @@
           "football-editor-style"
         ],
         "warnings": [
-          "布罗比描述中“第 16 分钟他打入制胜球，随后完成梅开二度”与比赛事实不符：他先在第 5 分钟打入第一球，然后在第 16 分钟打入制胜球（第二球）完成梅开二度，并非制胜球之后又进球。",
-          "修复事实错误：原文未涉及布罗比，已确保基米希数据与比赛事实一致。"
+          "未涉及进球球员描述，规避了事实风险"
         ],
         "summary": {
           "items": 6,
@@ -168,9 +165,12 @@
         "skills": [
           "football-editor-style"
         ],
-        "warnings": [],
+        "warnings": [
+          "MOHAMED SALAH draft error: Salah did not pull Egypt level; MOSTAFA ZICO scored the equalizer at 58'. The draft claims Salah pulled Egypt level before scoring the winner, which is not supported by evidence.",
+          "MOHAMED SALAH draft unsupported metric: '16 received passes' is unsupported; the evidence shows offers_received (16), not received passes."
+        ],
         "summary": {
-          "status": "pass"
+          "status": "fail"
         }
       },
       {
@@ -182,7 +182,11 @@
         "skills": [
           "football-editor-style"
         ],
-        "warnings": [],
+        "warnings": [
+          "Draft corrected: Salah did not equalise – that was Mostafa Zico – so the body now describes only his winner.",
+          "Metric 'offers_received' reinterpreted as 16 times he offered himself; 'received passes' removed.",
+          "Two hard numbers used: 16 offers and 7 line breaks."
+        ],
         "summary": {
           "items": 6,
           "agent_calls": 6,
@@ -196,7 +200,7 @@
         "max_attempts": 1,
         "warnings": [],
         "summary": {
-          "markdown_chars": 3508
+          "markdown_chars": 3341
         }
       },
       {
@@ -242,40 +246,40 @@
     "warnings": []
   },
   "artifacts": {
-    "markdown": "reports/editorial/2026-06-20.md",
-    "choices": "site/editorial/2026-06-20/choices.json",
-    "external_evidence": "site/editorial/2026-06-20/external_evidence.json"
+    "markdown": "reports/editorial/2026-06-21.md",
+    "choices": "site/editorial/2026-06-21/choices.json",
+    "external_evidence": "site/editorial/2026-06-21/external_evidence.json"
   },
   "choices": [
     {
       "award_type": "player_of_the_day",
-      "player_name": "Deniz UNDAV",
-      "team": "Germany"
+      "player_name": "MOHAMED SALAH",
+      "team": "Egypt"
     },
     {
       "award_type": "player_of_the_day",
-      "player_name": "Ayase UEDA",
-      "team": "Japan"
+      "player_name": "Lamine YAMAL",
+      "team": "Spain"
     },
     {
       "award_type": "player_of_the_day",
-      "player_name": "Brian BROBBEY",
-      "team": "Netherlands"
+      "player_name": "Agustin CANOBBIO",
+      "team": "Uruguay"
     },
     {
       "award_type": "progression_pick",
-      "player_name": "Joshua KIMMICH",
-      "team": "Germany"
+      "player_name": "MARAWAN ATTIA",
+      "team": "Egypt"
     },
     {
       "award_type": "hidden_gem",
-      "player_name": "Pedro VITE",
-      "team": "Ecuador"
+      "player_name": "Kevin DE BRUYNE",
+      "team": "Belgium"
     },
     {
       "award_type": "defensive_pick",
-      "player_name": "Felix NMECHA",
-      "team": "Germany"
+      "player_name": "PICO LOPES",
+      "team": "Cabo Verde"
     }
   ]
 }

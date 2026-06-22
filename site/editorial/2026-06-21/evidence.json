@@ -1,7 +1,6 @@
 {
-  "schema_version": 2,
+  "schema_version": 1,
   "generated_at": "2026-06-22T10:36:04+00:00",
-  "compiled_at": "2026-06-22T10:45:54+00:00",
   "match_date": "2026-06-21",
   "scoring_version": "v0.4",
   "editorial_input_hash": "f599f95037ddb1535d9ec8cab939593d84fd4a8d7efe2e60c888ea73a7910972",
@@ -182,7 +181,6 @@
     ],
     "input_hash": "f599f95037ddb1535d9ec8cab939593d84fd4a8d7efe2e60c888ea73a7910972"
   },
-  "source_markdown_path": "reports/editorial/2026-06-21.md",
   "matches": [
     {
       "match_key": "FIFA-2026-M37-URU-CPV",
@@ -523,6 +521,16 @@
       "team_final_goals": 3,
       "opponent_final_goals": 1,
       "position": "FW",
+      "score": 103.7,
+      "primary_score": "headline_score",
+      "role_scores": {
+        "attacking_threat": 22.2,
+        "impact": 31.0,
+        "progressor": 20.54,
+        "off_ball": 32.8,
+        "defensive": 6.8,
+        "physical": 16.28
+      },
       "progression_benchmark": {
         "score": 19.65,
         "quality": "useful",
@@ -606,6 +614,50 @@
         "blocks": 2,
         "total_distance_m": 9658.2
       },
+      "score_components": [
+        {
+          "metric": "offers_received",
+          "value": 16,
+          "weight": 1.0,
+          "contribution": 16.0,
+          "score": "off_ball"
+        },
+        {
+          "metric": "line_breaks_completed",
+          "value": 7,
+          "weight": 2.0,
+          "contribution": 14.0,
+          "score": "progressor"
+        },
+        {
+          "metric": "match_winning_goal",
+          "value": 1,
+          "weight": 12.0,
+          "contribution": 12.0,
+          "score": "impact"
+        },
+        {
+          "metric": "comeback_winner",
+          "value": 1,
+          "weight": 12.0,
+          "contribution": 12.0,
+          "score": "impact"
+        },
+        {
+          "metric": "total_distance_m",
+          "value": 9658.2,
+          "weight": 0.001,
+          "contribution": 9.66,
+          "score": "physical"
+        },
+        {
+          "metric": "in_behind",
+          "value": 16,
+          "weight": 0.6,
+          "contribution": 9.6,
+          "score": "off_ball"
+        }
+      ],
       "evidence_chips": {
         "en": [
           "comeback winner",
@@ -617,16 +669,6 @@
           "打入制胜球",
           "取得进球"
         ]
-      },
-      "content": {
-        "en": {
-          "title": "The comeback finisher",
-          "html": "<p>Salah struck the 66th-minute winner to seal a 3-1 comeback win for Egypt. He offered himself 16 times as a passing option and completed seven line-breaking passes.</p>"
-        },
-        "zh": {
-          "title": "萨拉赫 66 分钟制胜，埃及 3-1 逆转新西兰",
-          "html": "<p>埃及 0-1 落后新西兰，最终 3-1 逆转取胜。</p><p>萨拉赫第 66 分钟打入制胜球。全场 16 次接应成功，7 次打穿防线，持续威胁新西兰防线。</p>"
-        }
       }
     },
     {
@@ -647,6 +689,16 @@
       "team_final_goals": 4,
       "opponent_final_goals": 0,
       "position": "FW",
+      "score": 79.6,
+      "primary_score": "headline_score",
+      "role_scores": {
+        "attacking_threat": 21.3,
+        "impact": 19.0,
+        "progressor": 21.08,
+        "off_ball": 26.6,
+        "defensive": 6.2,
+        "physical": 11.39
+      },
       "progression_benchmark": {
         "score": 27.4,
         "quality": "strong",
@@ -723,6 +775,50 @@
         "blocks": 3,
         "total_distance_m": 4933.6
       },
+      "score_components": [
+        {
+          "metric": "offers_received",
+          "value": 14,
+          "weight": 1.0,
+          "contribution": 14.0,
+          "score": "off_ball"
+        },
+        {
+          "metric": "match_winning_goal",
+          "value": 1,
+          "weight": 12.0,
+          "contribution": 12.0,
+          "score": "impact"
+        },
+        {
+          "metric": "line_breaks_completed",
+          "value": 5,
+          "weight": 2.0,
+          "contribution": 10.0,
+          "score": "progressor"
+        },
+        {
+          "metric": "in_behind",
+          "value": 14,
+          "weight": 0.6,
+          "contribution": 8.4,
+          "score": "off_ball"
+        },
+        {
+          "metric": "goals",
+          "value": 1,
+          "weight": 8.0,
+          "contribution": 8.0,
+          "score": "attacking_threat"
+        },
+        {
+          "metric": "ball_progressions",
+          "value": 7,
+          "weight": 1.0,
+          "contribution": 7.0,
+          "score": "progressor"
+        }
+      ],
       "evidence_chips": {
         "en": [
           "match-winning goal",
@@ -732,16 +828,6 @@
           "打入制胜球",
           "取得进球"
         ]
-      },
-      "content": {
-        "en": {
-          "title": "The goal that tilted it",
-          "html": "<p>Lamine Yamal struck the go-ahead goal in the 9th minute, giving Spain an early edge in a 4-0 win. He got in behind Saudi Arabia's defence 14 times and completed 5 line breaks, providing a constant route forward.</p>"
-        },
-        "zh": {
-          "title": "9 分钟首开纪录，亚马尔 5 次打穿防线",
-          "html": "<p>第 9 分钟，亚马尔为西班牙首开纪录。 全场比赛，他完成 14 次接应，5 次打穿沙特防线。 西班牙最终 4-0 拿下比赛。</p>"
-        }
       }
     },
     {
@@ -762,6 +848,16 @@
       "team_final_goals": 2,
       "opponent_final_goals": 2,
       "position": "MF",
+      "score": 70.3,
+      "primary_score": "headline_score",
+      "role_scores": {
+        "attacking_threat": 21.9,
+        "impact": 5.0,
+        "progressor": 29.6,
+        "off_ball": 44.1,
+        "defensive": 15.8,
+        "physical": 17.82
+      },
       "progression_benchmark": {
         "score": 23.3,
         "quality": "useful",
@@ -816,6 +912,50 @@
         "possession_interrupted": 4,
         "total_distance_m": 11280.1
       },
+      "score_components": [
+        {
+          "metric": "line_breaks_completed",
+          "value": 10,
+          "weight": 2.0,
+          "contribution": 20.0,
+          "score": "progressor"
+        },
+        {
+          "metric": "in_behind",
+          "value": 30,
+          "weight": 0.6,
+          "contribution": 18.0,
+          "score": "off_ball"
+        },
+        {
+          "metric": "offers_received",
+          "value": 16,
+          "weight": 1.0,
+          "contribution": 16.0,
+          "score": "off_ball"
+        },
+        {
+          "metric": "total_distance_m",
+          "value": 11280.1,
+          "weight": 0.001,
+          "contribution": 11.28,
+          "score": "physical"
+        },
+        {
+          "metric": "goals",
+          "value": 1,
+          "weight": 8.0,
+          "contribution": 8.0,
+          "score": "attacking_threat"
+        },
+        {
+          "metric": "in_behind",
+          "value": 30,
+          "weight": 0.25,
+          "contribution": 7.5,
+          "score": "attacking_threat"
+        }
+      ],
       "evidence_chips": {
         "en": [
           "go-ahead goal",
@@ -825,16 +965,6 @@
           "取得领先",
           "取得进球"
         ]
-      },
-      "content": {
-        "en": {
-          "title": "The midfield connector",
-          "html": "<p>Canobbio helped Uruguay connect through midfield with his constant movement and vertical running. He scored the go-ahead goal, completed 10 line-breaking passes and made 30 in-behind offers. Covering over 11 km, his work off the ball kept the team linked in possession.</p>"
-        },
-        "zh": {
-          "title": "卡诺比奥：跑动 11 公里，中场接应打穿防线",
-          "html": "<p>卡诺比奥本场打入一球，帮助乌拉圭取得领先。他在中场充当连接点，拿球后帮助球队持续向前处理。</p><p>全场他 30 次身后接应，10 次打穿防线。跑动距离达到 11.28 公里。</p><p>即便比分最终被佛得角追成 2-2，他的接应和转移帮助球队保持向前处理。</p>"
-        }
       }
     },
     {
@@ -855,6 +985,16 @@
       "team_final_goals": 3,
       "opponent_final_goals": 1,
       "position": "MF",
+      "score": 65.2,
+      "primary_score": "progressor",
+      "role_scores": {
+        "attacking_threat": 8.25,
+        "impact": 0.0,
+        "progressor": 65.18,
+        "off_ball": 53.2,
+        "defensive": 10.65,
+        "physical": 18.62
+      },
       "progression_benchmark": {
         "score": 24.25,
         "quality": "strong",
@@ -890,6 +1030,32 @@
         "blocks": 4,
         "total_distance_m": 12502.6
       },
+      "score_components": [
+        {
+          "metric": "line_breaks_completed",
+          "value": 31,
+          "weight": 2.0,
+          "contribution": 62.0
+        },
+        {
+          "metric": "passes_completed",
+          "value": 84,
+          "weight": 0.02,
+          "contribution": 1.68
+        },
+        {
+          "metric": "ball_progressions",
+          "value": 1,
+          "weight": 1.0,
+          "contribution": 1.0
+        },
+        {
+          "metric": "step_ins",
+          "value": 1,
+          "weight": 0.5,
+          "contribution": 0.5
+        }
+      ],
       "evidence_chips": {
         "en": [
           "repeated line breaks",
@@ -899,16 +1065,6 @@
           "持续打穿防线",
           "持续接应"
         ]
-      },
-      "content": {
-        "en": {
-          "title": "The route back into it",
-          "html": "<p>Marawan Attia gave Egypt a route back into the match, repeatedly breaking New Zealand's lines with forward passing. He completed 31 line breaks as Egypt came from behind to win 3-1.</p>"
-        },
-        "zh": {
-          "title": "阿蒂亚 31 次打穿防线，埃及 3-1 逆转新西兰",
-          "html": "<p>埃及 0-1 落后新西兰。中场阿蒂亚持续接应，全场 31 次打穿防线。落后阶段他坚持向前传球，帮助埃及 3-1 逆转取胜。</p>"
-        }
       }
     },
     {
@@ -929,6 +1085,16 @@
       "team_final_goals": 0,
       "opponent_final_goals": 0,
       "position": "MF",
+      "score": 59.4,
+      "primary_score": "off_ball",
+      "role_scores": {
+        "attacking_threat": 18.55,
+        "impact": 0.0,
+        "progressor": 29.84,
+        "off_ball": 59.4,
+        "defensive": 9.5,
+        "physical": 16.15
+      },
       "progression_benchmark": {
         "score": 14.55,
         "quality": "thin",
@@ -963,6 +1129,32 @@
         "blocks": 2,
         "total_distance_m": 10013.3
       },
+      "score_components": [
+        {
+          "metric": "offers_received",
+          "value": 29,
+          "weight": 1.0,
+          "contribution": 29.0
+        },
+        {
+          "metric": "in_behind",
+          "value": 31,
+          "weight": 0.6,
+          "contribution": 18.6
+        },
+        {
+          "metric": "total_offers",
+          "value": 74,
+          "weight": 0.1,
+          "contribution": 7.4
+        },
+        {
+          "metric": "in_between",
+          "value": 11,
+          "weight": 0.4,
+          "contribution": 4.4
+        }
+      ],
       "evidence_chips": {
         "en": [
           "found again and again"
@@ -970,16 +1162,6 @@
         "zh": [
           "持续接应"
         ]
-      },
-      "content": {
-        "en": {
-          "title": "The quiet connector",
-          "html": "<p>Kevin De Bruyne kept giving teammates a passing option throughout the 0-0 draw with Iran, connecting play without the spotlight. He offered himself between the lines 11 times and received 29 offers, constantly being found to keep possession flowing.</p>"
-        },
-        "zh": {
-          "title": "德布劳内频繁接应，比利时前场连线未断",
-          "html": "<p>比利时 0-0 伊朗，德布劳内全场反复跑动接应。</p><p>他完成 29 次接应成功，另有 31 次身后接应与 11 次两线间接应。</p><p>这些跑动不抢镜，但持续提供了接应角度。比利时前场在比赛中保持连接，靠的是这些跑位。</p>"
-        }
       }
     },
     {
@@ -1000,6 +1182,16 @@
       "team_final_goals": 2,
       "opponent_final_goals": 2,
       "position": "DF",
+      "score": 42.1,
+      "primary_score": "defensive",
+      "role_scores": {
+        "attacking_threat": 2.85,
+        "impact": 0.0,
+        "progressor": 27.56,
+        "off_ball": 12.9,
+        "defensive": 42.15,
+        "physical": 16.28
+      },
       "progression_benchmark": {
         "score": 24.6,
         "quality": "strong",
@@ -1032,6 +1224,44 @@
         "blocks": 3,
         "total_distance_m": 9276.5
       },
+      "score_components": [
+        {
+          "metric": "possession_regains",
+          "value": 15,
+          "weight": 1.3,
+          "contribution": 19.5
+        },
+        {
+          "metric": "clearances",
+          "value": 11,
+          "weight": 0.5,
+          "contribution": 5.5
+        },
+        {
+          "metric": "possession_interrupted",
+          "value": 5,
+          "weight": 1.0,
+          "contribution": 5.0
+        },
+        {
+          "metric": "interceptions",
+          "value": 3,
+          "weight": 1.5,
+          "contribution": 4.5
+        },
+        {
+          "metric": "tackles_won",
+          "value": 2,
+          "weight": 1.5,
+          "contribution": 3.0
+        },
+        {
+          "metric": "blocks",
+          "value": 3,
+          "weight": 1.0,
+          "contribution": 3.0
+        }
+      ],
       "evidence_chips": {
         "en": [
           "ball-winning profile"
@@ -1039,16 +1269,6 @@
         "zh": [
           "夺回球权能力突出"
         ]
-      },
-      "content": {
-        "en": {
-          "title": "The stubborn stopper",
-          "html": "<p>The defender repeatedly broke up Uruguay's rhythm by winning possession 15 times and forcing five resets, helping Cabo Verde stay level until the final whistle.</p>"
-        },
-        "zh": {
-          "title": "顶住乌拉圭冲击，PICO LOPES 把防守脏活做到位",
-          "html": "<p>佛得角 2-2 战平乌拉圭，后防全线承压。 PICO LOPES 把防守端的脏活做到位了。全场 15 次夺回球权，5 次破坏进攻，另有 3 次封堵。 多次让乌拉圭的推进停下来，帮助球队守住平局。</p>"
-        }
       }
     }
   ],

@@ -1,0 +1,188 @@
+{
+  "schema_version": 1,
+  "language": "zh",
+  "generated_at": "2026-06-22T10:36:04+00:00",
+  "match_date": "2026-06-21",
+  "scoring_version": "v0.4",
+  "editorial_process": "from_scratch_chinese_sports_editor",
+  "editorial_voice": "严肃足球数据分析员面向大众发帖：判断清楚，语气可以轻松一点；先讲球场作用，再自然带一两个关键事实。",
+  "forbidden_inputs": [
+    "英文稿",
+    "英文标题",
+    "英文成稿",
+    "已成型选择理由句子"
+  ],
+  "editorial_review_guidance": [
+    "先用中文体育编辑视角从事实重写，不继承旧稿句式。",
+    "再做 qu-ai-wei 式严格审稿：删翻译腔、空话、事实越界。",
+    "只在卡片不顺时做 humanizer-zh 式语感修复。"
+  ],
+  "choices": [
+    {
+      "award_type": "player_of_the_day",
+      "award_label": "每日最佳球员",
+      "player_name": "MOHAMED SALAH",
+      "team": "埃及",
+      "opponent": "新西兰",
+      "match_no": 40,
+      "match_scoreline": "埃及 3-1 新西兰",
+      "position": "FW",
+      "facts": [
+        "逆转制胜",
+        "打入制胜球",
+        "取得进球",
+        "埃及 0-1 落后后 3-1 逆转取胜",
+        "66' 制胜",
+        "完成逆转制胜球",
+        "16 次接应成功",
+        "7 次打穿防线",
+        "1 次制胜进球",
+        "1 次逆转制胜球",
+        "跑动距离 9658.2 米"
+      ],
+      "allowed_angles": [
+        "逆转取胜",
+        "取得领先",
+        "制胜球",
+        "逆转过程中的决定性人物",
+        "补时制胜要写清楚来龙去脉"
+      ],
+      "evidence_chips": [
+        "逆转制胜",
+        "打入制胜球",
+        "取得进球"
+      ]
+    },
+    {
+      "award_type": "player_of_the_day",
+      "award_label": "每日最佳球员",
+      "player_name": "Lamine YAMAL",
+      "team": "西班牙",
+      "opponent": "沙特阿拉伯",
+      "match_no": 38,
+      "match_scoreline": "西班牙 4-0 沙特阿拉伯",
+      "position": "FW",
+      "facts": [
+        "打入制胜球",
+        "取得进球",
+        "9' 制胜",
+        "14 次接应成功",
+        "1 次制胜进球",
+        "5 次打穿防线",
+        "14 次身后接应",
+        "1 个进球"
+      ],
+      "allowed_angles": [
+        "制胜球",
+        "决定比分走势",
+        "不只靠最后一脚"
+      ],
+      "evidence_chips": [
+        "打入制胜球",
+        "取得进球"
+      ]
+    },
+    {
+      "award_type": "player_of_the_day",
+      "award_label": "每日最佳球员",
+      "player_name": "Agustin CANOBBIO",
+      "team": "乌拉圭",
+      "opponent": "佛得角",
+      "match_no": 37,
+      "match_scoreline": "乌拉圭 2-2 佛得角",
+      "position": "MF",
+      "facts": [
+        "取得领先",
+        "取得进球",
+        "10 次打穿防线",
+        "30 次身后接应",
+        "16 次接应成功",
+        "跑动距离 11280.1 米",
+        "1 个进球"
+      ],
+      "allowed_angles": [
+        "中场连接点",
+        "接应和转移",
+        "帮助球队持续向前处理"
+      ],
+      "evidence_chips": [
+        "取得领先",
+        "取得进球"
+      ]
+    },
+    {
+      "award_type": "progression_pick",
+      "award_label": "推进精选",
+      "player_name": "MARAWAN ATTIA",
+      "team": "埃及",
+      "opponent": "新西兰",
+      "match_no": 40,
+      "match_scoreline": "埃及 3-1 新西兰",
+      "position": "MF",
+      "facts": [
+        "持续打穿防线",
+        "持续接应",
+        "埃及 0-1 落后后 3-1 逆转取胜",
+        "31 次打穿防线",
+        "1 次推进"
+      ],
+      "allowed_angles": [
+        "落后阶段保持向前路线",
+        "把球从压力里带出来",
+        "推进出口"
+      ],
+      "evidence_chips": [
+        "持续打穿防线",
+        "持续接应"
+      ]
+    },
+    {
+      "award_type": "hidden_gem",
+      "award_label": "隐藏亮点",
+      "player_name": "Kevin DE BRUYNE",
+      "team": "比利时",
+      "opponent": "伊朗",
+      "match_no": 39,
+      "match_scoreline": "比利时 0-0 伊朗",
+      "position": "MF",
+      "facts": [
+        "持续接应",
+        "29 次接应成功",
+        "31 次身后接应",
+        "11 次两线间接应"
+      ],
+      "allowed_angles": [
+        "不抢镜",
+        "持续提供接应角度",
+        "让前场不断线"
+      ],
+      "evidence_chips": [
+        "持续接应"
+      ]
+    },
+    {
+      "award_type": "defensive_pick",
+      "award_label": "防守精选",
+      "player_name": "PICO LOPES",
+      "team": "佛得角",
+      "opponent": "乌拉圭",
+      "match_no": 37,
+      "match_scoreline": "佛得角 2-2 乌拉圭",
+      "position": "DF",
+      "facts": [
+        "夺回球权能力突出",
+        "15 次夺回球权",
+        "5 次破坏进攻",
+        "3 次封堵"
+      ],
+      "allowed_angles": [
+        "承压局防守",
+        "让对手进攻停下来",
+        "脏活和硬活"
+      ],
+      "evidence_chips": [
+        "夺回球权能力突出"
+      ]
+    }
+  ]
+}

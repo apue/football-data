@@ -1,14 +1,117 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-06-21T16:07:35+00:00",
-  "status": "up_to_date",
-  "latest_data_date": "2026-06-20",
+  "generated_at": "2026-06-22T10:19:52+00:00",
+  "status": "pending",
+  "latest_data_date": "2026-06-21",
   "latest_editorial_date": "2026-06-20",
-  "pending_dates": [],
-  "pending_items": [],
-  "pending_matches": [],
+  "pending_dates": [
+    "2026-06-20",
+    "2026-06-21"
+  ],
+  "pending_items": [
+    {
+      "match_date": "2026-06-20",
+      "reason": "editorial_input_changed",
+      "current_input_hash": "56011ad4c335e7880a0f11e9e71d710c67c8d562ce559590ad2876e61414d028",
+      "published_input_hash": "501c81dad2211310dfe35b8e2eead91ef98c50a120e270129cf587912073d807",
+      "scoring_version": "v0.4",
+      "source_ids": [
+        "fifa-world-cup-2026-pmsr-m33-ger-civ-v1",
+        "fifa-world-cup-2026-pmsr-m34-ecu-cuw-v1",
+        "fifa-world-cup-2026-pmsr-m35-ned-swe-v1",
+        "fifa-world-cup-2026-pmsr-m36-tun-jpn-v1"
+      ]
+    },
+    {
+      "match_date": "2026-06-21",
+      "reason": "data_date_ahead_of_editorial",
+      "current_input_hash": "f599f95037ddb1535d9ec8cab939593d84fd4a8d7efe2e60c888ea73a7910972",
+      "published_input_hash": null,
+      "scoring_version": "v0.4",
+      "source_ids": [
+        "fifa-world-cup-2026-pmsr-m37-uru-cpv-v1",
+        "fifa-world-cup-2026-pmsr-m38-esp-ksa-v1",
+        "fifa-world-cup-2026-pmsr-m39-bel-irn-v1",
+        "fifa-world-cup-2026-pmsr-m40-nzl-egy-v1"
+      ]
+    }
+  ],
+  "pending_matches": [
+    {
+      "match_no": 33,
+      "match_key": "FIFA-2026-M33-GER-CIV",
+      "match_date": "2026-06-20",
+      "home_team": "Germany",
+      "away_team": "Côte d'Ivoire",
+      "home_score": 2,
+      "away_score": 1
+    },
+    {
+      "match_no": 34,
+      "match_key": "FIFA-2026-M34-ECU-CUW",
+      "match_date": "2026-06-20",
+      "home_team": "Ecuador",
+      "away_team": "Curaçao",
+      "home_score": 0,
+      "away_score": 0
+    },
+    {
+      "match_no": 35,
+      "match_key": "FIFA-2026-M35-NED-SWE",
+      "match_date": "2026-06-20",
+      "home_team": "Netherlands",
+      "away_team": "Sweden",
+      "home_score": 5,
+      "away_score": 1
+    },
+    {
+      "match_no": 36,
+      "match_key": "FIFA-2026-M36-TUN-JPN",
+      "match_date": "2026-06-20",
+      "home_team": "Tunisia",
+      "away_team": "Japan",
+      "home_score": 0,
+      "away_score": 4
+    },
+    {
+      "match_no": 37,
+      "match_key": "FIFA-2026-M37-URU-CPV",
+      "match_date": "2026-06-21",
+      "home_team": "Uruguay",
+      "away_team": "Cabo Verde",
+      "home_score": 2,
+      "away_score": 2
+    },
+    {
+      "match_no": 38,
+      "match_key": "FIFA-2026-M38-ESP-KSA",
+      "match_date": "2026-06-21",
+      "home_team": "Spain",
+      "away_team": "Saudi Arabia",
+      "home_score": 4,
+      "away_score": 0
+    },
+    {
+      "match_no": 39,
+      "match_key": "FIFA-2026-M39-BEL-IRN",
+      "match_date": "2026-06-21",
+      "home_team": "Belgium",
+      "away_team": "IR Iran",
+      "home_score": 0,
+      "away_score": 0
+    },
+    {
+      "match_no": 40,
+      "match_key": "FIFA-2026-M40-NZL-EGY",
+      "match_date": "2026-06-21",
+      "home_team": "New Zealand",
+      "away_team": "Egypt",
+      "home_score": 1,
+      "away_score": 3
+    }
+  ],
   "new_matches": [],
   "version_updates": [],
   "failures": [],
-  "reason": "editorial_up_to_date"
+  "reason": "editorial_input_changed"
 }
