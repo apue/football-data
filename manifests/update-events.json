@@ -1,6 +1,23 @@
 {
-  "generated_at": "2026-06-21T16:06:01+00:00",
-  "new_matches": [],
+  "generated_at": "2026-06-22T07:05:18+00:00",
+  "new_matches": [
+    {
+      "match_no": 37,
+      "source_id": "fifa-world-cup-2026-pmsr-m37-uru-cpv-v1"
+    },
+    {
+      "match_no": 38,
+      "source_id": "fifa-world-cup-2026-pmsr-m38-esp-ksa-v1"
+    },
+    {
+      "match_no": 39,
+      "source_id": "fifa-world-cup-2026-pmsr-m39-bel-irn-v1"
+    },
+    {
+      "match_no": 40,
+      "source_id": "fifa-world-cup-2026-pmsr-m40-nzl-egy-v1"
+    }
+  ],
   "version_updates": [],
   "downloaded": [
     "fifa-world-cup-2026-pmsr-m01-mex-rsa-v1",
@@ -38,7 +55,26 @@
     "fifa-world-cup-2026-pmsr-m33-ger-civ-v1",
     "fifa-world-cup-2026-pmsr-m34-ecu-cuw-v1",
     "fifa-world-cup-2026-pmsr-m35-ned-swe-v1",
-    "fifa-world-cup-2026-pmsr-m36-tun-jpn-v1"
+    "fifa-world-cup-2026-pmsr-m36-tun-jpn-v1",
+    "fifa-world-cup-2026-pmsr-m37-uru-cpv-v1",
+    "fifa-world-cup-2026-pmsr-m38-esp-ksa-v1",
+    "fifa-world-cup-2026-pmsr-m39-bel-irn-v1",
+    "fifa-world-cup-2026-pmsr-m40-nzl-egy-v1"
   ],
+  "supplemental": {
+    "fifa_timeline": {
+      "generated_at": "2026-06-22T07:06:16+00:00",
+      "source": "fifa_timeline_api",
+      "status": "success",
+      "matches": 40,
+      "linked_matches": 40,
+      "timeline_matches": 40,
+      "events": 3562,
+      "goals": 107,
+      "assists": 82,
+      "goal_involvements": 107,
+      "failures": []
+    }
+  },
   "failures": []
 }

@@ -1,16 +1,48 @@
 {
-  "generated_at": "2026-06-21T16:06:01+00:00",
+  "generated_at": "2026-06-22T07:05:18+00:00",
   "status": "success",
   "failure_code": null,
   "hub_url": "https://www.fifatrainingcentre.com/en/fifa-world-cup-2026/match-report-hub.php",
-  "discovered": 36,
-  "active_sources": 36,
-  "downloaded": 36,
-  "parsed": 36,
-  "matches": 36,
-  "source_documents": 36,
-  "new_matches": [],
+  "discovered": 40,
+  "active_sources": 40,
+  "downloaded": 40,
+  "parsed": 40,
+  "matches": 40,
+  "source_documents": 40,
+  "new_matches": [
+    {
+      "match_no": 37,
+      "source_id": "fifa-world-cup-2026-pmsr-m37-uru-cpv-v1"
+    },
+    {
+      "match_no": 38,
+      "source_id": "fifa-world-cup-2026-pmsr-m38-esp-ksa-v1"
+    },
+    {
+      "match_no": 39,
+      "source_id": "fifa-world-cup-2026-pmsr-m39-bel-irn-v1"
+    },
+    {
+      "match_no": 40,
+      "source_id": "fifa-world-cup-2026-pmsr-m40-nzl-egy-v1"
+    }
+  ],
   "version_updates": [],
+  "supplemental": {
+    "fifa_timeline": {
+      "generated_at": "2026-06-22T07:06:16+00:00",
+      "source": "fifa_timeline_api",
+      "status": "success",
+      "matches": 40,
+      "linked_matches": 40,
+      "timeline_matches": 40,
+      "events": 3562,
+      "goals": 107,
+      "assists": 82,
+      "goal_involvements": 107,
+      "failures": []
+    }
+  },
   "failures": [],
   "message": "Dataset rebuilt from FIFA Match Report Hub active PMSR sources."
 }
