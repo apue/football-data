@@ -1,14 +1,7 @@
 {
-  "generated_at": "2026-06-23T07:41:27+00:00",
+  "generated_at": "2026-06-23T07:49:45+00:00",
   "new_matches": [],
-  "version_updates": [
-    {
-      "match_no": 20,
-      "from_version": 2,
-      "to_version": 3,
-      "source_id": "fifa-world-cup-2026-pmsr-m20-aut-jor-v3"
-    }
-  ],
+  "version_updates": [],
   "downloaded": [
     "fifa-world-cup-2026-pmsr-m01-mex-rsa-v1",
     "fifa-world-cup-2026-pmsr-m02-kor-cze-v1",
@@ -53,7 +46,7 @@
   ],
   "supplemental": {
     "fifa_timeline": {
-      "generated_at": "2026-06-23T07:42:21+00:00",
+      "generated_at": "2026-06-23T07:50:37+00:00",
       "source": "fifa_timeline_api",
       "status": "success",
       "matches": 40,
