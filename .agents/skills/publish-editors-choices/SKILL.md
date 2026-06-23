@@ -17,14 +17,15 @@ Read these before acting:
 
 ## Core Rules
 
-- Treat `scripts/run_editorial_queue.py` as the default publication entrypoint.
-- Use `scripts/run_editorial_queue.py --date YYYY-MM-DD` for targeted local backfills.
+- Treat `scripts/prepare_editorial_packet.py --date YYYY-MM-DD` as the default local handoff entrypoint.
+- Let local Codex write `agent-runs/YYYY-MM-DD/selection_decision.json` and `agent-runs/YYYY-MM-DD/copy.json`, then publish with `scripts/compile_local_editorial.py --date YYYY-MM-DD`.
+- Use `scripts/run_editorial_queue.py --date YYYY-MM-DD --fake --no-research --json` only for deterministic smoke tests or legacy queue checks.
 - Use `scripts/run_editorial_v2.py --date YYYY-MM-DD` only for low-level local debugging.
 - Treat `reports/editorial/YYYY-MM-DD.md` as the human-readable generated report.
 - Treat `agent-runs/YYYY-MM-DD/` as the primary run audit directory.
-- The production experiment is `ai_rerank_selection_v1`: deterministic scoring builds the candidate pool, an AI selection editor reranks only that pool, validation enforces pool membership and skipped-higher-ranked explanations, and separate English/Chinese copy editor calls write final cards.
-- LLM working nodes use the OpenAI Agents SDK with structured outputs. Keep scoring, candidate-pool construction, selection validation, artifact writing, and publishing deterministic in Python.
-- Let Codex repair code, scoring, registry config, prompts, or copy profiles when output fails review; do not hand-edit compiled JSON.
+- The production experiment is `ai_rerank_guardrails_v2`, using the `ai_rerank_selection_v1` workflow variant: deterministic scoring builds the candidate pool, local Codex reranks only that pool, validation enforces pool membership and skipped-higher-ranked explanations, and local English/Chinese copy is written from selected evidence packets.
+- Do not reimplement OpenAI Agents SDK capabilities in this local path. Keep scoring, candidate-pool construction, selection validation, artifact writing, and publishing deterministic in Python; keep the OpenAI Agents SDK queue as a manual/legacy runtime.
+- Let Codex repair code, scoring, registry config, prompts, copy profiles, or local selection/copy files when output fails review; do not hand-edit compiled frontend JSON.
 - Generate both English and Chinese copy from the same selected candidate evidence packet. They should express the same judgment but do not need to be literal translations.
 - Run the workflow validation gates before accepting output: `selection_validation.json`, copy warnings, and homepage/site artifacts.
 - Run the POTM calibration gate with `calibrate-potm-labels` when labels or external evidence are available for the date.

@@ -19,6 +19,8 @@ def test_publish_editors_choices_skill_is_repo_scoped():
     assert "name: publish-editors-choices" in text
     assert "description: Use when" in text
     assert "Editor" in text
+    assert "scripts/prepare_editorial_packet.py" in text
+    assert "scripts/compile_local_editorial.py" in text
     assert "scripts/run_editorial_queue.py" in text
     assert "scripts/run_editorial_v2.py" in references
     assert "reports/editorial/YYYY-MM-DD.md" in references
@@ -26,9 +28,12 @@ def test_publish_editors_choices_skill_is_repo_scoped():
     assert "scripts/render_editorial.py" not in text + references
     assert "scripts/run_editorial_loop.py" not in text + references
     assert "run_editorial_agent.py" not in text + references
+    assert "ai_rerank_guardrails_v2" in text + references
     assert "ai_rerank_selection_v1" in text + references
     assert "OpenAI Agents SDK" in text + references
+    assert "local Codex" in text + references
     assert "selection_validation.json" in text + references
+    assert "copy.json" in text + references
     assert "candidate_pool.json" in references
     assert "selector_input.json" in references
     assert "selection_decision.json" in references
