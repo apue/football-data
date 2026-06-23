@@ -13,6 +13,9 @@
     "Avoid AI-ish structure, score-table prose, and language that sounds like the prompt.",
     "offers_received means successful receptions or being found by teammates, not runs behind the defence; in_behind is the separate in-behind movement metric.",
     "line_breaks_completed means line-breaking passes/actions, not runs.",
+    "For Player of the Day, lead with goals, assists, decisive goal context, and shot quality. Off-ball or receiving counts are supporting evidence only, never the main argument.",
+    "For Progression Engine, do not turn pass-only centre-back line breaks into a strong carrying/progression story unless progression_benchmark supports it.",
+    "For Goalkeeper Watch, do not force a keeper who conceded multiple goals unless there is clear goals-prevented evidence; an empty optional slot is acceptable.",
     "Each card needs one title and one body paragraph with at most 2-3 key facts."
   ]
 }
