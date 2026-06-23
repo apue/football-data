@@ -5,13 +5,10 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
-from football_data.editorial_agent import (
-    FakeEditorialAgentClient,
-    load_editorial_agent_config,
-    run_editorial_agent,
-)
-from football_data.editorial_fingerprint import DEFAULT_SCORING_CONFIG
 from football_data.editorial_queue import build_editorial_queue, write_editorial_queue
+from football_data.editorial_registry import load_editorial_experiment
+from football_data.editorial_v2_runner import run_editorial_v2
+from football_data.llm_client import load_editorial_ai_config
 
 
 def run_editorial_queue(
@@ -21,8 +18,8 @@ def run_editorial_queue(
     reports_dir: str | Path = "reports",
     manifests_dir: str | Path = "manifests",
     agent_runs_dir: str | Path = "agent-runs",
-    scoring_config_path: str | Path = DEFAULT_SCORING_CONFIG,
-    style_dir: str | Path = ".agents/editorial-skills",
+    config_dir: str | Path = "config/editorial",
+    experiment_id: str | None = None,
     env_path: str | Path = ".env.local",
     run_out_path: str | Path = "manifests/editorial-run.json",
     queue_out_path: str | Path = "manifests/editorial-queue.json",
@@ -30,14 +27,13 @@ def run_editorial_queue(
     fake: bool = False,
     max_dates: int | None = None,
     match_dates: list[str] | None = None,
-    review_feedback_path: str | Path | None = None,
-    max_review_loops: int = 1,
 ) -> dict[str, Any]:
+    experiment = load_editorial_experiment(experiment_id, config_dir)
     queue = build_editorial_queue(
         db_path=db_path,
         site_dir=site_dir,
         manifests_dir=manifests_dir,
-        scoring_config_path=scoring_config_path,
+        scoring_config_path=experiment["scoring_config"],
     )
     write_editorial_queue(queue, queue_out_path)
     pending_dates = list(match_dates or queue.get("pending_dates", []))
@@ -66,31 +62,32 @@ def run_editorial_queue(
     runs: list[dict[str, Any]] = []
     for match_date in pending_dates:
         try:
-            client = FakeEditorialAgentClient() if fake else None
-            agent_result = run_editorial_agent(
+            v2_run_path = Path(run_out_path).with_name("editorial-v2-run.json")
+            agent_result = run_editorial_v2(
                 match_date=match_date,
                 db_path=db_path,
                 site_dir=site_dir,
                 reports_dir=reports_dir,
                 manifests_dir=manifests_dir,
                 agent_runs_dir=agent_runs_dir,
-                scoring_config_path=scoring_config_path,
-                style_dir=style_dir,
+                config_dir=config_dir,
+                experiment_id=experiment["id"],
                 env_path=env_path,
-                client=client,
+                run_out_path=v2_run_path,
+                fake=fake,
                 research=research,
                 rebuild_homepage=True,
-                review_feedback_path=review_feedback_path,
-                max_review_loops=max_review_loops,
             )
             if agent_result.get("status") != "success":
-                raise RuntimeError(f"Editorial agent did not publish: {agent_result.get('status')}")
+                raise RuntimeError(f"Editorial v2 did not publish: {agent_result.get('status')}")
             published_dates.append(match_date)
             runs.append(
                 {
                     "match_date": match_date,
                     "agent_status": agent_result.get("status"),
-                    "fact_check": agent_result.get("fact_check", {}).get("status"),
+                    "experiment_id": agent_result.get("experiment_id"),
+                    "workflow_variant": agent_result.get("workflow_variant"),
+                    "selection_validation": agent_result.get("selection_validation", {}).get("status"),
                     "choices": agent_result.get("choices", []),
                 }
             )
@@ -117,7 +114,7 @@ def run_editorial_queue(
 
 def _missing_credentials_reason(env_path: str | Path) -> str | None:
     try:
-        load_editorial_agent_config(env_path, require_credentials=True)
+        load_editorial_ai_config(env_path, require_credentials=True)
     except ValueError as exc:
         return str(exc)
     return None

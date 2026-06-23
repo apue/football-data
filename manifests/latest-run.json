@@ -1,28 +1,45 @@
 {
-  "generated_at": "2026-06-23T08:00:07+00:00",
+  "generated_at": "2026-06-23T08:52:58+00:00",
   "status": "success",
   "failure_code": null,
   "hub_url": "https://www.fifatrainingcentre.com/en/fifa-world-cup-2026/match-report-hub.php",
-  "discovered": 40,
-  "active_sources": 40,
-  "downloaded": 40,
-  "parsed": 40,
-  "matches": 40,
-  "source_documents": 40,
-  "new_matches": [],
+  "discovered": 44,
+  "active_sources": 44,
+  "downloaded": 5,
+  "parsed": 44,
+  "matches": 44,
+  "source_documents": 44,
+  "new_matches": [
+    {
+      "match_no": 41,
+      "source_id": "fifa-world-cup-2026-pmsr-m41-nor-sen-v1"
+    },
+    {
+      "match_no": 42,
+      "source_id": "fifa-world-cup-2026-pmsr-m42-fra-irq-v1"
+    },
+    {
+      "match_no": 43,
+      "source_id": "fifa-world-cup-2026-pmsr-m43-arg-aut-v1"
+    },
+    {
+      "match_no": 44,
+      "source_id": "fifa-world-cup-2026-pmsr-m44-jor-alg-v1"
+    }
+  ],
   "version_updates": [],
   "supplemental": {
     "fifa_timeline": {
-      "generated_at": "2026-06-23T08:00:53+00:00",
+      "generated_at": "2026-06-23T08:53:39+00:00",
       "source": "fifa_timeline_api",
       "status": "success",
-      "matches": 40,
-      "linked_matches": 40,
-      "timeline_matches": 40,
-      "events": 3562,
-      "goals": 107,
-      "assists": 82,
-      "goal_involvements": 107,
+      "matches": 44,
+      "linked_matches": 44,
+      "timeline_matches": 44,
+      "events": 3903,
+      "goals": 120,
+      "assists": 92,
+      "goal_involvements": 120,
       "failures": []
     }
   },

@@ -81,8 +81,11 @@ def test_run_editorial_queue_cli_with_fake_backend_publishes_pending_date(tmp_pa
     assert run["status"] == "success"
     assert run["published_dates"] == [latest_date]
     assert run["runs"][0]["agent_status"] == "success"
+    assert run["runs"][0]["workflow_variant"] == "ai_rerank_selection_v1"
     assert "loop_status" not in run["runs"][0]
     assert choices["match_date"] == latest_date
+    assert choices["editorial_generation"]["workflow_variant"] == "ai_rerank_selection_v1"
+    assert (tmp_path / "agent-runs" / latest_date / "selection_decision.json").exists()
 
 
 def test_run_editorial_queue_cli_date_backfill_does_not_replace_latest(tmp_path):

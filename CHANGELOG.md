@@ -1,5 +1,17 @@
 # Changelog
 
+## 2026-06-23 - Editorial v2 AI Rerank
+
+Rebuilt the Editor's Choices path around an experiment-registry driven AI rerank flow:
+
+- Added `config/editorial/` with production experiment, candidate-pool, selector, and copy profiles.
+- Added deterministic ranking, candidate-pool, selector-input, selection-validation, artifact, and v2 runner modules.
+- Switched `scripts/run_editorial_queue.py` to run the active v2 experiment and added `scripts/run_editorial_v2.py`.
+- Removed the old editorial agent state graph, old style-pack directory, old agent CLI, old root-level agent run audits, and retired sidecar JSON artifacts from published editorial pages.
+- Added v2 audit output under `agent-runs/YYYY-MM-DD/` and `manifests/editorial-v2-run.json`.
+- Updated the Editorial GitHub Actions workflow for v2, branch dispatch, experiment selection, longer model timeouts, and v2 artifact upload.
+- Published the latest local match day, 2026-06-22, to the homepage Editorial section.
+
 ## 2026-06-20 - Editorial State Graph
 
 Refactored the Editor's Choices publisher into a project-scoped state graph:

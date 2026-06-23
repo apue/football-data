@@ -20,24 +20,25 @@ def test_publish_editors_choices_skill_is_repo_scoped():
     assert "description: Use when" in text
     assert "Editor" in text
     assert "scripts/run_editorial_queue.py" in text
-    assert "scripts/run_editorial_agent.py" in references
+    assert "scripts/run_editorial_v2.py" in references
     assert "reports/editorial/YYYY-MM-DD.md" in references
     assert "scripts/generate_editorial.py" not in text + references
     assert "scripts/render_editorial.py" not in text + references
     assert "scripts/run_editorial_loop.py" not in text + references
-    assert "editorial state graph" in text + references
+    assert "run_editorial_agent.py" not in text + references
+    assert "ai_rerank_selection_v1" in text + references
     assert "OpenAI Agents SDK" in text + references
-    assert "compact editor self-checks" in text + references
-    assert "There is no separate LLM review gate in the default path" in references
-    assert "final_deterministic_validation" in references
-    assert "Write Chinese from `fact_bank.zh.json`, not from the English draft" in references
-    assert "Rewrite Chinese and English in separate passes from the same evidence" in references
+    assert "selection_validation.json" in text + references
+    assert "candidate_pool.json" in references
+    assert "selector_input.json" in references
+    assert "selection_decision.json" in references
     assert "Do not use either finished language version as input for the other" in references
-    assert "fact_bank.zh.json" in references
+    assert "candidate evidence packet" in references
     assert "from-scratch Chinese sports editor" in references
+    assert "fact_bank.zh.json" not in references
     assert "brief.zh.json" not in references
-    assert "brief.en.json" in references
-    assert "Generate 3-5 Chinese title candidates" in references
+    assert "brief.en.json" not in references
+    assert "generate 3-5 Chinese title candidates" in references
     assert "football actions before data labels" in references
 
 

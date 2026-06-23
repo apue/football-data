@@ -4,7 +4,6 @@ from __future__ import annotations
 import argparse
 import json
 
-from football_data.editorial_fingerprint import DEFAULT_SCORING_CONFIG
 from football_data.editorial_queue_runner import run_editorial_queue
 
 
@@ -17,9 +16,9 @@ def main() -> int:
     parser.add_argument("--reports-dir", default="reports", help="Reports output directory.")
     parser.add_argument("--manifests-dir", default="manifests", help="Manifests directory.")
     parser.add_argument("--agent-runs-dir", default="agent-runs", help="Agent audit directory.")
-    parser.add_argument("--style-dir", default=".agents/editorial-skills", help="Style pack directory.")
+    parser.add_argument("--config-dir", default="config/editorial", help="Editorial registry directory.")
+    parser.add_argument("--experiment", default=None, help="Experiment id. Defaults to production active_experiment.")
     parser.add_argument("--env", default=".env.local", help="Local env file.")
-    parser.add_argument("--scoring-config", default=DEFAULT_SCORING_CONFIG)
     parser.add_argument(
         "--out",
         default="manifests/editorial-run.json",
@@ -38,17 +37,6 @@ def main() -> int:
         help="Publish a specific match date. Can be passed multiple times for manual backfills.",
     )
     parser.add_argument("--no-research", action="store_true", help="Skip Firecrawl research.")
-    parser.add_argument(
-        "--review-feedback",
-        default=None,
-        help="Optional JSON comments from a local Codex/publication review.",
-    )
-    parser.add_argument(
-        "--max-review-loops",
-        type=int,
-        default=1,
-        help="Maximum publication review/revision loops before final validation.",
-    )
     parser.add_argument("--fake", action="store_true", help="Use deterministic fake agent backend.")
     parser.add_argument("--json", action="store_true", help="Print run JSON.")
     args = parser.parse_args()
@@ -59,8 +47,8 @@ def main() -> int:
         reports_dir=args.reports_dir,
         manifests_dir=args.manifests_dir,
         agent_runs_dir=args.agent_runs_dir,
-        scoring_config_path=args.scoring_config,
-        style_dir=args.style_dir,
+        config_dir=args.config_dir,
+        experiment_id=args.experiment,
         env_path=args.env,
         run_out_path=args.out,
         queue_out_path=args.queue_out,
@@ -68,8 +56,6 @@ def main() -> int:
         fake=args.fake,
         max_dates=args.max_dates,
         match_dates=args.match_dates,
-        review_feedback_path=args.review_feedback,
-        max_review_loops=args.max_review_loops,
     )
     if args.json:
         print(json.dumps(result, ensure_ascii=False, indent=2))

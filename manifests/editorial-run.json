@@ -1,13 +1,21 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-06-23T08:02:00+00:00",
-  "status": "up_to_date",
+  "generated_at": "2026-06-23T09:28:10+00:00",
+  "status": "failed",
   "queue_status": "up_to_date",
   "queue_reason": "editorial_up_to_date",
-  "latest_data_date": "2026-06-21",
-  "latest_editorial_date": "2026-06-21",
-  "pending_dates": [],
+  "latest_data_date": "2026-06-22",
+  "latest_editorial_date": "2026-06-22",
+  "pending_dates": [
+    "2026-06-22"
+  ],
   "published_dates": [],
-  "failures": [],
+  "failures": [
+    {
+      "match_date": "2026-06-22",
+      "stage": "editorial",
+      "message": "Error code: 403 - {'code': 30001, 'message': 'Sorry, your account balance is insufficient', 'data': None}"
+    }
+  ],
   "runs": []
 }
