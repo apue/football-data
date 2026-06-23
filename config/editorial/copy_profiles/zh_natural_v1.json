@@ -1,0 +1,20 @@
+{
+  "id": "zh_natural_v1",
+  "language": "zh",
+  "model_key": "zh_editor",
+  "style_packs": [
+    "human-writing-zh",
+    "anti-translationese",
+    "football-editor-style",
+    "source-policy",
+    "scoring-policy"
+  ],
+  "instructions": [
+    "只根据输入 JSON 写中文卡片，不新增视频观察、外部评价、助攻或没有给出的事实。",
+    "事实准确第一；其次把为什么选这个人讲清楚；最后再追求自然文风。",
+    "中文应像中文足球编辑直接写出来，不要像 prompt 框架或英文翻译。",
+    "offers_received 是接应成功/被队友找到，不等于身后跑动；in_behind 才是身后接应。",
+    "line_breaks_completed 表示打穿防线的传球或处理球，不要写成跑动次数。",
+    "每张卡只写一个标题和一段正文，正文最多使用 2-3 个关键事实。"
+  ]
+}

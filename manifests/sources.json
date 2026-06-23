@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-23T08:00:07+00:00",
+  "generated_at": "2026-06-23T08:52:58+00:00",
   "sources": [
     {
       "match": {
@@ -26,8 +26,8 @@
         "file_name": "PMSR-M01 MEX V RSA.pdf",
         "sha256": "0f56ac3c6c8b5b9cd0ce3f2ff1bd45def775401e126706c4f2b5db3257c4fbf7",
         "file_size": 5690377,
-        "discovered_at": "2026-06-23T08:00:07+00:00",
-        "fetched_at": "2026-06-23T08:00:14+00:00",
+        "discovered_at": "2026-06-23T08:52:58+00:00",
+        "fetched_at": "2026-06-23T08:53:11+00:00",
         "active": true,
         "status": "active"
       }
@@ -57,8 +57,8 @@
         "file_name": "PMSR-M02 KOR V CZE .pdf",
         "sha256": "5849fff9425cd6a797405787f7a723e216af5b74c1d6b94279d81557b6ccbc3a",
         "file_size": 5668508,
-        "discovered_at": "2026-06-23T08:00:07+00:00",
-        "fetched_at": "2026-06-23T08:00:15+00:00",
+        "discovered_at": "2026-06-23T08:52:58+00:00",
+        "fetched_at": "2026-06-23T08:53:12+00:00",
         "active": true,
         "status": "active"
       }
@@ -88,8 +88,8 @@
         "file_name": "PMSR-M03-CAN-V-BIH-V2.pdf",
         "sha256": "742bf05848b6cdaee5480d5708d893a66ddf6f9b1a4f66f2074573e563f66d29",
         "file_size": 5848182,
-        "discovered_at": "2026-06-23T08:00:07+00:00",
-        "fetched_at": "2026-06-23T08:00:16+00:00",
+        "discovered_at": "2026-06-23T08:52:58+00:00",
+        "fetched_at": "2026-06-23T08:53:13+00:00",
         "active": true,
         "status": "active"
       }
@@ -119,8 +119,8 @@
         "file_name": "PMSR-M04-USA-V-PAR.pdf",
         "sha256": "4ea51b7fd475efd225578b862bb09abbe791de72c96183fccaf124bd4b6b1085",
         "file_size": 5729044,
-        "discovered_at": "2026-06-23T08:00:07+00:00",
-        "fetched_at": "2026-06-23T08:00:17+00:00",
+        "discovered_at": "2026-06-23T08:52:58+00:00",
+        "fetched_at": "2026-06-23T08:53:13+00:00",
         "active": true,
         "status": "active"
       }
@@ -150,8 +150,8 @@
         "file_name": "PMSR-M05-HAI-V-SCO.pdf",
         "sha256": "116a4af71e1a68c9f264599176ef6ce07b26c382ce16ca858a7ff31aaff16307",
         "file_size": 5627541,
-        "discovered_at": "2026-06-23T08:00:07+00:00",
-        "fetched_at": "2026-06-23T08:00:18+00:00",
+        "discovered_at": "2026-06-23T08:52:58+00:00",
+        "fetched_at": "2026-06-23T08:53:14+00:00",
         "active": true,
         "status": "active"
       }
@@ -181,8 +181,8 @@
         "file_name": "PMSR-M06-AUS-V-TUR.pdf",
         "sha256": "572c9314a930a03edb03cf2f73c3c51b197075f9cc5a060f6e37d6e9aac12a30",
         "file_size": 5896379,
-        "discovered_at": "2026-06-23T08:00:07+00:00",
-        "fetched_at": "2026-06-23T08:00:19+00:00",
+        "discovered_at": "2026-06-23T08:52:58+00:00",
+        "fetched_at": "2026-06-23T08:53:15+00:00",
         "active": true,
         "status": "active"
       }
@@ -212,8 +212,8 @@
         "file_name": "PMSR-M07-BRA-V-MAR POST-V2.pdf",
         "sha256": "bcc41c89dbd371b28d7037ba59ae820dd00aa7610ab9908e0128c4b0b1fbfa31",
         "file_size": 5881447,
-        "discovered_at": "2026-06-23T08:00:07+00:00",
-        "fetched_at": "2026-06-23T08:00:20+00:00",
+        "discovered_at": "2026-06-23T08:52:58+00:00",
+        "fetched_at": "2026-06-23T08:53:15+00:00",
         "active": true,
         "status": "active"
       }
@@ -243,8 +243,8 @@
         "file_name": "PMSR-M08-QAT-V-SUI.pdf",
         "sha256": "550a64c9b5f87ec4fd9761ae3b429467d013fbc488800299730f996dbf666d99",
         "file_size": 5779073,
-        "discovered_at": "2026-06-23T08:00:07+00:00",
-        "fetched_at": "2026-06-23T08:00:21+00:00",
+        "discovered_at": "2026-06-23T08:52:58+00:00",
+        "fetched_at": "2026-06-23T08:53:16+00:00",
         "active": true,
         "status": "active"
       }
@@ -274,8 +274,8 @@
         "file_name": "PMSR-M09-CIV-V-ECU.pdf",
         "sha256": "da3653a93f68d5e463ecb65a318e5ae4d36e17717baf9f6d499aac4d57c4745b",
         "file_size": 5769360,
-        "discovered_at": "2026-06-23T08:00:07+00:00",
-        "fetched_at": "2026-06-23T08:00:22+00:00",
+        "discovered_at": "2026-06-23T08:52:58+00:00",
+        "fetched_at": "2026-06-23T08:53:17+00:00",
         "active": true,
         "status": "active"
       }
@@ -305,8 +305,8 @@
         "file_name": "PMSR-M10-GER-V-CUW-V2.pdf",
         "sha256": "f82717a0dd1373b12000c7bff2d033c1f96cbc9d6a57efaf18c682638201e792",
         "file_size": 5614795,
-        "discovered_at": "2026-06-23T08:00:07+00:00",
-        "fetched_at": "2026-06-23T08:00:23+00:00",
+        "discovered_at": "2026-06-23T08:52:58+00:00",
+        "fetched_at": "2026-06-23T08:53:17+00:00",
         "active": true,
         "status": "active"
       }
@@ -336,8 +336,8 @@
         "file_name": "PMSR-M11-NED-V-JPN.pdf",
         "sha256": "d485e6956019f57b78db7b6a4b8cd9ae727e7b902cabb96213472f31376a4d6d",
         "file_size": 5738229,
-        "discovered_at": "2026-06-23T08:00:07+00:00",
-        "fetched_at": "2026-06-23T08:00:24+00:00",
+        "discovered_at": "2026-06-23T08:52:58+00:00",
+        "fetched_at": "2026-06-23T08:53:18+00:00",
         "active": true,
         "status": "active"
       }
@@ -367,8 +367,8 @@
         "file_name": "PMSR-M12-SWE-V-TUN.pdf",
         "sha256": "c7df69fd2b01b6da7f506d68b76e8877e4d8e168beca9406a8335c9e219301f6",
         "file_size": 5746574,
-        "discovered_at": "2026-06-23T08:00:07+00:00",
-        "fetched_at": "2026-06-23T08:00:25+00:00",
+        "discovered_at": "2026-06-23T08:52:58+00:00",
+        "fetched_at": "2026-06-23T08:53:18+00:00",
         "active": true,
         "status": "active"
       }
@@ -398,8 +398,8 @@
         "file_name": "PMSR-M13-KSA-V-URU.pdf",
         "sha256": "a58f676edb1460327344c549a9d4b5c65175f6a46308313ada37fb44ba0ad0d2",
         "file_size": 5900093,
-        "discovered_at": "2026-06-23T08:00:07+00:00",
-        "fetched_at": "2026-06-23T08:00:26+00:00",
+        "discovered_at": "2026-06-23T08:52:58+00:00",
+        "fetched_at": "2026-06-23T08:53:19+00:00",
         "active": true,
         "status": "active"
       }
@@ -429,8 +429,8 @@
         "file_name": "PMSR-M14-ESP-V-CPV.pdf",
         "sha256": "058506bfa1f40a4b856d8b30606577e475b790c16c808e4353df525d34399288",
         "file_size": 5780870,
-        "discovered_at": "2026-06-23T08:00:07+00:00",
-        "fetched_at": "2026-06-23T08:00:27+00:00",
+        "discovered_at": "2026-06-23T08:52:58+00:00",
+        "fetched_at": "2026-06-23T08:53:20+00:00",
         "active": true,
         "status": "active"
       }
@@ -460,8 +460,8 @@
         "file_name": "PMSR-M15-IRN-V-NZL.pdf",
         "sha256": "0badcf1b7a99158840574738455dbd9fe65ef3cb5efcbc528d8c787003d6bb67",
         "file_size": 5793374,
-        "discovered_at": "2026-06-23T08:00:07+00:00",
-        "fetched_at": "2026-06-23T08:00:28+00:00",
+        "discovered_at": "2026-06-23T08:52:58+00:00",
+        "fetched_at": "2026-06-23T08:53:20+00:00",
         "active": true,
         "status": "active"
       }
@@ -491,8 +491,8 @@
         "file_name": "PMSR-M16-BEL-V-EGY.pdf",
         "sha256": "7f6ff9a1345e11aaf7b8488220e4955efb2626534700358c6266f95eee208897",
         "file_size": 5796662,
-        "discovered_at": "2026-06-23T08:00:07+00:00",
-        "fetched_at": "2026-06-23T08:00:29+00:00",
+        "discovered_at": "2026-06-23T08:52:58+00:00",
+        "fetched_at": "2026-06-23T08:53:21+00:00",
         "active": true,
         "status": "active"
       }
@@ -522,8 +522,8 @@
         "file_name": "PMSR-M17-FRA-V-SEN.pdf",
         "sha256": "b70af7a5dc5e2be286d79696c2852476de01c1888fbbd9e8560ccf6baecae1f4",
         "file_size": 5491455,
-        "discovered_at": "2026-06-23T08:00:07+00:00",
-        "fetched_at": "2026-06-23T08:00:30+00:00",
+        "discovered_at": "2026-06-23T08:52:58+00:00",
+        "fetched_at": "2026-06-23T08:53:22+00:00",
         "active": true,
         "status": "active"
       }
@@ -553,8 +553,8 @@
         "file_name": "PMSR-M18-IRQ-V-NOR.pdf",
         "sha256": "4641858c3fbf56cf4c750f078bb90d4327f032b5f29871dbb6d554318d3af211",
         "file_size": 5757551,
-        "discovered_at": "2026-06-23T08:00:07+00:00",
-        "fetched_at": "2026-06-23T08:00:31+00:00",
+        "discovered_at": "2026-06-23T08:52:58+00:00",
+        "fetched_at": "2026-06-23T08:53:22+00:00",
         "active": true,
         "status": "active"
       }
@@ -584,8 +584,8 @@
         "file_name": "PMSR-M19-ARG-V-ALG.pdf",
         "sha256": "6c0c440e35827b4075f45d8de477ab8b70b0e44a581a2d8252aee4d1d63bba5d",
         "file_size": 5710735,
-        "discovered_at": "2026-06-23T08:00:07+00:00",
-        "fetched_at": "2026-06-23T08:00:32+00:00",
+        "discovered_at": "2026-06-23T08:52:58+00:00",
+        "fetched_at": "2026-06-23T08:53:23+00:00",
         "active": true,
         "status": "active"
       }
@@ -615,8 +615,8 @@
         "file_name": "PMSR-M20-AUT-V-JOR-V3.pdf",
         "sha256": "450841597bc0cf6225a94650b0801c07c1c3971f196a08e90e96b78f473dda1a",
         "file_size": 5826738,
-        "discovered_at": "2026-06-23T08:00:07+00:00",
-        "fetched_at": "2026-06-23T08:00:33+00:00",
+        "discovered_at": "2026-06-23T08:52:58+00:00",
+        "fetched_at": "2026-06-23T08:53:23+00:00",
         "active": true,
         "status": "active"
       }
@@ -646,8 +646,8 @@
         "file_name": "PMSR-M21-GHA-V-PAN-V2.pdf",
         "sha256": "04fc97bde0636aaf1286d680955fd7147ee69ab305ddd8d2b5963f48d72d4e4f",
         "file_size": 5694711,
-        "discovered_at": "2026-06-23T08:00:07+00:00",
-        "fetched_at": "2026-06-23T08:00:34+00:00",
+        "discovered_at": "2026-06-23T08:52:58+00:00",
+        "fetched_at": "2026-06-23T08:53:24+00:00",
         "active": true,
         "status": "active"
       }
@@ -677,8 +677,8 @@
         "file_name": "PMSR-M22-ENG-V-CRO.pdf",
         "sha256": "7417d70599307bcfc9e2de146da9293eea5ca05dd753d3cad68226152505c701",
         "file_size": 5824147,
-        "discovered_at": "2026-06-23T08:00:07+00:00",
-        "fetched_at": "2026-06-23T08:00:35+00:00",
+        "discovered_at": "2026-06-23T08:52:58+00:00",
+        "fetched_at": "2026-06-23T08:53:25+00:00",
         "active": true,
         "status": "active"
       }
@@ -708,8 +708,8 @@
         "file_name": "PMSR-M23-POR-V-COD.pdf",
         "sha256": "2813415716a176b54d25846229df928d23444f955c9b352a97db8460c473c8ba",
         "file_size": 5590733,
-        "discovered_at": "2026-06-23T08:00:07+00:00",
-        "fetched_at": "2026-06-23T08:00:36+00:00",
+        "discovered_at": "2026-06-23T08:52:58+00:00",
+        "fetched_at": "2026-06-23T08:53:25+00:00",
         "active": true,
         "status": "active"
       }
@@ -739,8 +739,8 @@
         "file_name": "PMSR-M24-UZB-V-COL-V2.pdf",
         "sha256": "ca2f44b20c63e709ee430cdd6408eacbd199018f0c803d1c95761cb4f6e32b89",
         "file_size": 5756065,
-        "discovered_at": "2026-06-23T08:00:07+00:00",
-        "fetched_at": "2026-06-23T08:00:37+00:00",
+        "discovered_at": "2026-06-23T08:52:58+00:00",
+        "fetched_at": "2026-06-23T08:53:26+00:00",
         "active": true,
         "status": "active"
       }
@@ -770,8 +770,8 @@
         "file_name": "PMSR-M25-CZE-V-RSA.pdf",
         "sha256": "70eac257248c9e8f5eb7df07d660f3224ebd04306fe4f195ff8c5b146f7ef857",
         "file_size": 5639790,
-        "discovered_at": "2026-06-23T08:00:07+00:00",
-        "fetched_at": "2026-06-23T08:00:38+00:00",
+        "discovered_at": "2026-06-23T08:52:58+00:00",
+        "fetched_at": "2026-06-23T08:53:27+00:00",
         "active": true,
         "status": "active"
       }
@@ -801,8 +801,8 @@
         "file_name": "PMSR-M26-SUI-V-BIH.pdf",
         "sha256": "ef2e8713092b94e6137bc12c78fc8e12e7760b2af4c1a17f17b39a2bcc09957e",
         "file_size": 5768975,
-        "discovered_at": "2026-06-23T08:00:07+00:00",
-        "fetched_at": "2026-06-23T08:00:39+00:00",
+        "discovered_at": "2026-06-23T08:52:58+00:00",
+        "fetched_at": "2026-06-23T08:53:27+00:00",
         "active": true,
         "status": "active"
       }
@@ -832,8 +832,8 @@
         "file_name": "PMSR-M27-CAN-V-QAT.pdf",
         "sha256": "066e71c7d48b42e0e212936a5dc3aecfa2a7dd9e7f872565c033b27123bf9a67",
         "file_size": 5807367,
-        "discovered_at": "2026-06-23T08:00:07+00:00",
-        "fetched_at": "2026-06-23T08:00:40+00:00",
+        "discovered_at": "2026-06-23T08:52:58+00:00",
+        "fetched_at": "2026-06-23T08:53:28+00:00",
         "active": true,
         "status": "active"
       }
@@ -863,8 +863,8 @@
         "file_name": "PMSR-M28-MEX-V-KOR.pdf",
         "sha256": "40e5663887806285da56121cd2e97a45e7c7094933bec0fcf925e9ac5cb684bc",
         "file_size": 5758019,
-        "discovered_at": "2026-06-23T08:00:07+00:00",
-        "fetched_at": "2026-06-23T08:00:41+00:00",
+        "discovered_at": "2026-06-23T08:52:58+00:00",
+        "fetched_at": "2026-06-23T08:53:28+00:00",
         "active": true,
         "status": "active"
       }
@@ -894,8 +894,8 @@
         "file_name": "PMSR-M29-BRA-V-HAI.pdf",
         "sha256": "ac5989ef2df2cc020961e981f259e92865bcd266250d292f70380ff461494b8d",
         "file_size": 5736595,
-        "discovered_at": "2026-06-23T08:00:07+00:00",
-        "fetched_at": "2026-06-23T08:00:42+00:00",
+        "discovered_at": "2026-06-23T08:52:58+00:00",
+        "fetched_at": "2026-06-23T08:53:29+00:00",
         "active": true,
         "status": "active"
       }
@@ -925,8 +925,8 @@
         "file_name": "PMSR-M30-SCO-V-MAR.pdf",
         "sha256": "240846401cf3095ecd2baf0e0d1134aa1f56b8603f4951762d6be0085211cba1",
         "file_size": 5648597,
-        "discovered_at": "2026-06-23T08:00:07+00:00",
-        "fetched_at": "2026-06-23T08:00:42+00:00",
+        "discovered_at": "2026-06-23T08:52:58+00:00",
+        "fetched_at": "2026-06-23T08:53:30+00:00",
         "active": true,
         "status": "active"
       }
@@ -956,8 +956,8 @@
         "file_name": "PMSR-M31-TUR-V-PAR.pdf",
         "sha256": "2a5040a8ac24fe4f7dad6098c20a648fb7d6325820163b190ffe20e630766416",
         "file_size": 5913484,
-        "discovered_at": "2026-06-23T08:00:07+00:00",
-        "fetched_at": "2026-06-23T08:00:43+00:00",
+        "discovered_at": "2026-06-23T08:52:58+00:00",
+        "fetched_at": "2026-06-23T08:53:30+00:00",
         "active": true,
         "status": "active"
       }
@@ -987,8 +987,8 @@
         "file_name": "PMSR-M32-USA-V-AUS.pdf",
         "sha256": "974552242de3f1fd7b6d0b7de9d0c1841c418104305bd4dc548d965d85dd374b",
         "file_size": 5748729,
-        "discovered_at": "2026-06-23T08:00:07+00:00",
-        "fetched_at": "2026-06-23T08:00:44+00:00",
+        "discovered_at": "2026-06-23T08:52:58+00:00",
+        "fetched_at": "2026-06-23T08:53:31+00:00",
         "active": true,
         "status": "active"
       }
@@ -1018,8 +1018,8 @@
         "file_name": "PMSR-M33-GER-V-CIV.pdf",
         "sha256": "dfc2161b71c4059064e3bbc4b33457f7d6ceb38886c3eee1f3613c66f3f3298e",
         "file_size": 5785977,
-        "discovered_at": "2026-06-23T08:00:07+00:00",
-        "fetched_at": "2026-06-23T08:00:45+00:00",
+        "discovered_at": "2026-06-23T08:52:58+00:00",
+        "fetched_at": "2026-06-23T08:53:32+00:00",
         "active": true,
         "status": "active"
       }
@@ -1049,8 +1049,8 @@
         "file_name": "PMSR-M34-ECU-V-CUW.pdf",
         "sha256": "d98135ddb7e008238d46584d563072fc80180bc686585371450cb79c335887c4",
         "file_size": 5877040,
-        "discovered_at": "2026-06-23T08:00:07+00:00",
-        "fetched_at": "2026-06-23T08:00:46+00:00",
+        "discovered_at": "2026-06-23T08:52:58+00:00",
+        "fetched_at": "2026-06-23T08:53:32+00:00",
         "active": true,
         "status": "active"
       }
@@ -1080,8 +1080,8 @@
         "file_name": "PMSR-M35-NED-V-SWE.pdf",
         "sha256": "c11fa8f6584718bfb4f0d2059ec27867198ca1583746d385f6aab037a9461ed3",
         "file_size": 5834372,
-        "discovered_at": "2026-06-23T08:00:07+00:00",
-        "fetched_at": "2026-06-23T08:00:47+00:00",
+        "discovered_at": "2026-06-23T08:52:58+00:00",
+        "fetched_at": "2026-06-23T08:53:33+00:00",
         "active": true,
         "status": "active"
       }
@@ -1111,8 +1111,8 @@
         "file_name": "PMSR-M36-TUN-V-JPN.pdf",
         "sha256": "6f9bbf81af14c9b70f4a5b66bd37a7b23bcf9eee93020af8b525b8d8e2fae1c2",
         "file_size": 5606914,
-        "discovered_at": "2026-06-23T08:00:07+00:00",
-        "fetched_at": "2026-06-23T08:00:48+00:00",
+        "discovered_at": "2026-06-23T08:52:58+00:00",
+        "fetched_at": "2026-06-23T08:53:33+00:00",
         "active": true,
         "status": "active"
       }
@@ -1142,8 +1142,8 @@
         "file_name": "PMSR-M37-URU-V-CPV.pdf",
         "sha256": "d2d439bc66d491b514ffa1b4ab6762ec698586afd61b0b987ad9ddfda8da7cc8",
         "file_size": 5646060,
-        "discovered_at": "2026-06-23T08:00:07+00:00",
-        "fetched_at": "2026-06-23T08:00:49+00:00",
+        "discovered_at": "2026-06-23T08:52:58+00:00",
+        "fetched_at": "2026-06-23T08:53:34+00:00",
         "active": true,
         "status": "active"
       }
@@ -1173,8 +1173,8 @@
         "file_name": "PMSR-M38-ESP-V-KSA.pdf",
         "sha256": "99b9c43b74392c76ae78acd33b307cb9c8d4d3871a06124978061ed343ee7d4a",
         "file_size": 5487603,
-        "discovered_at": "2026-06-23T08:00:07+00:00",
-        "fetched_at": "2026-06-23T08:00:50+00:00",
+        "discovered_at": "2026-06-23T08:52:58+00:00",
+        "fetched_at": "2026-06-23T08:53:35+00:00",
         "active": true,
         "status": "active"
       }
@@ -1204,8 +1204,8 @@
         "file_name": "PMSR-M39-BEL-V-IRN.pdf",
         "sha256": "29963f254d28b82565b0a970abad7fe6d459ae149c596a82cfed22d70525efa2",
         "file_size": 5860092,
-        "discovered_at": "2026-06-23T08:00:07+00:00",
-        "fetched_at": "2026-06-23T08:00:51+00:00",
+        "discovered_at": "2026-06-23T08:52:58+00:00",
+        "fetched_at": "2026-06-23T08:53:35+00:00",
         "active": true,
         "status": "active"
       }
@@ -1235,8 +1235,132 @@
         "file_name": "PMSR-M40-NZL-V-EGY.pdf",
         "sha256": "20f970de2015584d6fa9f09d88d49e322bc1e04aef7c08ce81430d3ab93592c9",
         "file_size": 5937889,
-        "discovered_at": "2026-06-23T08:00:07+00:00",
-        "fetched_at": "2026-06-23T08:00:52+00:00",
+        "discovered_at": "2026-06-23T08:52:58+00:00",
+        "fetched_at": "2026-06-23T08:53:36+00:00",
+        "active": true,
+        "status": "active"
+      }
+    },
+    {
+      "match": {
+        "match_key": "FIFA-2026-M41-NOR-SEN",
+        "match_no": 41,
+        "group_name": "Group I",
+        "match_date": "2026-06-22",
+        "kickoff_time": "20:00",
+        "stadium": "New York/New Jersey Stadium",
+        "home_team": "Norway",
+        "away_team": "Senegal",
+        "home_score": 3,
+        "away_score": 2
+      },
+      "source": {
+        "source_id": "fifa-world-cup-2026-pmsr-m41-nor-sen-v1",
+        "competition": "fifa-world-cup-2026",
+        "report_type": "PMSR",
+        "match_no": 41,
+        "home_code": "NOR",
+        "away_code": "SEN",
+        "version": 1,
+        "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M41-NOR-V-SEN.pdf",
+        "file_name": "PMSR-M41-NOR-V-SEN.pdf",
+        "sha256": "6e90dd4608e03262346b077e7d5d771470334c395cf589fcfa8ab42055ef1bb0",
+        "file_size": 5857450,
+        "discovered_at": "2026-06-23T08:52:58+00:00",
+        "fetched_at": "2026-06-23T08:53:37+00:00",
+        "active": true,
+        "status": "active"
+      }
+    },
+    {
+      "match": {
+        "match_key": "FIFA-2026-M42-FRA-IRQ",
+        "match_no": 42,
+        "group_name": "Group I",
+        "match_date": "2026-06-22",
+        "kickoff_time": "17:00",
+        "stadium": "Philadelphia Stadium",
+        "home_team": "France",
+        "away_team": "Iraq",
+        "home_score": 3,
+        "away_score": 0
+      },
+      "source": {
+        "source_id": "fifa-world-cup-2026-pmsr-m42-fra-irq-v1",
+        "competition": "fifa-world-cup-2026",
+        "report_type": "PMSR",
+        "match_no": 42,
+        "home_code": "FRA",
+        "away_code": "IRQ",
+        "version": 1,
+        "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M42-FRA-V-IRQ.pdf",
+        "file_name": "PMSR-M42-FRA-V-IRQ.pdf",
+        "sha256": "282ead2aee46e1fb3a9733a440067d83cb170bd12b6626ac301bfeda7c580ba2",
+        "file_size": 5699535,
+        "discovered_at": "2026-06-23T08:52:58+00:00",
+        "fetched_at": "2026-06-23T08:53:37+00:00",
+        "active": true,
+        "status": "active"
+      }
+    },
+    {
+      "match": {
+        "match_key": "FIFA-2026-M43-ARG-AUT",
+        "match_no": 43,
+        "group_name": "Group J",
+        "match_date": "2026-06-22",
+        "kickoff_time": "12:00",
+        "stadium": "Dallas Stadium",
+        "home_team": "Argentina",
+        "away_team": "Austria",
+        "home_score": 2,
+        "away_score": 0
+      },
+      "source": {
+        "source_id": "fifa-world-cup-2026-pmsr-m43-arg-aut-v1",
+        "competition": "fifa-world-cup-2026",
+        "report_type": "PMSR",
+        "match_no": 43,
+        "home_code": "ARG",
+        "away_code": "AUT",
+        "version": 1,
+        "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M43-ARG-V-AUT.pdf",
+        "file_name": "PMSR-M43-ARG-V-AUT.pdf",
+        "sha256": "a35ea802d168b38aa104504389f6ecc61dd58c02d4ec8e29eec16eeee7376d5b",
+        "file_size": 5688250,
+        "discovered_at": "2026-06-23T08:52:58+00:00",
+        "fetched_at": "2026-06-23T08:53:38+00:00",
+        "active": true,
+        "status": "active"
+      }
+    },
+    {
+      "match": {
+        "match_key": "FIFA-2026-M44-JOR-ALG",
+        "match_no": 44,
+        "group_name": "Group J",
+        "match_date": "2026-06-22",
+        "kickoff_time": "20:00",
+        "stadium": "San Francisco Bay Area Stadium",
+        "home_team": "Jordan",
+        "away_team": "Algeria",
+        "home_score": 1,
+        "away_score": 2
+      },
+      "source": {
+        "source_id": "fifa-world-cup-2026-pmsr-m44-jor-alg-v1",
+        "competition": "fifa-world-cup-2026",
+        "report_type": "PMSR",
+        "match_no": 44,
+        "home_code": "JOR",
+        "away_code": "ALG",
+        "version": 1,
+        "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M44-JOR-V-ALG.pdf",
+        "file_name": "PMSR-M44-JOR-V-ALG.pdf",
+        "sha256": "5e61235d17705878e07c8671c6034cbb745d159b549c4b470fdcf941f03d6364",
+        "file_size": 5820847,
+        "discovered_at": "2026-06-23T08:52:58+00:00",
+        "fetched_at": "2026-06-23T08:53:39+00:00",
         "active": true,
         "status": "active"
       }

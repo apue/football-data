@@ -10,6 +10,10 @@ on:
         description: "Optional YYYY-MM-DD match date for manual backfill."
         required: false
         type: string
+      experiment:
+        description: "Optional editorial experiment id from config/editorial/experiments."
+        required: false
+        type: string
       fake:
         description: "Use deterministic fake editor backend for workflow smoke testing."
         required: false
@@ -37,7 +41,7 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v6
         with:
-          ref: main
+          ref: ${{ github.event_name == 'workflow_dispatch' && github.ref || 'main' }}
           fetch-depth: 0
 
       - name: Set up Python
@@ -54,10 +58,10 @@ jobs:
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           OPENAI_BASE_URL: ${{ vars.OPENAI_BASE_URL || 'https://api.siliconflow.cn/v1' }}
+          EDITORIAL_SELECTION_EDITOR_MODEL: ${{ vars.EDITORIAL_SELECTION_EDITOR_MODEL || 'deepseek-ai/DeepSeek-V4-Flash' }}
           EDITORIAL_ZH_EDITOR_MODEL: ${{ vars.EDITORIAL_ZH_EDITOR_MODEL || 'zai-org/GLM-5.2' }}
           EDITORIAL_EN_EDITOR_MODEL: ${{ vars.EDITORIAL_EN_EDITOR_MODEL || 'deepseek-ai/DeepSeek-V4-Flash' }}
-          EDITORIAL_REVISION_EDITOR_MODEL: ${{ vars.EDITORIAL_REVISION_EDITOR_MODEL || 'deepseek-ai/DeepSeek-V4-Flash' }}
-          EDITORIAL_AGENT_TIMEOUT_SECONDS: ${{ vars.EDITORIAL_AGENT_TIMEOUT_SECONDS || '90' }}
+          EDITORIAL_AGENT_TIMEOUT_SECONDS: ${{ vars.EDITORIAL_AGENT_TIMEOUT_SECONDS || '180' }}
           EDITORIAL_AGENT_MAX_CONCURRENCY: ${{ vars.EDITORIAL_AGENT_MAX_CONCURRENCY || '6' }}
           EDITORIAL_AGENT_MAX_ATTEMPTS: ${{ vars.EDITORIAL_AGENT_MAX_ATTEMPTS || '1' }}
           KEYPOOL_KEY: ${{ secrets.KEYPOOL_KEY }}
@@ -66,6 +70,9 @@ jobs:
           EXTRA_ARGS=""
           if [ -n "${{ github.event.inputs.match_date }}" ]; then
             EXTRA_ARGS="${EXTRA_ARGS} --date ${{ github.event.inputs.match_date }}"
+          fi
+          if [ -n "${{ github.event.inputs.experiment }}" ]; then
+            EXTRA_ARGS="${EXTRA_ARGS} --experiment ${{ github.event.inputs.experiment }}"
           fi
           if [ "${{ github.event.inputs.fake }}" = "true" ]; then
             EXTRA_ARGS="${EXTRA_ARGS} --fake --no-research"
@@ -80,6 +87,7 @@ jobs:
           path: |
             manifests/editorial-queue.json
             manifests/editorial-run.json
+            manifests/editorial-v2-run.json
             agent-runs/**
             reports/editorial/**
             site/editorial/**
@@ -89,31 +97,32 @@ jobs:
         run: python -m pytest -q --ignore=tests/test_extract.py --ignore=tests/test_database.py
 
       - name: Commit editorial outputs when changed
+        if: ${{ github.event.inputs.fake != 'true' }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add reports/editorial site/editorial manifests/editorial-queue.json manifests/editorial-run.json site/index.html
-          if [ -d agent-runs ]; then
-            git add agent-runs
-          fi
+          git add reports/editorial site/editorial manifests/editorial-queue.json manifests/editorial-run.json manifests/editorial-v2-run.json site/index.html
           if git diff --cached --quiet; then
             echo "No editorial changes to commit."
           else
             git commit -m "chore: publish editorial picks [skip ci]"
-            git pull --rebase origin main
-            git push origin HEAD:main
+            git pull --rebase origin "${GITHUB_REF_NAME}"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
           fi
 
       - name: Configure Pages
+        if: ${{ github.event.inputs.fake != 'true' }}
         uses: actions/configure-pages@v6
         with:
           enablement: true
 
       - name: Upload Pages artifact
+        if: ${{ github.event.inputs.fake != 'true' }}
         uses: actions/upload-pages-artifact@v5
         with:
           path: site
 
       - name: Deploy Pages
+        if: ${{ github.event.inputs.fake != 'true' }}
         id: deployment
         uses: actions/deploy-pages@v5

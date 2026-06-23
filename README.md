@@ -37,16 +37,16 @@ Assists are not available as structured fields in the PMSR PDFs. The pipeline su
 - `manifests/update-events.json` - new matches, version updates, downloads, and failures
 - `manifests/editorial-queue.json` - pending Editor's Choices dates after data updates
 - `manifests/editorial-run.json` - latest autonomous editorial workflow status
+- `manifests/editorial-v2-run.json` - latest v2 AI rerank workflow audit
 - `examples/*.sql` - reusable SQL examples
 - `notebooks/*.ipynb` - notebook-style demo examples
 - `reports/editorial/*.md` - human-readable Editor's Choices reports when published
-- `agent-runs/*.json` - editor agent run audits
+- `agent-runs/*/*.json` - local editor audit files, including rankings, candidate pools, selector input, decisions, and validation
+- `config/editorial/` - active editorial experiment registry, selector profiles, candidate-pool profiles, and copy profiles
 - `calibration/potm-labels.json` - optional weak labels for Player of the Match calibration
 - `calibration/reports/*.md` - POTM/model rank-diff reports when calibration is run
 - `calibration/evaluation/*.md` - POTM evidence quality and calibration-readiness reports
 - `site/editorial/` - rendered Editor's Choices JSON/HTML for the demo site
-- `site/editorial/*/fact_bank.zh.json` - raw Chinese fact bank for from-scratch Chinese sports-editor copy
-- `site/editorial/*/brief.en.json` - English editorial input
 - `.agents/skills/publish-editors-choices/` - repo-scoped Codex skill for the editorial publishing workflow
 - `.agents/skills/calibrate-potm-labels/` - repo-scoped Codex skill for Firecrawl-assisted scoring calibration
 - `.agents/skills/evaluate-potm-workflow/` - repo-scoped Codex skill for POTM workflow evaluation
@@ -86,7 +86,9 @@ python scripts/check_status.py
 
 ## Editor's Choices
 
-Editor's Choices are data-informed editorial picks generated from structured PMSR evidence. They are not official FIFA awards. The autonomous path selects candidates from the SQLite database, then runs a compact editorial state graph: build evidence, optional research, one Chinese editor-agent pass, one English editor-agent pass, render with only-if-needed repair, deterministic validation, frontend compile, and homepage rebuild. LLM working nodes run through the OpenAI Agents SDK with structured outputs; deterministic Python nodes keep scoring, evidence, validation, repair triggers, and publishing reproducible. Chinese copy is generated from `fact_bank.zh.json` as fresh Chinese sports copy. English copy is generated separately from `brief.en.json` plus `evidence.json`. The two languages should make the same judgment, but neither should be a translation of the other.
+Editor's Choices are data-informed editorial picks generated from structured PMSR evidence. They are not official FIFA awards. The production path is `ai_rerank_selection_v1`: deterministic scoring builds a rich Top 8 candidate pool, an AI selection editor reranks only that pool, and separate English/Chinese copy editor calls write the published cards from the selected candidates' evidence packets. Deterministic Python owns scoring, candidate-pool construction, selection validation, artifact writing, and homepage rebuilds; LLM calls use the OpenAI Agents SDK with structured outputs.
+
+The active experiment is resolved from `config/editorial/production.json`. Each experiment pins the scoring config, candidate-pool profile, selector profile, copy profiles, selection slots, and candidate ordering strategy. This keeps experimentation visible without inventing a generic workflow framework.
 
 The default scoring config is `config/scoring/v0.4.json`. It keeps the role-style performance scores and adds a structured impact layer for goals and official assists that change the match state and match story: opening goals, equalisers, go-ahead goals, contextual match-winning goals, late goals, stoppage-time goals, late match-winning goals, comeback equalisers, comeback winners, only-goal winners, assists, goal involvements, braces, hat-tricks, and substitute scoring bursts. These features are derived from the PMSR shot table, lineup status, final scoreline, deterministic match-flow reconstruction, and FIFA public match timeline goal-involvement records. POTM labels and media opinions are not scoring inputs.
 
@@ -102,25 +104,23 @@ For a targeted backfill run on one match date:
 python scripts/run_editorial_queue.py --date YYYY-MM-DD
 ```
 
-For local Codex-in-the-loop review, save structured comments and feed them into a capped targeted revision loop:
-
-```bash
-python scripts/run_editorial_queue.py --date YYYY-MM-DD \
-  --review-feedback agent-runs/YYYY-MM-DD.codex-review.json \
-  --max-review-loops 2
-```
-
 For a deterministic smoke test without credentials:
 
 ```bash
 python scripts/run_editorial_queue.py --fake --no-research --max-dates 1
 ```
 
-The compiled frontend artifacts are written to `site/editorial/`, and the homepage is rebuilt with the latest cards. `reports/editorial/YYYY-MM-DD.pre-review.md` keeps the compact editor draft before optional external feedback and deterministic repair so local runs can compare the unreviewed and repaired copy.
+For low-level v2 debugging on a single date:
+
+```bash
+python scripts/run_editorial_v2.py --date YYYY-MM-DD --fake --no-research --json
+```
+
+The compiled frontend artifacts are written to `site/editorial/`, and the homepage is rebuilt with the latest cards. Audit files are written under `agent-runs/YYYY-MM-DD/`, including `rankings.json`, `candidate_pool.json`, `selector_input.json`, `selection_decision.json`, `selection_validation.json`, and `run.json`.
 
 ## Editorial Automation
 
-`.github/workflows/editorial.yml` runs after the `Update Dataset` workflow succeeds and can also be started manually. The automatic queue publishes only the latest data match date; older input-hash changes are listed as stale and can be backfilled with `--date`. The workflow checks `manifests/editorial-queue.json`, runs the Agents SDK-backed editorial state graph for pending match dates, commits published editorial outputs with `[skip ci]`, and deploys GitHub Pages.
+`.github/workflows/editorial.yml` runs after the `Update Dataset` workflow succeeds and can also be started manually. The automatic queue publishes only the latest data match date; older input-hash changes are listed as stale and can be backfilled with `--date`. The workflow checks `manifests/editorial-queue.json`, runs the active editorial experiment for pending match dates, commits published editorial outputs with `[skip ci]`, and deploys GitHub Pages.
 
 Configure repository secrets with these names when you want the cloud workflow to publish new editorial copy:
 
@@ -133,16 +133,16 @@ The default OpenAI-compatible base URL is `https://api.siliconflow.cn/v1`, and d
 
 ```text
 OPENAI_BASE_URL
+EDITORIAL_SELECTION_EDITOR_MODEL
 EDITORIAL_ZH_EDITOR_MODEL
 EDITORIAL_EN_EDITOR_MODEL
-EDITORIAL_REVISION_EDITOR_MODEL
 EDITORIAL_AGENT_TIMEOUT_SECONDS
 EDITORIAL_AGENT_MAX_CONCURRENCY
 EDITORIAL_AGENT_MAX_ATTEMPTS
 KEYPOOL_URL
 ```
 
-Missing OpenAI credentials do not publish drafts; the workflow writes `manifests/editorial-run.json` with `needs_credentials` and exits cleanly so the data update pipeline stays healthy. Per-card editor-agent calls run with `EDITORIAL_AGENT_MAX_CONCURRENCY` and retry with `EDITORIAL_AGENT_MAX_ATTEMPTS`; if a single card still fails, the workflow records a warning and falls back to deterministic copy for that card instead of blocking the whole match day. `KEYPOOL_URL` is your KeyPool base URL and is required only for Firecrawl-backed evidence discovery; missing Firecrawl configuration does not block PMSR-only publishing.
+Missing OpenAI credentials do not publish drafts; the workflow writes `manifests/editorial-run.json` with `needs_credentials` and exits cleanly so the data update pipeline stays healthy. Agent calls run with `EDITORIAL_AGENT_MAX_CONCURRENCY` and retry with `EDITORIAL_AGENT_MAX_ATTEMPTS`. `KEYPOOL_URL` is your KeyPool base URL and is required only for Firecrawl-backed evidence discovery; missing Firecrawl configuration does not block PMSR-only publishing.
 
 ## POTM Calibration
 

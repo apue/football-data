@@ -6,6 +6,7 @@ __pycache__/
 .env.local
 *.pyc
 *.egg-info/
+agent-runs/*/
 
 # Original FIFA PMSR PDFs are kept as a local cache and are not redistributed.
 raw/*.pdf

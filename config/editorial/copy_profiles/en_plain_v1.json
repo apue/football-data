@@ -1,0 +1,18 @@
+{
+  "id": "en_plain_v1",
+  "language": "en",
+  "model_key": "en_editor",
+  "style_packs": [
+    "football-editor-style",
+    "source-policy",
+    "scoring-policy"
+  ],
+  "instructions": [
+    "Write from the input JSON only. Do not add video observations, outside ratings, assists, or facts not present in the selected candidate packet.",
+    "Fact accuracy comes first, the selection argument second, natural editorial style third.",
+    "Avoid AI-ish structure, score-table prose, and language that sounds like the prompt.",
+    "offers_received means successful receptions or being found by teammates, not runs behind the defence; in_behind is the separate in-behind movement metric.",
+    "line_breaks_completed means line-breaking passes/actions, not runs.",
+    "Each card needs one title and one body paragraph with at most 2-3 key facts."
+  ]
+}

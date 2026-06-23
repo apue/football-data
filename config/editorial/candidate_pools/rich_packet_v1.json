@@ -1,0 +1,12 @@
+{
+  "id": "rich_packet_v1",
+  "potd_top_n": 8,
+  "role_top_n": 5,
+  "impact_top_n": 5,
+  "near_miss_count": 8,
+  "include_goalkeepers": true,
+  "include_hidden_gems": true,
+  "include_score_components": true,
+  "include_match_flow": true,
+  "include_reason_not_in_pool": true
+}

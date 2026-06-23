@@ -1,0 +1,802 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-06-23T09:46:27+00:00",
+  "compiled_at": "2026-06-23T09:46:27+00:00",
+  "match_date": "2026-06-22",
+  "scoring_version": "v0.4",
+  "editorial_generation": {
+    "workflow_variant": "ai_rerank_selection_v1",
+    "experiment_id": "ai_rerank_baseline_v1",
+    "selection_mode": "ai_rerank_only",
+    "uses_official_assists": true,
+    "uses_goal_involvements": true,
+    "event_source": "fifa_timeline_api",
+    "event_sources": {
+      "goal_involvements": "fifa_timeline_api"
+    }
+  },
+  "matches": [
+    {
+      "match_key": "FIFA-2026-M41-NOR-SEN",
+      "match_no": 41,
+      "match_date": "2026-06-22",
+      "kickoff_time": "20:00",
+      "stadium": "New York/New Jersey Stadium",
+      "home_team": "Norway",
+      "away_team": "Senegal",
+      "home_score": 3,
+      "away_score": 2
+    },
+    {
+      "match_key": "FIFA-2026-M42-FRA-IRQ",
+      "match_no": 42,
+      "match_date": "2026-06-22",
+      "kickoff_time": "17:00",
+      "stadium": "Philadelphia Stadium",
+      "home_team": "France",
+      "away_team": "Iraq",
+      "home_score": 3,
+      "away_score": 0
+    },
+    {
+      "match_key": "FIFA-2026-M43-ARG-AUT",
+      "match_no": 43,
+      "match_date": "2026-06-22",
+      "kickoff_time": "12:00",
+      "stadium": "Dallas Stadium",
+      "home_team": "Argentina",
+      "away_team": "Austria",
+      "home_score": 2,
+      "away_score": 0
+    },
+    {
+      "match_key": "FIFA-2026-M44-JOR-ALG",
+      "match_no": 44,
+      "match_date": "2026-06-22",
+      "kickoff_time": "20:00",
+      "stadium": "San Francisco Bay Area Stadium",
+      "home_team": "Jordan",
+      "away_team": "Algeria",
+      "home_score": 1,
+      "away_score": 2
+    }
+  ],
+  "match_flows": {
+    "FIFA-2026-M41-NOR-SEN": {
+      "match_key": "FIFA-2026-M41-NOR-SEN",
+      "match_no": 41,
+      "match_date": "2026-06-22",
+      "home_team": "Norway",
+      "away_team": "Senegal",
+      "home_score": 3,
+      "away_score": 2,
+      "winner_team": "Norway",
+      "home_trailing_at_any_point": false,
+      "away_trailing_at_any_point": true,
+      "home_came_from_behind_to_win": false,
+      "away_came_from_behind_to_win": false,
+      "goals": [
+        {
+          "goal_order": 1,
+          "minute": 42,
+          "team": "Norway",
+          "player_name": "Marcus HOLMGREN PEDERSEN",
+          "score_before": "0-0",
+          "score_after": "1-0",
+          "team_score_before": 0,
+          "opponent_score_before": 0,
+          "team_score_after": 1,
+          "opponent_score_after": 0,
+          "tags": [
+            "opening_goal",
+            "go_ahead_goal"
+          ]
+        },
+        {
+          "goal_order": 2,
+          "minute": 47,
+          "team": "Norway",
+          "player_name": "Erling HAALAND",
+          "score_before": "1-0",
+          "score_after": "2-0",
+          "team_score_before": 1,
+          "opponent_score_before": 0,
+          "team_score_after": 2,
+          "opponent_score_after": 0,
+          "tags": []
+        },
+        {
+          "goal_order": 3,
+          "minute": 52,
+          "team": "Senegal",
+          "player_name": "Ismaila SARR",
+          "score_before": "2-0",
+          "score_after": "2-1",
+          "team_score_before": 0,
+          "opponent_score_before": 2,
+          "team_score_after": 1,
+          "opponent_score_after": 2,
+          "tags": []
+        },
+        {
+          "goal_order": 4,
+          "minute": 57,
+          "team": "Norway",
+          "player_name": "Erling HAALAND",
+          "score_before": "2-1",
+          "score_after": "3-1",
+          "team_score_before": 2,
+          "opponent_score_before": 1,
+          "team_score_after": 3,
+          "opponent_score_after": 1,
+          "tags": [
+            "match_winning_goal"
+          ]
+        },
+        {
+          "goal_order": 5,
+          "minute": 92,
+          "team": "Senegal",
+          "player_name": "Ismaila SARR",
+          "score_before": "3-1",
+          "score_after": "3-2",
+          "team_score_before": 1,
+          "opponent_score_before": 3,
+          "team_score_after": 2,
+          "opponent_score_after": 3,
+          "tags": [
+            "late_goal",
+            "stoppage_time_goal"
+          ]
+        }
+      ],
+      "decisive_goal": {
+        "goal_order": 4,
+        "minute": 57,
+        "team": "Norway",
+        "player_name": "Erling HAALAND",
+        "score_before": "2-1",
+        "score_after": "3-1",
+        "team_score_before": 2,
+        "opponent_score_before": 1,
+        "team_score_after": 3,
+        "opponent_score_after": 1,
+        "tags": [
+          "match_winning_goal"
+        ]
+      }
+    },
+    "FIFA-2026-M42-FRA-IRQ": {
+      "match_key": "FIFA-2026-M42-FRA-IRQ",
+      "match_no": 42,
+      "match_date": "2026-06-22",
+      "home_team": "France",
+      "away_team": "Iraq",
+      "home_score": 3,
+      "away_score": 0,
+      "winner_team": "France",
+      "home_trailing_at_any_point": false,
+      "away_trailing_at_any_point": true,
+      "home_came_from_behind_to_win": false,
+      "away_came_from_behind_to_win": false,
+      "goals": [
+        {
+          "goal_order": 1,
+          "minute": 13,
+          "team": "France",
+          "player_name": "Kylian MBAPPE",
+          "score_before": "0-0",
+          "score_after": "1-0",
+          "team_score_before": 0,
+          "opponent_score_before": 0,
+          "team_score_after": 1,
+          "opponent_score_after": 0,
+          "tags": [
+            "opening_goal",
+            "go_ahead_goal"
+          ]
+        },
+        {
+          "goal_order": 2,
+          "minute": 53,
+          "team": "France",
+          "player_name": "Kylian MBAPPE",
+          "score_before": "1-0",
+          "score_after": "2-0",
+          "team_score_before": 1,
+          "opponent_score_before": 0,
+          "team_score_after": 2,
+          "opponent_score_after": 0,
+          "tags": []
+        },
+        {
+          "goal_order": 3,
+          "minute": 65,
+          "team": "France",
+          "player_name": "Ousmane DEMBELE",
+          "score_before": "2-0",
+          "score_after": "3-0",
+          "team_score_before": 2,
+          "opponent_score_before": 0,
+          "team_score_after": 3,
+          "opponent_score_after": 0,
+          "tags": []
+        }
+      ],
+      "decisive_goal": null
+    },
+    "FIFA-2026-M43-ARG-AUT": {
+      "match_key": "FIFA-2026-M43-ARG-AUT",
+      "match_no": 43,
+      "match_date": "2026-06-22",
+      "home_team": "Argentina",
+      "away_team": "Austria",
+      "home_score": 2,
+      "away_score": 0,
+      "winner_team": "Argentina",
+      "home_trailing_at_any_point": false,
+      "away_trailing_at_any_point": true,
+      "home_came_from_behind_to_win": false,
+      "away_came_from_behind_to_win": false,
+      "goals": [
+        {
+          "goal_order": 1,
+          "minute": 37,
+          "team": "Argentina",
+          "player_name": "Lionel MESSI",
+          "score_before": "0-0",
+          "score_after": "1-0",
+          "team_score_before": 0,
+          "opponent_score_before": 0,
+          "team_score_after": 1,
+          "opponent_score_after": 0,
+          "tags": [
+            "opening_goal",
+            "go_ahead_goal"
+          ]
+        },
+        {
+          "goal_order": 2,
+          "minute": 94,
+          "team": "Argentina",
+          "player_name": "Lionel MESSI",
+          "score_before": "1-0",
+          "score_after": "2-0",
+          "team_score_before": 1,
+          "opponent_score_before": 0,
+          "team_score_after": 2,
+          "opponent_score_after": 0,
+          "tags": [
+            "late_goal",
+            "stoppage_time_goal"
+          ]
+        }
+      ],
+      "decisive_goal": null
+    },
+    "FIFA-2026-M44-JOR-ALG": {
+      "match_key": "FIFA-2026-M44-JOR-ALG",
+      "match_no": 44,
+      "match_date": "2026-06-22",
+      "home_team": "Jordan",
+      "away_team": "Algeria",
+      "home_score": 1,
+      "away_score": 2,
+      "winner_team": "Algeria",
+      "home_trailing_at_any_point": true,
+      "away_trailing_at_any_point": true,
+      "home_came_from_behind_to_win": false,
+      "away_came_from_behind_to_win": true,
+      "goals": [
+        {
+          "goal_order": 1,
+          "minute": 35,
+          "team": "Jordan",
+          "player_name": "NIZAR ALRASHDAN",
+          "score_before": "0-0",
+          "score_after": "1-0",
+          "team_score_before": 0,
+          "opponent_score_before": 0,
+          "team_score_after": 1,
+          "opponent_score_after": 0,
+          "tags": [
+            "opening_goal",
+            "go_ahead_goal"
+          ]
+        },
+        {
+          "goal_order": 2,
+          "minute": 68,
+          "team": "Algeria",
+          "player_name": "Nadhir BENBOUALI",
+          "score_before": "1-0",
+          "score_after": "1-1",
+          "team_score_before": 0,
+          "opponent_score_before": 1,
+          "team_score_after": 1,
+          "opponent_score_after": 1,
+          "tags": [
+            "equalizer",
+            "comeback_equalizer",
+            "team_came_from_behind_goal"
+          ]
+        },
+        {
+          "goal_order": 3,
+          "minute": 81,
+          "team": "Algeria",
+          "player_name": "Amine GOUIRI",
+          "score_before": "1-1",
+          "score_after": "1-2",
+          "team_score_before": 1,
+          "opponent_score_before": 1,
+          "team_score_after": 2,
+          "opponent_score_after": 1,
+          "tags": [
+            "go_ahead_goal",
+            "match_winning_goal",
+            "late_goal",
+            "team_came_from_behind_goal",
+            "comeback_winner"
+          ]
+        }
+      ],
+      "decisive_goal": {
+        "goal_order": 3,
+        "minute": 81,
+        "team": "Algeria",
+        "player_name": "Amine GOUIRI",
+        "score_before": "1-1",
+        "score_after": "1-2",
+        "team_score_before": 1,
+        "opponent_score_before": 1,
+        "team_score_after": 2,
+        "opponent_score_after": 1,
+        "tags": [
+          "go_ahead_goal",
+          "match_winning_goal",
+          "late_goal",
+          "team_came_from_behind_goal",
+          "comeback_winner"
+        ]
+      }
+    }
+  },
+  "choices": [
+    {
+      "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
+      "award_label": {
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
+      },
+      "player_id": "FIFA-2026-M42-FRA-IRQ|France|10",
+      "player_name": "Kylian MBAPPE",
+      "team": "France",
+      "opponent": "Iraq",
+      "match_key": "FIFA-2026-M42-FRA-IRQ",
+      "match_no": 42,
+      "player_no": 10,
+      "position": "FW",
+      "score": 115.7,
+      "metrics": {
+        "shots": 8,
+        "on_target": 3,
+        "goals": 2,
+        "goal_involvements": 2,
+        "offers_received": 28,
+        "in_behind": 20,
+        "in_between": 18,
+        "line_breaks_completed": 9,
+        "ball_progressions": 12,
+        "possession_regains": 2,
+        "possession_interrupted": 1,
+        "total_distance_m": 8679.1
+      },
+      "evidence_chips": {
+        "en": [
+          "brace",
+          "opening goal",
+          "high shot quality",
+          "constant carries"
+        ],
+        "zh": [
+          "梅开二度",
+          "首开纪录",
+          "射门质量突出",
+          "推进很活跃"
+        ]
+      },
+      "selection_reason": "Kylian Mbappé delivered an all-round masterclass against Iraq: a brace (opening goal and go-ahead goal), high shot quality, constant carries, and a team-leading 28 offers received with 9 line breaks. Lionel Messi matched that output with two goals and four on-target shots against Austria, dictating the attack with 22 offers and 7 line breaks. Amine Gouiri’s 81st-minute winner completed Algeria’s comeback against Jordan—a match‑winning goal that, combined with his relentless between‑line presence (38 in‑between actions, 17 offers), edges out Erling Haaland’s brace (which came in a non‑comeback win) and Ismaila Sarr’s brace (in a losing effort). Haaland and Sarr are both excellent performers, but Gouiri’s decisive, context‑heavy contribution in a comeback makes him the clearer third choice.",
+      "content": {
+        "en": {
+          "title": "Mbappé's brace powers France past Iraq",
+          "html": "<p>Kylian Mbappé scored twice—opening the scoring in the 13th minute and adding another in the 53rd—to lead France to a 3‑0 victory. He generated 3 shots on target from 8 attempts, received 28 offers, and completed 9 line breaks while covering 8.7 km.</p>"
+        },
+        "zh": {
+          "title": "姆巴佩梅开二度，法国3-0完胜伊拉克",
+          "html": "<p>第13分钟首开纪录，第53分钟再入一球，姆巴佩用梅开二度为法国3-0锁定胜局。全场8次射门3次射正，射术果断；28次接应、9次打穿防线，进攻端全方位输出。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
+      "award_label": {
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
+      },
+      "player_id": "FIFA-2026-M43-ARG-AUT|Argentina|10",
+      "player_name": "Lionel MESSI",
+      "team": "Argentina",
+      "opponent": "Austria",
+      "match_key": "FIFA-2026-M43-ARG-AUT",
+      "match_no": 43,
+      "player_no": 10,
+      "position": "FW",
+      "score": 106.03,
+      "metrics": {
+        "shots": 7,
+        "on_target": 4,
+        "goals": 2,
+        "goal_involvements": 2,
+        "offers_received": 22,
+        "in_behind": 2,
+        "in_between": 10,
+        "line_breaks_completed": 7,
+        "ball_progressions": 7,
+        "possession_regains": 2,
+        "possession_interrupted": 2,
+        "blocks": 2,
+        "total_distance_m": 7904.8
+      },
+      "evidence_chips": {
+        "en": [
+          "brace",
+          "opening goal",
+          "high shot quality"
+        ],
+        "zh": [
+          "梅开二度",
+          "首开纪录",
+          "射门质量突出"
+        ]
+      },
+      "selection_reason": "Selected for player of the day because Lionel MESSI has the clearest evidence packet for this slot: brace; opening goal; high shot quality.",
+      "content": {
+        "en": {
+          "title": "Messi's double sinks Austria",
+          "html": "<p>Lionel Messi bagged both goals in Argentina's 2‑0 win over Austria, netting the opener in the 37th minute and sealing it in stoppage time (94'). He fired 4 shots on target from 7 attempts, received 22 attacking offers, and completed 7 line breaks.</p>"
+        },
+        "zh": {
+          "title": "梅西两球定胜局，阿根廷2-0力克奥地利",
+          "html": "<p>第37分钟首开纪录，第94分钟补时再入一球，梅西梅开二度帮助阿根廷2-0取胜。全场7次射门4次射正，射正率超过五成，射门质量依然顶尖。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
+      "award_label": {
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
+      },
+      "player_id": "FIFA-2026-M44-JOR-ALG|Algeria|9",
+      "player_name": "Amine GOUIRI",
+      "team": "Algeria",
+      "opponent": "Jordan",
+      "match_key": "FIFA-2026-M44-JOR-ALG",
+      "match_no": 44,
+      "player_no": 9,
+      "position": "FW",
+      "score": 105.5,
+      "metrics": {
+        "shots": 3,
+        "on_target": 2,
+        "goals": 1,
+        "goal_involvements": 1,
+        "offers_received": 17,
+        "in_behind": 25,
+        "in_between": 38,
+        "possession_regains": 1,
+        "possession_interrupted": 1,
+        "total_distance_m": 9161.8
+      },
+      "evidence_chips": {
+        "en": [
+          "comeback winner",
+          "match-winning goal",
+          "goal scorer",
+          "between-line presence"
+        ],
+        "zh": [
+          "逆转制胜",
+          "打入制胜球",
+          "取得进球",
+          "在防线之间活跃"
+        ]
+      },
+      "selection_reason": "Selected for player of the day because Amine GOUIRI has the clearest evidence packet for this slot: comeback winner; match-winning goal; goal scorer.",
+      "content": {
+        "en": {
+          "title": "Gouiri's winner caps Algeria's comeback",
+          "html": "<p>Amine Gouiri scored the 81st‑minute winner to complete Algeria's comeback against Jordan, finishing with 2 shots on target and 1 goal. He was a constant threat between the lines with 38 in‑between actions and 25 runs in behind, covering over 9.1 km in the process.</p>"
+        },
+        "zh": {
+          "title": "古伊里81分钟制胜，阿尔及利亚逆转约旦",
+          "html": "<p>第81分钟，古伊里打入制胜球，帮助阿尔及利亚在0-1落后局面下2-1逆转取胜。全场38次在防线之间活动、25次插向身后，无球跑动贯穿整场，最终换来这粒关键进球。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "impact_pick",
+      "award_types": [
+        "impact_pick"
+      ],
+      "award_label": {
+        "en": "Impact Pick",
+        "zh": "影响力精选"
+      },
+      "player_id": "FIFA-2026-M44-JOR-ALG|Algeria|12",
+      "player_name": "Nadhir BENBOUALI",
+      "team": "Algeria",
+      "opponent": "Jordan",
+      "match_key": "FIFA-2026-M44-JOR-ALG",
+      "match_no": 44,
+      "player_no": 12,
+      "position": "FW",
+      "score": 56.6,
+      "metrics": {
+        "shots": 2,
+        "on_target": 2,
+        "goals": 1,
+        "goal_involvements": 1,
+        "offers_received": 4,
+        "in_behind": 5,
+        "in_between": 6,
+        "line_breaks_completed": 1,
+        "possession_regains": 2,
+        "blocks": 1,
+        "total_distance_m": 5586.1
+      },
+      "evidence_chips": {
+        "en": [
+          "substitute goal",
+          "comeback equaliser",
+          "equaliser",
+          "goal scorer"
+        ],
+        "zh": [
+          "替补进球",
+          "逆转扳平",
+          "扳平进球",
+          "取得进球"
+        ]
+      },
+      "selection_reason": "Nadhir Benbouali entered as a substitute in the 62nd minute and scored the equaliser in the 68th minute, flipping Algeria from 0‑1 down to 2‑1 up in a comeback win. No other candidate—even those with match‑winning goals or braces—altered a game from a losing position while coming off the bench. Higher‑ranked candidates like Haaland (brace, but started) and Gouiri (winner, but started) lack the substitute‑impact narrative that defines this category.",
+      "content": {
+        "en": {
+          "title": "Benbouali's instant impact earns Algeria a point, then a win",
+          "html": "<p>Nadhir Benbouali entered as a substitute in the 62nd minute and scored the equalizer six minutes later, flipping the match from 1‑0 down to a 2‑1 comeback victory for Algeria.</p>"
+        },
+        "zh": {
+          "title": "本布阿利替补扳平，阿尔及利亚逆转的关键一环",
+          "html": "<p>替补登场后，本布阿利在第68分钟将比分扳为1-1，为阿尔及利亚的逆转取胜迈出关键一步。两次射门全部射正，替补效率极高。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "progression_pick",
+      "award_types": [
+        "progression_pick"
+      ],
+      "award_label": {
+        "en": "Progression Engine",
+        "zh": "进攻发动机"
+      },
+      "player_id": "FIFA-2026-M42-FRA-IRQ|France|4",
+      "player_name": "Dayot UPAMECANO",
+      "team": "France",
+      "opponent": "Iraq",
+      "match_key": "FIFA-2026-M42-FRA-IRQ",
+      "match_no": 42,
+      "player_no": 4,
+      "position": "DF",
+      "score": 42.22,
+      "metrics": {
+        "offers_received": 8,
+        "in_behind": 1,
+        "line_breaks_completed": 24,
+        "possession_regains": 7,
+        "possession_interrupted": 2,
+        "blocks": 3,
+        "total_distance_m": 9601.7
+      },
+      "evidence_chips": {
+        "en": [
+          "repeated line breaks"
+        ],
+        "zh": [
+          "持续打穿防线"
+        ]
+      },
+      "selection_reason": "Dayot Upamecano completed 24 line breaks—the highest among all progression-eligible players—while adding 7 possession regains and keeping a clean sheet. His constant forward-carrying from the back (49.48 progression role score) surpasses Enzo Fernández’s 17 line breaks (more receiving but fewer breaks) and Zidane Iqbal’s 17 line breaks. Even though Fernández and Iqbal offered more receptions, Upamecano’s relentless line‑breaking in a defender’s role is the most clear‑cut progression story.",
+      "content": {
+        "en": {
+          "title": "Upamecano's line‑breaking masterclass",
+          "html": "<p>Dayot Upamecano completed 24 line breaks—more than any other player on the day—while contributing 7 possession regains, 2 interceptions, and 3 blocks in France's clean‑sheet win.</p>"
+        },
+        "zh": {
+          "title": "于帕梅卡诺24次打穿防线，法国后场推进引擎",
+          "html": "<p>身为后卫，于帕梅卡诺全场完成24次打穿防线，在所有入选球员中排名第一；7次夺回球权，助力法国零封伊拉克。他不仅是防守者，更是法国从后向前的第一推动力。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "defensive_pick",
+      "award_types": [
+        "defensive_pick"
+      ],
+      "award_label": {
+        "en": "Defensive Pick",
+        "zh": "防守精选"
+      },
+      "player_id": "FIFA-2026-M44-JOR-ALG|Jordan|20",
+      "player_name": "MOHANNAD ABUTAHA",
+      "team": "Jordan",
+      "opponent": "Algeria",
+      "match_key": "FIFA-2026-M44-JOR-ALG",
+      "match_no": 44,
+      "player_no": 20,
+      "position": "MF",
+      "score": 33.48,
+      "metrics": {
+        "offers_received": 4,
+        "in_behind": 4,
+        "in_between": 1,
+        "line_breaks_completed": 5,
+        "ball_progressions": 5,
+        "possession_regains": 10,
+        "possession_interrupted": 7,
+        "blocks": 3,
+        "total_distance_m": 9717.3
+      },
+      "evidence_chips": {
+        "en": [
+          "ball-winning profile"
+        ],
+        "zh": [
+          "夺回球权能力突出"
+        ]
+      },
+      "selection_reason": "Mohannad Abutaha posted 10 possession regains, 7 possession interruptions, and 3 blocks while facing an opponent xG of 2.05 and 8 on‑target attempts. His 41.25 defensive role score leads all defensive candidates, and his ball‑winning profile is backed by clear numbers. Higher‑ranked candidates like Merchas Doski (7 regains, fewer interruptions) and Ramy Bensebaini (8 regains, fewer blocks) fall short in overall defensive volume.",
+      "content": {
+        "en": {
+          "title": "Abutaha's ball‑winning display",
+          "html": "<p>Mohannad Abutaha racked up 10 possession regains, 7 possessions interrupted, and 3 blocks while facing an opponent xG of 2.05 and 8 shots on target.</p>"
+        },
+        "zh": {
+          "title": "阿布塔哈十次夺回球权，约旦中场铁闸",
+          "html": "<p>面对阿尔及利亚2.05的预期进球压力，阿布塔哈全场10次夺回球权、7次中断对手进攻，在约旦中场筑起一道难以逾越的屏障。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "goalkeeper_watch",
+      "award_types": [
+        "goalkeeper_watch"
+      ],
+      "award_label": {
+        "en": "Goalkeeper Watch",
+        "zh": "门将关注"
+      },
+      "player_id": "FIFA-2026-M44-JOR-ALG|Jordan|1",
+      "player_name": "YAZEED ABULAILA",
+      "team": "Jordan",
+      "opponent": "Algeria",
+      "match_key": "FIFA-2026-M44-JOR-ALG",
+      "match_no": 44,
+      "player_no": 1,
+      "position": "GK",
+      "score": 15.02,
+      "metrics": {
+        "offers_received": 2,
+        "line_breaks_completed": 7,
+        "possession_regains": 10,
+        "total_distance_m": 4629,
+        "opponent_xg": 2.05,
+        "opponent_attempts_on_target": 8,
+        "opponent_attempts_total": 17,
+        "keeper_saved_shots": 6
+      },
+      "evidence_chips": {
+        "en": [
+          "faced heavy on-target pressure",
+          "xG pressure resisted",
+          "Saved outcomes in shot log"
+        ],
+        "zh": [
+          "对手射正压力高",
+          "承受较高xG",
+          "射门记录Saved结果较多"
+        ]
+      },
+      "selection_reason": "Yazeed Abulaila faced the heaviest on‑target pressure of the day (8 shots on target, opponent xG 2.05) and made 6 saves. No other goalkeeper in the candidate pool is eligible for this slot, and his shot‑stopping volume clearly earns him the watch.",
+      "content": {
+        "en": {
+          "title": "Abulaila stands tall under heavy fire",
+          "html": "<p>Yazeed Abulaila faced 8 shots on target (opponent xG 2.05) and made 6 saves, also contributing 7 line breaks and 10 possession regains despite the 2‑1 loss.</p>"
+        },
+        "zh": {
+          "title": "阿布利拉六次扑救，独扛阿尔及利亚狂轰",
+          "html": "<p>面对阿尔及利亚8次射正、2.05的预期进球，约旦门将阿布利拉全场完成6次扑救，在重压之下苦苦支撑。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "hidden_gem",
+      "award_types": [
+        "hidden_gem"
+      ],
+      "award_label": {
+        "en": "Hidden Gem",
+        "zh": "隐藏亮点"
+      },
+      "player_id": "FIFA-2026-M44-JOR-ALG|Algeria|22",
+      "player_name": "Ibrahim MAZA",
+      "team": "Algeria",
+      "opponent": "Jordan",
+      "match_key": "FIFA-2026-M44-JOR-ALG",
+      "match_no": 44,
+      "player_no": 22,
+      "position": "MF",
+      "score": 57.02,
+      "metrics": {
+        "shots": 4,
+        "on_target": 2,
+        "offers_received": 24,
+        "in_behind": 17,
+        "in_between": 33,
+        "line_breaks_completed": 7,
+        "ball_progressions": 10,
+        "possession_regains": 3,
+        "possession_interrupted": 2,
+        "blocks": 1,
+        "total_distance_m": 11862.7
+      },
+      "evidence_chips": {
+        "en": [
+          "constant carries",
+          "between-line presence"
+        ],
+        "zh": [
+          "推进很活跃",
+          "在防线之间活跃"
+        ]
+      },
+      "selection_reason": "Ibrahim Maza was a constant midfield presence in Algeria’s comeback: 33 in‑between actions, 10 ball progressions, 24 offers received, and an off‑ball score of 55.0 (highest among hidden‑gem candidates). His work often went unglamorous but was vital to the comeback. Riyad Mahrez (assist, 45.6 off‑ball) and Ramy Bensebaini (46.85) are close, but Maza’s raw off‑ball and progression volume make him the truest hidden gem of the matchday.",
+      "content": {
+        "en": {
+          "title": "Maza's tireless midfield engine",
+          "html": "<p>Ibrahim Maza recorded 33 in‑between actions, 24 offers received, 10 ball progressions, and 7 line breaks while covering 11.9 km in Algeria's comeback win.</p>"
+        },
+        "zh": {
+          "title": "马扎穿针引线，阿尔及利亚逆转的隐形引擎",
+          "html": "<p>阿尔及利亚2-1逆转约旦，马扎全场33次在防线之间活动、10次推进球权、24次接应，进攻组织无处不在，是球队翻盘的无名功臣。</p>"
+        }
+      }
+    }
+  ],
+  "selection_validation": {
+    "schema_version": 1,
+    "status": "pass",
+    "warnings": []
+  },
+  "audit": []
+}
