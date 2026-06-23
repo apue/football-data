@@ -66,4 +66,4 @@ Before publishing, check:
 - Check the workflow gates: selection decision, skipped-candidate explanations, and deterministic selection validation.
 - Chinese final copy should read like a from-scratch Chinese sports editor wrote it after seeing the evidence packet.
 - No external match observation is implied unless an external source was actually checked.
-- If a card fails review, repair registry config, selector/copy profile prompts, scoring, or validation, then rerun `scripts/run_editorial_v2.py --date YYYY-MM-DD`.
+- If a card fails review, repair the local `selection_decision.json` or `copy.json`, or adjust registry config, selector/copy profile prompts, scoring, or validation, then rerun `scripts/compile_local_editorial.py --date YYYY-MM-DD`.

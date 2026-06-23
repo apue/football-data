@@ -1,9 +1,6 @@
 name: Editorial
 
 on:
-  workflow_run:
-    workflows: ["Update Dataset"]
-    types: [completed]
   workflow_dispatch:
     inputs:
       match_date:
@@ -17,7 +14,7 @@ on:
       fake:
         description: "Use deterministic fake editor backend for workflow smoke testing."
         required: false
-        default: "false"
+        default: "true"
         type: choice
         options:
           - "false"
@@ -29,7 +26,6 @@ concurrency:
 
 jobs:
   editorial:
-    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
     permissions:
@@ -41,7 +37,6 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v6
         with:
-          ref: ${{ github.event_name == 'workflow_dispatch' && github.ref || 'main' }}
           fetch-depth: 0
 
       - name: Set up Python

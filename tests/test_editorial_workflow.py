@@ -4,14 +4,16 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def test_editorial_workflow_runs_after_dataset_update_and_exposes_secret_env():
+def test_editorial_workflow_is_manual_only_smoke_path_and_exposes_optional_env():
     workflow = ROOT / ".github" / "workflows" / "editorial.yml"
 
     assert workflow.exists()
     text = workflow.read_text(encoding="utf-8")
 
-    assert 'workflows: ["Update Dataset"]' in text
     assert "workflow_dispatch" in text
+    assert "workflow_run" not in text
+    assert 'workflows: ["Update Dataset"]' not in text
+    assert 'default: "true"' in text
     assert "python scripts/run_editorial_queue.py" in text
     assert "manifests/editorial-v2-run.json" in text
     assert "--experiment" in text

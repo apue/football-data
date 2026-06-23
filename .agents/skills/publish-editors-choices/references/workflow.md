@@ -22,19 +22,36 @@ sqlite3 data/latest.sqlite \
   "select match_date, count(*) from matches group by match_date order by match_date;"
 ```
 
-4. Run the autonomous queue:
+4. Prepare the local editorial handoff packet:
 
 ```bash
-python scripts/run_editorial_queue.py
+python scripts/prepare_editorial_packet.py --date YYYY-MM-DD --json
 ```
 
-For a targeted local backfill on one date:
+This step is deterministic and does not publish site artifacts. It writes the evidence packet that local Codex should inspect:
+
+- `agent-runs/YYYY-MM-DD/rankings.json`
+- `agent-runs/YYYY-MM-DD/candidate_pool.json`
+- `agent-runs/YYYY-MM-DD/selector_input.json`
+- `agent-runs/YYYY-MM-DD/run.json`
+- `manifests/editorial-v2-run.json`
+
+5. Write the local editor outputs:
+
+- `agent-runs/YYYY-MM-DD/selection_decision.json`: selected players, editorial reasons, and reasons for skipping higher-ranked or notable candidates.
+- `agent-runs/YYYY-MM-DD/copy.json`: final English and Chinese card copy generated from the selected candidate evidence packets.
+
+Do not edit compiled frontend JSON directly. If the output is wrong, change selection/copy, scoring config, candidate-pool config, prompts/profiles, or deterministic validation, then prepare/compile again.
+
+6. Compile and publish the local result:
 
 ```bash
-python scripts/run_editorial_queue.py --date YYYY-MM-DD
+python scripts/compile_local_editorial.py --date YYYY-MM-DD --json
 ```
 
-For deterministic local smoke testing without OpenAI credentials:
+This validates local selection, writes public editorial artifacts, and rebuilds the homepage.
+
+For deterministic smoke testing without OpenAI credentials:
 
 ```bash
 python scripts/run_editorial_queue.py --date YYYY-MM-DD --fake --no-research --json
@@ -48,8 +65,6 @@ python scripts/run_editorial_v2.py --date YYYY-MM-DD --fake --no-research --json
 
 Outputs:
 
-- `manifests/editorial-queue.json`
-- `manifests/editorial-run.json`
 - `manifests/editorial-v2-run.json`
 - `reports/editorial/YYYY-MM-DD.md`
 - `agent-runs/YYYY-MM-DD/rankings.json`
@@ -64,24 +79,24 @@ Outputs:
 - `site/editorial/index.html`
 - `site/index.html`
 
-The active production mode is `ai_rerank_selection_v1`:
+The active production experiment is `ai_rerank_guardrails_v2`, using the `ai_rerank_selection_v1` workflow variant:
 
 ```text
 load active experiment registry
   -> deterministic ranking and rich candidate-pool build
-  -> AI selection editor reranks only candidate_pool.selectable_candidates
+  -> local Codex reranks only candidate_pool.selectable_candidates
   -> deterministic selection validation
-  -> English and Chinese copy editor calls from selected evidence packets
+  -> English and Chinese copy from selected evidence packets
   -> compile public editorial artifacts
   -> rebuild homepage
 ```
 
-The queue publishes only the latest data match date by default. Older `editorial_input_hash` changes are recorded as stale and should be backfilled explicitly with `--date`, so historical regeneration never blocks the newest match day. Missing OpenAI credentials should produce `needs_credentials` in `manifests/editorial-run.json`, not a draft publication.
+The GitHub `Update Dataset` workflow should fetch and rebuild data. The GitHub `Editorial` workflow is manual-only and defaults to fake mode for smoke testing; do not rely on it for final daily publication unless the user explicitly asks for an OpenAI Agents SDK run.
 
-5. Review local audit files:
+7. Review local audit files:
 
 - `candidate_pool.json`: Top 8 selectable candidates, near misses, rank lookup, and candidate-pool reasons.
-- `selector_input.json`: what the AI saw, usually name-sorted so the model is not anchored to score order.
+- `selector_input.json`: what local Codex should consider, usually name-sorted so it is not anchored to score order.
 - `selection_decision.json`: selected players, editorial reasons, and reasons for skipping higher-ranked or notable candidates.
 - `selection_validation.json`: deterministic checks for pool membership, slot counts, and skipped-higher-ranked explanations.
 - `reports/editorial/YYYY-MM-DD.md`: human-readable generated report.
@@ -96,21 +111,21 @@ If labels are missing, use the `calibrate-potm-labels` skill and `scripts/discov
 
 If output is poor, repair the source of the problem: scoring config, candidate-pool profile, selector profile, copy profile, prompts, or deterministic validation. Avoid hand-editing compiled frontend JSON.
 
-6. Review gates before accepting output:
+8. Review gates before accepting output:
 
 - Does `selection_validation.json` pass?
-- Did the AI explain selected players and skipped higher-ranked candidates?
+- Did local Codex explain selected players and skipped higher-ranked candidates?
 - Is every selected player present in the candidate pool?
 - Does each card have a distinct football angle?
 - Are there at most two or three key facts per body?
 - Does the copy avoid implying video review, media ratings, or unsupported tactical observation?
 - Does the homepage show the latest generated cards?
 
-7. Verify:
+9. Verify:
 
 ```bash
 python -m pytest -q
 for f in examples/*.sql; do sqlite3 data/latest.sqlite < "$f" >/dev/null || exit 1; done
 ```
 
-8. Follow `pr-policy.md` for publication.
+10. Follow `pr-policy.md` for publication.
