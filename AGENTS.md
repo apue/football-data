@@ -75,6 +75,7 @@ When the user asks to evaluate the POTM workflow, Firecrawl evidence quality, so
 - Do not commit `raw/*.pdf` or `raw/**/*.pdf`.
 - Do keep source URLs, hashes, filenames, and timestamps in manifests and SQLite.
 - Do keep FIFA timeline event provenance in `fifa_match_links`, `official_match_events`, and `goal_involvements` when assists or official event timelines are used.
+- For any remote network operation, including `gh`, `git`, Vercel CLI, Supabase CLI, and similar tools, prefer the local machine proxy when one is configured; if `.env.local` already defines the proxy, load it and use it directly.
 - Do not bypass login, CAPTCHA, rate limits, or access controls.
 - If GitHub Actions fetching fails with 403/429, record the failure and use local assisted recovery instead of aggressive retrying.
 
