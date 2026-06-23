@@ -27,7 +27,8 @@ def test_publish_editors_choices_skill_is_repo_scoped():
     assert "scripts/run_editorial_loop.py" not in text + references
     assert "editorial state graph" in text + references
     assert "OpenAI Agents SDK" in text + references
-    assert "draft fact check" in text + references
+    assert "compact editor self-checks" in text + references
+    assert "There is no separate LLM review gate in the default path" in references
     assert "final_deterministic_validation" in references
     assert "Write Chinese from `fact_bank.zh.json`, not from the English draft" in references
     assert "Rewrite Chinese and English in separate passes from the same evidence" in references

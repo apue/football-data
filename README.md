@@ -86,7 +86,7 @@ python scripts/check_status.py
 
 ## Editor's Choices
 
-Editor's Choices are data-informed editorial picks generated from structured PMSR evidence. They are not official FIFA awards. The autonomous path selects candidates from the SQLite database, then runs a lightweight editorial state graph: build evidence, optional research, writer draft, draft fact check, final editor, final validation, frontend compile, and homepage rebuild. LLM working nodes run through the OpenAI Agents SDK with structured outputs; deterministic Python nodes keep scoring, evidence, validation, and publishing reproducible. Chinese copy is generated from `fact_bank.zh.json` as fresh Chinese sports copy. English copy is generated separately from `brief.en.json` plus `evidence.json`. The two languages should make the same judgment, but neither should be a translation of the other.
+Editor's Choices are data-informed editorial picks generated from structured PMSR evidence. They are not official FIFA awards. The autonomous path selects candidates from the SQLite database, then runs a compact editorial state graph: build evidence, optional research, one Chinese editor-agent pass, one English editor-agent pass, render with only-if-needed repair, deterministic validation, frontend compile, and homepage rebuild. LLM working nodes run through the OpenAI Agents SDK with structured outputs; deterministic Python nodes keep scoring, evidence, validation, repair triggers, and publishing reproducible. Chinese copy is generated from `fact_bank.zh.json` as fresh Chinese sports copy. English copy is generated separately from `brief.en.json` plus `evidence.json`. The two languages should make the same judgment, but neither should be a translation of the other.
 
 The default scoring config is `config/scoring/v0.4.json`. It keeps the role-style performance scores and adds a structured impact layer for goals and official assists that change the match state and match story: opening goals, equalisers, go-ahead goals, contextual match-winning goals, late goals, stoppage-time goals, late match-winning goals, comeback equalisers, comeback winners, only-goal winners, assists, goal involvements, braces, hat-tricks, and substitute scoring bursts. These features are derived from the PMSR shot table, lineup status, final scoreline, deterministic match-flow reconstruction, and FIFA public match timeline goal-involvement records. POTM labels and media opinions are not scoring inputs.
 
@@ -102,13 +102,21 @@ For a targeted backfill run on one match date:
 python scripts/run_editorial_queue.py --date YYYY-MM-DD
 ```
 
+For local Codex-in-the-loop review, save structured comments and feed them into a capped targeted revision loop:
+
+```bash
+python scripts/run_editorial_queue.py --date YYYY-MM-DD \
+  --review-feedback agent-runs/YYYY-MM-DD.codex-review.json \
+  --max-review-loops 2
+```
+
 For a deterministic smoke test without credentials:
 
 ```bash
 python scripts/run_editorial_queue.py --fake --no-research --max-dates 1
 ```
 
-The compiled frontend artifacts are written to `site/editorial/`, and the homepage is rebuilt with the latest cards.
+The compiled frontend artifacts are written to `site/editorial/`, and the homepage is rebuilt with the latest cards. `reports/editorial/YYYY-MM-DD.pre-review.md` keeps the compact editor draft before optional external feedback and deterministic repair so local runs can compare the unreviewed and repaired copy.
 
 ## Editorial Automation
 
@@ -125,18 +133,16 @@ The default OpenAI-compatible base URL is `https://api.siliconflow.cn/v1`, and d
 
 ```text
 OPENAI_BASE_URL
-EDITORIAL_ZH_WRITER_MODEL
 EDITORIAL_ZH_EDITOR_MODEL
-EDITORIAL_EN_WRITER_MODEL
 EDITORIAL_EN_EDITOR_MODEL
-EDITORIAL_FACT_CHECK_MODEL
+EDITORIAL_REVISION_EDITOR_MODEL
 EDITORIAL_AGENT_TIMEOUT_SECONDS
 EDITORIAL_AGENT_MAX_CONCURRENCY
 EDITORIAL_AGENT_MAX_ATTEMPTS
 KEYPOOL_URL
 ```
 
-Missing OpenAI credentials do not publish drafts; the workflow writes `manifests/editorial-run.json` with `needs_credentials` and exits cleanly so the data update pipeline stays healthy. Per-card writer/editor calls run with `EDITORIAL_AGENT_MAX_CONCURRENCY` and retry with `EDITORIAL_AGENT_MAX_ATTEMPTS`; if a single card still fails, the workflow records a warning and falls back to the latest available draft for that card instead of blocking the whole match day. `KEYPOOL_URL` is your KeyPool base URL and is required only for Firecrawl-backed evidence discovery; missing Firecrawl configuration does not block PMSR-only publishing.
+Missing OpenAI credentials do not publish drafts; the workflow writes `manifests/editorial-run.json` with `needs_credentials` and exits cleanly so the data update pipeline stays healthy. Per-card editor-agent calls run with `EDITORIAL_AGENT_MAX_CONCURRENCY` and retry with `EDITORIAL_AGENT_MAX_ATTEMPTS`; if a single card still fails, the workflow records a warning and falls back to deterministic copy for that card instead of blocking the whole match day. `KEYPOOL_URL` is your KeyPool base URL and is required only for Firecrawl-backed evidence discovery; missing Firecrawl configuration does not block PMSR-only publishing.
 
 ## POTM Calibration
 

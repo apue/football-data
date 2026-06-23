@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-06-22T13:45:00+00:00",
+  "generated_at": "2026-06-23T07:34:17+00:00",
   "match_date": "2026-06-21",
   "scoring_version": "v0.4",
   "editorial_input_hash": "848dd820d1eead32effb887a68ae5d1584cf0c150c373f9f062c3dda60d32926",
@@ -488,10 +488,30 @@
   "choices": [
     {
       "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day",
+        "impact_pick"
+      ],
       "award_label": {
         "en": "Player of the Day",
         "zh": "每日最佳球员"
       },
+      "badges": [
+        {
+          "type": "player_of_the_day",
+          "label": {
+            "en": "Player of the Day",
+            "zh": "每日最佳球员"
+          }
+        },
+        {
+          "type": "impact_pick",
+          "label": {
+            "en": "Impact Pick",
+            "zh": "影响力精选"
+          }
+        }
+      ],
       "rank": 1,
       "match_key": "FIFA-2026-M40-NZL-EGY",
       "match_no": 40,
@@ -689,10 +709,22 @@
     },
     {
       "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
       "award_label": {
         "en": "Player of the Day",
         "zh": "每日最佳球员"
       },
+      "badges": [
+        {
+          "type": "player_of_the_day",
+          "label": {
+            "en": "Player of the Day",
+            "zh": "每日最佳球员"
+          }
+        }
+      ],
       "rank": 2,
       "match_key": "FIFA-2026-M38-ESP-KSA",
       "match_no": 38,
@@ -857,10 +889,22 @@
     },
     {
       "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
       "award_label": {
         "en": "Player of the Day",
         "zh": "每日最佳球员"
       },
+      "badges": [
+        {
+          "type": "player_of_the_day",
+          "label": {
+            "en": "Player of the Day",
+            "zh": "每日最佳球员"
+          }
+        }
+      ],
       "rank": 3,
       "match_key": "FIFA-2026-M37-URU-CPV",
       "match_no": 37,
@@ -1035,159 +1079,23 @@
       }
     },
     {
-      "award_type": "impact_pick",
-      "award_label": {
-        "en": "Impact Pick",
-        "zh": "影响力精选"
-      },
-      "rank": 1,
-      "match_key": "FIFA-2026-M40-NZL-EGY",
-      "match_no": 40,
-      "player_no": 11,
-      "player_name": "MOSTAFA ZICO",
-      "team": "Egypt",
-      "opponent": "New Zealand",
-      "home_score": 1,
-      "away_score": 3,
-      "team_final_goals": 3,
-      "opponent_final_goals": 1,
-      "position": "MF",
-      "score": 20.0,
-      "primary_score": "impact",
-      "role_scores": {
-        "attacking_threat": 22.65,
-        "impact": 20.0,
-        "progressor": 10.4,
-        "off_ball": 18.9,
-        "defensive": 12.95,
-        "physical": 15.83,
-        "goalkeeper": 26.52
-      },
-      "progression_benchmark": {
-        "score": 3.0,
-        "quality": "thin",
-        "support_actions": 0.0,
-        "pass_only_line_break_volume": false
-      },
-      "hidden_gem_profile": {
-        "eligible": false,
-        "profile": "insufficient_evidence",
-        "score": 18.9
-      },
-      "flow_context": {
-        "match_key": "FIFA-2026-M40-NZL-EGY",
-        "team_came_from_behind_to_win": true,
-        "allowed_claims": {
-          "en": [
-            "comeback win",
-            "equaliser",
-            "comeback equaliser",
-            "57' equaliser"
-          ],
-          "zh": [
-            "逆转取胜",
-            "扳平",
-            "逆转过程中的扳平球",
-            "逆转扳平",
-            "57' 扳平"
-          ]
-        },
-        "goals": [
-          {
-            "goal_order": 2,
-            "minute": 57,
-            "team": "Egypt",
-            "player_name": "MOSTAFA ZICO",
-            "score_before": "1-0",
-            "score_after": "1-1",
-            "team_score_before": 0,
-            "opponent_score_before": 1,
-            "team_score_after": 1,
-            "opponent_score_after": 1,
-            "tags": [
-              "equalizer",
-              "comeback_equalizer",
-              "team_came_from_behind_goal"
-            ]
-          }
-        ],
-        "decisive_goal": null
-      },
-      "metrics": {
-        "shots": 4,
-        "on_target": 1,
-        "goals": 1,
-        "assists": 1,
-        "goal_involvements": 2,
-        "offers_received": 5,
-        "in_behind": 15,
-        "in_between": 4,
-        "line_breaks_completed": 5,
-        "possession_regains": 2,
-        "possession_interrupted": 3,
-        "blocks": 2,
-        "total_distance_m": 9630.4
-      },
-      "score_components": [
-        {
-          "metric": "comeback_equalizer",
-          "value": 1,
-          "weight": 6.0,
-          "contribution": 6.0
-        },
-        {
-          "metric": "assists",
-          "value": 1,
-          "weight": 5.0,
-          "contribution": 5.0
-        },
-        {
-          "metric": "equalizing_goal",
-          "value": 1,
-          "weight": 4.0,
-          "contribution": 4.0
-        },
-        {
-          "metric": "goal_involvements",
-          "value": 2,
-          "weight": 1.5,
-          "contribution": 3.0
-        },
-        {
-          "metric": "team_came_from_behind_goal",
-          "value": 1,
-          "weight": 2.0,
-          "contribution": 2.0
-        },
-        {
-          "metric": "goals",
-          "value": 1,
-          "weight": 8.0,
-          "contribution": 8.0,
-          "score": "attacking_threat"
-        }
-      ],
-      "evidence_chips": {
-        "en": [
-          "comeback equaliser",
-          "equaliser",
-          "goal scorer",
-          "assist"
-        ],
-        "zh": [
-          "逆转扳平",
-          "扳平进球",
-          "取得进球",
-          "送出助攻"
-        ]
-      }
-    },
-    {
       "award_type": "progression_pick",
+      "award_types": [
+        "progression_pick"
+      ],
       "award_label": {
         "en": "Progression Engine",
         "zh": "进攻发动机"
       },
+      "badges": [
+        {
+          "type": "progression_pick",
+          "label": {
+            "en": "Progression Engine",
+            "zh": "进攻发动机"
+          }
+        }
+      ],
       "rank": 1,
       "match_key": "FIFA-2026-M40-NZL-EGY",
       "match_no": 40,
@@ -1285,10 +1193,30 @@
     },
     {
       "award_type": "defensive_pick",
+      "award_types": [
+        "defensive_pick",
+        "hidden_gem"
+      ],
       "award_label": {
         "en": "Defensive Pick",
         "zh": "防守精选"
       },
+      "badges": [
+        {
+          "type": "defensive_pick",
+          "label": {
+            "en": "Defensive Pick",
+            "zh": "防守精选"
+          }
+        },
+        {
+          "type": "hidden_gem",
+          "label": {
+            "en": "Hidden Gem",
+            "zh": "隐藏亮点"
+          }
+        }
+      ],
       "rank": 1,
       "match_key": "FIFA-2026-M37-URU-CPV",
       "match_no": 37,
@@ -1405,10 +1333,22 @@
     },
     {
       "award_type": "goalkeeper_watch",
+      "award_types": [
+        "goalkeeper_watch"
+      ],
       "award_label": {
         "en": "Goalkeeper Watch",
         "zh": "门将关注"
       },
+      "badges": [
+        {
+          "type": "goalkeeper_watch",
+          "label": {
+            "en": "Goalkeeper Watch",
+            "zh": "门将关注"
+          }
+        }
+      ],
       "rank": 1,
       "match_key": "FIFA-2026-M39-BEL-IRN",
       "match_no": 39,
@@ -1516,7 +1456,7 @@
         "teams": [
           {
             "team": "Egypt",
-            "count": 3
+            "count": 2
           }
         ]
       }
@@ -1533,7 +1473,7 @@
             "teams": [
               {
                 "team": "Egypt",
-                "count": 3
+                "count": 2
               }
             ]
           }
@@ -1542,7 +1482,6 @@
           "MOHAMED SALAH",
           "Mikel OYARZABAL",
           "Maxi ARAUJO",
-          "MOSTAFA ZICO",
           "MARAWAN ATTIA",
           "PICO LOPES",
           "Alireza BEIRANVAND"
@@ -1550,11 +1489,5 @@
       }
     ]
   },
-  "audit": [
-    {
-      "level": "info",
-      "code": "no_hidden_gem",
-      "message": "No hidden gem passed the current threshold."
-    }
-  ]
+  "audit": []
 }

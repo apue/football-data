@@ -1,13 +1,55 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-06-22T14:01:59+00:00",
-  "status": "up_to_date",
+  "generated_at": "2026-06-23T07:37:46+00:00",
+  "status": "success",
   "queue_status": "up_to_date",
   "queue_reason": "editorial_up_to_date",
   "latest_data_date": "2026-06-21",
   "latest_editorial_date": "2026-06-21",
-  "pending_dates": [],
-  "published_dates": [],
+  "pending_dates": [
+    "2026-06-21"
+  ],
+  "published_dates": [
+    "2026-06-21"
+  ],
   "failures": [],
-  "runs": []
+  "runs": [
+    {
+      "match_date": "2026-06-21",
+      "agent_status": "success",
+      "fact_check": "pass",
+      "choices": [
+        {
+          "award_type": "player_of_the_day",
+          "player_name": "MOHAMED SALAH",
+          "team": "Egypt"
+        },
+        {
+          "award_type": "player_of_the_day",
+          "player_name": "Mikel OYARZABAL",
+          "team": "Spain"
+        },
+        {
+          "award_type": "player_of_the_day",
+          "player_name": "Maxi ARAUJO",
+          "team": "Uruguay"
+        },
+        {
+          "award_type": "progression_pick",
+          "player_name": "MARAWAN ATTIA",
+          "team": "Egypt"
+        },
+        {
+          "award_type": "defensive_pick",
+          "player_name": "PICO LOPES",
+          "team": "Cabo Verde"
+        },
+        {
+          "award_type": "goalkeeper_watch",
+          "player_name": "Alireza BEIRANVAND",
+          "team": "IR Iran"
+        }
+      ]
+    }
+  ]
 }

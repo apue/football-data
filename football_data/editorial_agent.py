@@ -4,7 +4,6 @@ import asyncio
 import json
 import os
 import re
-import signal
 import sys
 from dataclasses import dataclass
 from datetime import UTC, datetime
@@ -16,6 +15,8 @@ from pydantic import BaseModel, Field
 from football_data.calibration import discover_potm_evidence_candidates
 from football_data.demo import build_demo_site
 from football_data.editorial import (
+    _zh_player_name,
+    _zh_team_name,
     build_editorial_report,
     render_editorial_markdown_file,
     write_editorial_artifacts,
@@ -30,20 +31,16 @@ DEFAULT_AGENT_MAX_CONCURRENCY = "6"
 DEFAULT_AGENT_MAX_ATTEMPTS = "1"
 
 DEFAULT_MODELS = {
-    "zh_writer": "zai-org/GLM-5.2",
-    "zh_editor": "Qwen/Qwen3.5-397B-A17B",
-    "en_writer": "deepseek-ai/DeepSeek-V4-Flash",
-    "en_editor": "deepseek-ai/DeepSeek-V4-Pro",
-    "fact_check": "deepseek-ai/DeepSeek-V4-Pro",
+    "zh_editor": "zai-org/GLM-5.2",
+    "en_editor": "deepseek-ai/DeepSeek-V4-Flash",
+    "revision_editor": "deepseek-ai/DeepSeek-V4-Flash",
 }
 
 
 MODEL_ENV_KEYS = {
-    "zh_writer": "EDITORIAL_ZH_WRITER_MODEL",
     "zh_editor": "EDITORIAL_ZH_EDITOR_MODEL",
-    "en_writer": "EDITORIAL_EN_WRITER_MODEL",
     "en_editor": "EDITORIAL_EN_EDITOR_MODEL",
-    "fact_check": "EDITORIAL_FACT_CHECK_MODEL",
+    "revision_editor": "EDITORIAL_REVISION_EDITOR_MODEL",
 }
 
 CONTROL_ENV_KEYS = [
@@ -146,15 +143,12 @@ class EditorialCopyItem(BaseModel):
     player_name: str = Field(description="Player name from the input choice.")
     title: str = Field(description="Short publishable title.")
     body: str = Field(description="One publishable body paragraph.")
+    used_evidence: list[str] = Field(default_factory=list)
+    risk_check: list[str] = Field(default_factory=list)
 
 
 class EditorialCopyOutput(BaseModel):
     items: list[EditorialCopyItem]
-    warnings: list[str] = Field(default_factory=list)
-
-
-class EditorialFactCheckOutput(BaseModel):
-    status: str
     warnings: list[str] = Field(default_factory=list)
 
 
@@ -333,8 +327,6 @@ class FakeEditorialAgentClient(AgentTextClient):
         output_type: type[Any] | None = None,
     ) -> str:
         payload = json.loads(user_input)
-        if role.endswith("fact_check"):
-            return json.dumps({"status": "pass", "warnings": []})
         language = payload["language"]
         items = []
         for choice in payload["choices"]:
@@ -412,6 +404,8 @@ class EditorialWorkflowRunner:
         config: EditorialAgentConfig,
         research: bool,
         rebuild_homepage: bool,
+        review_feedback_path: str | Path | None,
+        max_review_loops: int,
     ) -> None:
         self.match_date = match_date
         self.db_path = db_path
@@ -425,6 +419,8 @@ class EditorialWorkflowRunner:
         self.config = config
         self.research = research
         self.rebuild_homepage = rebuild_homepage
+        self.review_feedback_path = Path(review_feedback_path) if review_feedback_path else None
+        self.max_review_loops = max(0, max_review_loops)
         self.nodes = self._build_nodes()
 
     def run(self) -> dict[str, Any]:
@@ -452,69 +448,34 @@ class EditorialWorkflowRunner:
     def _build_nodes(self) -> list[EditorialWorkflowNode]:
         return [
             EditorialWorkflowNode("build_evidence", "python", self._build_evidence, "external_research"),
-            EditorialWorkflowNode("external_research", "python", self._external_research, "zh_writer"),
+            EditorialWorkflowNode("external_research", "python", self._external_research, "zh_editor_agent"),
             EditorialWorkflowNode(
-                "zh_writer",
+                "zh_editor_agent",
                 "agent",
-                self._zh_writer,
-                "zh_draft_fact_check",
-                model_key="zh_writer",
-                skills=("human-writing-zh", "anti-translationese", "football-editor-style"),
-            ),
-            EditorialWorkflowNode(
-                "zh_draft_fact_check",
-                "agent",
-                self._zh_draft_fact_check,
-                "zh_final_editor",
-                model_key="fact_check",
-                skills=("football-editor-style",),
-            ),
-            EditorialWorkflowNode(
-                "zh_final_editor",
-                "agent",
-                self._zh_final_editor,
-                "en_writer",
+                self._zh_editor_agent,
+                "en_editor_agent",
                 model_key="zh_editor",
                 skills=("human-writing-zh", "anti-translationese", "football-editor-style"),
             ),
             EditorialWorkflowNode(
-                "en_writer",
+                "en_editor_agent",
                 "agent",
-                self._en_writer,
-                "en_draft_fact_check",
-                model_key="en_writer",
-                skills=("football-editor-style",),
-            ),
-            EditorialWorkflowNode(
-                "en_draft_fact_check",
-                "agent",
-                self._en_draft_fact_check,
-                "en_final_editor",
-                model_key="fact_check",
-                skills=("football-editor-style",),
-            ),
-            EditorialWorkflowNode(
-                "en_final_editor",
-                "agent",
-                self._en_final_editor,
-                "render_markdown",
+                self._en_editor_agent,
+                "render_markdown_and_repair",
                 model_key="en_editor",
                 skills=("football-editor-style",),
             ),
-            EditorialWorkflowNode("render_markdown", "python", self._render_markdown, "final_deterministic_validation"),
+            EditorialWorkflowNode(
+                "render_markdown_and_repair",
+                "python",
+                self._render_markdown_and_repair,
+                "final_deterministic_validation",
+            ),
             EditorialWorkflowNode(
                 "final_deterministic_validation",
                 "validator",
                 self._final_deterministic_validation,
-                "final_fact_check",
-            ),
-            EditorialWorkflowNode(
-                "final_fact_check",
-                "agent",
-                self._final_fact_check,
                 "compile_publish",
-                model_key="fact_check",
-                skills=("football-editor-style",),
             ),
             EditorialWorkflowNode("compile_publish", "python", self._compile_publish),
         ]
@@ -599,55 +560,43 @@ class EditorialWorkflowRunner:
             }
         }
 
-    def _zh_writer(self, state: dict[str, Any]) -> dict[str, Any]:
-        return self._write_draft(state, "zh", state["fact_bank"]["choices"], "zh_writer", "zh_writer")
-
-    def _en_writer(self, state: dict[str, Any]) -> dict[str, Any]:
-        return self._write_draft(state, "en", state["brief_en"]["choices"], "en_writer", "en_writer")
-
-    def _zh_draft_fact_check(self, state: dict[str, Any]) -> dict[str, Any]:
-        return self._draft_fact_check(state, "zh", "zh_draft_fact_check", "zh_draft", "zh_draft_fact_check")
-
-    def _en_draft_fact_check(self, state: dict[str, Any]) -> dict[str, Any]:
-        return self._draft_fact_check(state, "en", "en_draft_fact_check", "en_draft", "en_draft_fact_check")
-
-    def _zh_final_editor(self, state: dict[str, Any]) -> dict[str, Any]:
-        return self._final_editor(
+    def _zh_editor_agent(self, state: dict[str, Any]) -> dict[str, Any]:
+        return self._edit_language_compact(
             state,
             "zh",
             state["fact_bank"]["choices"],
-            "zh_final_editor",
-            "zh_draft",
-            "zh_draft_fact_check",
+            "zh_editor_agent",
+            "zh_editor",
             "zh_final",
         )
 
-    def _en_final_editor(self, state: dict[str, Any]) -> dict[str, Any]:
-        return self._final_editor(
+    def _en_editor_agent(self, state: dict[str, Any]) -> dict[str, Any]:
+        return self._edit_language_compact(
             state,
             "en",
             state["brief_en"]["choices"],
-            "en_final_editor",
-            "en_draft",
-            "en_draft_fact_check",
+            "en_editor_agent",
+            "en_editor",
             "en_final",
         )
 
-    def _write_draft(
+    def _edit_language_compact(
         self,
         state: dict[str, Any],
         language: str,
         choices: list[dict[str, Any]],
         role: str,
         model_key: str,
+        output_key: str,
     ) -> dict[str, Any]:
         items: list[dict[str, str]] = []
         warnings: list[str] = []
+        self_checks: list[dict[str, Any]] = []
         requests = [
             {
                 "role": role,
                 "model": self.config.models[model_key],
-                "instructions": _writer_instructions(language, state["style_packs"]),
+                "instructions": _compact_editor_instructions(language, state["style_packs"]),
                 "payload": _language_payload(
                     language=language,
                     choices=[choice],
@@ -659,121 +608,32 @@ class EditorialWorkflowRunner:
             }
             for choice, identity_choice in zip(choices, state["report"]["choices"], strict=True)
         ]
-        drafts = _call_json_many(
+        outputs = _call_json_many(
             self.text_client,
             requests,
             max_concurrency=self.config.max_concurrency,
         )
-        for draft, identity_choice in zip(drafts, state["report"]["choices"], strict=True):
-            bound = _copy_output_bound_to_choices(draft, [identity_choice], language)
+        for output, identity_choice in zip(outputs, state["report"]["choices"], strict=True):
+            bound = _copy_output_bound_to_choices(output, [identity_choice], language)
             items.extend(bound["items"])
-            warnings.extend(str(warning) for warning in draft.get("warnings", []))
-        state[f"{language}_draft"] = {"items": items, "warnings": warnings}
-        return {
-            "warnings": warnings,
-            "summary": {
-                "items": len(state[f"{language}_draft"]["items"]),
-                "agent_calls": len(requests),
-                "max_concurrency": self.config.max_concurrency,
-            },
-        }
-
-    def _draft_fact_check(
-        self,
-        state: dict[str, Any],
-        language: str,
-        role: str,
-        draft_key: str,
-        output_key: str,
-    ) -> dict[str, Any]:
-        try:
-            result = _call_json(
-                self.text_client,
-                role=role,
-                model=self.config.models["fact_check"],
-                instructions=_draft_fact_check_instructions(language, state["style_packs"]),
-                payload={
-                    "language": language,
-                    "match_date": self.match_date,
-                    "evidence": state["evidence"],
-                    "external_evidence": state["external_evidence"],
-                    "draft": state[draft_key],
-                },
-                output_type=EditorialFactCheckOutput,
-                timeout_seconds=self.config.timeout_seconds,
-            )
-        except (AgentCallTimeout, AgentCallError) as exc:
-            result = {"status": "warning", "warnings": [str(exc)]}
-        state[output_key] = {
-            "status": result.get("status", "pass"),
-            "warnings": result.get("warnings", []),
-        }
-        return {
-            "warnings": state[output_key]["warnings"],
-            "summary": {"status": state[output_key]["status"]},
-        }
-
-    def _final_editor(
-        self,
-        state: dict[str, Any],
-        language: str,
-        choices: list[dict[str, Any]],
-        role: str,
-        draft_key: str,
-        fact_check_key: str,
-        output_key: str,
-    ) -> dict[str, Any]:
-        items: list[dict[str, str]] = []
-        warnings: list[str] = []
-        draft_items = state[draft_key]["items"]
-        requests: list[dict[str, Any]] = []
-        for index, (choice, identity_choice) in enumerate(
-            zip(choices, state["report"]["choices"], strict=True)
-        ):
-            draft_item = draft_items[index] if index < len(draft_items) else _fallback_copy(identity_choice, language)
-            requests.append(
-                {
-                    "role": role,
-                    "model": self.config.models["zh_editor" if language == "zh" else "en_editor"],
-                    "instructions": _editor_instructions(language, state["style_packs"]),
-                    "payload": {
-                        "language": language,
-                        "choices": [choice],
-                        "draft": {"items": [draft_item]},
-                        "draft_fact_check": state[fact_check_key],
-                        "style_packs": _style_subset(
-                            state["style_packs"],
-                            ["anti-translationese", "human-writing-zh"]
-                            if language == "zh"
-                            else ["football-editor-style"],
-                        ),
-                    },
-                    "output_type": EditorialCopyOutput,
-                }
-            )
-        edits = _call_json_many(
-            self.text_client,
-            requests,
-            max_concurrency=self.config.max_concurrency,
-        )
-        for index, (edited, identity_choice) in enumerate(zip(edits, state["report"]["choices"], strict=True)):
-            if not edited.get("items") and index < len(draft_items):
-                draft_item = draft_items[index]
-                edited = {
-                    "items": [
+            warnings.extend(str(warning) for warning in output.get("warnings", []))
+            for raw_item in output.get("items", []):
+                if isinstance(raw_item, dict):
+                    self_checks.append(
                         {
                             "award_type": identity_choice["award_type"],
                             "player_name": identity_choice["player_name"],
-                            "title": str(draft_item.get("title") or ""),
-                            "body": str(draft_item.get("body") or ""),
+                            "language": language,
+                            "used_evidence": list(raw_item.get("used_evidence", []))
+                            if isinstance(raw_item.get("used_evidence"), list)
+                            else [],
+                            "risk_check": list(raw_item.get("risk_check", []))
+                            if isinstance(raw_item.get("risk_check"), list)
+                            else [],
                         }
-                    ],
-                    "warnings": edited.get("warnings", []),
-                }
-            bound = _copy_output_bound_to_choices(edited, [identity_choice], language)
-            items.extend(bound["items"])
-            warnings.extend(str(warning) for warning in edited.get("warnings", []))
+                    )
         state[output_key] = {"items": items, "warnings": warnings}
+        state.setdefault("editor_self_checks", []).extend(self_checks)
         return {
             "warnings": warnings,
             "summary": {
@@ -783,61 +643,175 @@ class EditorialWorkflowRunner:
             },
         }
 
-    def _render_markdown(self, state: dict[str, Any]) -> dict[str, Any]:
-        en_copy, zh_copy, markdown_text, repair_warnings = _render_repaired_markdown(
+    def _render_markdown_and_repair(self, state: dict[str, Any]) -> dict[str, Any]:
+        warnings: list[str] = []
+        iterations: list[dict[str, Any]] = []
+        revision_count = 0
+        fallback_repairs = 0
+
+        markdown_text = _render_agent_markdown(
             report=state["report"],
-            evidence=state["evidence"],
             en_copy=state["en_final"],
             zh_copy=state["zh_final"],
         )
-        state["en_final"] = en_copy
-        state["zh_final"] = zh_copy
+        state["pre_review_markdown_text"] = markdown_text
+        state["paths"]["pre_review_markdown"].write_text(markdown_text, encoding="utf-8")
+
+        external_comments = _load_review_feedback_comments(self.review_feedback_path, self.match_date)
+        if external_comments and self.max_review_loops > 0:
+            revision_warnings = self._revise_from_review_comments(state, external_comments)
+            warnings.extend(revision_warnings)
+            revision_count += len(external_comments)
+            markdown_text = _render_agent_markdown(
+                report=state["report"],
+                en_copy=state["en_final"],
+                zh_copy=state["zh_final"],
+            )
+            iterations.append(
+                {
+                    "loop": 1,
+                    "source": "external",
+                    "status": "needs_revision",
+                    "comments": external_comments,
+                    "actionable_comments": len(external_comments),
+                    "warnings": revision_warnings,
+                }
+            )
+
+        repair_loop_cap = max(1, self.max_review_loops)
+        deterministic_iterations: list[dict[str, Any]] = []
+        for loop_index in range(1, repair_loop_cap + 1):
+            comments = _deterministic_review_comments(
+                report=state["report"],
+                evidence=state["evidence"],
+                markdown_text=markdown_text,
+            )
+            if not comments:
+                break
+            revision_warnings = self._revise_from_review_comments(state, comments)
+            warnings.extend(revision_warnings)
+            revision_count += len(comments)
+            markdown_text = _render_agent_markdown(
+                report=state["report"],
+                en_copy=state["en_final"],
+                zh_copy=state["zh_final"],
+            )
+            deterministic_iterations.append(
+                {
+                    "loop": loop_index,
+                    "comments": comments,
+                    "warnings": revision_warnings,
+                }
+            )
+
+        final_warnings = _deterministic_fact_check(state["evidence"], markdown_text)
+        if final_warnings:
+            en_copy, zh_copy, markdown_text, repair_warnings = _render_repaired_markdown(
+                report=state["report"],
+                evidence=state["evidence"],
+                en_copy=state["en_final"],
+                zh_copy=state["zh_final"],
+            )
+            state["en_final"] = en_copy
+            state["zh_final"] = zh_copy
+            warnings.extend(repair_warnings)
+            fallback_repairs = len(repair_warnings)
+
         state["markdown_text"] = markdown_text
         state["paths"]["markdown"].write_text(markdown_text, encoding="utf-8")
+        state["review_feedback"] = {
+            "iterations": iterations,
+            "external_comments": external_comments,
+        }
+        state["deterministic_repair"] = {
+            "iterations": deterministic_iterations,
+            "fallback_repairs": fallback_repairs,
+        }
         return {
-            "warnings": repair_warnings,
+            "warnings": warnings,
             "summary": {
                 "markdown_chars": len(markdown_text),
-                "repairs": len(repair_warnings),
+                "external_revisions": len(external_comments),
+                "external_comments": len(external_comments),
+                "deterministic_repairs": sum(len(item["comments"]) for item in deterministic_iterations)
+                + fallback_repairs,
+                "revisions": revision_count,
+                "fallback_repairs": fallback_repairs,
             },
         }
+
+    def _revise_from_review_comments(
+        self,
+        state: dict[str, Any],
+        comments: list[dict[str, Any]],
+    ) -> list[str]:
+        warnings: list[str] = []
+        requests: list[dict[str, Any]] = []
+        request_meta: list[tuple[dict[str, Any], str]] = []
+        for choice in state["report"]["choices"]:
+            for language in ("en", "zh"):
+                language_comments = _review_comments_for_choice_language(
+                    comments,
+                    choice,
+                    language,
+                )
+                if not language_comments:
+                    continue
+                copy_payload = state[f"{language}_final"]
+                current_copy = _copy_by_choice(copy_payload).get(_choice_key(choice)) or _fallback_copy(
+                    choice,
+                    language,
+                )
+                requests.append(
+                    {
+                        "role": "revision_editor",
+                        "model": self.config.models["revision_editor"],
+                        "instructions": _revision_editor_instructions(language, state["style_packs"]),
+                        "payload": {
+                            "language": language,
+                            "choices": [choice],
+                            "current_copy": {"items": [{**current_copy, "award_type": choice["award_type"], "player_name": choice["player_name"]}]},
+                            "comments": language_comments,
+                            "evidence": _evidence_for_choice(state["evidence"], choice),
+                            "style_packs": _style_subset(
+                                state["style_packs"],
+                                ["anti-translationese", "human-writing-zh"]
+                                if language == "zh"
+                                else ["football-editor-style"],
+                            ),
+                        },
+                        "output_type": EditorialCopyOutput,
+                    }
+                )
+                request_meta.append((choice, language))
+        if not requests:
+            return warnings
+        revisions = _call_json_many(
+            self.text_client,
+            requests,
+            max_concurrency=self.config.max_concurrency,
+        )
+        for revision, (choice, language) in zip(revisions, request_meta, strict=True):
+            bound = _copy_output_bound_to_choices(revision, [choice], language)
+            if not bound["items"]:
+                warnings.append(f"revision_editor returned no copy for {choice['player_name']} {language}")
+                continue
+            _set_copy_item(state[f"{language}_final"], choice, bound["items"][0])
+            warnings.extend(str(warning) for warning in revision.get("warnings", []))
+        return warnings
 
     def _final_deterministic_validation(self, state: dict[str, Any]) -> dict[str, Any]:
         warnings = _deterministic_fact_check(state["evidence"], state["markdown_text"])
         state["deterministic_warnings"] = warnings
         if warnings:
             raise RuntimeError(f"Editorial deterministic validation failed: {warnings}")
-        return {"warnings": warnings, "summary": {"status": "pass"}}
-
-    def _final_fact_check(self, state: dict[str, Any]) -> dict[str, Any]:
-        try:
-            llm_fact_check = _call_json(
-                self.text_client,
-                role="final_fact_check",
-                model=self.config.models["fact_check"],
-                instructions=_fact_check_instructions(state["style_packs"]),
-                payload={
-                    "match_date": self.match_date,
-                    "evidence": state["evidence"],
-                    "external_evidence": state["external_evidence"],
-                    "markdown": state["markdown_text"],
-                    "deterministic_warnings": state["deterministic_warnings"],
-                },
-                output_type=EditorialFactCheckOutput,
-                timeout_seconds=self.config.timeout_seconds,
-            )
-        except (AgentCallTimeout, AgentCallError) as exc:
-            llm_fact_check = {"status": "timeout", "warnings": [str(exc)]}
-        llm_warnings = _filter_llm_warnings(state["markdown_text"], llm_fact_check.get("warnings", []))
-        llm_status = llm_fact_check.get("status", "pass") if llm_warnings else "pass"
-        fact_check = {
-            "status": "warning" if llm_warnings else "pass",
+        state["fact_check"] = {
+            "status": "pass",
             "deterministic_status": "pass",
-            "llm_status": llm_status,
-            "warnings": llm_warnings,
+            "llm_status": "skipped",
+            "warnings": [],
         }
-        state["fact_check"] = fact_check
-        return {"warnings": llm_warnings, "summary": {"status": fact_check["status"]}}
+        return {"warnings": warnings, "summary": {"status": "pass"}}
 
     def _compile_publish(self, state: dict[str, Any]) -> dict[str, Any]:
         compiled = render_editorial_markdown_file(
@@ -865,6 +839,8 @@ def run_editorial_agent(
     client: AgentTextClient | None = None,
     research: bool = True,
     rebuild_homepage: bool = True,
+    review_feedback_path: str | Path | None = None,
+    max_review_loops: int = 1,
 ) -> dict[str, Any]:
     config = load_editorial_agent_config(env_path, require_credentials=client is None)
     text_client = client or AgentsSdkTextClient(config)
@@ -881,6 +857,8 @@ def run_editorial_agent(
         config=config,
         research=research,
         rebuild_homepage=rebuild_homepage,
+        review_feedback_path=review_feedback_path,
+        max_review_loops=max_review_loops,
     )
     state = runner.run()
     report = state["report"]
@@ -904,8 +882,12 @@ def run_editorial_agent(
         "models": {role: config.models[role] for role in sorted(config.models)},
         "workflow": runner.workflow_audit(state),
         "fact_check": fact_check,
+        "review_feedback": state.get("review_feedback"),
+        "deterministic_repair": state.get("deterministic_repair"),
+        "editor_self_checks": state.get("editor_self_checks", []),
         "artifacts": {
             "markdown": str(paths["markdown"]),
+            "pre_review_markdown": str(paths["pre_review_markdown"]),
             "choices": str(paths["choices"]),
             "external_evidence": str(paths["external_evidence"]),
         },
@@ -934,6 +916,7 @@ def _artifact_paths(
     return {
         "dated": dated_path,
         "markdown": Path(reports_dir) / "editorial" / f"{match_date}.md",
+        "pre_review_markdown": Path(reports_dir) / "editorial" / f"{match_date}.pre-review.md",
         "evidence": dated_path / "evidence.json",
         "fact_bank": dated_path / "fact_bank.zh.json",
         "brief_en": dated_path / "brief.en.json",
@@ -1048,37 +1031,6 @@ def _copy_output_bound_to_choices(
     return {"items": items, "warnings": payload.get("warnings", [])}
 
 
-def _call_json(
-    client: AgentTextClient,
-    *,
-    role: str,
-    model: str,
-    instructions: str,
-    payload: dict[str, Any],
-    output_type: type[Any] | None = None,
-    timeout_seconds: float | None = None,
-) -> dict[str, Any]:
-    print(f"[editorial-agent] {role} -> {model}", file=sys.stderr, flush=True)
-    user_input = json.dumps(payload, ensure_ascii=False)
-    try:
-        effective_timeout = None if isinstance(client, AgentsSdkTextClient) else timeout_seconds
-        response = _complete_with_timeout(
-            lambda: client.complete(
-                role=role,
-                model=model,
-                instructions=instructions,
-                user_input=user_input,
-                output_type=output_type,
-            ),
-            timeout_seconds=effective_timeout,
-            role=role,
-        )
-    except AgentCallTimeout as exc:
-        raise
-    parsed = _extract_json_object(response)
-    return parsed
-
-
 def _call_json_many(
     client: AgentTextClient,
     requests: list[dict[str, Any]],
@@ -1118,118 +1070,62 @@ def _call_json_many(
     return payloads
 
 
-def _complete_with_timeout(
-    call: Any,
-    *,
-    timeout_seconds: float | None,
-    role: str,
-) -> str:
-    if timeout_seconds is None or timeout_seconds <= 0:
-        return str(call())
-
-    previous_handler = signal.getsignal(signal.SIGALRM)
-
-    def _handle_timeout(_signum: int, _frame: Any) -> None:
-        raise AgentCallTimeout(f"{role} timed out after {timeout_seconds:g} seconds")
-
-    signal.signal(signal.SIGALRM, _handle_timeout)
-    signal.setitimer(signal.ITIMER_REAL, timeout_seconds)
-    try:
-        return str(call())
-    finally:
-        signal.setitimer(signal.ITIMER_REAL, 0)
-        signal.signal(signal.SIGALRM, previous_handler)
-
-
-def _writer_instructions(language: str, style_packs: dict[str, str]) -> str:
+def _compact_editor_instructions(language: str, style_packs: dict[str, str]) -> str:
     if language == "zh":
         return "\n\n".join(
             [
-                "你是中文足球数据编辑。只根据输入 JSON 写作，不要编造助攻、视频观察或外部评价。",
-                "返回严格 JSON：{\"items\":[{\"award_type\":\"...\",\"player_name\":\"...\",\"title\":\"...\",\"body\":\"...\"}],\"warnings\":[]}",
-                "每个 body 只写一段，最多带 2-3 个关键数字。不要翻译英文句式。",
-                "严格区分“取得领先”和“首开纪录”：只有 allowed_claims 明确包含“首开纪录”时才能写首开纪录、首球。",
-                "严格区分“取得领先”和“制胜”：只有 allowed_claims 明确包含“制胜球”“补时制胜”或“逆转制胜”时才能写制胜。",
+                "你是一个中文足球编辑节点，一次完成选角、写作和自检。只根据输入 JSON 写作，不要编造助攻、视频观察或外部评价。",
+                "返回严格 JSON：{\"items\":[{\"award_type\":\"...\",\"player_name\":\"...\",\"title\":\"...\",\"body\":\"...\",\"used_evidence\":[\"...\"],\"risk_check\":[\"...\"]}],\"warnings\":[]}",
+                "每张卡只写一个 title 和一个 body。body 最多一段，最多带 2-3 个关键数字。",
+                "写作前在心里完成 risk_check：事实是否都在 evidence；时间顺序是否正确；指标是否误写；中文是否像翻译腔或模板句。",
+                "risk_check 只写简短检查点，不要写进 body。used_evidence 只列你实际使用的关键事实。",
+                "严格区分“取得领先”“首开纪录”“制胜”：只有 allowed_claims 明确支持时才写。",
                 "不要把“一球一助”写成“两球”“梅开二度”或“双响”。",
                 "`offers_received` 写作“接应成功/被队友找到”，不要写成传球次数。",
-                "`in_behind` 是独立的 in-behind offer 计数；不要和 `offers_received` 写成包含关系，不要写“X次身后接应中Y次被找到”。",
+                "`in_behind` 是独立的 in-behind offer 计数；不要和 `offers_received` 写成包含关系。",
+                "`line_breaks_completed` 写作“打穿防线”或“完成打穿防线”，不要写成跑动或传球次数。",
                 "不要写需要看录像才能证明的总括句，例如“几乎都从他脚下经过”“完全掌控”“没有办法限制他”。",
+                "避免“压力背景足够清楚”“入选理由很直接”“给出答案”这类审稿腔/模板腔。",
                 _style_subset(style_packs, ["human-writing-zh", "anti-translationese", "football-editor-style"]).get("joined", ""),
             ]
         )
     return "\n\n".join(
         [
-            "You are a football data editor. Write compact English editorial copy from the input JSON only.",
-            "Return strict JSON: {\"items\":[{\"award_type\":\"...\",\"player_name\":\"...\",\"title\":\"...\",\"body\":\"...\"}],\"warnings\":[]}",
-            "One paragraph per body. Use at most 2-3 key numbers. Do not invent assists, video observations, or outside ratings.",
-            "Distinguish go-ahead goals from opening goals. Only write opened the scoring/opening goal when allowed_claims explicitly supports it.",
-            "Distinguish go-ahead/opening goals from winners. Only write winner/match-winning when allowed_claims explicitly supports a winner claim.",
+            "You are a football editor node. In one pass, choose the angle, write the card, and self-check it from the input JSON only.",
+            "Return strict JSON: {\"items\":[{\"award_type\":\"...\",\"player_name\":\"...\",\"title\":\"...\",\"body\":\"...\",\"used_evidence\":[\"...\"],\"risk_check\":[\"...\"]}],\"warnings\":[]}",
+            "Each card needs one title and one body paragraph. Use at most 2-3 key numbers.",
+            "Before finalizing, run a risk_check: supported facts only, correct sequence, no metric mistranslation, no generic filler.",
+            "risk_check stays in JSON only; do not put it in body. used_evidence should list only facts actually used.",
+            "Distinguish go-ahead, opening, and match-winning goals. Use them only when allowed_claims supports them.",
             "Do not turn one goal plus one assist into two goals, a brace, or scored twice.",
             "Treat offers_received as successful receptions/being found, not as passes.",
-            "Treat in_behind as a separate in-behind offer count. Do not combine it with offers_received, and do not call it passes or runs received in behind.",
-            "Avoid unsupported totalizing phrases such as \"no answer\", \"all afternoon\", \"controlled everything\", or \"every attack\".",
+            "Treat in_behind as a separate in-behind offer count. Do not combine it with offers_received.",
+            "Treat line_breaks_completed as completed line breaks or line-breaking actions, not runs or passes.",
+            "Avoid generic or unsupported phrases like 'made the case', 'clear evidence', 'no answer', or audit-style wording.",
             style_packs.get("football-editor-style", ""),
         ]
     )
 
 
-def _editor_instructions(language: str, style_packs: dict[str, str]) -> str:
+def _revision_editor_instructions(language: str, style_packs: dict[str, str]) -> str:
     if language == "zh":
         return "\n\n".join(
             [
-                "你是终审中文体育编辑。根据输入 draft、draft_fact_check 和 evidence 定稿，不新增事实。",
-                "返回同样 JSON schema。必须修复 draft_fact_check 指出的事实问题，再删掉翻译腔、空话和过度数据罗列。",
-                "严格区分“取得领先”和“首开纪录”：没有 allowed_claims 明确支持时，必须删掉首开纪录、首球等说法。",
-                "严格区分“取得领先”和“制胜”：没有 allowed_claims 明确支持时，必须删掉制胜球、补时制胜等说法。",
-                "如果 evidence 是一球一助，必须写一球一助，不得改写成两球、梅开二度或双响。",
-                "`offers_received` 必须写作接应成功或被队友找到，不得改写成传球次数。",
-                "`in_behind` 不得和 `offers_received` 写成包含关系；删除“X次身后接应中Y次被队友找到”这类句子。",
-                "删掉“几乎都”“完全掌控”“没有办法限制他”等没有结构化证据支撑的总括句。",
-                _style_subset(style_packs, ["human-writing-zh", "anti-translationese"]).get("joined", ""),
+                "你是发布前修订编辑。只根据 comments 修改 current_copy，不重新选人，不新增事实。",
+                "返回同样 JSON schema: {\"items\":[{\"award_type\":\"...\",\"player_name\":\"...\",\"title\":\"...\",\"body\":\"...\"}],\"warnings\":[]}",
+                "目标是让文案像中文足球短评：去重复、去模板腔、去审计口吻。",
+                "必须保留 evidence 支持的事实边界；不能写站位、压迫、视频观察或外部评价。",
+                style_packs.get("human-writing-zh", ""),
+                style_packs.get("anti-translationese", ""),
             ]
         )
     return "\n\n".join(
         [
-            "You are the final English editor. Finalize the copy from the draft, draft_fact_check, and evidence without adding facts.",
-            "Return the same JSON schema. Fix any fact-check issues first, then keep the copy compact and editorial.",
-            "Distinguish go-ahead goals from opening goals. Remove opened-the-scoring claims unless allowed_claims explicitly supports them.",
-            "Remove winner/match-winning claims unless allowed_claims explicitly supports them.",
-            "If evidence says one goal and one assist, write one goal and one assist, not two goals, a brace, or scored twice.",
-            "Keep offers_received as successful receptions/being found; do not rewrite it as passes received.",
-            "Keep in_behind separate from offers_received; do not write received passes/runs in behind unless the input says so explicitly.",
-            "Remove unsupported totalizing phrases such as \"no answer\", \"all afternoon\", \"controlled everything\", or \"every attack\".",
+            "You are the publication revision editor. Revise only the current_copy according to comments.",
+            "Return the same JSON schema with one title/body item. Do not change the selected player.",
+            "Make the copy concise and publishable. Remove repetition, template phrasing, and audit/process language.",
+            "Do not add facts, video observations, outside ratings, or unsupported tactical claims.",
             style_packs.get("football-editor-style", ""),
-        ]
-    )
-
-
-def _draft_fact_check_instructions(language: str, style_packs: dict[str, str]) -> str:
-    if language == "zh":
-        return "\n\n".join(
-            [
-                "你是中文初稿事实核查编辑。只检查 draft 是否被 evidence 支撑，不润色。",
-                "返回严格 JSON：{\"status\":\"pass\"|\"fail\",\"warnings\":[\"...\"]}。",
-                "指出错比分、错进球、助攻臆造、视频观察、外部评价、过度总括或证据不足的句子。",
-                style_packs.get("fact-check-rules", ""),
-            ]
-        )
-    return "\n\n".join(
-        [
-            "You are a draft fact-checking editor. Check whether the draft is supported by evidence; do not rewrite it.",
-            "Return strict JSON: {\"status\":\"pass\"|\"fail\",\"warnings\":[\"...\"]}.",
-            "Flag wrong scorelines, unsupported assists, video observations, outside ratings, overbroad claims, or unsupported metrics.",
-            style_packs.get("fact-check-rules", ""),
-        ]
-    )
-
-
-def _fact_check_instructions(style_packs: dict[str, str]) -> str:
-    return "\n\n".join(
-        [
-            "You are a fact-checking editor. Check the Markdown against evidence JSON.",
-            "Return strict JSON: {\"status\":\"pass\"|\"fail\",\"warnings\":[\"...\"]}.",
-            "Fail unsupported assists, invented source claims, implied video review, wrong scorelines, or unsupported metrics.",
-            style_packs.get("fact-check-rules", ""),
         ]
     )
 
@@ -1280,10 +1176,6 @@ def _render_agent_markdown(
                 f"**{zh['title']}**",
                 "",
                 zh["body"],
-                "",
-                "Evidence: " + ", ".join(choice["evidence_chips"]["en"]),
-                "",
-                "依据：" + "，".join(choice["evidence_chips"]["zh"]),
                 "",
             ]
         )
@@ -1359,6 +1251,50 @@ def _choice_section_hard_warnings(choice: dict[str, Any], section: str) -> list[
     return warnings
 
 
+def _deterministic_review_comments(
+    *,
+    report: dict[str, Any],
+    evidence: dict[str, Any],
+    markdown_text: str,
+) -> list[dict[str, Any]]:
+    del evidence
+    comments: list[dict[str, Any]] = []
+    sections = _markdown_choice_sections(markdown_text)
+    for choice_index, (choice, section) in enumerate(
+        zip(report.get("choices", []), sections, strict=False),
+        start=1,
+    ):
+        for language, language_section in _language_sections(section).items():
+            section_warnings = _choice_section_hard_warnings(choice, language_section)
+            for warning_index, warning in enumerate(section_warnings, start=1):
+                comments.append(
+                    {
+                        "id": f"deterministic-{choice_index}-{language}-{warning_index}",
+                        "award_type": str(choice.get("award_type") or ""),
+                        "player_name": str(choice.get("player_name") or ""),
+                        "language": language,
+                        "severity": "blocking",
+                        "issue_type": "deterministic_validation",
+                        "quote": "",
+                        "comment": warning,
+                        "constraint": (
+                            "Make the smallest local edit needed to remove this validation issue. "
+                            "Preserve the title, structure, tone, and all unrelated supported context."
+                        ),
+                    }
+                )
+    return comments
+
+
+def _language_sections(section: str) -> dict[str, str]:
+    en_match = re.search(r"#### English\s+(.*?)(?=#### 中文|\Z)", section, flags=re.DOTALL)
+    zh_match = re.search(r"#### 中文\s+(.*)", section, flags=re.DOTALL)
+    return {
+        "en": en_match.group(1) if en_match else section,
+        "zh": zh_match.group(1) if zh_match else section,
+    }
+
+
 def _clone_copy_payload(payload: dict[str, Any]) -> dict[str, Any]:
     return {
         "items": [
@@ -1368,6 +1304,70 @@ def _clone_copy_payload(payload: dict[str, Any]) -> dict[str, Any]:
         ],
         "warnings": list(payload.get("warnings", [])),
     }
+
+
+def _load_review_feedback_comments(
+    path: Path | None,
+    match_date: str,
+) -> list[dict[str, Any]]:
+    if path is None or not path.exists():
+        return []
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    if str(payload.get("match_date") or match_date) != match_date:
+        raise ValueError(
+            f"Review feedback date {payload.get('match_date')} does not match {match_date}"
+        )
+    return _normalize_review_comments(payload.get("comments", []))
+
+
+def _normalize_review_comments(raw_comments: object) -> list[dict[str, Any]]:
+    if not isinstance(raw_comments, list):
+        return []
+    comments: list[dict[str, Any]] = []
+    for index, raw in enumerate(raw_comments, start=1):
+        if isinstance(raw, BaseModel):
+            raw = raw.model_dump()
+        if not isinstance(raw, dict):
+            continue
+        player_name = str(raw.get("player_name") or "").strip()
+        comment = str(raw.get("comment") or "").strip()
+        if not player_name or not comment:
+            continue
+        comments.append(
+            {
+                "id": str(raw.get("id") or f"review-{index}"),
+                "award_type": str(raw.get("award_type") or ""),
+                "player_name": player_name,
+                "language": str(raw.get("language") or "both").lower(),
+                "severity": str(raw.get("severity") or "major").lower(),
+                "issue_type": str(raw.get("issue_type") or "style"),
+                "quote": str(raw.get("quote") or ""),
+                "comment": comment,
+                "constraint": str(raw.get("constraint") or ""),
+            }
+        )
+    return comments
+
+
+def _review_comments_for_choice_language(
+    comments: list[dict[str, Any]],
+    choice: dict[str, Any],
+    language: str,
+) -> list[dict[str, Any]]:
+    player_name = str(choice["player_name"])
+    award_type = str(choice["award_type"])
+    matched: list[dict[str, Any]] = []
+    for comment in comments:
+        comment_language = str(comment.get("language") or "both").lower()
+        if comment_language not in {language, "both", "all"}:
+            continue
+        if str(comment.get("player_name") or "") != player_name:
+            continue
+        comment_award = str(comment.get("award_type") or "")
+        if comment_award and comment_award != award_type:
+            continue
+        matched.append(comment)
+    return matched
 
 
 def _set_copy_item(
@@ -1465,7 +1465,7 @@ def _fallback_copy(choice: dict[str, Any], language: str) -> dict[str, str]:
 
 
 def _fallback_zh_copy(choice: dict[str, Any]) -> dict[str, str]:
-    player = str(choice["player_name"])
+    player = _zh_player_name(str(choice["player_name"]))
     award_type = str(choice.get("award_type") or "")
     metrics = choice.get("metrics") if isinstance(choice.get("metrics"), dict) else {}
     chips = [str(chip) for chip in choice.get("evidence_chips", {}).get("zh", [])]
@@ -1473,32 +1473,53 @@ def _fallback_zh_copy(choice: dict[str, Any]) -> dict[str, str]:
     assists = int(float(metrics.get("assists") or 0))
     line_breaks = int(float(metrics.get("line_breaks_completed") or 0))
     regains = int(float(metrics.get("possession_regains") or 0))
+    interruptions = int(float(metrics.get("possession_interrupted") or 0))
+    blocks = int(float(metrics.get("blocks") or 0))
     offers = int(float(metrics.get("offers_received") or 0))
     in_behind = int(float(metrics.get("in_behind") or 0))
     in_between = int(float(metrics.get("in_between") or 0))
     opponent_xg = float(metrics.get("opponent_xg") or 0)
     opponent_on_target = int(float(metrics.get("opponent_attempts_on_target") or 0))
-    scoreline = f"{choice['team']} {choice['team_final_goals']}-{choice['opponent_final_goals']} {choice['opponent']}"
+    team = _zh_team_name(str(choice["team"]))
+    opponent = _zh_team_name(str(choice["opponent"]))
+    scoreline = f"{team}{choice['team_final_goals']}-{choice['opponent_final_goals']}{opponent}"
 
-    if "逆转制胜" in chips:
+    if "逆转制胜" in chips and assists:
+        title = f"{player}一球一助，打进逆转制胜球"
+        body = f"{scoreline}，{player}打进逆转制胜球，还送出一次助攻。"
+        if line_breaks:
+            body += f" 全场{line_breaks}次打穿防线，进攻贡献不只停在进球上。"
+    elif "逆转制胜" in chips:
         title = f"{player}打进逆转制胜球"
         body = f"{scoreline}，{player}的进球直接改变了比赛结果。"
     elif "扳平进球" in chips and assists:
         title = f"{player}扳平又助攻"
-        body = f"{scoreline}，{player}打进扳平球，并送出一次助攻。"
+        body = f"{scoreline}，{player}既有扳平球，也送出一次助攻。两次直接参与进球，让他的进攻贡献不只停在一个瞬间。"
     elif goals >= 2:
         title = f"{player}梅开二度"
         assist_note = "，还送出一次助攻" if assists else ""
         body = f"{scoreline}，{player}梅开二度{assist_note}。"
     elif goals:
         title = f"{player}打进关键进球"
-        body = f"{scoreline}，{player}取得进球，是这张卡片最直接的理由。"
+        body = f"{scoreline}，{player}取得进球，这是他入选最直接的理由。"
     elif award_type == "progression_pick" and line_breaks:
         title = f"{line_breaks}次打穿防线，{player}负责向前"
-        body = f"{scoreline}，{player}全场{line_breaks}次打穿防线。"
+        body = (
+            f"{scoreline}，{player}全场{line_breaks}次打穿防线，"
+            "这类贡献不一定抢镜，但会持续把进攻推到更靠前的位置。"
+        )
     elif award_type == "defensive_pick" and regains:
         title = f"{regains}次夺回球权，{player}守住防线"
-        body = f"{scoreline}，{player}全场{regains}次夺回球权，在防守端反复把球权抢回来。"
+        details = []
+        if interruptions:
+            details.append(f"{interruptions}次破坏进攻")
+        if blocks:
+            details.append(f"{blocks}次封堵")
+        detail_text = f"再加上{'、'.join(details[:2])}，" if details else ""
+        body = (
+            f"{scoreline}，{player}全场{regains}次夺回球权。"
+            f"{detail_text}他的防守存在感很直接。"
+        )
     elif award_type == "goalkeeper_watch":
         title = f"{player}守住零封"
         details = []
@@ -1506,9 +1527,9 @@ def _fallback_zh_copy(choice: dict[str, Any]) -> dict[str, str]:
             details.append(f"对手{opponent_on_target}次射正")
         if opponent_xg:
             details.append(f"xG达到{opponent_xg:g}")
-        body = f"{scoreline}，{player}的零封不是轻松路过。"
+        body = f"{scoreline}，{player}这个零封不算轻松。"
         if details:
-            body += " " + "，".join(details[:2]) + "，说明这张卡片有足够压力背景。"
+            body += " " + "，".join(details[:2]) + "，这个零封有足够分量。"
     elif offers:
         title = f"{offers}次接应成功，{player}把进攻串起来"
         body = f"{scoreline}，{player}全场{offers}次接应成功。"
@@ -1548,18 +1569,24 @@ def _fallback_en_copy(choice: dict[str, Any]) -> dict[str, str]:
     scoreline = f"{choice['team']} {choice['team_final_goals']}-{choice['opponent_final_goals']} {choice['opponent']}"
     if "equaliser" in chips and assists:
         return {
-            "title": f"{player}'s equaliser and assist",
-            "body": f"{player} scored the equaliser and added an assist in {scoreline}, a direct impact case without needing extra tactical framing.",
+            "title": f"{player} kept Uruguay alive",
+            "body": f"{player} scored the equaliser and added an assist in {scoreline}, giving Uruguay both a way back and another direct contribution in attack.",
         }
     if goals >= 2 and assists:
         return {
             "title": f"{player}'s two goals and assist",
-            "body": f"{player} scored twice and added an assist in {scoreline}. That is enough for a direct scoring case.",
+            "body": f"{player} scored twice and added an assist in {scoreline}.",
+        }
+    if goals and assists:
+        goal_phrase = "the match-winning goal" if "match-winning goal" in chips else "a goal"
+        return {
+            "title": f"{player}'s goal and assist",
+            "body": f"{player} scored {goal_phrase} and added an assist in {scoreline}.",
         }
     if goals:
         return {
             "title": f"{player}'s decisive touch",
-            "body": f"{player} scored in {scoreline}, giving this selection a direct match-impact case.",
+            "body": f"{player} scored in {scoreline}.",
         }
     if str(choice.get("award_type") or "") == "goalkeeper_watch":
         pressure = []
@@ -1570,12 +1597,12 @@ def _fallback_en_copy(choice: dict[str, Any]) -> dict[str, str]:
         detail = f" against {' and '.join(pressure)}" if pressure else ""
         return {
             "title": "The clean sheet under pressure",
-            "body": f"{player} kept the clean sheet in {scoreline}{detail}, enough to make the zero more than a scoreline note.",
+            "body": f"{player} kept the clean sheet in {scoreline}{detail}, making the shutout stand out on a quiet scoreboard.",
         }
     if str(choice.get("award_type") or "") == "defensive_pick" and regains:
         return {
             "title": "The ball-winner",
-            "body": f"{player} made {regains} possession regains in {scoreline}, a clear defensive footprint.",
+            "body": f"{player} made {regains} possession regains in {scoreline}, giving his defensive selection a clear base.",
         }
     if line_breaks:
         return {
@@ -1707,7 +1734,13 @@ def _unsupported_tactical_detail_claims(markdown_text: str) -> list[str]:
         r"接应和转移",
         r"帮助.{0,12}不断向前",
         r"帮球队持续向前处理",
+        r"没有断掉进攻",
+        r"落后阶段.{0,12}接应",
+        r"被队友不断找到",
         r"把球往前推",
+        r"把球往前送",
+        r"一直.{0,8}往前送",
+        r"没回收",
         r"出球点",
         r"连接让球队稳住",
         r"禁区前沿",
@@ -1720,14 +1753,24 @@ def _unsupported_tactical_detail_claims(markdown_text: str) -> list[str]:
         r"找到通道",
         r"长传或直塞",
         r"脏活硬活包揽",
+        r"脏活.{0,4}硬活",
+        r"包揽.{0,12}脏活.{0,6}硬活",
         r"推进一次次停下来",
+        r"推进.{0,8}停下来",
+        r"进攻.{0,8}停下来",
+        r"不断施压",
         r"\d+\s*次身后接应中(?:有)?\d+\s*次被(?:队友)?找到",
         r"\bdefen[cs]e unbalanced\b",
         r"\bforcing resets\b",
+        r"\brestart (?:their )?attacks\b",
+        r"\broute back into (?:it|the match)\b",
+        r"\bhelp(?:ed|ing)?\s+\w+\s+recover from\b",
+        r"\brecover from a one-goal deficit\b",
         r"\bmidfield connector\b",
         r"\bconnected\b.{0,40}\bmidfield\b",
         r"\bconstant movement\b",
         r"\bdangerous areas\b",
+        r"\bline[- ]breaking (?:runs?|passes?)\b",
         r"\b\d+\s+(?:runs?|passes?)\s+in\s+behind\b",
         r"\b(?:received|receiving)\s+\w+\s+(?:passes?|offers?)\s+.{0,20}\bin\s+behind\b",
         r"\bsliced through\b.{0,40}\bshape\b",
@@ -1755,6 +1798,10 @@ def _unsupported_position_claims(evidence: dict[str, Any], markdown_text: str) -
         if re.search(r"\bdefender\b", section, flags=re.IGNORECASE) and not position.startswith("DF"):
             warnings.append(
                 f"Copy calls {choice.get('player_name')} a defender, but evidence position is {position or 'unknown'}."
+            )
+        if re.search(r"\bwinger\b", section, flags=re.IGNORECASE) and "WINGER" not in position.upper():
+            warnings.append(
+                f"Copy calls {choice.get('player_name')} a winger, but evidence position is {position or 'unknown'}."
             )
     return warnings
 
@@ -1962,7 +2009,7 @@ def _unsupported_goalkeeper_save_claims_for_choice(choice: dict[str, Any], secti
         return []
     number = r"(?:\d+|one|two|three|four|five|six|seven|eight|nine|ten)"
     if re.search(
-        rf"\b(?:made|required)?\s*{number}\s+saves?\b|\bsaved\s+{number}\b|\bturned\s+aside\s+(?:all\s+)?{number}\b|\brepelled\s+(?:all\s+)?{number}\s+shots?\b",
+        rf"\b(?:made|required)?\s*{number}\s+saves?\b|\bsaved\s+{number}\b|\bturned\s+aside\s+(?:all\s+)?{number}\b|\brepell(?:ed|ing)\s+(?:all\s+)?{number}\s+shots?\b",
         section,
         flags=re.IGNORECASE,
     ):
@@ -1970,6 +2017,14 @@ def _unsupported_goalkeeper_save_claims_for_choice(choice: dict[str, Any], secti
             f"Copy treats shot-log Saved outcomes as official goalkeeper saves for {choice.get('player_name')}."
         ]
     if re.search(r"\d+\s*次.{0,10}(?:扑救|扑出|挡出|化解)|被他挡出", section):
+        return [
+            f"Copy treats shot-log Saved outcomes as official goalkeeper saves for {choice.get('player_name')}."
+        ]
+    if re.search(
+        r"\bresisted every attempt\b|\bevery attempt\b|力保城门不失|一次次化解|连续的射正考验",
+        section,
+        flags=re.IGNORECASE,
+    ):
         return [
             f"Copy treats shot-log Saved outcomes as official goalkeeper saves for {choice.get('player_name')}."
         ]
@@ -2039,17 +2094,6 @@ def _team_goals_for_choice(choice: dict[str, Any], match: dict[str, Any] | None)
     if team == match.get("away_team"):
         return float(match.get("away_score") or 0)
     return 0.0
-
-
-def _filter_llm_warnings(markdown_text: str, warnings: list[str]) -> list[str]:
-    filtered: list[str] = []
-    lower_markdown = markdown_text.lower()
-    for warning in warnings:
-        lower_warning = str(warning).lower()
-        if "assist" in lower_warning and "assist" not in lower_markdown and "助攻" not in markdown_text:
-            continue
-        filtered.append(str(warning))
-    return filtered
 
 
 def _extract_json_object(text: str) -> dict[str, Any]:

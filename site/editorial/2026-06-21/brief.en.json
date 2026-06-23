@@ -1,14 +1,22 @@
 {
   "schema_version": 1,
   "language": "en",
-  "generated_at": "2026-06-22T13:45:00+00:00",
+  "generated_at": "2026-06-23T07:34:17+00:00",
   "match_date": "2026-06-21",
   "scoring_version": "v0.4",
   "editorial_voice": "A data-aware football analyst writing for a general audience: clear, light, and grounded in the evidence without sounding like a table.",
   "choices": [
     {
       "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day",
+        "impact_pick"
+      ],
       "award_label": "Player of the Day",
+      "award_badges": [
+        "Player of the Day",
+        "Impact Pick"
+      ],
       "player_name": "MOHAMED SALAH",
       "team": "Egypt",
       "opponent": "New Zealand",
@@ -84,7 +92,13 @@
     },
     {
       "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
       "award_label": "Player of the Day",
+      "award_badges": [
+        "Player of the Day"
+      ],
       "player_name": "Mikel OYARZABAL",
       "team": "Spain",
       "opponent": "Saudi Arabia",
@@ -146,7 +160,13 @@
     },
     {
       "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
       "award_label": "Player of the Day",
+      "award_badges": [
+        "Player of the Day"
+      ],
       "player_name": "Maxi ARAUJO",
       "team": "Uruguay",
       "opponent": "Cabo Verde",
@@ -214,80 +234,14 @@
       ]
     },
     {
-      "award_type": "impact_pick",
-      "award_label": "Impact Pick",
-      "player_name": "MOSTAFA ZICO",
-      "team": "Egypt",
-      "opponent": "New Zealand",
-      "match_no": 40,
-      "score": 20.0,
-      "why_selected": "Focus on the connective midfield role.",
-      "title_candidates": [
-        "The midfield connector",
-        "The link in possession",
-        "A quiet route through midfield"
-      ],
-      "action_notes": [
-        "Egypt came from behind to win 3-1",
-        "57' equaliser"
-      ],
-      "flow_notes": [
-        "Egypt came from behind to win 3-1",
-        "57' equaliser"
-      ],
-      "allowed_claims": [
-        "comeback win",
-        "equaliser",
-        "comeback equaliser",
-        "57' equaliser"
-      ],
-      "key_metrics": [
-        {
-          "metric": "comeback_equalizer",
-          "label": "comeback equaliser",
-          "value": 1,
-          "unit": ""
-        },
-        {
-          "metric": "assists",
-          "label": "assists",
-          "value": 1,
-          "unit": ""
-        },
-        {
-          "metric": "equalizing_goal",
-          "label": "equaliser",
-          "value": 1,
-          "unit": ""
-        },
-        {
-          "metric": "goal_involvements",
-          "label": "goal involvements",
-          "value": 2,
-          "unit": ""
-        },
-        {
-          "metric": "team_came_from_behind_goal",
-          "label": "comeback goal",
-          "value": 1,
-          "unit": ""
-        }
-      ],
-      "evidence_chips": [
-        "comeback equaliser",
-        "equaliser",
-        "goal scorer",
-        "assist"
-      ],
-      "avoid": [
-        "metric dumps",
-        "generic AI phrasing",
-        "claims that imply video review"
-      ]
-    },
-    {
       "award_type": "progression_pick",
+      "award_types": [
+        "progression_pick"
+      ],
       "award_label": "Progression Engine",
+      "award_badges": [
+        "Progression Engine"
+      ],
       "player_name": "MARAWAN ATTIA",
       "team": "Egypt",
       "opponent": "New Zealand",
@@ -335,7 +289,15 @@
     },
     {
       "award_type": "defensive_pick",
+      "award_types": [
+        "defensive_pick",
+        "hidden_gem"
+      ],
       "award_label": "Defensive Pick",
+      "award_badges": [
+        "Defensive Pick",
+        "Hidden Gem"
+      ],
       "player_name": "PICO LOPES",
       "team": "Cabo Verde",
       "opponent": "Uruguay",
@@ -383,7 +345,13 @@
     },
     {
       "award_type": "goalkeeper_watch",
+      "award_types": [
+        "goalkeeper_watch"
+      ],
       "award_label": "Goalkeeper Watch",
+      "award_badges": [
+        "Goalkeeper Watch"
+      ],
       "player_name": "Alireza BEIRANVAND",
       "team": "IR Iran",
       "opponent": "Belgium",

@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "language": "zh",
-  "generated_at": "2026-06-22T13:45:00+00:00",
+  "generated_at": "2026-06-23T07:34:17+00:00",
   "match_date": "2026-06-21",
   "scoring_version": "v0.4",
   "editorial_process": "from_scratch_chinese_sports_editor",
@@ -20,8 +20,16 @@
   "choices": [
     {
       "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day",
+        "impact_pick"
+      ],
       "award_label": "每日最佳球员",
-      "player_name": "MOHAMED SALAH",
+      "award_badges": [
+        "每日最佳球员",
+        "影响力精选"
+      ],
+      "player_name": "萨拉赫",
       "team": "埃及",
       "opponent": "新西兰",
       "match_no": 40,
@@ -57,8 +65,14 @@
     },
     {
       "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
       "award_label": "每日最佳球员",
-      "player_name": "Mikel OYARZABAL",
+      "award_badges": [
+        "每日最佳球员"
+      ],
+      "player_name": "奥亚萨瓦尔",
       "team": "西班牙",
       "opponent": "沙特阿拉伯",
       "match_no": 38,
@@ -87,8 +101,14 @@
     },
     {
       "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
       "award_label": "每日最佳球员",
-      "player_name": "Maxi ARAUJO",
+      "award_badges": [
+        "每日最佳球员"
+      ],
+      "player_name": "马克西·阿劳霍",
       "team": "乌拉圭",
       "opponent": "佛得角",
       "match_no": 37,
@@ -119,43 +139,15 @@
       ]
     },
     {
-      "award_type": "impact_pick",
-      "award_label": "影响力精选",
-      "player_name": "MOSTAFA ZICO",
-      "team": "埃及",
-      "opponent": "新西兰",
-      "match_no": 40,
-      "match_scoreline": "埃及 3-1 新西兰",
-      "position": "MF",
-      "facts": [
-        "逆转扳平",
-        "扳平进球",
-        "取得进球",
-        "送出助攻",
-        "埃及 0-1 落后后 3-1 逆转取胜",
-        "57' 扳平",
-        "1 次逆转扳平球",
-        "1 次助攻",
-        "1 次扳平进球",
-        "2 次参与进球",
-        "1 次逆转进程进球"
-      ],
-      "allowed_angles": [
-        "中场连接点",
-        "接应和转移",
-        "帮助球队持续向前处理"
-      ],
-      "evidence_chips": [
-        "逆转扳平",
-        "扳平进球",
-        "取得进球",
-        "送出助攻"
-      ]
-    },
-    {
       "award_type": "progression_pick",
+      "award_types": [
+        "progression_pick"
+      ],
       "award_label": "进攻发动机",
-      "player_name": "MARAWAN ATTIA",
+      "award_badges": [
+        "进攻发动机"
+      ],
+      "player_name": "阿蒂亚",
       "team": "埃及",
       "opponent": "新西兰",
       "match_no": 40,
@@ -180,8 +172,16 @@
     },
     {
       "award_type": "defensive_pick",
+      "award_types": [
+        "defensive_pick",
+        "hidden_gem"
+      ],
       "award_label": "防守精选",
-      "player_name": "PICO LOPES",
+      "award_badges": [
+        "防守精选",
+        "隐藏亮点"
+      ],
+      "player_name": "皮科·洛佩斯",
       "team": "佛得角",
       "opponent": "乌拉圭",
       "match_no": 37,
@@ -204,8 +204,14 @@
     },
     {
       "award_type": "goalkeeper_watch",
+      "award_types": [
+        "goalkeeper_watch"
+      ],
       "award_label": "门将关注",
-      "player_name": "Alireza BEIRANVAND",
+      "award_badges": [
+        "门将关注"
+      ],
+      "player_name": "贝兰万德",
       "team": "伊朗",
       "opponent": "比利时",
       "match_no": 39,
