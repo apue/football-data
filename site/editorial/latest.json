@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-06-22T13:45:00+00:00",
-  "compiled_at": "2026-06-22T13:54:49+00:00",
+  "generated_at": "2026-06-23T07:34:17+00:00",
+  "compiled_at": "2026-06-23T07:37:46+00:00",
   "match_date": "2026-06-21",
   "scoring_version": "v0.4",
   "editorial_generation": {
@@ -496,10 +496,30 @@
   "choices": [
     {
       "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day",
+        "impact_pick"
+      ],
       "award_label": {
         "en": "Player of the Day",
         "zh": "每日最佳球员"
       },
+      "badges": [
+        {
+          "type": "player_of_the_day",
+          "label": {
+            "en": "Player of the Day",
+            "zh": "每日最佳球员"
+          }
+        },
+        {
+          "type": "impact_pick",
+          "label": {
+            "en": "Impact Pick",
+            "zh": "影响力精选"
+          }
+        }
+      ],
       "rank": 1,
       "match_key": "FIFA-2026-M40-NZL-EGY",
       "match_no": 40,
@@ -614,20 +634,32 @@
       "content": {
         "en": {
           "title": "The comeback finisher",
-          "html": "<p>Mohamed Salah scored the go-ahead goal to complete Egypt's comeback from a goal down. The forward also completed 7 line-breaking runs, giving his side a decisive route back into the match.</p>"
+          "html": "<p>Mohamed Salah dragged Egypt back into the match after they went behind, scoring the 66th-minute go-ahead goal and providing an assist in a 3-1 comeback win. The forward also completed 7 line-breaking actions, giving his side a constant route forward.</p>"
         },
         "zh": {
-          "title": "66分钟制胜球，萨拉赫率埃及逆转新西兰",
-          "html": "<p>埃及 0-1 落后，萨拉赫一球一助，率队 3-1 逆转新西兰。66分钟他打入制胜球，帮助埃及取得领先。全场 7 次打穿新西兰防线，是这场逆转的核心。</p>"
+          "title": "萨拉赫一球一助，66分钟制胜球助埃及逆转新西兰",
+          "html": "<p>埃及0-1落后新西兰，萨拉赫第66分钟打入制胜球，帮助球队3-1逆转取胜。这场他贡献一球一助，7次打穿防线，在逆转过程中发挥了决定性作用。</p>"
         }
       }
     },
     {
       "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
       "award_label": {
         "en": "Player of the Day",
         "zh": "每日最佳球员"
       },
+      "badges": [
+        {
+          "type": "player_of_the_day",
+          "label": {
+            "en": "Player of the Day",
+            "zh": "每日最佳球员"
+          }
+        }
+      ],
       "rank": 2,
       "match_key": "FIFA-2026-M38-ESP-KSA",
       "match_no": 38,
@@ -715,21 +747,33 @@
       },
       "content": {
         "en": {
-          "title": "The direct scoring case",
-          "html": "<p>Mikel Oyarzabal led Spain's attack with two goals and an assist in a 4-0 win over Saudi Arabia. He had three shots on target and was involved in all three of his team's first-half goals, assisting the opener and then scoring twice.</p>"
+          "title": "Two goals and an assist",
+          "html": "<p>Mikel Oyarzabal spearheaded Spain's attack by scoring twice and providing an assist, directly contributing to three of his team's four goals.</p>"
         },
         "zh": {
-          "title": "两球一助，奥亚萨瓦尔撑起西班牙锋线火力",
-          "html": "<p>西班牙4-0大胜沙特阿拉伯。奥亚萨瓦尔梅开二度并送出一次助攻，直接参与3粒进球。3次射正打进2球，射门质量突出。除了自己破门，他还助攻队友得分。</p>"
+          "title": "三脚射正换两球加一助，奥亚萨瓦尔扛起西班牙大胜",
+          "html": "<p>西班牙4-0横扫沙特阿拉伯，真正撑开比分的是奥亚萨瓦尔。三脚射正打进两球、送出一记助攻，射门质量突出——效率摆在那里，他在锋线既完成终结也做了串联。</p>"
         }
       }
     },
     {
       "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
       "award_label": {
         "en": "Player of the Day",
         "zh": "每日最佳球员"
       },
+      "badges": [
+        {
+          "type": "player_of_the_day",
+          "label": {
+            "en": "Player of the Day",
+            "zh": "每日最佳球员"
+          }
+        }
+      ],
       "rank": 3,
       "match_key": "FIFA-2026-M37-URU-CPV",
       "match_no": 37,
@@ -821,129 +865,33 @@
       },
       "content": {
         "en": {
-          "title": "Maxi ARAUJO's equaliser and assist",
-          "html": "<p>Maxi ARAUJO scored the equaliser and added an assist in Uruguay 2-2 Cabo Verde, a direct impact case without needing extra tactical framing.</p>"
+          "title": "Maxi ARAUJO kept Uruguay alive",
+          "html": "<p>Maxi ARAUJO scored the equaliser and added an assist in Uruguay 2-2 Cabo Verde, giving Uruguay both a way back and another direct contribution in attack.</p>"
         },
         "zh": {
-          "title": "Maxi ARAUJO扳平又助攻",
-          "html": "<p>Uruguay 2-2 Cabo Verde，Maxi ARAUJO打进扳平球，并送出一次助攻。</p>"
-        }
-      }
-    },
-    {
-      "award_type": "impact_pick",
-      "award_label": {
-        "en": "Impact Pick",
-        "zh": "影响力精选"
-      },
-      "rank": 1,
-      "match_key": "FIFA-2026-M40-NZL-EGY",
-      "match_no": 40,
-      "player_no": 11,
-      "player_name": "MOSTAFA ZICO",
-      "team": "Egypt",
-      "opponent": "New Zealand",
-      "home_score": 1,
-      "away_score": 3,
-      "team_final_goals": 3,
-      "opponent_final_goals": 1,
-      "position": "MF",
-      "progression_benchmark": {
-        "score": 3.0,
-        "quality": "thin",
-        "support_actions": 0.0,
-        "pass_only_line_break_volume": false
-      },
-      "hidden_gem_profile": {
-        "eligible": false,
-        "profile": "insufficient_evidence",
-        "score": 18.9
-      },
-      "flow_context": {
-        "match_key": "FIFA-2026-M40-NZL-EGY",
-        "team_came_from_behind_to_win": true,
-        "allowed_claims": {
-          "en": [
-            "comeback win",
-            "equaliser",
-            "comeback equaliser",
-            "57' equaliser"
-          ],
-          "zh": [
-            "逆转取胜",
-            "扳平",
-            "逆转过程中的扳平球",
-            "逆转扳平",
-            "57' 扳平"
-          ]
-        },
-        "goals": [
-          {
-            "goal_order": 2,
-            "minute": 57,
-            "team": "Egypt",
-            "player_name": "MOSTAFA ZICO",
-            "score_before": "1-0",
-            "score_after": "1-1",
-            "team_score_before": 0,
-            "opponent_score_before": 1,
-            "team_score_after": 1,
-            "opponent_score_after": 1,
-            "tags": [
-              "equalizer",
-              "comeback_equalizer",
-              "team_came_from_behind_goal"
-            ]
-          }
-        ],
-        "decisive_goal": null
-      },
-      "metrics": {
-        "shots": 4,
-        "on_target": 1,
-        "goals": 1,
-        "assists": 1,
-        "goal_involvements": 2,
-        "offers_received": 5,
-        "in_behind": 15,
-        "in_between": 4,
-        "line_breaks_completed": 5,
-        "possession_regains": 2,
-        "possession_interrupted": 3,
-        "blocks": 2,
-        "total_distance_m": 9630.4
-      },
-      "evidence_chips": {
-        "en": [
-          "comeback equaliser",
-          "equaliser",
-          "goal scorer",
-          "assist"
-        ],
-        "zh": [
-          "逆转扳平",
-          "扳平进球",
-          "取得进球",
-          "送出助攻"
-        ]
-      },
-      "content": {
-        "en": {
-          "title": "MOSTAFA ZICO's equaliser and assist",
-          "html": "<p>MOSTAFA ZICO scored the equaliser and added an assist in Egypt 3-1 New Zealand, a direct impact case without needing extra tactical framing.</p>"
-        },
-        "zh": {
-          "title": "MOSTAFA ZICO扳平又助攻",
-          "html": "<p>Egypt 3-1 New Zealand，MOSTAFA ZICO打进扳平球，并送出一次助攻。</p>"
+          "title": "马克西·阿劳霍扳平又助攻",
+          "html": "<p>乌拉圭2-2佛得角，马克西·阿劳霍既有扳平球，也送出一次助攻。两次直接参与进球，让他的进攻贡献不只停在一个瞬间。</p>"
         }
       }
     },
     {
       "award_type": "progression_pick",
+      "award_types": [
+        "progression_pick"
+      ],
       "award_label": {
         "en": "Progression Engine",
         "zh": "进攻发动机"
       },
+      "badges": [
+        {
+          "type": "progression_pick",
+          "label": {
+            "en": "Progression Engine",
+            "zh": "进攻发动机"
+          }
+        }
+      ],
       "rank": 1,
       "match_key": "FIFA-2026-M40-NZL-EGY",
       "match_no": 40,
@@ -1003,21 +951,41 @@
       },
       "content": {
         "en": {
-          "title": "Forward passing in the comeback",
-          "html": "<p>Marawan Attia helped Egypt recover from a trailing position by repeatedly breaking the opponent's lines, finishing with 31 completed line breaks to fuel the comeback win.</p>"
+          "title": "The forward route",
+          "html": "<p>MARAWAN ATTIA completed 31 line breaks in Egypt 3-1 New Zealand, giving his side a repeated way forward.</p>"
         },
         "zh": {
-          "title": "中场不退，阿蒂亚31次打穿防线助埃及3-1逆转",
-          "html": "<p>埃及0-1落后新西兰，阿蒂亚在中场始终保持向前接应，单场31次打穿防线、1次推进。落后阶段他反复被队友找到，让球队保住向前的路线，最终3-1完成逆转。</p>"
+          "title": "31次打穿防线，阿蒂亚负责向前",
+          "html": "<p>埃及3-1新西兰，阿蒂亚全场31次打穿防线，这类贡献不一定抢镜，但会持续把进攻推到更靠前的位置。</p>"
         }
       }
     },
     {
       "award_type": "defensive_pick",
+      "award_types": [
+        "defensive_pick",
+        "hidden_gem"
+      ],
       "award_label": {
         "en": "Defensive Pick",
         "zh": "防守精选"
       },
+      "badges": [
+        {
+          "type": "defensive_pick",
+          "label": {
+            "en": "Defensive Pick",
+            "zh": "防守精选"
+          }
+        },
+        {
+          "type": "hidden_gem",
+          "label": {
+            "en": "Hidden Gem",
+            "zh": "隐藏亮点"
+          }
+        }
+      ],
       "rank": 1,
       "match_key": "FIFA-2026-M37-URU-CPV",
       "match_no": 37,
@@ -1073,20 +1041,32 @@
       "content": {
         "en": {
           "title": "The ball-winner",
-          "html": "<p>PICO LOPES made 15 possession regains in Cabo Verde 2-2 Uruguay, a clear defensive footprint.</p>"
+          "html": "<p>PICO LOPES made 15 possession regains in Cabo Verde 2-2 Uruguay, giving his defensive selection a clear base.</p>"
         },
         "zh": {
-          "title": "15次夺回球权，PICO LOPES守住防线",
-          "html": "<p>Cabo Verde 2-2 Uruguay，PICO LOPES全场15次夺回球权，在防守端反复把球权抢回来。</p>"
+          "title": "15次夺回球权，皮科·洛佩斯守住防线",
+          "html": "<p>佛得角2-2乌拉圭，皮科·洛佩斯全场15次夺回球权。再加上5次破坏进攻、3次封堵，他的防守存在感很直接。</p>"
         }
       }
     },
     {
       "award_type": "goalkeeper_watch",
+      "award_types": [
+        "goalkeeper_watch"
+      ],
       "award_label": {
         "en": "Goalkeeper Watch",
         "zh": "门将关注"
       },
+      "badges": [
+        {
+          "type": "goalkeeper_watch",
+          "label": {
+            "en": "Goalkeeper Watch",
+            "zh": "门将关注"
+          }
+        }
+      ],
       "rank": 1,
       "match_key": "FIFA-2026-M39-BEL-IRN",
       "match_no": 39,
@@ -1148,11 +1128,11 @@
       "content": {
         "en": {
           "title": "The clean sheet under pressure",
-          "html": "<p>Alireza BEIRANVAND kept the clean sheet in IR Iran 0-0 Belgium against 7 opponent shots on target and 1.48 opponent xG, enough to make the zero more than a scoreline note.</p>"
+          "html": "<p>Alireza Beiranvand kept a clean sheet for Iran against Belgium despite facing heavy on-target pressure. Belgium put 7 shots on target with a combined expected goals of 1.48, but Beiranvand held firm to keep the match goalless.</p>"
         },
         "zh": {
-          "title": "Alireza BEIRANVAND守住零封",
-          "html": "<p>IR Iran 0-0 Belgium，Alireza BEIRANVAND的零封不是轻松路过。 对手7次射正，xG达到1.48，说明这张卡片有足够压力背景。</p>"
+          "title": "贝兰万德挡住比利时的射正压力",
+          "html": "<p>比利时7次射正、制造1.48的xG，贝兰万德把球一次次拦在门外，8次Saved结果换来零封。面对这样的射正压力，他帮伊朗从这场0-0里守住一分。</p>"
         }
       }
     }
@@ -1167,7 +1147,7 @@
         "teams": [
           {
             "team": "Egypt",
-            "count": 3
+            "count": 2
           }
         ]
       }
@@ -1184,7 +1164,7 @@
             "teams": [
               {
                 "team": "Egypt",
-                "count": 3
+                "count": 2
               }
             ]
           }
@@ -1193,7 +1173,6 @@
           "MOHAMED SALAH",
           "Mikel OYARZABAL",
           "Maxi ARAUJO",
-          "MOSTAFA ZICO",
           "MARAWAN ATTIA",
           "PICO LOPES",
           "Alireza BEIRANVAND"
@@ -1201,11 +1180,5 @@
       }
     ]
   },
-  "audit": [
-    {
-      "level": "info",
-      "code": "no_hidden_gem",
-      "message": "No hidden gem passed the current threshold."
-    }
-  ]
+  "audit": []
 }

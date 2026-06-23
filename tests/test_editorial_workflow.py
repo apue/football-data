@@ -17,7 +17,12 @@ def test_editorial_workflow_runs_after_dataset_update_and_exposes_secret_env():
     assert "--ignore=tests/test_database.py" in text
     assert "OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}" in text
     assert "OPENAI_BASE_URL: ${{ vars.OPENAI_BASE_URL || 'https://api.siliconflow.cn/v1' }}" in text
-    assert "EDITORIAL_ZH_WRITER_MODEL: ${{ vars.EDITORIAL_ZH_WRITER_MODEL || 'zai-org/GLM-5.2' }}" in text
+    assert "EDITORIAL_ZH_EDITOR_MODEL: ${{ vars.EDITORIAL_ZH_EDITOR_MODEL || 'zai-org/GLM-5.2' }}" in text
+    assert "EDITORIAL_EN_EDITOR_MODEL: ${{ vars.EDITORIAL_EN_EDITOR_MODEL || 'deepseek-ai/DeepSeek-V4-Flash' }}" in text
+    assert "EDITORIAL_REVISION_EDITOR_MODEL: ${{ vars.EDITORIAL_REVISION_EDITOR_MODEL || 'deepseek-ai/DeepSeek-V4-Flash' }}" in text
+    assert "EDITORIAL_ZH_WRITER_MODEL" not in text
+    assert "EDITORIAL_EN_WRITER_MODEL" not in text
+    assert "EDITORIAL_FACT_CHECK_MODEL" not in text
     assert "EDITORIAL_AGENT_MAX_CONCURRENCY: ${{ vars.EDITORIAL_AGENT_MAX_CONCURRENCY || '6' }}" in text
     assert "EDITORIAL_AGENT_MAX_ATTEMPTS: ${{ vars.EDITORIAL_AGENT_MAX_ATTEMPTS || '1' }}" in text
     assert "KEYPOOL_KEY: ${{ secrets.KEYPOOL_KEY }}" in text
@@ -36,11 +41,9 @@ def test_env_example_lists_editorial_agent_and_firecrawl_placeholders():
     for key in [
         "OPENAI_API_KEY=",
         "OPENAI_BASE_URL=https://api.siliconflow.cn/v1",
-        "EDITORIAL_ZH_WRITER_MODEL=zai-org/GLM-5.2",
-        "EDITORIAL_ZH_EDITOR_MODEL=Qwen/Qwen3.5-397B-A17B",
-        "EDITORIAL_EN_WRITER_MODEL=deepseek-ai/DeepSeek-V4-Flash",
-        "EDITORIAL_EN_EDITOR_MODEL=deepseek-ai/DeepSeek-V4-Pro",
-        "EDITORIAL_FACT_CHECK_MODEL=deepseek-ai/DeepSeek-V4-Pro",
+        "EDITORIAL_ZH_EDITOR_MODEL=zai-org/GLM-5.2",
+        "EDITORIAL_EN_EDITOR_MODEL=deepseek-ai/DeepSeek-V4-Flash",
+        "EDITORIAL_REVISION_EDITOR_MODEL=deepseek-ai/DeepSeek-V4-Flash",
         "EDITORIAL_AGENT_TIMEOUT_SECONDS=90",
         "EDITORIAL_AGENT_MAX_CONCURRENCY=6",
         "EDITORIAL_AGENT_MAX_ATTEMPTS=1",
@@ -48,3 +51,9 @@ def test_env_example_lists_editorial_agent_and_firecrawl_placeholders():
         "KEYPOOL_URL=",
     ]:
         assert key in text
+    for old_key in [
+        "EDITORIAL_ZH_WRITER_MODEL",
+        "EDITORIAL_EN_WRITER_MODEL",
+        "EDITORIAL_FACT_CHECK_MODEL",
+    ]:
+        assert old_key not in text

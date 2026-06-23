@@ -24,6 +24,17 @@ def main() -> int:
     parser.add_argument("--scoring-config", default=DEFAULT_SCORING_CONFIG)
     parser.add_argument("--no-research", action="store_true", help="Skip Firecrawl research.")
     parser.add_argument("--no-homepage", action="store_true", help="Do not rebuild site/index.html.")
+    parser.add_argument(
+        "--review-feedback",
+        default=None,
+        help="Optional JSON comments from a local Codex/publication review.",
+    )
+    parser.add_argument(
+        "--max-review-loops",
+        type=int,
+        default=1,
+        help="Maximum publication review/revision loops before final validation.",
+    )
     parser.add_argument("--fake", action="store_true", help="Use deterministic fake agent backend.")
     parser.add_argument("--json", action="store_true", help="Print run JSON.")
     args = parser.parse_args()
@@ -44,6 +55,8 @@ def main() -> int:
         client=client,
         research=not args.no_research,
         rebuild_homepage=not args.no_homepage,
+        review_feedback_path=args.review_feedback,
+        max_review_loops=args.max_review_loops,
     )
     if args.json:
         print(json.dumps(result, ensure_ascii=False, indent=2))

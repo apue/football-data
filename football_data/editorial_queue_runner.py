@@ -30,6 +30,8 @@ def run_editorial_queue(
     fake: bool = False,
     max_dates: int | None = None,
     match_dates: list[str] | None = None,
+    review_feedback_path: str | Path | None = None,
+    max_review_loops: int = 1,
 ) -> dict[str, Any]:
     queue = build_editorial_queue(
         db_path=db_path,
@@ -78,6 +80,8 @@ def run_editorial_queue(
                 client=client,
                 research=research,
                 rebuild_homepage=True,
+                review_feedback_path=review_feedback_path,
+                max_review_loops=max_review_loops,
             )
             if agent_result.get("status") != "success":
                 raise RuntimeError(f"Editorial agent did not publish: {agent_result.get('status')}")

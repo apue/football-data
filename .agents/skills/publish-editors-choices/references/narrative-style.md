@@ -64,7 +64,7 @@ Before publishing, check:
 - Every claim is supported by `evidence.json` or SQLite.
 - The English and Chinese versions make the same selection argument.
 - The copy does not sound like a metric table.
-- Check the workflow gates: draft fact check, final editor, deterministic validation, and final fact-check warnings.
+- Check the workflow gates: compact editor self-checks, deterministic repair summary, and final deterministic validation.
 - Chinese final copy should read like a from-scratch Chinese sports editor wrote it after seeing the fact-check report.
 - No external match observation is implied unless an external source was actually checked.
 - If a card fails review, repair prompts/style packs or rerun `scripts/run_editorial_agent.py --date YYYY-MM-DD`.

@@ -25,6 +25,8 @@ def test_build_editorial_report_for_match_day():
 
     first_choice = report["choices"][0]
     assert first_choice["award_type"] == "player_of_the_day"
+    assert "player_of_the_day" in first_choice["award_types"]
+    assert first_choice["badges"][0]["label"]["en"] == "Player of the Day"
     assert first_choice["player_name"]
     assert first_choice["score"] > 0
     assert 1 <= len(first_choice["evidence_chips"]["en"]) <= 4
@@ -137,8 +139,14 @@ def test_editorial_selection_gate_rebalances_contextual_risks():
 def test_latest_day_allows_keeper_watch_and_optional_hidden_gem():
     report = build_editorial_report("data/latest.sqlite", match_date="2026-06-21")
     choices_by_award = {choice["award_type"]: choice for choice in report["choices"]}
+    choices_by_name = {choice["player_name"]: choice for choice in report["choices"]}
 
-    assert "hidden_gem" not in choices_by_award
+    assert "MOSTAFA ZICO" not in choices_by_name
+    assert [choice["team"] for choice in report["choices"]].count("Egypt") == 2
+    assert choices_by_name["MOHAMED SALAH"]["award_types"] == [
+        "player_of_the_day",
+        "impact_pick",
+    ]
 
     progression = choices_by_award["progression_pick"]
     assert progression["award_label"]["en"] == "Progression Engine"
@@ -147,6 +155,7 @@ def test_latest_day_allows_keeper_watch_and_optional_hidden_gem():
     defensive = choices_by_award["defensive_pick"]
     assert defensive["player_name"] == "PICO LOPES"
     assert defensive["team"] == "Cabo Verde"
+    assert defensive["award_types"] == ["defensive_pick", "hidden_gem"]
 
     keeper = choices_by_award["goalkeeper_watch"]
     assert keeper["player_name"] == "Alireza BEIRANVAND"

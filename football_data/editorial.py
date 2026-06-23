@@ -27,6 +27,22 @@ AWARD_LABELS = {
 }
 
 
+AWARD_DISPLAY_ORDER = [
+    "player_of_the_day",
+    "impact_pick",
+    "progression_pick",
+    "defensive_pick",
+    "goalkeeper_watch",
+    "hidden_gem",
+]
+
+
+AWARD_DISPLAY_PRIORITY = {
+    award_type: index
+    for index, award_type in enumerate(AWARD_DISPLAY_ORDER)
+}
+
+
 ZH_TEAM_NAMES = {
     "Algeria": "阿尔及利亚",
     "Argentina": "阿根廷",
@@ -81,6 +97,7 @@ ZH_TEAM_NAMES = {
 
 ZH_PLAYER_NAMES = {
     "ABDALLAH NASIB": "纳西布",
+    "Alireza BEIRANVAND": "贝兰万德",
     "Andres ANDRADE": "安德烈斯·安德拉德",
     "Ayase UEDA": "上田绮世",
     "Brian BROBBEY": "布罗比",
@@ -92,7 +109,12 @@ ZH_PLAYER_NAMES = {
     "Joshua KIMMICH": "基米希",
     "Kylian MBAPPE": "姆巴佩",
     "Lionel MESSI": "梅西",
+    "MARAWAN ATTIA": "阿蒂亚",
+    "Maxi ARAUJO": "马克西·阿劳霍",
+    "Mikel OYARZABAL": "奥亚萨瓦尔",
+    "MOHAMED SALAH": "萨拉赫",
     "Nicolas SEIWALD": "塞瓦尔德",
+    "PICO LOPES": "皮科·洛佩斯",
     "Pedro VITE": "维特",
     "Rayan AIT-NOURI": "艾特-努里",
     "Rodrigo DE PAUL": "德保罗",
@@ -788,62 +810,146 @@ def _select_choices(
     *,
     apply_editorial_guards: bool = False,
 ) -> list[dict[str, Any]]:
-    choices: list[dict[str, Any]] = []
-    used_keys: set[tuple[str, str, int]] = set()
+    candidates: dict[tuple[str, str, int], dict[str, Any]] = {}
+    headline_keys: set[tuple[str, str, int]] = set()
+    headline_teams: set[str] = set()
 
     players_of_day = sorted(players, key=lambda row: row["headline_score"], reverse=True)[
         : int(scoring["selection"]["players_of_the_day"])
     ]
+    player_of_day_keys: set[tuple[str, str, int]] = set()
     for rank, player in enumerate(players_of_day, start=1):
-        choices.append(_choice("player_of_the_day", player, rank, primary_score="headline_score"))
-        used_keys.add(_player_key(player))
+        _add_choice_award(candidates, player, "player_of_the_day", rank, "headline_score")
+        player_key = _player_key(player)
+        player_of_day_keys.add(player_key)
+        headline_keys.add(player_key)
+        headline_teams.add(str(player["team"]))
 
     impact_min = float(scoring["selection"].get("minimum_impact_pick_score", 0))
+    impact_slots = int(scoring["selection"].get("impact_picks", 0))
     impact_candidates = [
         player
         for player in players
-        if _player_key(player) not in used_keys
-        and player["role_scores"].get("impact", 0) >= impact_min
+        if player["role_scores"].get("impact", 0) >= impact_min
     ]
     impact_candidates.sort(key=lambda row: row["role_scores"]["impact"], reverse=True)
-    for rank, player in enumerate(
-        impact_candidates[: int(scoring["selection"].get("impact_picks", 0))],
-        start=1,
-    ):
-        choices.append(_choice("impact_pick", player, rank, primary_score="impact"))
-        used_keys.add(_player_key(player))
+    impact_award_keys: set[tuple[str, str, int]] = set()
+    for rank, player in enumerate(impact_candidates[:impact_slots], start=1):
+        player_key = _player_key(player)
+        _add_choice_award(candidates, player, "impact_pick", rank, "impact")
+        impact_award_keys.add(player_key)
+        headline_keys.add(player_key)
+        headline_teams.add(str(player["team"]))
+    supplemental_impact_candidates = [
+        player
+        for player in impact_candidates
+        if _player_key(player) not in player_of_day_keys
+        and _player_key(player) not in impact_award_keys
+        and str(player["team"]) not in headline_teams
+    ]
+    for rank, player in enumerate(supplemental_impact_candidates[:impact_slots], start=1):
+        player_key = _player_key(player)
+        _add_choice_award(candidates, player, "impact_pick", impact_slots + rank, "impact")
+        impact_award_keys.add(player_key)
+        headline_keys.add(player_key)
+        headline_teams.add(str(player["team"]))
 
-    player = _top_unused_role_player(
+    player = _top_role_player(
         players,
-        used_keys,
         "progressor",
         avoid_heavy_defensive_loss=apply_editorial_guards,
     )
     if player is not None:
-        choices.append(_choice("progression_pick", player, 1, primary_score="progressor"))
-        used_keys.add(_player_key(player))
+        _add_choice_award(candidates, player, "progression_pick", 1, "progressor")
 
-    player = _top_unused_role_player(
+    player = _top_role_player(
         players,
-        used_keys,
         "defensive",
         avoid_heavy_defensive_loss=apply_editorial_guards,
     )
     if player is not None:
-        choices.append(_choice("defensive_pick", player, 1, primary_score="defensive"))
-        used_keys.add(_player_key(player))
+        _add_choice_award(candidates, player, "defensive_pick", 1, "defensive")
 
-    player = _top_goalkeeper_watch_player(players, used_keys, scoring)
+    player = _top_goalkeeper_watch_player(players, scoring)
     if player is not None:
-        choices.append(_choice("goalkeeper_watch", player, 1, primary_score="goalkeeper"))
-        used_keys.add(_player_key(player))
+        _add_choice_award(candidates, player, "goalkeeper_watch", 1, "goalkeeper")
 
-    hidden_player = _top_hidden_gem_player(players, choices, used_keys, scoring, apply_editorial_guards)
+    hidden_player = _top_hidden_gem_player(
+        players,
+        excluded_keys=headline_keys,
+        excluded_teams=headline_teams,
+        used_teams={str(candidate["player"]["team"]) for candidate in candidates.values()},
+        attachable_keys=set(candidates) - headline_keys,
+        scoring=scoring,
+    )
     if hidden_player is not None:
-        choices.append(_choice("hidden_gem", hidden_player, 1, primary_score=_best_role_score(hidden_player)))
-        used_keys.add(_player_key(hidden_player))
+        _add_choice_award(candidates, hidden_player, "hidden_gem", 1, _best_role_score(hidden_player))
 
-    return choices
+    choices = [_choice_from_candidate(candidate) for candidate in candidates.values()]
+    return sorted(
+        choices,
+        key=lambda choice: (
+            AWARD_DISPLAY_PRIORITY.get(choice["award_type"], 999),
+            int(choice["rank"]),
+            -float(choice["score"]),
+            str(choice["player_name"]),
+        ),
+    )
+
+
+def _add_choice_award(
+    candidates: dict[tuple[str, str, int], dict[str, Any]],
+    player: dict[str, Any],
+    award_type: str,
+    rank: int,
+    primary_score: str,
+) -> None:
+    key = _player_key(player)
+    candidate = candidates.setdefault(key, {"player": player, "awards": {}})
+    score = _score_value(player, primary_score)
+    existing = candidate["awards"].get(award_type)
+    if existing is not None and float(existing["score"]) >= score:
+        return
+    candidate["awards"][award_type] = {
+        "rank": rank,
+        "primary_score": primary_score,
+        "score": score,
+    }
+
+
+def _score_value(player: dict[str, Any], primary_score: str) -> float:
+    if primary_score in {"composite_score", "headline_score"}:
+        return float(player[primary_score])
+    return float(player["role_scores"][primary_score])
+
+
+def _choice_from_candidate(candidate: dict[str, Any]) -> dict[str, Any]:
+    player = candidate["player"]
+    awards = candidate["awards"]
+    primary_award_type = min(
+        awards,
+        key=lambda award_type: (
+            AWARD_DISPLAY_PRIORITY.get(award_type, 999),
+            int(awards[award_type]["rank"]),
+            -float(awards[award_type]["score"]),
+        ),
+    )
+    primary = awards[primary_award_type]
+    award_types = sorted(
+        awards,
+        key=lambda award_type: (
+            AWARD_DISPLAY_PRIORITY.get(award_type, 999),
+            int(awards[award_type]["rank"]),
+            -float(awards[award_type]["score"]),
+        ),
+    )
+    return _choice(
+        primary_award_type,
+        player,
+        int(primary["rank"]),
+        primary_score=str(primary["primary_score"]),
+        award_types=award_types,
+    )
 
 
 def _choice(
@@ -851,7 +957,10 @@ def _choice(
     player: dict[str, Any],
     rank: int,
     primary_score: str,
+    *,
+    award_types: list[str] | None = None,
 ) -> dict[str, Any]:
+    award_types = award_types or [award_type]
     if primary_score in {"composite_score", "headline_score"}:
         score = player[primary_score]
         components = _top_components_across_roles(player)
@@ -861,7 +970,9 @@ def _choice(
     audit_components = _audit_score_components(player, components)
     return {
         "award_type": award_type,
+        "award_types": award_types,
         "award_label": AWARD_LABELS[award_type],
+        "badges": [_award_badge(label_type) for label_type in award_types],
         "rank": rank,
         "match_key": player["match_key"],
         "match_no": player["match_no"],
@@ -884,6 +995,13 @@ def _choice(
         "score_components": audit_components,
         "evidence_chips": _evidence_chips(player, award_type),
         "draft": _draft_brief(player, award_type),
+    }
+
+
+def _award_badge(award_type: str) -> dict[str, Any]:
+    return {
+        "type": award_type,
+        "label": AWARD_LABELS[award_type],
     }
 
 
@@ -969,21 +1087,27 @@ def _choice_metrics(player: dict[str, Any], award_type: str) -> dict[str, int | 
 
 def _top_hidden_gem_player(
     players: list[dict[str, Any]],
-    choices: list[dict[str, Any]],
-    used_keys: set[tuple[str, str, int]],
+    *,
+    excluded_keys: set[tuple[str, str, int]],
+    excluded_teams: set[str],
+    used_teams: set[str],
+    attachable_keys: set[tuple[str, str, int]],
     scoring: dict[str, Any],
-    apply_editorial_guards: bool,
 ) -> dict[str, Any] | None:
     if int(scoring["selection"].get("hidden_gems", 0)) <= 0:
         return None
     hidden_min = float(scoring["selection"]["minimum_hidden_gem_role_score"])
-    used_teams = {choice["team"] for choice in choices}
     require_distinct_team = bool(scoring["selection"].get("require_hidden_gem_distinct_team", True))
     candidates = [
         player
         for player in players
-        if _player_key(player) not in used_keys
-        and (not require_distinct_team or player["team"] not in used_teams)
+        if _player_key(player) not in excluded_keys
+        and player["team"] not in excluded_teams
+        and (
+            not require_distinct_team
+            or player["team"] not in used_teams
+            or _player_key(player) in attachable_keys
+        )
         and int(player.get("goals") or 0) == 0
         and _hidden_selection_score(player) >= hidden_min
         and _hidden_gem_profile_is_publishable(player, scoring)
@@ -1003,7 +1127,6 @@ def _top_hidden_gem_player(
 
 def _top_goalkeeper_watch_player(
     players: list[dict[str, Any]],
-    used_keys: set[tuple[str, str, int]],
     scoring: dict[str, Any],
 ) -> dict[str, Any] | None:
     selection = scoring.get("selection", {})
@@ -1016,8 +1139,7 @@ def _top_goalkeeper_watch_player(
     candidates = [
         player
         for player in players
-        if _player_key(player) not in used_keys
-        and str(player.get("position") or "").upper() == "GK"
+        if str(player.get("position") or "").upper() == "GK"
         and int(player.get("started") or 0) == 1
         and (not require_clean_sheet or int(player.get("clean_sheet") or 0) == 1)
         and float(player.get("opponent_xg") or 0) >= min_xg
@@ -1036,9 +1158,8 @@ def _top_goalkeeper_watch_player(
     )
 
 
-def _top_unused_role_player(
+def _top_role_player(
     players: list[dict[str, Any]],
-    used_keys: set[tuple[str, str, int]],
     score_name: str,
     *,
     avoid_heavy_defensive_loss: bool = False,
@@ -1046,7 +1167,8 @@ def _top_unused_role_player(
     candidates = [
         player
         for player in players
-        if _player_key(player) not in used_keys and player["role_scores"].get(score_name, 0) > 0
+        if str(player.get("position") or "").upper() != "GK"
+        and player["role_scores"].get(score_name, 0) > 0
     ]
     if not candidates:
         return None
@@ -1078,7 +1200,7 @@ def _review_editorial_selection(
         return {"status": "needs_adjustment", "alerts": alerts}
 
     defensive_pick = next(
-        (choice for choice in choices if choice["award_type"] == "defensive_pick"),
+        (choice for choice in choices if _choice_has_award(choice, "defensive_pick")),
         None,
     )
     if defensive_pick is not None and _heavy_defensive_loss(defensive_pick):
@@ -1098,12 +1220,12 @@ def _review_editorial_selection(
             }
         )
 
-    hidden_gem = next((choice for choice in choices if choice["award_type"] == "hidden_gem"), None)
+    hidden_gem = next((choice for choice in choices if _choice_has_award(choice, "hidden_gem")), None)
     if hidden_gem is not None:
         teams_before_hidden = {
             choice["team"]
             for choice in choices
-            if choice["award_type"] != "hidden_gem"
+            if choice is not hidden_gem
         }
         replacement = _diverse_hidden_gem_replacement(
             players,
@@ -1162,6 +1284,17 @@ def _review_editorial_selection(
 
     status = "needs_adjustment" if any(alert["level"] == "high" for alert in alerts) else "publishable"
     return {"status": status, "alerts": alerts}
+
+
+def _choice_has_award(choice: dict[str, Any], award_type: str) -> bool:
+    return award_type in _choice_award_types(choice)
+
+
+def _choice_award_types(choice: dict[str, Any]) -> list[str]:
+    award_types = choice.get("award_types")
+    if isinstance(award_types, list) and award_types:
+        return [str(item) for item in award_types]
+    return [str(choice.get("award_type") or "")]
 
 
 def _selection_review_iteration(
@@ -1581,7 +1714,7 @@ def _build_audit(
                     "message": "Top editorial score was not positive.",
                 }
             )
-    if not any(choice["award_type"] == "hidden_gem" for choice in choices):
+    if not any(_choice_has_award(choice, "hidden_gem") for choice in choices):
         alerts.append(
             {
                 "level": "info",
@@ -1640,7 +1773,13 @@ def _zh_fact_bank_choice(
 ) -> dict[str, Any]:
     return {
         "award_type": choice["award_type"],
+        "award_types": _choice_award_types(choice),
         "award_label": choice["award_label"]["zh"],
+        "award_badges": [
+            str(badge.get("label", {}).get("zh") or "")
+            for badge in choice.get("badges", [])
+            if isinstance(badge, dict)
+        ],
         "player_name": _zh_player_name(choice["player_name"]),
         "team": _zh_team_name(choice["team"]),
         "opponent": _zh_team_name(choice["opponent"]),
@@ -1750,21 +1889,21 @@ def _zh_allowed_angles(choice: dict[str, Any]) -> list[str]:
         return ["补时绝杀", "不只靠最后一脚", "全场贡献支撑这个瞬间"]
     if _metric_value(choice, "match_winning_goal") > 0:
         return ["制胜球", "决定比分走势", "不只靠最后一脚"]
-    if choice["award_type"] == "progression_pick":
+    if _choice_has_award(choice, "progression_pick"):
         if _choice_goal_difference(choice) < 0:
             return ["输球方亮点", "把球从压力里带出来", "推进出口"]
         if (choice.get("flow_context") or {}).get("team_came_from_behind_to_win"):
             return ["落后阶段保持向前路线", "把球从压力里带出来", "推进出口"]
         return ["把球从压力里带出来", "推进出口", "帮助球队持续向前处理"]
-    if choice["award_type"] == "defensive_pick":
+    if _choice_has_award(choice, "defensive_pick"):
         return ["承压局防守", "让对手进攻停下来", "脏活和硬活"]
-    if choice["award_type"] == "goalkeeper_watch":
+    if _choice_has_award(choice, "goalkeeper_watch"):
         return [
             "零封有压力",
             "对手射正和xG说明防守承压",
             "不要写成官方扑救、扑出或被他挡出",
         ]
-    if choice["award_type"] == "hidden_gem":
+    if _choice_has_award(choice, "hidden_gem"):
         return ["不抢镜", "持续提供接应角度", "让前场不断线"]
     return ["中场连接点", "接应和转移", "帮助球队持续向前处理"]
 
@@ -1788,7 +1927,13 @@ def _english_brief_payload(report: dict[str, Any]) -> dict[str, Any]:
 def _english_choice_brief(choice: dict[str, Any]) -> dict[str, Any]:
     return {
         "award_type": choice["award_type"],
+        "award_types": _choice_award_types(choice),
         "award_label": choice["award_label"]["en"],
+        "award_badges": [
+            str(badge.get("label", {}).get("en") or "")
+            for badge in choice.get("badges", [])
+            if isinstance(badge, dict)
+        ],
         "player_name": choice["player_name"],
         "team": choice["team"],
         "opponent": choice["opponent"],
@@ -1841,17 +1986,17 @@ def _en_selection_angle(choice: dict[str, Any]) -> str:
         return "Lead with the stoppage-time winner, then support it with the rest of his match profile."
     if _metric_value(choice, "match_winning_goal") > 0:
         return "Lead with the decisive goal, then support it with the broader match profile."
-    if choice["award_type"] == "progression_pick":
+    if _choice_has_award(choice, "progression_pick"):
         if _choice_goal_difference(choice) < 0:
             return "Focus on moving the ball through pressure from a losing side."
         if (choice.get("flow_context") or {}).get("team_came_from_behind_to_win"):
             return "Focus on the forward passing that helped the team recover from a trailing position."
         return "Focus on moving the ball through pressure and into territory."
-    if choice["award_type"] == "defensive_pick":
+    if _choice_has_award(choice, "defensive_pick"):
         return "Focus on stopping attacks and forcing resets."
-    if choice["award_type"] == "goalkeeper_watch":
+    if _choice_has_award(choice, "goalkeeper_watch"):
         return "Focus on the clean sheet under measurable shot pressure; avoid presenting saved-shot outcomes as an official goalkeeper saves table."
-    if choice["award_type"] == "hidden_gem":
+    if _choice_has_award(choice, "hidden_gem"):
         return "Explain the quieter linking work that kept possession connected."
     return "Focus on the connective midfield role."
 
@@ -1874,17 +2019,17 @@ def _en_title_candidates(choice: dict[str, Any]) -> list[str]:
         return ["The late answer", "The winner at the end", "One finish that changed the day"]
     if _metric_value(choice, "match_winning_goal") > 0:
         return ["The decisive touch", "The goal that tilted it", "The moment that mattered"]
-    if choice["award_type"] == "progression_pick":
+    if _choice_has_award(choice, "progression_pick"):
         if _choice_goal_difference(choice) < 0:
             return ["Progression from a losing side", "Carrying through pressure", "The best route forward"]
         if (choice.get("flow_context") or {}).get("team_came_from_behind_to_win"):
             return ["The route back into it", "Forward passing under pressure", "Progression in the comeback"]
         return ["The best route forward", "Carrying through pressure", "Forward passing under control"]
-    if choice["award_type"] == "defensive_pick":
+    if _choice_has_award(choice, "defensive_pick"):
         return ["The stubborn stopper", "Breaking the flow", "The defender who kept resetting attacks"]
-    if choice["award_type"] == "goalkeeper_watch":
+    if _choice_has_award(choice, "goalkeeper_watch"):
         return ["The clean sheet under pressure", "A harder clean sheet than it looked", "The zero that mattered"]
-    if choice["award_type"] == "hidden_gem":
+    if _choice_has_award(choice, "hidden_gem"):
         return ["The quiet connector", "The link behind the highlights", "A useful game between the lines"]
     return ["The midfield connector", "The link in possession", "A quiet route through midfield"]
 
@@ -1917,7 +2062,7 @@ def _en_action_notes(choice: dict[str, Any]) -> list[str]:
         notes.append("won possession back repeatedly")
     if _metric_value(choice, "blocks") >= 8:
         notes.append("blocked attacks before they became cleaner chances")
-    if choice["award_type"] == "goalkeeper_watch":
+    if _choice_has_award(choice, "goalkeeper_watch"):
         if _metric_value(choice, "clean_sheet") > 0:
             notes.append("kept a clean sheet")
         if _metric_value(choice, "opponent_attempts_on_target") >= 5:
@@ -1994,7 +2139,10 @@ def _choice_metric_items(choice: dict[str, Any], language: str) -> list[dict[str
         "total_distance_m": {"en": "distance", "zh": "跑动距离"},
     }
     direct_goal_story = (
-        choice.get("award_type") in {"player_of_the_day", "impact_pick"}
+        any(
+            award_type in {"player_of_the_day", "impact_pick"}
+            for award_type in _choice_award_types(choice)
+        )
         and (
             _metric_value(choice, "goals") > 0
             or _metric_value(choice, "assists") > 0
@@ -2204,10 +2352,20 @@ def _choices_html(choices: list[dict[str, Any]]) -> str:
             f"<span>{html.escape(chip, quote=False)}</span>"
             for chip in choice["evidence_chips"]["en"]
         )
+        badges = "".join(
+            (
+                '<span class="award-badge">'
+                f'{html.escape(str(badge.get("label", {}).get("en") or ""), quote=False)}'
+                "</span>"
+            )
+            for badge in choice.get("badges", [])
+            if isinstance(badge, dict)
+        )
         card = f"""
     <article class="choice-card">
       <div>
         <p class="award">{html.escape(choice["award_label"]["en"], quote=False)}</p>
+        <div class="award-badges">{badges}</div>
         <h2>{html.escape(format_player(choice["player_name"], choice["team"]), quote=False)}</h2>
         <p class="meta">{html.escape(format_team(choice["team"]), quote=False)} vs {html.escape(format_team(choice["opponent"]), quote=False)} · Match {choice["match_no"]}</p>
         <h3>{html.escape(en["title"], quote=False)}</h3>
@@ -2243,11 +2401,18 @@ def _render_markdown_report(report: dict[str, Any]) -> str:
     lines.extend(["", "## Choices", ""])
     for choice in report["choices"]:
         zh_placeholder = _zh_markdown_placeholder(choice)
+        tags = " · ".join(
+            badge["label"]["en"]
+            for badge in choice.get("badges", [])
+            if isinstance(badge, dict)
+        )
         lines.extend(
             [
                 f"### {choice['award_label']['en']}: {choice['player_name']}",
                 "",
                 f"_{choice['team']} vs {choice['opponent']} · Match {choice['match_no']}_",
+                "",
+                f"_Tags: {tags}_",
                 "",
                 "#### English",
                 "",
@@ -2301,6 +2466,8 @@ def _editorial_css() -> str:
     .choice-card aside strong { display: block; font-size: 34px; }
     .choice-card aside > span { color: #59677c; font-size: 12px; text-transform: uppercase; }
     .meta { margin: 0; color: #59677c; }
+    .award-badges { display: flex; flex-wrap: wrap; gap: 6px; margin: -6px 0 10px; }
+    .award-badge { border: 1px solid #dce5f2; background: #f7f9fc; color: #35465d; border-radius: 999px; padding: 4px 8px; font-size: 12px; font-weight: 700; }
     .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
     .chips span { background: #edf2fa; border: 1px solid #dce5f2; border-radius: 999px; padding: 5px 9px; font-size: 12px; }
     .archive-list { display: grid; gap: 10px; margin-top: 22px; }
