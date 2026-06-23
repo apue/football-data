@@ -59,6 +59,7 @@ def run_editorial_queue(
 
     published_dates: list[str] = []
     failures: list[dict[str, Any]] = []
+    warnings: list[dict[str, Any]] = []
     runs: list[dict[str, Any]] = []
     for match_date in pending_dates:
         try:
@@ -78,27 +79,74 @@ def run_editorial_queue(
                 research=research,
                 rebuild_homepage=True,
             )
-            if agent_result.get("status") != "success":
-                raise RuntimeError(f"Editorial v2 did not publish: {agent_result.get('status')}")
-            published_dates.append(match_date)
-            runs.append(
-                {
-                    "match_date": match_date,
-                    "agent_status": agent_result.get("status"),
-                    "experiment_id": agent_result.get("experiment_id"),
-                    "workflow_variant": agent_result.get("workflow_variant"),
-                    "selection_validation": agent_result.get("selection_validation", {}).get("status"),
-                    "choices": agent_result.get("choices", []),
-                }
-            )
         except Exception as exc:
+            if fake:
+                failures.append(
+                    {
+                        "match_date": match_date,
+                        "stage": "editorial",
+                        "message": str(exc)[:1000],
+                    }
+                )
+                continue
+            original_error = str(exc)[:1000]
+            try:
+                v2_run_path = Path(run_out_path).with_name("editorial-v2-run.json")
+                agent_result = run_editorial_v2(
+                    match_date=match_date,
+                    db_path=db_path,
+                    site_dir=site_dir,
+                    reports_dir=reports_dir,
+                    manifests_dir=manifests_dir,
+                    agent_runs_dir=agent_runs_dir,
+                    config_dir=config_dir,
+                    experiment_id=experiment["id"],
+                    env_path=env_path,
+                    run_out_path=v2_run_path,
+                    fake=True,
+                    research=research,
+                    rebuild_homepage=True,
+                )
+                warnings.append(
+                    {
+                        "match_date": match_date,
+                        "stage": "editorial",
+                        "message": f"agent failed; used static fallback: {original_error}",
+                    }
+                )
+            except Exception as fallback_exc:
+                failures.append(
+                    {
+                        "match_date": match_date,
+                        "stage": "editorial",
+                        "message": (
+                            f"{original_error}; static fallback also failed: "
+                            f"{str(fallback_exc)[:1000]}"
+                        )[:1000],
+                    }
+                )
+                continue
+        if agent_result.get("status") != "success":
             failures.append(
                 {
                     "match_date": match_date,
                     "stage": "editorial",
-                    "message": str(exc)[:1000],
+                    "message": f"Editorial v2 did not publish: {agent_result.get('status')}",
                 }
             )
+            continue
+        published_dates.append(match_date)
+        runs.append(
+            {
+                "match_date": match_date,
+                "agent_status": agent_result.get("status"),
+                "experiment_id": agent_result.get("experiment_id"),
+                "workflow_variant": agent_result.get("workflow_variant"),
+                "selection_validation": agent_result.get("selection_validation", {}).get("status"),
+                "choices": agent_result.get("choices", []),
+                **({"fallback": "static"} if warnings and warnings[-1].get("match_date") == match_date else {}),
+            }
+        )
 
     payload = _run_payload(
         status="failed" if failures else "success",
@@ -106,6 +154,7 @@ def run_editorial_queue(
         pending_dates=pending_dates,
         published_dates=published_dates,
         failures=failures,
+        warnings=warnings,
         runs=runs,
     )
     _write_json(run_out_path, payload)
@@ -127,6 +176,7 @@ def _run_payload(
     pending_dates: list[str],
     published_dates: list[str] | None = None,
     failures: list[dict[str, Any]] | None = None,
+    warnings: list[dict[str, Any]] | None = None,
     runs: list[dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
     return {
@@ -140,6 +190,7 @@ def _run_payload(
         "pending_dates": pending_dates,
         "published_dates": published_dates or [],
         "failures": failures or [],
+        "warnings": warnings or [],
         "runs": runs or [],
     }
 

@@ -109,6 +109,12 @@ ZH_PLAYER_NAMES = {
     "Joshua KIMMICH": "基米希",
     "Kylian MBAPPE": "姆巴佩",
     "Lionel MESSI": "梅西",
+    "Erling HAALAND": "哈兰德",
+    "Amine GOUIRI": "古伊里",
+    "Ibrahim MAZA": "马扎",
+    "MOHANNAD ABUTAHA": "阿布塔哈",
+    "Sadio MANE": "马内",
+    "Nadhir BENBOUALI": "本布阿里",
     "MARAWAN ATTIA": "阿蒂亚",
     "Maxi ARAUJO": "马克西·阿劳霍",
     "Mikel OYARZABAL": "奥亚萨瓦尔",
@@ -647,6 +653,10 @@ def _score_player(
     role_scores: dict[str, float] = {}
     component_map: dict[str, list[dict[str, Any]]] = {}
     for score_name, weights in scoring["scores"].items():
+        if score_name == "goalkeeper" and not _is_starting_goalkeeper(features):
+            role_scores[score_name] = 0.0
+            component_map[score_name] = []
+            continue
         components = []
         total = 0.0
         for metric, weight in weights.items():
@@ -684,6 +694,10 @@ def _score_player(
     features["progression_benchmark"] = progression_benchmark(features)
     features["hidden_gem_profile"] = hidden_gem_profile(features)
     return features
+
+
+def _is_starting_goalkeeper(player: dict[str, Any]) -> bool:
+    return str(player.get("position") or "").upper() == "GK" and int(player.get("started") or 0) == 1
 
 
 def _attach_flow_contexts(
@@ -1052,37 +1066,91 @@ def _audit_score_components(
 
 
 def _choice_metrics(player: dict[str, Any], award_type: str) -> dict[str, int | float]:
-    metric_names = [
-        "shots",
-        "on_target",
-        "goals",
-        "assists",
-        "goal_involvements",
-        "offers_received",
-        "in_behind",
-        "in_between",
-        "line_breaks_completed",
-        "ball_progressions",
-        "possession_regains",
-        "possession_interrupted",
-        "blocks",
-        "total_distance_m",
-    ]
     if award_type == "goalkeeper_watch":
-        metric_names.extend(
-            [
-                "clean_sheet",
-                "opponent_xg",
-                "opponent_attempts_on_target",
-                "opponent_attempts_total",
-                "keeper_saved_shots",
-            ]
-        )
+        metric_names = [
+            "clean_sheet",
+            "opponent_xg",
+            "opponent_attempts_on_target",
+            "opponent_attempts_total",
+            "keeper_saved_shots",
+        ]
+    elif award_type in {"player_of_the_day", "impact_pick"} and _has_direct_scoring_case(player):
+        metric_names = [
+            "shots",
+            "on_target",
+            "goals",
+            "assists",
+            "goal_involvements",
+            "brace",
+            "hat_trick",
+            "opening_goal",
+            "equalizing_goal",
+            "go_ahead_goal",
+            "match_winning_goal",
+            "late_goal",
+            "stoppage_time_goal",
+            "late_match_winning_goal",
+            "comeback_equalizer",
+            "comeback_winner",
+            "only_goal_winner",
+            "substitute_goal",
+            "substitute_brace",
+        ]
+    elif award_type == "progression_pick":
+        metric_names = [
+            "passes_completed",
+            "line_breaks_completed",
+            "ball_progressions",
+            "take_ons",
+            "step_ins",
+            "offers_received",
+        ]
+    elif award_type == "defensive_pick":
+        metric_names = [
+            "possession_regains",
+            "possession_interrupted",
+            "tackles_won",
+            "interceptions",
+            "blocks",
+            "clearances",
+        ]
+    elif award_type == "hidden_gem":
+        metric_names = [
+            "offers_received",
+            "in_behind",
+            "in_between",
+            "line_breaks_completed",
+            "ball_progressions",
+            "possession_regains",
+            "possession_interrupted",
+            "blocks",
+        ]
+    else:
+        metric_names = [
+            "shots",
+            "on_target",
+            "goals",
+            "assists",
+            "goal_involvements",
+            "line_breaks_completed",
+            "ball_progressions",
+            "possession_regains",
+            "possession_interrupted",
+            "blocks",
+        ]
     return {
         metric: _clean_number(float(player.get(metric) or 0))
         for metric in metric_names
         if float(player.get(metric) or 0) > 0
     }
+
+
+def _has_direct_scoring_case(player: dict[str, Any]) -> bool:
+    return (
+        int(player.get("goals") or 0) > 0
+        or int(player.get("assists") or 0) > 0
+        or int(player.get("goal_involvements") or 0) > 0
+    )
 
 
 def _top_hidden_gem_player(
@@ -1550,12 +1618,19 @@ def _evidence_chips(player: dict[str, Any], award_type: str) -> dict[str, list[s
         zh.append("送出助攻")
 
     _append_if(en, zh, player, "on_target", 3, "high shot quality", "射门质量突出")
-    _append_if(en, zh, player, "line_breaks_completed", 15, "repeated line breaks", "持续打穿防线")
-    _append_if(en, zh, player, "ball_progressions", 10, "constant carries", "推进很活跃")
-    _append_if(en, zh, player, "offers_received", 25, "found again and again", "持续接应")
-    _append_if(en, zh, player, "in_between", 15, "between-line presence", "在防线之间活跃")
-    _append_if(en, zh, player, "possession_regains", 8, "ball-winning profile", "夺回球权能力突出")
-    _append_if(en, zh, player, "possession_interrupted", 8, "disrupted attacks", "持续破坏进攻")
+    direct_scoring_case = _has_direct_scoring_case(player)
+    include_progression = award_type in {"progression_pick", "hidden_gem"} or not direct_scoring_case
+    include_off_ball = award_type == "hidden_gem" or not direct_scoring_case
+    include_defensive = award_type in {"defensive_pick", "hidden_gem"} or not direct_scoring_case
+    if include_progression:
+        _append_if(en, zh, player, "line_breaks_completed", 15, "repeated line breaks", "持续打穿防线")
+        _append_if(en, zh, player, "ball_progressions", 10, "constant carries", "推进很活跃")
+    if include_off_ball:
+        _append_if(en, zh, player, "offers_received", 25, "found again and again", "持续接应")
+        _append_if(en, zh, player, "in_between", 15, "between-line presence", "在防线之间活跃")
+    if include_defensive:
+        _append_if(en, zh, player, "possession_regains", 8, "ball-winning profile", "夺回球权能力突出")
+        _append_if(en, zh, player, "possession_interrupted", 8, "disrupted attacks", "持续破坏进攻")
 
     if not en:
         if award_type == "defensive_pick":

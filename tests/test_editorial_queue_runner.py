@@ -88,6 +88,53 @@ def test_run_editorial_queue_cli_with_fake_backend_publishes_pending_date(tmp_pa
     assert (tmp_path / "agent-runs" / latest_date / "selection_decision.json").exists()
 
 
+def test_run_editorial_queue_falls_back_to_static_copy_when_agent_fails(tmp_path, monkeypatch):
+    from football_data import editorial_queue_runner
+
+    latest_date, previous_date = _latest_and_previous_data_dates()
+    site_dir = _site_with_latest_editorial(tmp_path, previous_date)
+    env_path = tmp_path / ".env.local"
+    env_path.write_text("OPENAI_API_KEY=test-key\n", encoding="utf-8")
+    calls: list[bool] = []
+
+    def flaky_run_editorial_v2(**kwargs):
+        calls.append(bool(kwargs["fake"]))
+        if not kwargs["fake"]:
+            raise RuntimeError("agent balance is insufficient")
+        return {
+            "status": "success",
+            "experiment_id": "ai_rerank_guardrails_v2",
+            "workflow_variant": "ai_rerank_selection_v1",
+            "selection_validation": {"status": "pass"},
+            "choices": [
+                {
+                    "award_type": "player_of_the_day",
+                    "player_name": "Fallback Player",
+                    "team": "Fallback Team",
+                }
+            ],
+        }
+
+    monkeypatch.setattr(editorial_queue_runner, "run_editorial_v2", flaky_run_editorial_v2)
+
+    result = editorial_queue_runner.run_editorial_queue(
+        site_dir=site_dir,
+        reports_dir=tmp_path / "reports",
+        agent_runs_dir=tmp_path / "agent-runs",
+        run_out_path=tmp_path / "editorial-run.json",
+        queue_out_path=tmp_path / "editorial-queue.json",
+        env_path=env_path,
+        max_dates=1,
+        research=False,
+    )
+
+    assert calls == [False, True]
+    assert result["status"] == "success"
+    assert result["published_dates"] == [latest_date]
+    assert result["runs"][0]["fallback"] == "static"
+    assert "agent balance is insufficient" in result["warnings"][0]["message"]
+
+
 def test_run_editorial_queue_cli_date_backfill_does_not_replace_latest(tmp_path):
     latest_date, previous_date = _latest_and_previous_data_dates()
     site_dir = _site_with_latest_editorial(tmp_path, latest_date)

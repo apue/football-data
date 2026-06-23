@@ -1,0 +1,33 @@
+{
+  "id": "ai_rerank_guardrails_v2",
+  "workflow_variant": "ai_rerank_selection_v1",
+  "scoring_config": "config/scoring/v0.4.json",
+  "candidate_pool": "guarded_packet_v2",
+  "selector_profile": "guarded_editor_v2",
+  "copy_profiles": {
+    "zh": "zh_natural_v1",
+    "en": "en_plain_v1"
+  },
+  "selection": {
+    "mode": "ai_rerank_only",
+    "slots": {
+      "player_of_the_day": 3,
+      "impact_pick": 1,
+      "progression_pick": 1,
+      "defensive_pick": 1,
+      "goalkeeper_watch": 1,
+      "hidden_gem": 1
+    },
+    "optional_slots": [
+      "goalkeeper_watch",
+      "hidden_gem"
+    ],
+    "slate_constraints": {
+      "max_per_match": 3,
+      "max_per_team": 2
+    },
+    "must_explain_skipped_higher_ranked_candidates": true
+  },
+  "shuffle_strategy": "name_sorted",
+  "status": "active"
+}

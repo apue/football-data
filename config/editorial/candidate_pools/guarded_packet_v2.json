@@ -1,0 +1,27 @@
+{
+  "id": "guarded_packet_v2",
+  "potd_top_n": 8,
+  "role_top_n": 5,
+  "impact_top_n": 5,
+  "near_miss_count": 8,
+  "include_goalkeepers": true,
+  "include_hidden_gems": true,
+  "include_score_components": true,
+  "include_match_flow": true,
+  "include_reason_not_in_pool": true,
+  "progression_allowed_quality": [
+    "strong",
+    "useful"
+  ],
+  "progression_min_benchmark_score": 18.0,
+  "exclude_pass_only_progression": true,
+  "goalkeeper_watch_policy": {
+    "require_clean_sheet": false,
+    "min_goalkeeper_score": 35.0,
+    "min_opponent_xg": 1.0,
+    "min_opponent_on_target": 5,
+    "allow_goals_prevented_case": true,
+    "min_goals_prevented": 0.75,
+    "min_saved_shots": 4
+  }
+}

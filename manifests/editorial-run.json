@@ -1,13 +1,65 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-06-23T09:54:06+00:00",
-  "status": "up_to_date",
+  "generated_at": "2026-06-23T10:36:29+00:00",
+  "status": "success",
   "queue_status": "up_to_date",
   "queue_reason": "editorial_up_to_date",
   "latest_data_date": "2026-06-22",
   "latest_editorial_date": "2026-06-22",
-  "pending_dates": [],
-  "published_dates": [],
+  "pending_dates": [
+    "2026-06-22"
+  ],
+  "published_dates": [
+    "2026-06-22"
+  ],
   "failures": [],
-  "runs": []
+  "warnings": [
+    {
+      "match_date": "2026-06-22",
+      "stage": "editorial",
+      "message": "agent failed; used static fallback: Error code: 403 - {'code': 30001, 'message': 'Sorry, your account balance is insufficient', 'data': None}"
+    }
+  ],
+  "runs": [
+    {
+      "match_date": "2026-06-22",
+      "agent_status": "success",
+      "experiment_id": "ai_rerank_guardrails_v2",
+      "workflow_variant": "ai_rerank_selection_v1",
+      "selection_validation": "pass",
+      "choices": [
+        {
+          "award_type": "player_of_the_day",
+          "player_name": "Kylian MBAPPE",
+          "team": "France"
+        },
+        {
+          "award_type": "player_of_the_day",
+          "player_name": "Lionel MESSI",
+          "team": "Argentina"
+        },
+        {
+          "award_type": "player_of_the_day",
+          "player_name": "Erling HAALAND",
+          "team": "Norway"
+        },
+        {
+          "award_type": "impact_pick",
+          "player_name": "Amine GOUIRI",
+          "team": "Algeria"
+        },
+        {
+          "award_type": "progression_pick",
+          "player_name": "Ibrahim MAZA",
+          "team": "Algeria"
+        },
+        {
+          "award_type": "defensive_pick",
+          "player_name": "MOHANNAD ABUTAHA",
+          "team": "Jordan"
+        }
+      ],
+      "fallback": "static"
+    }
+  ]
 }

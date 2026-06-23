@@ -76,24 +76,157 @@ def generate_copy(
 def _fake_language_copy(payload: dict[str, Any], language: str) -> dict[str, Any]:
     items = []
     for choice in payload.get("choices", []):
-        player_name = str(choice["player_name"])
-        reason = str(choice.get("selection", {}).get("editorial_reason") or "")
-        if language == "zh":
-            title = f"{player_name} 留在编辑精选里"
-            body = f"{player_name} 的入选来自候选池复核：{reason}"
-        else:
-            title = f"{player_name} stays in the edit"
-            body = f"{player_name} makes the final cut after reranking the candidate pool: {reason}"
-        items.append(
-            {
-                "award_type": choice["selection"]["award_type"],
-                "player_id": choice["player_id"],
-                "title": title,
-                "body": body,
-                "warnings": [],
-            }
-        )
+        item = _static_copy_item(choice, language)
+        items.append(item)
     return {"items": items, "warnings": []}
+
+
+def _static_copy_item(choice: dict[str, Any], language: str) -> dict[str, Any]:
+    player_name = str(choice["player_name"])
+    display_name = _display_player_name(player_name, language)
+    award_type = str(choice["selection"]["award_type"])
+    metrics = choice.get("metrics") or {}
+    chips = (choice.get("evidence_chips") or {}).get(language) or []
+    if language == "zh":
+        title, body = _static_zh_copy(display_name, award_type, metrics, chips)
+    else:
+        title, body = _static_en_copy(display_name, award_type, metrics, chips)
+    return {
+        "award_type": award_type,
+        "player_id": choice["player_id"],
+        "title": title,
+        "body": body,
+        "warnings": ["static fallback copy"],
+    }
+
+
+def _static_en_copy(
+    player_name: str,
+    award_type: str,
+    metrics: dict[str, Any],
+    chips: list[str],
+) -> tuple[str, str]:
+    goals = int(metrics.get("goals") or 0)
+    assists = int(metrics.get("assists") or 0)
+    on_target = int(metrics.get("on_target") or 0)
+    if award_type == "player_of_the_day":
+        if goals >= 3:
+            title = "The hat-trick was enough"
+            body = f"{player_name}'s hat-trick settles the main argument."
+        elif goals == 2:
+            title = "Two goals, clear case"
+            body = f"{player_name}'s two goals put him in the top group."
+        elif goals == 1:
+            title = "The decisive scorer"
+            body = f"{player_name}'s goal gives this pick its starting point."
+        else:
+            title = f"{player_name} led the day"
+            body = f"{player_name} had the strongest evidence packet for this slot."
+        if int(metrics.get("comeback_winner") or 0):
+            body += " It was also the comeback winner."
+        elif int(metrics.get("match_winning_goal") or 0):
+            body += " One of them was the match-winner."
+        if assists:
+            body += f" He also added {assists} assist{'s' if assists != 1 else ''}."
+        elif on_target >= 3:
+            body += f" He also put {on_target} shots on target."
+        return title, body
+    if award_type == "impact_pick":
+        title = "The moment that mattered"
+        body = f"{player_name} gets the impact slot because the decisive evidence is clear: {_join_chips(chips)}."
+        return title, body
+    if award_type == "progression_pick":
+        title = "The route forward"
+        line_breaks = int(metrics.get("line_breaks_completed") or 0)
+        progressions = int(metrics.get("ball_progressions") or 0)
+        body = (
+            f"{player_name} earns the progression slot with {line_breaks} line breaks"
+            f" and {progressions} ball progressions."
+        )
+        return title, body
+    if award_type == "defensive_pick":
+        title = "The defensive answer"
+        body = f"{player_name} stood out through defensive actions: {_join_chips(chips)}."
+        return title, body
+    if award_type == "goalkeeper_watch":
+        title = "The clean sheet under pressure"
+        body = f"{player_name} gets the goalkeeper note because the clean sheet came with measurable pressure."
+        return title, body
+    if award_type == "hidden_gem":
+        title = "The quieter useful game"
+        body = f"{player_name} is the hidden-gem pick for the less obvious work behind the headline choices."
+        return title, body
+    return f"{player_name} made the edit", f"{player_name} had the clearest evidence for this slot."
+
+
+def _static_zh_copy(
+    player_name: str,
+    award_type: str,
+    metrics: dict[str, Any],
+    chips: list[str],
+) -> tuple[str, str]:
+    goals = int(metrics.get("goals") or 0)
+    assists = int(metrics.get("assists") or 0)
+    on_target = int(metrics.get("on_target") or 0)
+    if award_type == "player_of_the_day":
+        if goals >= 3:
+            title = "帽子戏法就是答案"
+            body = f"{player_name}这场帽子戏法，入选理由不用绕远。"
+        elif goals == 2:
+            title = "梅开二度，理由够直接"
+            body = f"{player_name}梅开二度，这就是最直接的入选理由。"
+        elif goals == 1:
+            title = "关键一脚给出答案"
+            body = f"{player_name}的进球是这张卡片的起点。"
+        else:
+            title = f"{player_name} 进入每日最佳"
+            body = f"{player_name}的证据包最能支撑这个席位。"
+        if int(metrics.get("comeback_winner") or 0):
+            body += " 这还是逆转制胜球。"
+        elif int(metrics.get("match_winning_goal") or 0):
+            body += " 其中包括制胜球。"
+        if assists:
+            body += f" 他还送出 {assists} 次助攻。"
+        elif on_target >= 3:
+            body += f" 另外还有 {on_target} 次射正。"
+        return title, body
+    if award_type == "impact_pick":
+        title = "关键时刻站出来"
+        body = f"{player_name}拿到影响力精选，核心证据很直接：{_join_chips(chips, language='zh')}。"
+        return title, body
+    if award_type == "progression_pick":
+        title = "向前路线最清楚"
+        line_breaks = int(metrics.get("line_breaks_completed") or 0)
+        progressions = int(metrics.get("ball_progressions") or 0)
+        body = f"{player_name}的推进理由来自 {line_breaks} 次打穿防线和 {progressions} 次带球推进。"
+        return title, body
+    if award_type == "defensive_pick":
+        title = "防守端最抢眼"
+        body = f"{player_name}的防守精选来自这些硬证据：{_join_chips(chips, language='zh')}。"
+        return title, body
+    if award_type == "goalkeeper_watch":
+        title = "有压力的零封"
+        body = f"{player_name}的门将关注来自零封，以及对手制造出的可量化压力。"
+        return title, body
+    if award_type == "hidden_gem":
+        title = "不抢镜，但有用"
+        body = f"{player_name}是这期隐藏亮点，价值在于那些不一定进入头条的持续贡献。"
+        return title, body
+    return f"{player_name} 入选", f"{player_name} 的证据最能支撑这个席位。"
+
+
+def _join_chips(chips: list[str], *, language: str = "en") -> str:
+    separator = "、" if language == "zh" else ", "
+    fallback = "关键证据" if language == "zh" else "strong match evidence"
+    return separator.join(str(chip) for chip in chips[:3]) or fallback
+
+
+def _display_player_name(player_name: str, language: str) -> str:
+    if language != "zh":
+        return player_name
+    from football_data.editorial import ZH_PLAYER_NAMES
+
+    return ZH_PLAYER_NAMES.get(player_name, player_name)
 
 
 def _agent_language_copy(

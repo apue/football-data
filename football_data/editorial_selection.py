@@ -212,26 +212,46 @@ def fake_selection_decision(
         ]
         for award in experiment["selection"]["slots"]
     }
+    selection_config = experiment["selection"]
+    optional_slots = {str(item) for item in selection_config.get("optional_slots", [])}
+    slate_constraints = selection_config.get("slate_constraints", {})
+    if not isinstance(slate_constraints, dict):
+        slate_constraints = {}
     selected: list[dict[str, Any]] = []
     used: set[str] = set()
+    team_counts: dict[str, int] = {}
+    match_counts: dict[str, int] = {}
     skipped: list[dict[str, Any]] = []
-    for award_type, slot_count in experiment["selection"]["slots"].items():
-        pool = by_award.get(award_type, [])
-        if award_type == "player_of_the_day":
-            pick_order = [0, 2, 4, 1, 3, 5, 6, 7]
-            ordered = [pool[index] for index in pick_order if index < len(pool)]
-        else:
-            ordered = pool
+    for award_type, slot_count in selection_config["slots"].items():
+        ordered = sorted(
+            by_award.get(award_type, []),
+            key=lambda candidate: _candidate_award_score(candidate, award_type),
+            reverse=True,
+        )
         picked = 0
         for candidate in ordered:
             player_id = str(candidate["player_id"])
             if player_id in used:
                 continue
+            if not _slate_allows(candidate, team_counts, match_counts, slate_constraints):
+                continue
             selected.append(_selected_item(award_type, candidate))
             used.add(player_id)
+            _count_slate(candidate, team_counts, match_counts)
             picked += 1
             if picked >= int(slot_count):
                 break
+        if picked < int(slot_count) and award_type not in optional_slots:
+            for candidate in ordered:
+                player_id = str(candidate["player_id"])
+                if player_id in used:
+                    continue
+                selected.append(_selected_item(award_type, candidate))
+                used.add(player_id)
+                _count_slate(candidate, team_counts, match_counts)
+                picked += 1
+                if picked >= int(slot_count):
+                    break
     selected_potd_ids = {
         item["player_id"]
         for item in selected
@@ -264,7 +284,10 @@ def fake_selection_decision(
 
 
 def _selected_item(award_type: str, candidate: dict[str, Any]) -> dict[str, Any]:
-    chips = candidate.get("evidence_chips", {}).get("en", [])
+    award_context = (candidate.get("award_contexts") or {}).get(award_type) or {}
+    chips = (award_context.get("evidence_chips") or {}).get("en")
+    if not chips:
+        chips = candidate.get("evidence_chips", {}).get("en", [])
     reason = ", ".join(str(chip) for chip in chips[:2]) or "strong all-round evidence"
     return {
         "award_type": award_type,
@@ -275,6 +298,97 @@ def _selected_item(award_type: str, candidate: dict[str, Any]) -> dict[str, Any]
         "evidence_used": [str(chip) for chip in chips[:4]],
         "selection_risk": "Low: deterministic evidence supports the selection.",
     }
+
+
+def _candidate_award_score(candidate: dict[str, Any], award_type: str) -> tuple[float, float, float, float]:
+    role_scores = candidate.get("role_scores") or {}
+    metrics = ((candidate.get("award_contexts") or {}).get(award_type) or {}).get("metrics") or {}
+    headline_rank = int(candidate.get("headline_rank") or 9999)
+    if award_type == "player_of_the_day":
+        team_won = int(candidate.get("team_final_goals") or 0) > int(candidate.get("opponent_final_goals") or 0)
+        direct_tier = (
+            _num(metrics, "goals") * 100
+            + _num(metrics, "assists") * 35
+            + _num(metrics, "hat_trick") * 50
+            + _num(metrics, "brace") * 10
+            + (20 if team_won else 0)
+        )
+        decisive_tiebreak = (
+            _num(metrics, "match_winning_goal")
+            + _num(metrics, "comeback_winner")
+            + _num(metrics, "late_match_winning_goal")
+        )
+        return (direct_tier, float(candidate.get("headline_score") or 0), decisive_tiebreak, -headline_rank)
+    if award_type == "impact_pick":
+        return (
+            float(role_scores.get("impact") or 0),
+            float(candidate.get("headline_score") or 0),
+            -headline_rank,
+            0,
+        )
+    if award_type == "progression_pick":
+        benchmark = candidate.get("progression_benchmark") or {}
+        return (
+            float(benchmark.get("score") or 0),
+            float(role_scores.get("progressor") or 0),
+            -headline_rank,
+            0,
+        )
+    if award_type == "defensive_pick":
+        return (
+            float(role_scores.get("defensive") or 0),
+            float(candidate.get("headline_score") or 0),
+            -headline_rank,
+            0,
+        )
+    if award_type == "goalkeeper_watch":
+        return (
+            float(role_scores.get("goalkeeper") or 0),
+            float(candidate.get("opponent_xg") or 0),
+            float(candidate.get("opponent_attempts_on_target") or 0),
+            -headline_rank,
+        )
+    if award_type == "hidden_gem":
+        profile = candidate.get("hidden_gem_profile") or {}
+        return (
+            float(profile.get("score") or 0),
+            float(candidate.get("headline_score") or 0),
+            -headline_rank,
+            0,
+        )
+    return (float(candidate.get("headline_score") or 0), -headline_rank, 0, 0)
+
+
+def _slate_allows(
+    candidate: dict[str, Any],
+    team_counts: dict[str, int],
+    match_counts: dict[str, int],
+    slate_constraints: dict[str, Any],
+) -> bool:
+    max_per_team = int(slate_constraints.get("max_per_team") or 0)
+    max_per_match = int(slate_constraints.get("max_per_match") or 0)
+    team = str(candidate.get("team") or "")
+    match_key = str(candidate.get("match_key") or "")
+    if max_per_team and team_counts.get(team, 0) >= max_per_team:
+        return False
+    if max_per_match and match_counts.get(match_key, 0) >= max_per_match:
+        return False
+    return True
+
+
+def _count_slate(
+    candidate: dict[str, Any],
+    team_counts: dict[str, int],
+    match_counts: dict[str, int],
+) -> None:
+    team = str(candidate.get("team") or "")
+    match_key = str(candidate.get("match_key") or "")
+    team_counts[team] = team_counts.get(team, 0) + 1
+    match_counts[match_key] = match_counts.get(match_key, 0) + 1
+
+
+def _num(metrics: dict[str, Any], key: str) -> float:
+    return float(metrics.get(key) or 0)
 
 
 def _compact_candidate(candidate: dict[str, Any]) -> dict[str, Any]:
@@ -325,7 +439,14 @@ def _compact_candidate(candidate: dict[str, Any]) -> dict[str, Any]:
     if progression:
         compact["progression_benchmark"] = {
             key: progression.get(key)
-            for key in ("score", "percentile", "label")
+            for key in (
+                "score",
+                "quality",
+                "support_actions",
+                "pass_only_line_break_volume",
+                "percentile",
+                "label",
+            )
             if key in progression
         }
     return compact
