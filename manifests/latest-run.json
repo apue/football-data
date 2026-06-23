@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-22T13:58:23+00:00",
+  "generated_at": "2026-06-23T07:41:27+00:00",
   "status": "success",
   "failure_code": null,
   "hub_url": "https://www.fifatrainingcentre.com/en/fifa-world-cup-2026/match-report-hub.php",
@@ -10,10 +10,17 @@
   "matches": 40,
   "source_documents": 40,
   "new_matches": [],
-  "version_updates": [],
+  "version_updates": [
+    {
+      "match_no": 20,
+      "from_version": 2,
+      "to_version": 3,
+      "source_id": "fifa-world-cup-2026-pmsr-m20-aut-jor-v3"
+    }
+  ],
   "supplemental": {
     "fifa_timeline": {
-      "generated_at": "2026-06-22T13:59:18+00:00",
+      "generated_at": "2026-06-23T07:42:21+00:00",
       "source": "fifa_timeline_api",
       "status": "success",
       "matches": 40,
