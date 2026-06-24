@@ -23,7 +23,7 @@ Read these before acting:
 - Use `scripts/run_editorial_v2.py --date YYYY-MM-DD` only for low-level local debugging.
 - Treat `reports/editorial/YYYY-MM-DD.md` as the human-readable generated report.
 - Treat `agent-runs/YYYY-MM-DD/` as the primary run audit directory.
-- The production experiment is `ai_rerank_slate_copy_v3`, using the `ai_rerank_selection_v1` workflow variant: deterministic scoring builds the candidate pool, local Codex reranks only that pool, validation enforces pool membership, slate balance, and skipped-higher-ranked explanations, and local English/Chinese copy is written from selected evidence packets.
+- The production experiment is `ai_rerank_slate_copy_v3`, using the `ai_rerank_selection_v1` workflow variant: deterministic scoring builds the candidate pool, local Codex reranks only that pool, validation enforces pool membership, public-card count, award limits, slate balance, and skipped-higher-ranked explanations, and local English/Chinese copy is written from selected evidence packets.
 - Do not reimplement OpenAI Agents SDK capabilities in this local path. Keep scoring, candidate-pool construction, selection validation, artifact writing, and publishing deterministic in Python; keep the OpenAI Agents SDK queue as a manual/legacy runtime.
 - Let Codex repair code, scoring, registry config, prompts, copy profiles, or local selection/copy files when output fails review; do not hand-edit compiled frontend JSON.
 - Generate both English and Chinese copy from the same selected candidate evidence packet. They should express the same judgment but do not need to be literal translations.

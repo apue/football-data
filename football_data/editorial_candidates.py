@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import Any
 
 from football_data.editorial import AWARD_LABELS, _choice_metrics, _evidence_chips
+from football_data.editorial_display_names import player_display_entry
 
 
 AWARD_ROLE_MAP = {
@@ -213,6 +214,10 @@ def _add_candidate(
     candidate.setdefault("eligible_awards", [])
     candidate.setdefault("pool_reasons", [])
     candidate.setdefault("award_contexts", {})
+    display_entry = player_display_entry(str(candidate.get("player_name") or ""), "zh")
+    if display_entry:
+        candidate.setdefault("display_names", {})
+        candidate["display_names"]["zh"] = display_entry
     if award_type not in candidate["eligible_awards"]:
         candidate["eligible_awards"].append(award_type)
     if reason not in candidate["pool_reasons"]:

@@ -70,5 +70,6 @@ Before publishing, check:
 - The copy does not sound like a metric table.
 - Check the workflow gates: selection decision, skipped-candidate explanations, and deterministic selection validation.
 - Chinese final copy should read like a from-scratch Chinese sports editor wrote it after seeing the evidence packet.
+- Use `display_names.zh.display_name` when it appears in the candidate packet. Use `display_names.zh.short_name` only when that shorter, more fan-facing register is intentionally desired.
 - No external match observation is implied unless an external source was actually checked.
 - If a card fails review, repair the local `selection_decision.json` or `copy.json`, or adjust registry config, selector/copy profile prompts, scoring, or validation, then rerun `scripts/compile_local_editorial.py --date YYYY-MM-DD`.

@@ -48,13 +48,19 @@ def validate_selection_decision(
         match_counts[str(candidate.get("match_key") or "")] += 1
 
     selection_config = experiment.get("selection", {})
-    slots = selection_config.get("slots", {})
-    optional_slots = {str(item) for item in selection_config.get("optional_slots", [])}
-    for award_type, expected_count in slots.items():
+    award_limits = _selection_award_limits(selection_config)
+    required_slots = _selection_required_slots(selection_config)
+    for award_type, expected_count in award_limits.items():
         if award_counts[award_type] > int(expected_count):
-            warnings.append(f"{award_type} exceeds configured slots")
-        if award_type not in optional_slots and award_counts[award_type] < int(expected_count):
+            warnings.append(f"{award_type} exceeds configured award limit")
+    for award_type, expected_count in required_slots.items():
+        if award_counts[award_type] < int(expected_count):
             warnings.append(f"missing required slot {award_type}")
+    target_public_cards = int(selection_config.get("target_public_cards") or 0)
+    if target_public_cards and len(selected) != target_public_cards:
+        warnings.append(
+            f"selected public card count {len(selected)} does not match target_public_cards {target_public_cards}"
+        )
 
     slate_constraints = selection_config.get("slate_constraints", {})
     if isinstance(slate_constraints, dict):
@@ -80,6 +86,11 @@ def validate_selection_decision(
             for item in selected
             if isinstance(item, dict) and item.get("award_type") == "player_of_the_day"
         ]
+        selected_ids = {
+            str(item.get("player_id"))
+            for item in selected
+            if isinstance(item, dict)
+        }
         selected_potd_ids = {str(item.get("player_id")) for item in selected_potd}
         for item in selected_potd:
             player = selectable.get(str(item.get("player_id")))
@@ -91,7 +102,7 @@ def validate_selection_decision(
                 for candidate in candidate_pool.get("selectable_candidates", [])
                 if "player_of_the_day" in candidate.get("eligible_awards", [])
                 and int(candidate.get("headline_rank") or 9999) < rank
-                and str(candidate.get("player_id")) not in selected_potd_ids
+                and str(candidate.get("player_id")) not in selected_ids
             ]
             missing = [
                 candidate
@@ -118,6 +129,39 @@ def _progression_pick_publishable(candidate: dict[str, Any]) -> bool:
         and not bool(benchmark.get("pass_only_line_break_volume"))
         and float(benchmark.get("score") or 0) >= 18.0
     )
+
+
+def _selection_award_limits(selection_config: dict[str, Any]) -> dict[str, int]:
+    raw_limits = selection_config.get("award_limits")
+    if not isinstance(raw_limits, dict):
+        raw_limits = selection_config.get("slots", {})
+    if not isinstance(raw_limits, dict):
+        return {}
+    return {str(key): int(value) for key, value in raw_limits.items()}
+
+
+def _selection_required_slots(selection_config: dict[str, Any]) -> dict[str, int]:
+    raw_required = selection_config.get("required_slots")
+    if isinstance(raw_required, dict):
+        return {str(key): int(value) for key, value in raw_required.items()}
+    if isinstance(raw_required, list):
+        return {str(item): 1 for item in raw_required}
+    raw_slots = selection_config.get("slots", {})
+    if not isinstance(raw_slots, dict):
+        return {}
+    optional_slots = {
+        str(item)
+        for item in (
+            selection_config.get("optional_slots")
+            or selection_config.get("optional_awards")
+            or []
+        )
+    }
+    return {
+        str(award_type): int(expected_count)
+        for award_type, expected_count in raw_slots.items()
+        if str(award_type) not in optional_slots
+    }
 
 
 def _goalkeeper_watch_publishable(candidate: dict[str, Any]) -> bool:

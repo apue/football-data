@@ -7,6 +7,7 @@ from typing import Any
 
 from pydantic import BaseModel, Field
 
+from football_data.editorial_display_names import player_display_name
 from football_data.llm_client import AgentTextClient
 
 
@@ -230,7 +231,8 @@ def _display_player_name(player_name: str, language: str) -> str:
         return player_name
     from football_data.editorial import ZH_PLAYER_NAMES
 
-    return ZH_PLAYER_NAMES.get(player_name, player_name)
+    fallback = ZH_PLAYER_NAMES.get(player_name, player_name)
+    return player_display_name(player_name, language, fallback=fallback)
 
 
 def _agent_language_copy(

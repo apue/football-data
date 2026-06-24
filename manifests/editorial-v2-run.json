@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-06-24T10:34:19+00:00",
+  "generated_at": "2026-06-24T13:45:55+00:00",
   "status": "success",
   "match_date": "2026-06-23",
   "workflow_variant": "ai_rerank_selection_v1",
@@ -29,19 +29,19 @@
       "team": "Portugal"
     },
     {
+      "award_type": "impact_pick",
+      "player_name": "BRUNO FERNANDES",
+      "team": "Portugal"
+    },
+    {
       "award_type": "player_of_the_day",
       "player_name": "Ante BUDIMIR",
       "team": "Croatia"
     },
     {
-      "award_type": "impact_pick",
-      "player_name": "Josip STANISIC",
-      "team": "Croatia"
-    },
-    {
-      "award_type": "progression_pick",
-      "player_name": "Noni MADUEKE",
-      "team": "England"
+      "award_type": "player_of_the_day",
+      "player_name": "NUNO MENDES",
+      "team": "Portugal"
     }
   ]
 }

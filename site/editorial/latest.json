@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-06-24T10:34:19+00:00",
-  "compiled_at": "2026-06-24T10:34:19+00:00",
+  "generated_at": "2026-06-24T13:45:55+00:00",
+  "compiled_at": "2026-06-24T13:45:55+00:00",
   "match_date": "2026-06-23",
   "scoring_version": "v0.4",
   "editorial_generation": {
@@ -297,15 +297,15 @@
           "取得进球"
         ]
       },
-      "selection_reason": "Scored the only goal of Colombia's 1-0 win over Congo DR, turning a tight match with one late finish.",
+      "selection_reason": "Scored the only goal in Colombia's 1-0 win over Congo DR, with a 75th-minute match-winning finish.",
       "content": {
         "en": {
           "title": "Munoz Hit Colombia's Winner",
-          "html": "<p>Munoz scored the only goal against Congo DR, turning a tight match in Colombia's favour. One late finish was enough for a 1-0 win.</p>"
+          "html": "<p>Munoz scored the only goal in Colombia's 1-0 win over Congo DR. It came in the 75th minute, enough to decide a tight game.</p>"
         },
         "zh": {
-          "title": "穆尼奥斯第76分钟制胜",
-          "html": "<p>穆尼奥斯打进哥伦比亚1-0击败刚果（金）的唯一进球。比赛僵到第76分钟，他这一脚把胜负分出来了。</p>"
+          "title": "穆尼奥斯第75分钟制胜",
+          "html": "<p>穆尼奥斯打进哥伦比亚1-0击败刚果（金）的唯一进球。第75分钟这一下，够把一场僵局敲开。</p>"
         }
       }
     },
@@ -351,12 +351,56 @@
       "selection_reason": "Opened the scoring and completed a brace in Portugal's 5-0 win over Uzbekistan, with five shots on target.",
       "content": {
         "en": {
-          "title": "Ronaldo Set Portugal Loose",
-          "html": "<p>Ronaldo opened the scoring and added a second before half-time. In Portugal's 5-0 win, two goals and five shots on target made the headline straightforward.</p>"
+          "title": "Ronaldo Scored Twice",
+          "html": "<p>Ronaldo opened the scoring after five minutes and added another before half-time. Portugal won 5-0, and his five shots on target kept the case simple.</p>"
         },
         "zh": {
           "title": "C罗梅开二度",
-          "html": "<p>C罗先帮葡萄牙打开比分，上半场又进第二个。5-0赢乌兹别克斯坦，他全场5次射正，火力很足。</p>"
+          "html": "<p>C罗第5分钟首开纪录，半场前又进一个。葡萄牙5-0赢乌兹别克斯坦，他全场5次射正，火力压得很满。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "impact_pick",
+      "award_types": [
+        "impact_pick"
+      ],
+      "award_label": {
+        "en": "Impact Pick",
+        "zh": "影响力精选"
+      },
+      "player_id": "FIFA-2026-M47-POR-GHA|Portugal|8",
+      "player_name": "BRUNO FERNANDES",
+      "team": "Portugal",
+      "opponent": "Uzbekistan",
+      "match_key": "FIFA-2026-M47-POR-GHA",
+      "match_no": 47,
+      "player_no": 8,
+      "position": "MF",
+      "score": 81.02,
+      "metrics": {
+        "shots": 2,
+        "on_target": 1,
+        "assists": 1,
+        "goal_involvements": 1
+      },
+      "evidence_chips": {
+        "en": [
+          "assist"
+        ],
+        "zh": [
+          "送出助攻"
+        ]
+      },
+      "selection_reason": "Supplied an assist and added an all-round Portugal packet in a dominant 5-0 win.",
+      "content": {
+        "en": {
+          "title": "Fernandes Supplied the Assist",
+          "html": "<p>Fernandes added an assist in Portugal's 5-0 win and kept showing for the ball. With 32 received offers, his game was more than a footnote to the scoreline.</p>"
+        },
+        "zh": {
+          "title": "布鲁诺-费尔南德斯送出助攻",
+          "html": "<p>布鲁诺-费尔南德斯在葡萄牙5-0这场送出助攻，也一直在中前场接应串联。32次接到队友传球，他不是只在比分后面补一笔。</p>"
         }
       }
     },
@@ -407,99 +451,55 @@
       "content": {
         "en": {
           "title": "Budimir Changed It off the Bench",
-          "html": "<p>Budimir came on and scored the only goal against Panama. Croatia won 1-0, and his single touch in front of goal carried the match.</p>"
+          "html": "<p>Budimir came on and scored the only goal against Panama in the 53rd minute. Croatia won 1-0, so the substitute finish carried the match.</p>"
         },
         "zh": {
           "title": "布季米尔替补制胜",
-          "html": "<p>布季米尔替补登场后打进全场唯一进球。克罗地亚1-0赢巴拿马，这一下就够了。</p>"
+          "html": "<p>布季米尔替补登场后，第53分钟打进全场唯一进球。克罗地亚1-0赢巴拿马，这一脚把替补价值踢出来了。</p>"
         }
       }
     },
     {
-      "award_type": "impact_pick",
+      "award_type": "player_of_the_day",
       "award_types": [
-        "impact_pick"
+        "player_of_the_day"
       ],
       "award_label": {
-        "en": "Impact Pick",
-        "zh": "影响力精选"
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
       },
-      "player_id": "FIFA-2026-M46-PAN-CRO|Croatia|2",
-      "player_name": "Josip STANISIC",
-      "team": "Croatia",
-      "opponent": "Panama",
-      "match_key": "FIFA-2026-M46-PAN-CRO",
-      "match_no": 46,
-      "player_no": 2,
+      "player_id": "FIFA-2026-M47-POR-GHA|Portugal|25",
+      "player_name": "NUNO MENDES",
+      "team": "Portugal",
+      "opponent": "Uzbekistan",
+      "match_key": "FIFA-2026-M47-POR-GHA",
+      "match_no": 47,
+      "player_no": 25,
       "position": "DF",
-      "score": 52.77,
+      "score": 63.62,
       "metrics": {
-        "assists": 1,
+        "shots": 1,
+        "on_target": 1,
+        "goals": 1,
         "goal_involvements": 1
       },
       "evidence_chips": {
         "en": [
-          "assist"
+          "goal scorer"
         ],
         "zh": [
-          "送出助攻"
+          "取得进球"
         ]
       },
-      "selection_reason": "Set up Budimir's only goal and still carried a useful defensive workload in Croatia's 1-0 win.",
+      "selection_reason": "Scored Portugal's second goal and carried a strong progression profile in the same dominant 5-0 win.",
       "content": {
         "en": {
-          "title": "Stanisic Made the Goal",
-          "html": "<p>Stanisic supplied the assist for Budimir's winner. On a day when Croatia only needed one goal, that final pass mattered.</p>"
+          "title": "Nuno Mendes Added a Goal and Drive",
+          "html": "<p>Nuno Mendes scored Portugal's second goal and kept moving possession forward. Eight ball progressions and 11 completed line breaks gave his game a separate shape.</p>"
         },
         "zh": {
-          "title": "斯塔尼希奇助攻唯一进球",
-          "html": "<p>斯塔尼希奇送出布季米尔那粒制胜球的助攻。克罗地亚这场只进一个，他这脚传球很关键。</p>"
-        }
-      }
-    },
-    {
-      "award_type": "progression_pick",
-      "award_types": [
-        "progression_pick"
-      ],
-      "award_label": {
-        "en": "Progression Engine",
-        "zh": "进攻发动机"
-      },
-      "player_id": "FIFA-2026-M45-ENG-GHA|England|20",
-      "player_name": "Noni MADUEKE",
-      "team": "England",
-      "opponent": "Ghana",
-      "match_key": "FIFA-2026-M45-ENG-GHA",
-      "match_no": 45,
-      "player_no": 20,
-      "position": "FW",
-      "score": 35.84,
-      "metrics": {
-        "passes_completed": 23,
-        "line_breaks_completed": 5,
-        "ball_progressions": 7,
-        "take_ons": 6,
-        "step_ins": 1,
-        "offers_received": 18
-      },
-      "evidence_chips": {
-        "en": [
-          "progression profile"
-        ],
-        "zh": [
-          "推进画像突出"
-        ]
-      },
-      "selection_reason": "England's liveliest progression profile in the 0-0 with Ghana, with repeated carries and take-ons even without a goal.",
-      "content": {
-        "en": {
-          "title": "Madueke Kept Driving Forward",
-          "html": "<p>Madueke gave England the clearest progression case in the 0-0 with Ghana. Seven carries, six take-ons and 18 receptions kept him involved even without a goal.</p>"
-        },
-        "zh": {
-          "title": "马杜埃凯持续推进",
-          "html": "<p>马杜埃凯在英格兰0-0加纳这场一直往前带。7次带球推进、6次过人，再加上18次接应，英格兰需要这种向前动作。</p>"
+          "title": "努诺-门德斯进球又推进",
+          "html": "<p>努诺-门德斯第16分钟进球，帮葡萄牙把比分带到2-0。他还有8次带球推进、11次打穿防线，边路存在感很足。</p>"
         }
       }
     }

@@ -41,7 +41,7 @@ This step is deterministic and does not publish site artifacts. It writes the ev
 - `agent-runs/YYYY-MM-DD/selection_decision.json`: selected players, editorial reasons, and reasons for skipping higher-ranked or notable candidates.
 - `agent-runs/YYYY-MM-DD/copy.json`: final English and Chinese card copy generated from the selected candidate evidence packets.
 
-Do not edit compiled frontend JSON directly. If the output is wrong, change selection/copy, scoring config, candidate-pool config, prompts/profiles, or deterministic validation, then prepare/compile again. The active slate profile normally allows at most two public cards from the same match, and secondary slots can be omitted when the story feels forced.
+Do not edit compiled frontend JSON directly. If the output is wrong, change selection/copy, scoring config, candidate-pool config, prompts/profiles, or deterministic validation, then prepare/compile again. The active slate is overall-first: pick the five strongest public cards when evidence supports them, then use award types as editorial angles rather than fixed quotas. Progression, defensive, goalkeeper, impact, and hidden-gem labels are optional; do not fill them with weaker candidates just for variety. The slate normally allows at most two public cards from the same match, but a dominant result with multiple top-ranked, independently strong candidates can justify a third.
 
 6. Compile and publish the local result:
 
@@ -100,7 +100,7 @@ The GitHub `Update Dataset` workflow should fetch and rebuild data. The GitHub `
 - `candidate_pool.json`: Top 8 selectable candidates, near misses, rank lookup, and candidate-pool reasons.
 - `selector_input.json`: what local Codex should consider, usually name-sorted so it is not anchored to score order.
 - `selection_decision.json`: selected players, editorial reasons, and reasons for skipping higher-ranked or notable candidates.
-- `selection_validation.json`: deterministic checks for pool membership, slot counts, and skipped-higher-ranked explanations.
+- `selection_validation.json`: deterministic checks for pool membership, public-card count, award limits, slate balance, and skipped-higher-ranked explanations.
 - `copy_validation.json`: deterministic checks for banned public Chinese abstract terms and other copy-profile gates.
 - `reports/editorial/YYYY-MM-DD.md`: human-readable generated report.
 
@@ -120,6 +120,7 @@ If output is poor, repair the source of the problem: scoring config, candidate-p
 - Did local Codex explain selected players and skipped higher-ranked candidates?
 - Is every selected player present in the candidate pool?
 - Does the whole slate avoid overconcentrating one match unless the extra card has an extraordinary independent reason?
+- Does the slate avoid picking a weaker Progression Engine, Defensive Pick, Goalkeeper Watch, Hidden Gem, or Impact Pick just to fill an angle?
 - Does each card have a distinct football angle?
 - Are there at most two or three key facts per body?
 - Does `copy_validation.json` pass?

@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Any
 
 from football_data.editorial_fingerprint import editorial_input_fingerprint
+from football_data.editorial_display_names import player_display_name
 from football_data.flags import format_player, format_team
 from football_data.match_flow import build_match_flows, player_flow_impacts
 from football_data.metric_benchmarks import hidden_gem_profile, progression_benchmark
@@ -1762,7 +1763,8 @@ def _zh_team_name(team: str) -> str:
 
 
 def _zh_player_name(player_name: str) -> str:
-    return ZH_PLAYER_NAMES.get(player_name, player_name)
+    fallback = ZH_PLAYER_NAMES.get(player_name, player_name)
+    return player_display_name(player_name, "zh", fallback=fallback)
 
 
 def _build_audit(

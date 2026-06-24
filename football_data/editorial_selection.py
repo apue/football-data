@@ -203,17 +203,28 @@ def fake_selection_decision(
     candidate_pool: dict[str, Any],
     experiment: dict[str, Any],
 ) -> dict[str, Any]:
+    selection_config = experiment["selection"]
+    if selection_config.get("strategy") == "overall_slate_v1":
+        return _fake_overall_slate_decision(candidate_pool, experiment)
+    return _fake_slot_selection_decision(candidate_pool, experiment)
+
+
+def _fake_slot_selection_decision(
+    candidate_pool: dict[str, Any],
+    experiment: dict[str, Any],
+) -> dict[str, Any]:
     candidates = list(candidate_pool.get("selectable_candidates", []))
+    award_limits = _selection_award_limits(experiment["selection"])
     by_award = {
         award: [
             candidate
             for candidate in candidates
             if award in candidate.get("eligible_awards", [])
         ]
-        for award in experiment["selection"]["slots"]
+        for award in award_limits
     }
     selection_config = experiment["selection"]
-    optional_slots = {str(item) for item in selection_config.get("optional_slots", [])}
+    required_slots = _selection_required_slots(selection_config)
     slate_constraints = selection_config.get("slate_constraints", {})
     if not isinstance(slate_constraints, dict):
         slate_constraints = {}
@@ -221,8 +232,7 @@ def fake_selection_decision(
     used: set[str] = set()
     team_counts: dict[str, int] = {}
     match_counts: dict[str, int] = {}
-    skipped: list[dict[str, Any]] = []
-    for award_type, slot_count in selection_config["slots"].items():
+    for award_type, slot_count in award_limits.items():
         ordered = sorted(
             by_award.get(award_type, []),
             key=lambda candidate: _candidate_award_score(candidate, award_type),
@@ -241,7 +251,8 @@ def fake_selection_decision(
             picked += 1
             if picked >= int(slot_count):
                 break
-        if picked < int(slot_count) and award_type not in optional_slots:
+        required_count = int(required_slots.get(award_type) or 0)
+        if picked < required_count:
             for candidate in ordered:
                 player_id = str(candidate["player_id"])
                 if player_id in used:
@@ -250,8 +261,85 @@ def fake_selection_decision(
                 used.add(player_id)
                 _count_slate(candidate, team_counts, match_counts)
                 picked += 1
-                if picked >= int(slot_count):
+                if picked >= required_count:
                     break
+    skipped = _skipped_higher_ranked_potd(candidates, selected)
+    return {
+        "selected": selected,
+        "skipped_higher_ranked": skipped,
+        "skipped_notable_candidates": [],
+        "warnings": [],
+    }
+
+
+def _fake_overall_slate_decision(
+    candidate_pool: dict[str, Any],
+    experiment: dict[str, Any],
+) -> dict[str, Any]:
+    candidates = list(candidate_pool.get("selectable_candidates", []))
+    selection_config = experiment["selection"]
+    award_limits = _selection_award_limits(selection_config)
+    slate_constraints = selection_config.get("slate_constraints", {})
+    if not isinstance(slate_constraints, dict):
+        slate_constraints = {}
+    target_count = int(selection_config.get("target_public_cards") or 0)
+    if target_count <= 0:
+        target_count = sum(int(value or 0) for value in award_limits.values())
+    award_preference = [
+        str(item)
+        for item in selection_config.get(
+            "overall_slate_award_preference",
+            [
+                "player_of_the_day",
+                "impact_pick",
+                "progression_pick",
+                "defensive_pick",
+                "goalkeeper_watch",
+                "hidden_gem",
+            ],
+        )
+    ]
+    selected: list[dict[str, Any]] = []
+    used: set[str] = set()
+    award_counts: dict[str, int] = {}
+    team_counts: dict[str, int] = {}
+    match_counts: dict[str, int] = {}
+    ordered = sorted(candidates, key=_overall_slate_score, reverse=True)
+    for candidate in ordered:
+        if len(selected) >= target_count:
+            break
+        player_id = str(candidate["player_id"])
+        if player_id in used:
+            continue
+        if not _slate_allows(candidate, team_counts, match_counts, slate_constraints):
+            continue
+        award_type = _best_overall_slate_award(
+            candidate,
+            award_counts,
+            award_limits,
+            award_preference,
+        )
+        if not award_type:
+            continue
+        selected.append(_selected_item(award_type, candidate))
+        used.add(player_id)
+        award_counts[award_type] = award_counts.get(award_type, 0) + 1
+        _count_slate(candidate, team_counts, match_counts)
+    skipped = _skipped_higher_ranked_potd(candidates, selected)
+    return {
+        "selected": selected,
+        "skipped_higher_ranked": skipped,
+        "skipped_notable_candidates": [],
+        "warnings": [],
+    }
+
+
+def _skipped_higher_ranked_potd(
+    candidates: list[dict[str, Any]],
+    selected: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    skipped: list[dict[str, Any]] = []
+    selected_ids = {str(item["player_id"]) for item in selected}
     selected_potd_ids = {
         item["player_id"]
         for item in selected
@@ -263,9 +351,15 @@ def fake_selection_decision(
         if candidate["player_id"] in selected_potd_ids
     ]
     worst_selected_rank = max(selected_potd_ranks or [0])
-    for candidate in by_award.get("player_of_the_day", []):
+    for candidate in candidates:
+        if "player_of_the_day" not in candidate.get("eligible_awards", []):
+            continue
         rank = int(candidate.get("headline_rank") or 9999)
-        if rank < worst_selected_rank and candidate["player_id"] not in selected_potd_ids:
+        if (
+            rank < worst_selected_rank
+            and candidate["player_id"] not in selected_potd_ids
+            and str(candidate["player_id"]) not in selected_ids
+        ):
             skipped.append(
                 {
                     "award_type": "player_of_the_day",
@@ -275,12 +369,78 @@ def fake_selection_decision(
                     "reason": "Higher raw rank, but the selected slate gives a broader match-day story.",
                 }
             )
-    return {
-        "selected": selected,
-        "skipped_higher_ranked": skipped,
-        "skipped_notable_candidates": [],
-        "warnings": [],
+    return skipped
+
+
+def _selection_award_limits(selection_config: dict[str, Any]) -> dict[str, int]:
+    raw_limits = selection_config.get("award_limits")
+    if not isinstance(raw_limits, dict):
+        raw_limits = selection_config.get("slots", {})
+    if not isinstance(raw_limits, dict):
+        return {}
+    return {str(key): int(value) for key, value in raw_limits.items()}
+
+
+def _selection_required_slots(selection_config: dict[str, Any]) -> dict[str, int]:
+    raw_required = selection_config.get("required_slots")
+    if isinstance(raw_required, dict):
+        return {str(key): int(value) for key, value in raw_required.items()}
+    if isinstance(raw_required, list):
+        return {str(item): 1 for item in raw_required}
+    raw_slots = selection_config.get("slots", {})
+    if not isinstance(raw_slots, dict):
+        return {}
+    optional_slots = {
+        str(item)
+        for item in (
+            selection_config.get("optional_slots")
+            or selection_config.get("optional_awards")
+            or []
+        )
     }
+    return {
+        str(award_type): int(expected_count)
+        for award_type, expected_count in raw_slots.items()
+        if str(award_type) not in optional_slots
+    }
+
+
+def _overall_slate_score(candidate: dict[str, Any]) -> tuple[float, float, float, float, float]:
+    headline_rank = int(candidate.get("headline_rank") or 9999)
+    if "player_of_the_day" in candidate.get("eligible_awards", []):
+        direct, headline, decisive, rank_component = _candidate_award_score(
+            candidate,
+            "player_of_the_day",
+        )
+        return (3, direct, headline, decisive, rank_component)
+    eligible_scores = [
+        _candidate_award_score(candidate, str(award_type))
+        for award_type in candidate.get("eligible_awards", [])
+    ]
+    best_role_score = max((float(score[0]) for score in eligible_scores), default=0.0)
+    return (
+        2,
+        best_role_score,
+        float(candidate.get("headline_score") or 0),
+        0,
+        -float(headline_rank),
+    )
+
+
+def _best_overall_slate_award(
+    candidate: dict[str, Any],
+    award_counts: dict[str, int],
+    award_limits: dict[str, int],
+    award_preference: list[str],
+) -> str | None:
+    eligible = {str(item) for item in candidate.get("eligible_awards", [])}
+    for award_type in award_preference:
+        if award_type not in eligible:
+            continue
+        if award_counts.get(award_type, 0) >= int(award_limits.get(award_type, 0)):
+            continue
+        return award_type
+    return None
 
 
 def _selected_item(award_type: str, candidate: dict[str, Any]) -> dict[str, Any]:
@@ -409,6 +569,7 @@ def _compact_candidate(candidate: dict[str, Any]) -> dict[str, Any]:
         "pool_reasons",
         "role_scores",
         "evidence_chips",
+        "display_names",
     ]
     compact = {key: candidate.get(key) for key in keys if key in candidate}
     compact["score_components"] = list(candidate.get("score_components", []))[:6]

@@ -1,0 +1,14 @@
+{
+  "id": "zh_player_display_names_v1",
+  "language": "zh",
+  "players": {
+    "BRUNO FERNANDES": {
+      "display_name": "布鲁诺-费尔南德斯",
+      "short_name": "B费"
+    },
+    "CRISTIANO RONALDO": {
+      "display_name": "C罗",
+      "formal_name": "克里斯蒂亚诺-罗纳尔多"
+    }
+  }
+}
