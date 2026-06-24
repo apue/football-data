@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-06-24T00:17:49+00:00",
+  "generated_at": "2026-06-24T10:34:19+00:00",
   "status": "success",
-  "match_date": "2026-06-22",
+  "match_date": "2026-06-23",
   "workflow_variant": "ai_rerank_selection_v1",
   "experiment_id": "ai_rerank_slate_copy_v3",
   "editor_runtime": "local_codex",
@@ -20,28 +20,28 @@
   "choices": [
     {
       "award_type": "player_of_the_day",
-      "player_name": "Kylian MBAPPE",
-      "team": "France"
+      "player_name": "Daniel MUNOZ",
+      "team": "Colombia"
     },
     {
       "award_type": "player_of_the_day",
-      "player_name": "Lionel MESSI",
-      "team": "Argentina"
+      "player_name": "CRISTIANO RONALDO",
+      "team": "Portugal"
     },
     {
       "award_type": "player_of_the_day",
-      "player_name": "Erling HAALAND",
-      "team": "Norway"
+      "player_name": "Ante BUDIMIR",
+      "team": "Croatia"
     },
     {
       "award_type": "impact_pick",
-      "player_name": "Amine GOUIRI",
-      "team": "Algeria"
+      "player_name": "Josip STANISIC",
+      "team": "Croatia"
     },
     {
       "award_type": "progression_pick",
-      "player_name": "Ibrahim MAZA",
-      "team": "Algeria"
+      "player_name": "Noni MADUEKE",
+      "team": "England"
     }
   ]
 }
