@@ -41,7 +41,7 @@ This step is deterministic and does not publish site artifacts. It writes the ev
 - `agent-runs/YYYY-MM-DD/selection_decision.json`: selected players, editorial reasons, and reasons for skipping higher-ranked or notable candidates.
 - `agent-runs/YYYY-MM-DD/copy.json`: final English and Chinese card copy generated from the selected candidate evidence packets.
 
-Do not edit compiled frontend JSON directly. If the output is wrong, change selection/copy, scoring config, candidate-pool config, prompts/profiles, or deterministic validation, then prepare/compile again.
+Do not edit compiled frontend JSON directly. If the output is wrong, change selection/copy, scoring config, candidate-pool config, prompts/profiles, or deterministic validation, then prepare/compile again. The active slate profile normally allows at most two public cards from the same match, and secondary slots can be omitted when the story feels forced.
 
 6. Compile and publish the local result:
 
@@ -72,6 +72,7 @@ Outputs:
 - `agent-runs/YYYY-MM-DD/selector_input.json`
 - `agent-runs/YYYY-MM-DD/selection_decision.json`
 - `agent-runs/YYYY-MM-DD/selection_validation.json`
+- `agent-runs/YYYY-MM-DD/copy_validation.json`
 - `agent-runs/YYYY-MM-DD/run.json`
 - `site/editorial/latest.json`
 - `site/editorial/YYYY-MM-DD/choices.json`
@@ -79,7 +80,7 @@ Outputs:
 - `site/editorial/index.html`
 - `site/index.html`
 
-The active production experiment is `ai_rerank_guardrails_v2`, using the `ai_rerank_selection_v1` workflow variant:
+The active production experiment is `ai_rerank_slate_copy_v3`, using the `ai_rerank_selection_v1` workflow variant:
 
 ```text
 load active experiment registry
@@ -87,6 +88,7 @@ load active experiment registry
   -> local Codex reranks only candidate_pool.selectable_candidates
   -> deterministic selection validation
   -> English and Chinese copy from selected evidence packets
+  -> deterministic copy validation
   -> compile public editorial artifacts
   -> rebuild homepage
 ```
@@ -99,6 +101,7 @@ The GitHub `Update Dataset` workflow should fetch and rebuild data. The GitHub `
 - `selector_input.json`: what local Codex should consider, usually name-sorted so it is not anchored to score order.
 - `selection_decision.json`: selected players, editorial reasons, and reasons for skipping higher-ranked or notable candidates.
 - `selection_validation.json`: deterministic checks for pool membership, slot counts, and skipped-higher-ranked explanations.
+- `copy_validation.json`: deterministic checks for banned public Chinese abstract terms and other copy-profile gates.
 - `reports/editorial/YYYY-MM-DD.md`: human-readable generated report.
 
 Before changing scoring weights, run the POTM calibration gate when labels exist or when Firecrawl can find credible match recognition for the date:
@@ -116,10 +119,14 @@ If output is poor, repair the source of the problem: scoring config, candidate-p
 - Does `selection_validation.json` pass?
 - Did local Codex explain selected players and skipped higher-ranked candidates?
 - Is every selected player present in the candidate pool?
+- Does the whole slate avoid overconcentrating one match unless the extra card has an extraordinary independent reason?
 - Does each card have a distinct football angle?
 - Are there at most two or three key facts per body?
+- Does `copy_validation.json` pass?
 - Does the copy avoid implying video review, media ratings, or unsupported tactical observation?
 - Does the homepage show the latest generated cards?
+
+For ad hoc wording audits, use `rg -n "<terms>" site/editorial/YYYY-MM-DD site/index.html` against generated artifacts. Do not turn broad phrase scans over docs or source files into unit tests.
 
 9. Verify:
 

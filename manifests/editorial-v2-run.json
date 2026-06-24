@@ -1,12 +1,18 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-06-23T10:36:29+00:00",
+  "generated_at": "2026-06-24T00:17:49+00:00",
   "status": "success",
   "match_date": "2026-06-22",
   "workflow_variant": "ai_rerank_selection_v1",
-  "experiment_id": "ai_rerank_guardrails_v2",
+  "experiment_id": "ai_rerank_slate_copy_v3",
+  "editor_runtime": "local_codex",
   "scoring_version": "v0.4",
   "selection_validation": {
+    "schema_version": 1,
+    "status": "pass",
+    "warnings": []
+  },
+  "copy_validation": {
     "schema_version": 1,
     "status": "pass",
     "warnings": []
@@ -36,11 +42,6 @@
       "award_type": "progression_pick",
       "player_name": "Ibrahim MAZA",
       "team": "Algeria"
-    },
-    {
-      "award_type": "defensive_pick",
-      "player_name": "MOHANNAD ABUTAHA",
-      "team": "Jordan"
     }
   ]
 }

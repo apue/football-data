@@ -37,20 +37,25 @@ Bad:
 
 Use natural Chinese sports commentary. Write Chinese from the selected candidate evidence packet, not from the English draft and not from the generated Markdown frame. The Chinese copy should make the same editorial judgment, but it should not mirror English sentence order, metaphors, or abstractions.
 
-Before writing each Chinese card, generate 3-5 Chinese title candidates from facts and allowed angles in the evidence packet. Pick the one that sounds most like a Chinese football post. Reject titles that feel mechanically abstract, such as `帽子戏法把答案写明了`; prefer direct phrasing such as `帽子戏法就是答案`.
+Before writing each Chinese card, generate 3-5 Chinese title candidates from facts and allowed angles in the evidence packet. Pick the one that covers the core fact most cleanly. Reject titles that feel mechanically abstract or evaluative, such as `帽子戏法把答案写明了`, `最清楚的进攻答案`, `梅开二度更有说服力`, `两脚够硬`, or `这一脚来得正好`. Prefer plain core-fact labels such as `姆巴佩梅开二度`, `梅西梅开二度`, `哈兰德双响制胜`, `古伊里第81分钟制胜`, or `马扎不断接球向前`.
+
+The active Chinese profile is `zh_matchnote_light_emotion_v1`: titles are core-fact labels, while body copy can be a match-report note plus half a sentence of light football emotion. Do not use public abstract terms such as `答案`, `理由`, `说服力`, `分量`, `走势`, `分界线`, `写下`, `证明`, `含金量`, `最稳`, `最直接`, `这张卡`, `卡片`, `模型`, or `指标压`.
 
 After drafting Chinese, run a strict `qu-ai-wei` style review:
 
 - Does it sound like a Chinese football editor wrote it directly?
+- Does the title cover the highest-priority fact, such as 梅开二度, 双响制胜, 制胜球, 推进, or 防守?
+- Does the title avoid light-emotion phrasing that belongs in the body?
 - Is there at least one concrete football action before the numbers?
 - Are abstract phrases and polished-but-empty claims removed?
+- Does it avoid the active copy profile's banned public terms?
 - Is every claim supported by the candidate evidence packet or SQLite?
 
 Use `humanizer-zh` style repair only for cards that fail this review. Repair rhythm and word choice, but do not change the player selection argument.
 
 Good:
 
-> 姆巴佩这场一直压着塞内加尔后卫线踢。两个进球是结果，更持续的威胁来自他不断冲击身后空间。
+> 哈兰德第47分钟、第57分钟各进一球，第二球后来成了制胜球。挪威最后3-2赢下来，这两脚够硬。
 
 Bad:
 

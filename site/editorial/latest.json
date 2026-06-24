@@ -1,12 +1,12 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-06-23T10:36:29+00:00",
-  "compiled_at": "2026-06-23T10:36:29+00:00",
+  "generated_at": "2026-06-24T00:17:49+00:00",
+  "compiled_at": "2026-06-24T00:17:49+00:00",
   "match_date": "2026-06-22",
   "scoring_version": "v0.4",
   "editorial_generation": {
     "workflow_variant": "ai_rerank_selection_v1",
-    "experiment_id": "ai_rerank_guardrails_v2",
+    "experiment_id": "ai_rerank_slate_copy_v3",
     "selection_mode": "ai_rerank_only",
     "uses_official_assists": true,
     "uses_goal_involvements": true,
@@ -402,15 +402,15 @@
           "射门质量突出"
         ]
       },
-      "selection_reason": "Selected from the candidate pool for brace, opening goal.",
+      "selection_reason": "Two goals for France, including the opener, with three shots on target in a 3-0 win.",
       "content": {
         "en": {
-          "title": "Two goals, clear case",
-          "html": "<p>Kylian MBAPPE's two goals put him in the top group. He also put 3 shots on target.</p>"
+          "title": "Mbappe Took the Early Grip",
+          "html": "<p>Mbappe put France ahead in the 13th minute and scored again after half-time. Two goals and three shots on target gave France the cleanest attacking lead in a 3-0 win.</p>"
         },
         "zh": {
-          "title": "梅开二度，理由够直接",
-          "html": "<p>姆巴佩梅开二度，这就是最直接的入选理由。 另外还有 3 次射正。</p>"
+          "title": "姆巴佩梅开二度",
+          "html": "<p>姆巴佩第13分钟先进一球，第53分钟又进一个。法国3-0赢伊拉克，他这两脚处理得很干脆。</p>"
         }
       }
     },
@@ -455,15 +455,15 @@
           "射门质量突出"
         ]
       },
-      "selection_reason": "Selected from the candidate pool for brace, opening goal.",
+      "selection_reason": "A brace in Argentina's 2-0 win, with the first goal opening the scoring and the second coming in stoppage time.",
       "content": {
         "en": {
-          "title": "Two goals, clear case",
-          "html": "<p>Lionel MESSI's two goals put him in the top group. He also put 4 shots on target.</p>"
+          "title": "Messi Finished Both Ends",
+          "html": "<p>Messi scored in the 37th minute and again in stoppage time. Argentina beat Austria 2-0, and he did not leave those chances hanging.</p>"
         },
         "zh": {
-          "title": "梅开二度，理由够直接",
-          "html": "<p>梅西梅开二度，这就是最直接的入选理由。 另外还有 4 次射正。</p>"
+          "title": "梅西梅开二度",
+          "html": "<p>梅西第37分钟先破门，补时阶段又进一个。阿根廷2-0赢奥地利，他这场没有浪费机会。</p>"
         }
       }
     },
@@ -505,15 +505,15 @@
           "射门质量突出"
         ]
       },
-      "selection_reason": "Selected from the candidate pool for brace, match-winning goal.",
+      "selection_reason": "Two goals in Norway's 3-2 win over Senegal, including the eventual match-winning goal.",
       "content": {
         "en": {
-          "title": "Two goals, clear case",
-          "html": "<p>Erling HAALAND's two goals put him in the top group. One of them was the match-winner. He also put 3 shots on target.</p>"
+          "title": "Haaland Gave Norway Enough",
+          "html": "<p>Haaland scored in the 47th and 57th minutes, and the second one later counted as the winner. Norway still had to hold on for 3-2, but those two finishes were enough.</p>"
         },
         "zh": {
-          "title": "梅开二度，理由够直接",
-          "html": "<p>哈兰德梅开二度，这就是最直接的入选理由。 其中包括制胜球。 另外还有 3 次射正。</p>"
+          "title": "哈兰德双响制胜",
+          "html": "<p>哈兰德第47分钟、第57分钟各进一球，第二球后来成了制胜球。挪威最后3-2赢下来，这两脚够硬。</p>"
         }
       }
     },
@@ -557,15 +557,15 @@
           "取得进球"
         ]
       },
-      "selection_reason": "Selected from the candidate pool for comeback winner, match-winning goal.",
+      "selection_reason": "His 81st-minute goal completed Algeria's comeback and turned 1-1 into a 2-1 win.",
       "content": {
         "en": {
-          "title": "The moment that mattered",
-          "html": "<p>Amine GOUIRI gets the impact slot because the decisive evidence is clear: comeback winner, match-winning goal, goal scorer.</p>"
+          "title": "Gouiri Hit It on Time",
+          "html": "<p>Gouiri changed the score in the 81st minute. Algeria had come from behind to reach 1-1; his finish made it 2-1.</p>"
         },
         "zh": {
-          "title": "关键时刻站出来",
-          "html": "<p>古伊里拿到影响力精选，核心证据很直接：逆转制胜、打入制胜球、取得进球。</p>"
+          "title": "古伊里第81分钟制胜",
+          "html": "<p>第81分钟，古伊里把比分改成2-1。阿尔及利亚从落后到反超，这一脚来得正好。</p>"
         }
       }
     },
@@ -605,61 +605,15 @@
           "在防线之间活跃"
         ]
       },
-      "selection_reason": "Selected from the candidate pool for constant carries, between-line presence.",
+      "selection_reason": "A publishable progression case because he paired carrying volume with between-line receiving and attacking involvement.",
       "content": {
         "en": {
-          "title": "The route forward",
-          "html": "<p>Ibrahim MAZA earns the progression slot with 7 line breaks and 10 ball progressions.</p>"
+          "title": "Maza Kept Finding the Next Pass",
+          "html": "<p>Maza kept showing for the ball around the front half and carried Algeria forward 10 times. It was not the loudest game on the slate, but his touches helped keep Algeria connected.</p>"
         },
         "zh": {
-          "title": "向前路线最清楚",
-          "html": "<p>马扎的推进理由来自 7 次打穿防线和 10 次带球推进。</p>"
-        }
-      }
-    },
-    {
-      "award_type": "defensive_pick",
-      "award_types": [
-        "defensive_pick"
-      ],
-      "award_label": {
-        "en": "Defensive Pick",
-        "zh": "防守精选"
-      },
-      "player_id": "FIFA-2026-M44-JOR-ALG|Jordan|20",
-      "player_name": "MOHANNAD ABUTAHA",
-      "team": "Jordan",
-      "opponent": "Algeria",
-      "match_key": "FIFA-2026-M44-JOR-ALG",
-      "match_no": 44,
-      "player_no": 20,
-      "position": "MF",
-      "score": 33.48,
-      "metrics": {
-        "possession_regains": 10,
-        "possession_interrupted": 7,
-        "tackles_won": 2,
-        "interceptions": 5,
-        "blocks": 3,
-        "clearances": 5
-      },
-      "evidence_chips": {
-        "en": [
-          "ball-winning profile"
-        ],
-        "zh": [
-          "夺回球权能力突出"
-        ]
-      },
-      "selection_reason": "Selected from the candidate pool for ball-winning profile.",
-      "content": {
-        "en": {
-          "title": "The defensive answer",
-          "html": "<p>MOHANNAD ABUTAHA stood out through defensive actions: ball-winning profile.</p>"
-        },
-        "zh": {
-          "title": "防守端最抢眼",
-          "html": "<p>阿布塔哈的防守精选来自这些硬证据：夺回球权能力突出。</p>"
+          "title": "马扎不断接球向前",
+          "html": "<p>马扎这场一直在前场附近接球、带球往前走。10次带球推进，加上多次在防线之间接应，阿尔及利亚需要这种连接。</p>"
         }
       }
     }

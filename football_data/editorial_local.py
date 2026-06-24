@@ -13,9 +13,11 @@ from football_data.editorial_artifacts import (
 )
 from football_data.editorial_candidates import build_candidate_pool
 from football_data.editorial_copy import build_copy_payloads
+from football_data.editorial_copy_validation import validate_copy
 from football_data.editorial_rankings import build_editorial_rankings
 from football_data.editorial_registry import (
     load_candidate_pool_config,
+    load_copy_profile,
     load_editorial_experiment,
 )
 from football_data.editorial_selection import (
@@ -46,6 +48,7 @@ def prepare_editorial_packet(
         experiment=experiment,
         rankings=rankings,
         selection_validation=None,
+        copy_validation=None,
         choices=[],
     )
 
@@ -54,6 +57,7 @@ def prepare_editorial_packet(
     for stale_name in (
         "selection_decision",
         "selection_validation",
+        "copy_validation",
         "copy_payload",
         "copy",
     ):
@@ -99,8 +103,16 @@ def compile_local_editorial(
     if selection_validation["status"] != "pass":
         _write_json(audit_dir / "selection_validation.json", selection_validation)
         raise RuntimeError(f"Local editorial selection validation failed: {selection_validation['warnings']}")
-
     copy_payload = build_copy_payloads(selection_decision, candidate_pool)
+    copy_profiles = {
+        language: load_copy_profile(str(profile_id), config_dir)
+        for language, profile_id in (experiment.get("copy_profiles") or {}).items()
+    }
+    copy_validation = validate_copy(copy, copy_profiles, copy_payload=copy_payload)
+    _write_json(audit_dir / "copy_validation.json", copy_validation)
+    if copy_validation["status"] != "pass":
+        raise RuntimeError(f"Local editorial copy validation failed: {copy_validation['warnings']}")
+
     compiled = build_compiled_report(
         experiment=experiment,
         rankings=rankings,
@@ -115,6 +127,7 @@ def compile_local_editorial(
         experiment=experiment,
         rankings=rankings,
         selection_validation=selection_validation,
+        copy_validation=copy_validation,
         choices=[
             {
                 "award_type": choice["award_type"],
@@ -134,6 +147,7 @@ def compile_local_editorial(
         copy_payload=copy_payload,
         copy=copy,
         run_payload=run_payload,
+        copy_validation=copy_validation,
         site_dir=site_dir,
         reports_dir=reports_dir,
         agent_runs_dir=agent_runs_dir,
@@ -151,6 +165,7 @@ def _run_payload(
     experiment: dict[str, Any],
     rankings: dict[str, Any],
     selection_validation: dict[str, Any] | None,
+    copy_validation: dict[str, Any] | None,
     choices: list[dict[str, Any]],
 ) -> dict[str, Any]:
     return {
@@ -163,6 +178,7 @@ def _run_payload(
         "editor_runtime": "local_codex",
         "scoring_version": rankings["scoring_version"],
         "selection_validation": selection_validation,
+        "copy_validation": copy_validation,
         "choices": choices,
     }
 

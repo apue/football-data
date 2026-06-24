@@ -8,7 +8,8 @@ from pathlib import Path
 
 from football_data.demo import build_demo_site
 from football_data.editorial_artifacts import build_compiled_report, write_v2_artifacts
-from football_data.editorial_registry import load_editorial_experiment
+from football_data.editorial_copy_validation import validate_copy
+from football_data.editorial_registry import load_copy_profile, load_editorial_experiment
 
 
 def main() -> int:
@@ -38,6 +39,13 @@ def main() -> int:
     previous_run = _load_json(audit_dir / "run.json")
 
     experiment = load_editorial_experiment(previous_run.get("experiment_id"), args.config_dir)
+    copy_profiles = {
+        language: load_copy_profile(str(profile_id), args.config_dir)
+        for language, profile_id in (experiment.get("copy_profiles") or {}).items()
+    }
+    copy_validation = validate_copy(copy, copy_profiles, copy_payload=copy_payload)
+    if copy_validation["status"] != "pass":
+        raise RuntimeError(f"Editorial v2 copy validation failed: {copy_validation['warnings']}")
     compiled = build_compiled_report(
         experiment=experiment,
         rankings=rankings,
@@ -49,6 +57,7 @@ def main() -> int:
     run_payload = {
         **previous_run,
         "status": "success",
+        "copy_validation": copy_validation,
         "recompiled_at": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
     }
     write_v2_artifacts(
@@ -61,6 +70,7 @@ def main() -> int:
         copy_payload=copy_payload,
         copy=copy,
         run_payload=run_payload,
+        copy_validation=copy_validation,
         site_dir=args.site_dir,
         reports_dir=args.reports_dir,
         agent_runs_dir=args.agent_runs_dir,

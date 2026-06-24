@@ -170,20 +170,24 @@ def _static_zh_copy(
     on_target = int(metrics.get("on_target") or 0)
     if award_type == "player_of_the_day":
         if goals >= 3:
-            title = "帽子戏法就是答案"
-            body = f"{player_name}这场帽子戏法，入选理由不用绕远。"
+            title = "帽子戏法"
+            body = f"{player_name}这场完成帽子戏法。"
         elif goals == 2:
-            title = "梅开二度，理由够直接"
-            body = f"{player_name}梅开二度，这就是最直接的入选理由。"
+            title = "梅开二度"
+            body = f"{player_name}这场梅开二度。"
         elif goals == 1:
-            title = "关键一脚给出答案"
-            body = f"{player_name}的进球是这张卡片的起点。"
+            title = "制胜球" if int(metrics.get("match_winning_goal") or 0) else "取得进球"
+            body = f"{player_name}这场打进一球。"
         else:
             title = f"{player_name} 进入每日最佳"
-            body = f"{player_name}的证据包最能支撑这个席位。"
+            body = f"{player_name}这场表现进入每日最佳。"
         if int(metrics.get("comeback_winner") or 0):
+            if "制胜" not in title and "反超" not in title:
+                title = f"{title}制胜"
             body += " 这还是逆转制胜球。"
         elif int(metrics.get("match_winning_goal") or 0):
+            if "制胜" not in title:
+                title = f"{title}制胜"
             body += " 其中包括制胜球。"
         if assists:
             body += f" 他还送出 {assists} 次助攻。"
@@ -191,18 +195,18 @@ def _static_zh_copy(
             body += f" 另外还有 {on_target} 次射正。"
         return title, body
     if award_type == "impact_pick":
-        title = "关键时刻站出来"
-        body = f"{player_name}拿到影响力精选，核心证据很直接：{_join_chips(chips, language='zh')}。"
+        title = "制胜球" if int(metrics.get("match_winning_goal") or 0) else "关键进球"
+        body = f"{player_name}这次影响力精选来自：{_join_chips(chips, language='zh')}。"
         return title, body
     if award_type == "progression_pick":
-        title = "向前路线最清楚"
+        title = "持续接球向前"
         line_breaks = int(metrics.get("line_breaks_completed") or 0)
         progressions = int(metrics.get("ball_progressions") or 0)
-        body = f"{player_name}的推进理由来自 {line_breaks} 次打穿防线和 {progressions} 次带球推进。"
+        body = f"{player_name}这场有 {line_breaks} 次打穿防线和 {progressions} 次带球推进。"
         return title, body
     if award_type == "defensive_pick":
         title = "防守端最抢眼"
-        body = f"{player_name}的防守精选来自这些硬证据：{_join_chips(chips, language='zh')}。"
+        body = f"{player_name}这场防守端很突出：{_join_chips(chips, language='zh')}。"
         return title, body
     if award_type == "goalkeeper_watch":
         title = "有压力的零封"

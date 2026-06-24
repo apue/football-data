@@ -14,6 +14,7 @@ from football_data.llm_client import (
 from football_data.editorial_artifacts import build_compiled_report, write_v2_artifacts
 from football_data.editorial_candidates import build_candidate_pool
 from football_data.editorial_copy import build_copy_payloads, generate_copy
+from football_data.editorial_copy_validation import validate_copy
 from football_data.editorial_rankings import build_editorial_rankings
 from football_data.editorial_registry import (
     load_candidate_pool_config,
@@ -83,6 +84,9 @@ def run_editorial_v2(
         profiles=copy_profiles,
         models=config.models,
     )
+    copy_validation = validate_copy(copy, copy_profiles, copy_payload=copy_payload)
+    if copy_validation["status"] != "pass":
+        raise RuntimeError(f"Editorial v2 copy validation failed: {copy_validation['warnings']}")
     compiled = build_compiled_report(
         experiment=experiment,
         rankings=rankings,
@@ -100,6 +104,7 @@ def run_editorial_v2(
         "experiment_id": experiment["id"],
         "scoring_version": rankings["scoring_version"],
         "selection_validation": selection_validation,
+        "copy_validation": copy_validation,
         "choices": [
             {
                 "award_type": choice["award_type"],
@@ -119,6 +124,7 @@ def run_editorial_v2(
         copy_payload=copy_payload,
         copy=copy,
         run_payload=run_payload,
+        copy_validation=copy_validation,
         site_dir=site_dir,
         reports_dir=reports_dir,
         agent_runs_dir=agent_runs_dir,
