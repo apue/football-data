@@ -109,6 +109,7 @@ def write_v2_artifacts(
     reports_dir: str | Path,
     agent_runs_dir: str | Path,
     run_out_path: str | Path,
+    copy_validation: dict[str, Any] | None = None,
 ) -> None:
     write_compiled_editorial_artifacts(compiled, site_dir)
     reports_path = Path(reports_dir) / "editorial"
@@ -120,7 +121,7 @@ def write_v2_artifacts(
     )
     audit_dir = Path(agent_runs_dir) / compiled["match_date"]
     audit_dir.mkdir(parents=True, exist_ok=True)
-    for name, payload in {
+    audit_payloads = {
         "rankings": _audit_rankings(rankings),
         "candidate_pool": candidate_pool,
         "selector_input": selector_input,
@@ -129,7 +130,10 @@ def write_v2_artifacts(
         "copy_payload": copy_payload,
         "copy": copy,
         "run": run_payload,
-    }.items():
+    }
+    if copy_validation is not None:
+        audit_payloads["copy_validation"] = copy_validation
+    for name, payload in audit_payloads.items():
         (audit_dir / f"{name}.json").write_text(
             json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
             encoding="utf-8",

@@ -11,14 +11,20 @@ def test_editorial_v2_registry_resolves_default_experiment():
 
     experiment = load_editorial_experiment()
 
-    assert experiment["id"] == "ai_rerank_guardrails_v2"
+    assert experiment["id"] == "ai_rerank_slate_copy_v3"
     assert experiment["workflow_variant"] == "ai_rerank_selection_v1"
     assert experiment["selection"]["mode"] == "ai_rerank_only"
     assert experiment["candidate_pool"] == "guarded_packet_v2"
-    assert experiment["selector_profile"] == "guarded_editor_v2"
-    assert experiment["selection"]["optional_slots"] == ["goalkeeper_watch", "hidden_gem"]
+    assert experiment["selector_profile"] == "slate_balanced_editor_v3"
+    assert experiment["copy_profiles"]["zh"] == "zh_matchnote_light_emotion_v1"
+    assert experiment["selection"]["optional_slots"] == [
+        "progression_pick",
+        "defensive_pick",
+        "goalkeeper_watch",
+        "hidden_gem",
+    ]
     assert experiment["selection"]["slate_constraints"] == {
-        "max_per_match": 3,
+        "max_per_match": 2,
         "max_per_team": 2,
     }
 
@@ -30,10 +36,18 @@ def test_editorial_v2_registry_resolves_default_experiment():
     assert pool["potd_top_n"] == 8
     assert selector["allowed_selection_source"] == "candidate_pool_only"
     assert any("Fact accuracy" in item for item in selector["instructions"])
+    assert any("same match" in item for item in selector["instructions"])
     assert zh_profile["language"] == "zh"
     assert zh_profile["instructions"]
+    assert isinstance(zh_profile.get("banned_public_terms"), list)
+    assert zh_profile["banned_public_terms"]
+    assert zh_profile["title_policy"]["mode"] == "core_fact_label"
+    assert isinstance(zh_profile["title_policy"].get("banned_title_terms"), list)
     assert en_profile["language"] == "en"
     assert en_profile["instructions"]
+
+    baseline = load_editorial_experiment("ai_rerank_baseline_v1")
+    assert baseline["status"] == "archived"
 
 
 def test_editorial_v2_goalkeeper_score_is_keeper_only_for_latest_day():
@@ -256,6 +270,155 @@ def test_editorial_v2_fake_selector_prefers_direct_potd_case_and_slate_constrain
     assert any("selected for multiple awards" in warning for warning in duplicate_validation["warnings"])
 
 
+def test_editorial_v2_slate_balance_allows_omitting_defensive_and_blocks_third_match_card():
+    from football_data.editorial_candidates import build_candidate_pool
+    from football_data.editorial_rankings import build_editorial_rankings
+    from football_data.editorial_registry import (
+        load_candidate_pool_config,
+        load_editorial_experiment,
+    )
+    from football_data.editorial_validation import validate_selection_decision
+
+    experiment = load_editorial_experiment()
+    rankings = build_editorial_rankings(
+        "data/latest.sqlite",
+        "2026-06-22",
+        experiment["scoring_config"],
+    )
+    pool = build_candidate_pool(
+        rankings,
+        load_candidate_pool_config(experiment["candidate_pool"]),
+    )
+    balanced = {
+        "selected": [
+            _selected(_candidate(pool, "Kylian MBAPPE"), "player_of_the_day"),
+            _selected(_candidate(pool, "Lionel MESSI"), "player_of_the_day"),
+            _selected(_candidate(pool, "Erling HAALAND"), "player_of_the_day"),
+            _selected(_candidate(pool, "Amine GOUIRI"), "impact_pick"),
+            _selected(_candidate(pool, "Ibrahim MAZA"), "progression_pick"),
+        ],
+        "skipped_higher_ranked": [
+            {
+                "award_type": "player_of_the_day",
+                "player_id": _candidate(pool, "Amine GOUIRI")["player_id"],
+                "player_name": "Amine GOUIRI",
+                "coarse_rank": 3,
+                "reason": "Gouiri is kept as the impact pick so Haaland's brace and winner can stay in Player of the Day.",
+            }
+        ],
+        "skipped_notable_candidates": [],
+        "warnings": [],
+    }
+    overconcentrated = json.loads(json.dumps(balanced, ensure_ascii=False))
+    overconcentrated["selected"].append(_selected(_candidate(pool, "MOHANNAD ABUTAHA"), "defensive_pick"))
+
+    balanced_validation = validate_selection_decision(balanced, pool, experiment)
+    overconcentrated_validation = validate_selection_decision(overconcentrated, pool, experiment)
+
+    assert balanced_validation["status"] == "pass"
+    assert overconcentrated_validation["status"] == "failed"
+    assert any("FIFA-2026-M44-JOR-ALG exceeds max_per_match 2" in warning for warning in overconcentrated_validation["warnings"])
+
+
+def test_editorial_v2_copy_validation_rejects_abstract_chinese_public_terms():
+    from football_data.editorial_copy_validation import validate_copy
+
+    term = "禁用公共词"
+    zh_profile = {"banned_public_terms": [term]}
+    copy = {
+        "en": {"items": [], "warnings": []},
+        "zh": {
+            "items": [
+                {
+                    "award_type": "player_of_the_day",
+                    "player_id": "p1",
+                    "title": "姆巴佩梅开二度",
+                    "body": f"这句包含{term}，应该被拦住。",
+                    "warnings": [],
+                }
+            ],
+            "warnings": [],
+        },
+    }
+
+    validation = validate_copy(copy, {"zh": zh_profile})
+
+    assert validation["status"] == "failed"
+    assert any(f"banned zh public term {term!r}" in warning for warning in validation["warnings"])
+
+
+def test_editorial_v2_copy_validation_requires_zh_title_core_fact():
+    from football_data.editorial_candidates import build_candidate_pool
+    from football_data.editorial_copy import build_copy_payloads
+    from football_data.editorial_copy_validation import validate_copy
+    from football_data.editorial_rankings import build_editorial_rankings
+    from football_data.editorial_registry import (
+        load_candidate_pool_config,
+        load_copy_profile,
+        load_editorial_experiment,
+    )
+
+    experiment = load_editorial_experiment()
+    rankings = build_editorial_rankings(
+        "data/latest.sqlite",
+        "2026-06-22",
+        experiment["scoring_config"],
+    )
+    pool = build_candidate_pool(
+        rankings,
+        load_candidate_pool_config(experiment["candidate_pool"]),
+    )
+    messi = _candidate(pool, "Lionel MESSI")
+    haaland = _candidate(pool, "Erling HAALAND")
+    payload = build_copy_payloads(
+        {
+            "selected": [
+                _selected(messi, "player_of_the_day"),
+                _selected(haaland, "player_of_the_day"),
+            ],
+            "skipped_higher_ranked": [],
+            "skipped_notable_candidates": [],
+        },
+        pool,
+    )
+    copy = {
+        "en": {"items": [], "warnings": []},
+        "zh": {
+            "items": [
+                {
+                    "award_type": "player_of_the_day",
+                    "player_id": messi["player_id"],
+                    "title": "梅西补时再进",
+                    "body": "梅西第37分钟先破门，补时阶段又进一个。阿根廷2-0赢奥地利。",
+                    "warnings": [],
+                },
+                {
+                    "award_type": "player_of_the_day",
+                    "player_id": haaland["player_id"],
+                    "title": "哈兰德双响制胜禁用标题词",
+                    "body": "哈兰德第47分钟、第57分钟各进一球，第二球后来成了制胜球。",
+                    "warnings": [],
+                },
+            ],
+            "warnings": [],
+        },
+    }
+    zh_profile = load_copy_profile(experiment["copy_profiles"]["zh"])
+    zh_profile = {
+        **zh_profile,
+        "title_policy": {
+            **zh_profile["title_policy"],
+            "banned_title_terms": ["禁用标题词"],
+        },
+    }
+
+    validation = validate_copy(copy, {"zh": zh_profile}, copy_payload=payload)
+
+    assert validation["status"] == "failed"
+    assert any("missing zh title core fact goals>=2" in warning for warning in validation["warnings"])
+    assert any("banned zh title term '禁用标题词'" in warning for warning in validation["warnings"])
+
+
 def test_editorial_v2_fake_copy_is_publishable_static_copy():
     from football_data.editorial_candidates import build_candidate_pool
     from football_data.editorial_copy import build_copy_payloads, generate_copy
@@ -386,15 +549,24 @@ def test_editorial_v2_selection_validation_requires_pool_membership_and_skip_rea
     assert lower_validation["status"] == "failed"
     assert any("skipped_higher_ranked" in warning for warning in lower_validation["warnings"])
 
-    missing_required_slot = json.loads(json.dumps(decision))
-    missing_required_slot["selected"] = [
+    missing_optional_defensive = json.loads(json.dumps(decision))
+    missing_optional_defensive["selected"] = [
         item
-        for item in missing_required_slot["selected"]
+        for item in missing_optional_defensive["selected"]
         if item["award_type"] != "defensive_pick"
     ]
-    missing_validation = validate_selection_decision(missing_required_slot, pool, experiment)
+    missing_optional_validation = validate_selection_decision(missing_optional_defensive, pool, experiment)
+    assert missing_optional_validation["status"] == "pass"
+
+    missing_required_impact = json.loads(json.dumps(decision))
+    missing_required_impact["selected"] = [
+        item
+        for item in missing_required_impact["selected"]
+        if item["award_type"] != "impact_pick"
+    ]
+    missing_validation = validate_selection_decision(missing_required_impact, pool, experiment)
     assert missing_validation["status"] == "failed"
-    assert any("missing required slot defensive_pick" in warning for warning in missing_validation["warnings"])
+    assert any("missing required slot impact_pick" in warning for warning in missing_validation["warnings"])
 
     from football_data.editorial_selection import normalize_selection_decision, repair_selection_decision
 
