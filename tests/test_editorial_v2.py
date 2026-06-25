@@ -6,20 +6,29 @@ def test_editorial_v2_registry_resolves_default_experiment():
         load_candidate_pool_config,
         load_copy_profile,
         load_editorial_experiment,
+        load_review_profile,
         load_selector_profile,
     )
     from football_data.editorial_display_names import player_display_entry, player_display_name
 
     experiment = load_editorial_experiment()
 
-    assert experiment["id"] == "ai_rerank_slate_copy_v3"
+    assert experiment["id"] == "ai_rerank_slate_self_review_v4"
     assert experiment["workflow_variant"] == "ai_rerank_selection_v1"
     assert experiment["selection"]["mode"] == "ai_rerank_only"
     assert experiment["candidate_pool"] == "guarded_packet_v2"
     assert experiment["selector_profile"] == "slate_balanced_editor_v3"
+    assert experiment["review_profile"] == "reader_intuition_v1"
+    assert experiment["revision_policy"]["mode"] == "local_editor_revise_until_review_passes"
     assert experiment["copy_profiles"]["zh"] == "zh_matchnote_light_emotion_v1"
     assert experiment["selection"]["strategy"] == "overall_slate_v1"
-    assert experiment["selection"]["target_public_cards"] == 5
+    assert experiment["selection"]["public_card_count"]["min"] == 3
+    assert experiment["selection"]["public_card_count"]["max"] == 6
+    assert experiment["selection"]["public_card_count"]["recommended_by_match_count"][0] == {
+        "match_count_min": 1,
+        "match_count_max": 2,
+        "recommended": 4,
+    }
     assert experiment["selection"]["award_limits"]["progression_pick"] == 1
     assert experiment["selection"]["optional_awards"] == [
         "player_of_the_day",
@@ -41,6 +50,7 @@ def test_editorial_v2_registry_resolves_default_experiment():
 
     pool = load_candidate_pool_config(experiment["candidate_pool"])
     selector = load_selector_profile(experiment["selector_profile"])
+    review_profile = load_review_profile(experiment["review_profile"])
     zh_profile = load_copy_profile(experiment["copy_profiles"]["zh"])
     en_profile = load_copy_profile(experiment["copy_profiles"]["en"])
 
@@ -49,6 +59,13 @@ def test_editorial_v2_registry_resolves_default_experiment():
     assert any("Fact accuracy" in item for item in selector["instructions"])
     assert any("same match" in item for item in selector["instructions"])
     assert any("not a quota" in item for item in selector["instructions"])
+    assert review_profile["required_dimensions"] == [
+        "obvious_omission",
+        "slate_balance",
+        "metric_misuse",
+        "copy_style",
+        "display_names",
+    ]
     assert zh_profile["language"] == "zh"
     assert zh_profile["instructions"]
     assert isinstance(zh_profile.get("banned_public_terms"), list)
@@ -58,8 +75,152 @@ def test_editorial_v2_registry_resolves_default_experiment():
     assert en_profile["language"] == "en"
     assert en_profile["instructions"]
 
-    baseline = load_editorial_experiment("ai_rerank_baseline_v1")
-    assert baseline["status"] == "archived"
+    retired_paths = [
+        "config/editorial/experiments/ai_rerank_baseline_v1.json",
+        "config/editorial/experiments/ai_rerank_guardrails_v2.json",
+        "config/editorial/candidate_pools/rich_packet_v1.json",
+        "config/editorial/selector_profiles/strict_editor_v1.json",
+        "config/editorial/selector_profiles/guarded_editor_v2.json",
+        "config/editorial/copy_profiles/zh_natural_v1.json",
+    ]
+    assert not [path for path in retired_paths if Path(path).exists()]
+
+
+def test_editorial_review_validation_requires_reader_intuition_coverage():
+    from football_data.editorial_candidates import build_candidate_pool
+    from football_data.editorial_copy import build_copy_payloads, generate_copy
+    from football_data.editorial_rankings import build_editorial_rankings
+    from football_data.editorial_registry import (
+        load_candidate_pool_config,
+        load_editorial_experiment,
+        load_review_profile,
+    )
+    from football_data.editorial_review import build_editorial_review_payload, validate_editorial_review
+    from football_data.editorial_selection import fake_selection_decision
+    from football_data.editorial_validation import validate_selection_decision
+
+    experiment = load_editorial_experiment()
+    rankings = build_editorial_rankings(
+        "data/latest.sqlite",
+        "2026-06-22",
+        experiment["scoring_config"],
+    )
+    pool = build_candidate_pool(
+        rankings,
+        load_candidate_pool_config(experiment["candidate_pool"]),
+    )
+    decision = fake_selection_decision(pool, experiment)
+    copy_payload = build_copy_payloads(decision, pool)
+    copy = generate_copy(copy_payload, fake=True)
+    review_payload = build_editorial_review_payload(
+        selection_decision=decision,
+        candidate_pool=pool,
+        copy=copy,
+        selection_validation=validate_selection_decision(decision, pool, experiment),
+        review_profile=load_review_profile(experiment["review_profile"]),
+        selection_config=experiment["selection"],
+    )
+    review_profile = load_review_profile(experiment["review_profile"])
+    assert review_payload["public_card_count"] == {
+        "selected": len(decision["selected"]),
+        "min": 3,
+        "max": 6,
+        "match_count": 4,
+    }
+
+    selected_reviews = [
+        {
+            "player_id": item["player_id"],
+            "verdict": "pass",
+            "note": "Public case is supported by the candidate packet.",
+        }
+        for item in review_payload["selected"]
+    ]
+    unselected_reviews = [
+        {
+            "player_id": item["player_id"],
+            "verdict": "pass",
+            "note": "Not selected after comparing direct impact, match balance, and stronger public cases.",
+        }
+        for item in review_payload["required_unselected_candidate_reviews"]
+    ]
+    good_review = {
+        "schema_version": 1,
+        "review_profile": review_profile["id"],
+        "status": "pass",
+        "reviewed_dimensions": review_profile["required_dimensions"],
+        "selected_player_reviews": selected_reviews,
+        "unselected_candidate_reviews": unselected_reviews,
+        "blocking_findings": [],
+        "revision_summary": "No blocking reader-intuition issue remains.",
+    }
+
+    good_validation = validate_editorial_review(good_review, review_profile, review_payload)
+    assert good_validation["status"] == "pass"
+
+    missing_unselected = json.loads(json.dumps(good_review, ensure_ascii=False))
+    missing_unselected["unselected_candidate_reviews"] = missing_unselected["unselected_candidate_reviews"][:-1]
+    missing_validation = validate_editorial_review(missing_unselected, review_profile, review_payload)
+    assert missing_validation["status"] == "failed"
+    assert any("missing unselected candidate review" in warning for warning in missing_validation["warnings"])
+
+    blocking = json.loads(json.dumps(good_review, ensure_ascii=False))
+    blocking["blocking_findings"] = [
+        {
+            "category": "obvious_omission",
+            "severity": "high",
+            "evidence": "Two-goal winner is still outside the slate.",
+            "recommended_action": "Revise selection before publishing.",
+        }
+    ]
+    blocking_validation = validate_editorial_review(blocking, review_profile, review_payload)
+    assert blocking_validation["status"] == "failed"
+    assert any("blocking finding" in warning for warning in blocking_validation["warnings"])
+
+
+def test_editorial_review_agent_uses_review_profile_contract():
+    import json
+
+    from football_data.editorial_review import EditorialReviewOutput, run_ai_editorial_review
+    from football_data.llm_client import AgentTextClient
+
+    class RecordingReviewClient(AgentTextClient):
+        def __init__(self) -> None:
+            self.calls = []
+
+        def complete(self, **kwargs):
+            self.calls.append(kwargs)
+            return json.dumps(
+                {
+                    "schema_version": 1,
+                    "review_profile": "reader_intuition_v1",
+                    "status": "pass",
+                    "reviewed_dimensions": ["obvious_omission"],
+                    "selected_player_reviews": [],
+                    "unselected_candidate_reviews": [],
+                    "blocking_findings": [],
+                    "revision_summary": "No issue.",
+                }
+            )
+
+    client = RecordingReviewClient()
+    review = run_ai_editorial_review(
+        {"selected": [], "required_unselected_candidate_reviews": []},
+        client,
+        {
+            "id": "reader_intuition_v1",
+            "model_key": "review_editor",
+            "instructions": ["Review the slate."],
+            "required_dimensions": ["obvious_omission"],
+        },
+        model="review-model",
+    )
+
+    assert review["status"] == "pass"
+    assert client.calls[0]["role"] == "review_editor"
+    assert client.calls[0]["model"] == "review-model"
+    assert client.calls[0]["output_type"] is EditorialReviewOutput
+    assert "Review the slate." in client.calls[0]["instructions"]
 
 
 def test_editorial_v2_goalkeeper_score_is_keeper_only_for_latest_day():
@@ -282,7 +443,7 @@ def test_editorial_v2_fake_selector_prefers_direct_potd_case_and_slate_constrain
         "Lionel MESSI",
         "Erling HAALAND",
     ]
-    assert len(decision["selected"]) == 5
+    assert 3 <= len(decision["selected"]) <= 6
     assert potd_names == [item["player_name"] for item in decision["selected"]]
     assert validation["status"] == "pass"
 
@@ -399,6 +560,33 @@ def test_editorial_v2_copy_validation_rejects_abstract_chinese_public_terms():
 
     assert validation["status"] == "failed"
     assert any(f"banned zh public term {term!r}" in warning for warning in validation["warnings"])
+
+
+def test_editorial_v2_copy_validation_rejects_configured_unsupported_claim_terms():
+    from football_data.editorial_copy_validation import validate_copy
+
+    copy = {
+        "en": {"items": [], "warnings": []},
+        "zh": {
+            "items": [
+                {
+                    "award_type": "player_of_the_day",
+                    "player_id": "p1",
+                    "title": "努诺-门德斯进球又推进",
+                    "body": "他还有11次打穿防线、8次推进和6次夺回球权，这场不是只在边路补一个进球。",
+                    "warnings": [],
+                }
+            ],
+            "warnings": [],
+        },
+    }
+    zh_profile = {"unsupported_public_terms": ["不是只在", "补一个进球"]}
+
+    validation = validate_copy(copy, {"zh": zh_profile})
+
+    assert validation["status"] == "failed"
+    assert any("unsupported zh public term '不是只在'" in warning for warning in validation["warnings"])
+    assert any("unsupported zh public term '补一个进球'" in warning for warning in validation["warnings"])
 
 
 def test_editorial_v2_copy_validation_requires_zh_title_core_fact():
@@ -602,11 +790,16 @@ def test_editorial_v2_selection_validation_requires_pool_membership_and_skip_rea
     assert lower_validation["status"] == "failed"
     assert any("skipped_higher_ranked" in warning for warning in lower_validation["warnings"])
 
-    missing_public_card = json.loads(json.dumps(decision))
-    missing_public_card["selected"] = missing_public_card["selected"][:-1]
-    missing_validation = validate_selection_decision(missing_public_card, pool, experiment)
-    assert missing_validation["status"] == "failed"
-    assert any("target_public_cards 5" in warning for warning in missing_validation["warnings"])
+    too_few_public_cards = json.loads(json.dumps(decision))
+    too_few_public_cards["selected"] = too_few_public_cards["selected"][:2]
+    too_few_validation = validate_selection_decision(too_few_public_cards, pool, experiment)
+    assert too_few_validation["status"] == "failed"
+    assert any("outside public_card_count range 3-6" in warning for warning in too_few_validation["warnings"])
+
+    four_public_cards = json.loads(json.dumps(decision))
+    four_public_cards["selected"] = four_public_cards["selected"][:4]
+    four_validation = validate_selection_decision(four_public_cards, pool, experiment)
+    assert four_validation["status"] == "pass"
 
     from football_data.editorial_selection import normalize_selection_decision, repair_selection_decision
 

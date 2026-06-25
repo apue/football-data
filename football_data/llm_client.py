@@ -19,12 +19,14 @@ DEFAULT_MODELS = {
     "selection_editor": "deepseek-ai/DeepSeek-V4-Flash",
     "zh_editor": "zai-org/GLM-5.2",
     "en_editor": "deepseek-ai/DeepSeek-V4-Flash",
+    "review_editor": "deepseek-ai/DeepSeek-V4-Flash",
 }
 
 MODEL_ENV_KEYS = {
     "selection_editor": "EDITORIAL_SELECTION_EDITOR_MODEL",
     "zh_editor": "EDITORIAL_ZH_EDITOR_MODEL",
     "en_editor": "EDITORIAL_EN_EDITOR_MODEL",
+    "review_editor": "EDITORIAL_REVIEW_EDITOR_MODEL",
 }
 
 CONTROL_ENV_KEYS = [

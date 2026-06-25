@@ -55,5 +55,6 @@
     "must_explain_skipped_higher_ranked_candidates": true
   },
   "shuffle_strategy": "name_sorted",
-  "status": "active"
+  "status": "archived",
+  "superseded_by": "ai_rerank_slate_self_review_v4"
 }

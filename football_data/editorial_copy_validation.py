@@ -16,6 +16,11 @@ def validate_copy(
         if not isinstance(payload, dict):
             continue
         terms = [str(term) for term in profile.get("banned_public_terms", []) if str(term).strip()]
+        unsupported_terms = [
+            str(term)
+            for term in profile.get("unsupported_public_terms", [])
+            if str(term).strip()
+        ]
         title_policy = profile.get("title_policy") if isinstance(profile.get("title_policy"), dict) else {}
         title_terms = [
             str(term)
@@ -31,6 +36,9 @@ def validate_copy(
             for term in terms:
                 if term in title or term in body:
                     warnings.append(f"banned {language} public term {term!r} in {label}")
+            for term in unsupported_terms:
+                if term in title or term in body:
+                    warnings.append(f"unsupported {language} public term {term!r} in {label}")
             for term in title_terms:
                 if term in title:
                     warnings.append(f"banned {language} title term {term!r} in {label}")

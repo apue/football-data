@@ -28,13 +28,15 @@ def test_publish_editors_choices_skill_is_repo_scoped():
     assert "scripts/render_editorial.py" not in text + references
     assert "scripts/run_editorial_loop.py" not in text + references
     assert "run_editorial_agent.py" not in text + references
-    assert "ai_rerank_slate_copy_v3" in text + references
+    assert "ai_rerank_slate_self_review_v4" in text + references
     assert "ai_rerank_selection_v1" in text + references
     assert "zh_matchnote_light_emotion_v1" in references
     assert "OpenAI Agents SDK" in text + references
     assert "local Codex" in text + references
     assert "selection_validation.json" in text + references
     assert "copy_validation.json" in text + references
+    assert "editorial_review_validation.json" in text + references
+    assert "editorial_review.json" in text + references
     assert "copy.json" in text + references
     assert "candidate_pool.json" in references
     assert "selector_input.json" in references

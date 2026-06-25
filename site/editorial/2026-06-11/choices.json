@@ -1,0 +1,392 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-06-25T00:32:50+00:00",
+  "compiled_at": "2026-06-25T00:32:50+00:00",
+  "match_date": "2026-06-11",
+  "scoring_version": "v0.4",
+  "editorial_generation": {
+    "workflow_variant": "ai_rerank_selection_v1",
+    "experiment_id": "ai_rerank_slate_self_review_v4",
+    "selection_mode": "ai_rerank_only",
+    "review_profile": "reader_intuition_v1",
+    "revision_policy": {
+      "mode": "local_editor_revise_until_review_passes",
+      "max_revision_rounds": 2,
+      "blocking_review_requires_revision": true
+    },
+    "editorial_review_status": "pass",
+    "uses_official_assists": true,
+    "uses_goal_involvements": true,
+    "event_source": "fifa_timeline_api",
+    "event_sources": {
+      "goal_involvements": "fifa_timeline_api"
+    }
+  },
+  "matches": [
+    {
+      "match_key": "FIFA-2026-M01-MEX-RSA",
+      "match_no": 1,
+      "match_date": "2026-06-11",
+      "kickoff_time": "13:00",
+      "stadium": "Mexico City Stadium",
+      "home_team": "Mexico",
+      "away_team": "South Africa",
+      "home_score": 2,
+      "away_score": 0
+    },
+    {
+      "match_key": "FIFA-2026-M02-KOR-CZE",
+      "match_no": 2,
+      "match_date": "2026-06-11",
+      "kickoff_time": "20:00",
+      "stadium": "Guadalajara Stadium",
+      "home_team": "Korea Republic",
+      "away_team": "Czechia",
+      "home_score": 2,
+      "away_score": 1
+    }
+  ],
+  "match_flows": {
+    "FIFA-2026-M01-MEX-RSA": {
+      "match_key": "FIFA-2026-M01-MEX-RSA",
+      "match_no": 1,
+      "match_date": "2026-06-11",
+      "home_team": "Mexico",
+      "away_team": "South Africa",
+      "home_score": 2,
+      "away_score": 0,
+      "winner_team": "Mexico",
+      "home_trailing_at_any_point": false,
+      "away_trailing_at_any_point": true,
+      "home_came_from_behind_to_win": false,
+      "away_came_from_behind_to_win": false,
+      "goals": [
+        {
+          "goal_order": 1,
+          "minute": 8,
+          "team": "Mexico",
+          "player_name": "Julian QUINONES",
+          "score_before": "0-0",
+          "score_after": "1-0",
+          "team_score_before": 0,
+          "opponent_score_before": 0,
+          "team_score_after": 1,
+          "opponent_score_after": 0,
+          "tags": [
+            "opening_goal",
+            "go_ahead_goal"
+          ]
+        },
+        {
+          "goal_order": 2,
+          "minute": 66,
+          "team": "Mexico",
+          "player_name": "Raul JIMENEZ",
+          "score_before": "1-0",
+          "score_after": "2-0",
+          "team_score_before": 1,
+          "opponent_score_before": 0,
+          "team_score_after": 2,
+          "opponent_score_after": 0,
+          "tags": []
+        }
+      ],
+      "decisive_goal": null
+    },
+    "FIFA-2026-M02-KOR-CZE": {
+      "match_key": "FIFA-2026-M02-KOR-CZE",
+      "match_no": 2,
+      "match_date": "2026-06-11",
+      "home_team": "Korea Republic",
+      "away_team": "Czechia",
+      "home_score": 2,
+      "away_score": 1,
+      "winner_team": "Korea Republic",
+      "home_trailing_at_any_point": true,
+      "away_trailing_at_any_point": true,
+      "home_came_from_behind_to_win": true,
+      "away_came_from_behind_to_win": false,
+      "goals": [
+        {
+          "goal_order": 1,
+          "minute": 58,
+          "team": "Czechia",
+          "player_name": "Ladislav KREJCI",
+          "score_before": "0-0",
+          "score_after": "0-1",
+          "team_score_before": 0,
+          "opponent_score_before": 0,
+          "team_score_after": 1,
+          "opponent_score_after": 0,
+          "tags": [
+            "opening_goal",
+            "go_ahead_goal"
+          ]
+        },
+        {
+          "goal_order": 2,
+          "minute": 66,
+          "team": "Korea Republic",
+          "player_name": "HWANG Inbeom",
+          "score_before": "0-1",
+          "score_after": "1-1",
+          "team_score_before": 0,
+          "opponent_score_before": 1,
+          "team_score_after": 1,
+          "opponent_score_after": 1,
+          "tags": [
+            "equalizer",
+            "comeback_equalizer",
+            "team_came_from_behind_goal"
+          ]
+        },
+        {
+          "goal_order": 3,
+          "minute": 79,
+          "team": "Korea Republic",
+          "player_name": "OH Hyeongyu",
+          "score_before": "1-1",
+          "score_after": "2-1",
+          "team_score_before": 1,
+          "opponent_score_before": 1,
+          "team_score_after": 2,
+          "opponent_score_after": 1,
+          "tags": [
+            "go_ahead_goal",
+            "match_winning_goal",
+            "late_goal",
+            "team_came_from_behind_goal",
+            "comeback_winner"
+          ]
+        }
+      ],
+      "decisive_goal": {
+        "goal_order": 3,
+        "minute": 79,
+        "team": "Korea Republic",
+        "player_name": "OH Hyeongyu",
+        "score_before": "1-1",
+        "score_after": "2-1",
+        "team_score_before": 1,
+        "opponent_score_before": 1,
+        "team_score_after": 2,
+        "opponent_score_after": 1,
+        "tags": [
+          "go_ahead_goal",
+          "match_winning_goal",
+          "late_goal",
+          "team_came_from_behind_goal",
+          "comeback_winner"
+        ]
+      }
+    }
+  },
+  "choices": [
+    {
+      "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
+      "award_label": {
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
+      },
+      "player_id": "FIFA-2026-M02-KOR-CZE|Korea Republic|6",
+      "player_name": "HWANG Inbeom",
+      "team": "Korea Republic",
+      "opponent": "Czechia",
+      "match_key": "FIFA-2026-M02-KOR-CZE",
+      "match_no": 2,
+      "player_no": 6,
+      "position": "MF",
+      "score": 96.1,
+      "metrics": {
+        "shots": 3,
+        "on_target": 2,
+        "goals": 1,
+        "assists": 1,
+        "goal_involvements": 2,
+        "equalizing_goal": 1,
+        "comeback_equalizer": 1
+      },
+      "evidence_chips": {
+        "en": [
+          "comeback equaliser",
+          "equaliser",
+          "goal scorer",
+          "assist"
+        ],
+        "zh": [
+          "逆转扳平",
+          "扳平进球",
+          "取得进球",
+          "送出助攻"
+        ]
+      },
+      "selection_reason": "Selected because he was involved in both Korea Republic goals: he scored the equaliser and assisted the winning goal in the 2-1 comeback over Czechia.",
+      "content": {
+        "en": {
+          "title": "Hwang Inbeom had a goal and an assist",
+          "html": "<p>Hwang Inbeom scored Korea Republic's equaliser and later assisted Oh Hyeongyu's winner in the 2-1 comeback over Czechia. Both Korea goals ran through him.</p>"
+        },
+        "zh": {
+          "title": "黄仁范一球一助",
+          "html": "<p>黄仁范先为韩国扳平，之后又助攻吴贤揆打进制胜球，韩国2-1逆转捷克。韩国两个进球都和他有关。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
+      "award_label": {
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
+      },
+      "player_id": "FIFA-2026-M02-KOR-CZE|Korea Republic|18",
+      "player_name": "OH Hyeongyu",
+      "team": "Korea Republic",
+      "opponent": "Czechia",
+      "match_key": "FIFA-2026-M02-KOR-CZE",
+      "match_no": 2,
+      "player_no": 18,
+      "position": "FW",
+      "score": 83.19,
+      "metrics": {
+        "shots": 1,
+        "on_target": 1,
+        "goals": 1,
+        "goal_involvements": 1,
+        "go_ahead_goal": 1,
+        "match_winning_goal": 1,
+        "late_goal": 1,
+        "comeback_winner": 1,
+        "substitute_goal": 1
+      },
+      "evidence_chips": {
+        "en": [
+          "substitute goal",
+          "comeback winner",
+          "match-winning goal",
+          "goal scorer"
+        ],
+        "zh": [
+          "替补进球",
+          "逆转制胜",
+          "打入制胜球",
+          "取得进球"
+        ]
+      },
+      "selection_reason": "Selected because he came off the bench and scored the match-winning goal in Korea Republic's 2-1 comeback win.",
+      "content": {
+        "en": {
+          "title": "Oh Hyeongyu came off the bench to win it",
+          "html": "<p>Oh Hyeongyu came on as a substitute and scored the winner as Korea Republic beat Czechia 2-1. One shot on target was enough to finish the comeback.</p>"
+        },
+        "zh": {
+          "title": "吴贤揆替补制胜",
+          "html": "<p>吴贤揆替补出场后打进制胜球，韩国2-1逆转捷克。他全场唯一一次射正，就是韩国的第二球。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
+      "award_label": {
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
+      },
+      "player_id": "FIFA-2026-M01-MEX-RSA|Mexico|16",
+      "player_name": "Julian QUINONES",
+      "team": "Mexico",
+      "opponent": "South Africa",
+      "match_key": "FIFA-2026-M01-MEX-RSA",
+      "match_no": 1,
+      "player_no": 16,
+      "position": "FW",
+      "score": 71.04,
+      "metrics": {
+        "shots": 5,
+        "on_target": 2,
+        "goals": 1,
+        "goal_involvements": 1,
+        "opening_goal": 1,
+        "go_ahead_goal": 1
+      },
+      "evidence_chips": {
+        "en": [
+          "opening goal",
+          "goal scorer"
+        ],
+        "zh": [
+          "首开纪录",
+          "取得进球"
+        ]
+      },
+      "selection_reason": "Selected because he scored Mexico's opening goal in the 2-0 win over South Africa and carried the strongest attacking-shot profile from that match.",
+      "content": {
+        "en": {
+          "title": "Quinones struck first for Mexico",
+          "html": "<p>Julian Quinones scored Mexico's opening goal in the 2-0 win over South Africa. Five shots and two on target keep the attacking case with him.</p>"
+        },
+        "zh": {
+          "title": "奎尼奥内斯首开纪录",
+          "html": "<p>奎尼奥内斯开场阶段为墨西哥破门，墨西哥2-0击败南非。全场5脚射门、2次射正，前场威胁也跟得上。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
+      "award_label": {
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
+      },
+      "player_id": "FIFA-2026-M02-KOR-CZE|Korea Republic|19",
+      "player_name": "LEE Kangin",
+      "team": "Korea Republic",
+      "opponent": "Czechia",
+      "match_key": "FIFA-2026-M02-KOR-CZE",
+      "match_no": 2,
+      "player_no": 19,
+      "position": "MF",
+      "score": 56.65,
+      "metrics": {
+        "shots": 1,
+        "on_target": 1,
+        "assists": 1,
+        "goal_involvements": 1
+      },
+      "evidence_chips": {
+        "en": [
+          "assist"
+        ],
+        "zh": [
+          "送出助攻"
+        ]
+      },
+      "selection_reason": "Selected because he assisted Korea Republic's equaliser and adds a useful progression layer with 11 line breaks and 8 ball progressions.",
+      "content": {
+        "en": {
+          "title": "Lee Kangin supplied the equaliser",
+          "html": "<p>Lee Kangin assisted Korea Republic's equaliser against Czechia and added 11 line breaks with 8 ball progressions. The direct assist leads the case; the forward play supports it.</p>"
+        },
+        "zh": {
+          "title": "李刚仁送出扳平助攻",
+          "html": "<p>李刚仁助攻韩国扳平捷克，全场还有11次打穿防线和8次推进。直接贡献在前，向前处理也够多。</p>"
+        }
+      }
+    }
+  ],
+  "selection_validation": {
+    "schema_version": 1,
+    "status": "pass",
+    "warnings": []
+  },
+  "audit": []
+}

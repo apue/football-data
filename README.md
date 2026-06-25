@@ -116,7 +116,7 @@ For low-level v2 debugging on a single date:
 python scripts/run_editorial_v2.py --date YYYY-MM-DD --fake --no-research --json
 ```
 
-The compiled frontend artifacts are written to `site/editorial/`, and the homepage is rebuilt with the latest cards. Audit files are written under `agent-runs/YYYY-MM-DD/`, including `rankings.json`, `candidate_pool.json`, `selector_input.json`, `selection_decision.json`, `selection_validation.json`, and `run.json`.
+The compiled frontend artifacts are written to `site/editorial/`, and the homepage is rebuilt with the latest cards. Audit files are written under `agent-runs/YYYY-MM-DD/`, including `rankings.json`, `candidate_pool.json`, `selector_input.json`, `selection_decision.json`, `selection_validation.json`, `copy_validation.json`, `editorial_review_payload.json`, `editorial_review.json`, `editorial_review_validation.json`, and `run.json`.
 
 ## Editorial Automation
 

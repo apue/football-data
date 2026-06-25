@@ -24,6 +24,7 @@ def test_editorial_workflow_is_manual_only_smoke_path_and_exposes_optional_env()
     assert "EDITORIAL_SELECTION_EDITOR_MODEL: ${{ vars.EDITORIAL_SELECTION_EDITOR_MODEL || 'deepseek-ai/DeepSeek-V4-Flash' }}" in text
     assert "EDITORIAL_ZH_EDITOR_MODEL: ${{ vars.EDITORIAL_ZH_EDITOR_MODEL || 'zai-org/GLM-5.2' }}" in text
     assert "EDITORIAL_EN_EDITOR_MODEL: ${{ vars.EDITORIAL_EN_EDITOR_MODEL || 'deepseek-ai/DeepSeek-V4-Flash' }}" in text
+    assert "EDITORIAL_REVIEW_EDITOR_MODEL: ${{ vars.EDITORIAL_REVIEW_EDITOR_MODEL || 'deepseek-ai/DeepSeek-V4-Flash' }}" in text
     assert "EDITORIAL_REVISION_EDITOR_MODEL" not in text
     assert "EDITORIAL_AGENT_TIMEOUT_SECONDS: ${{ vars.EDITORIAL_AGENT_TIMEOUT_SECONDS || '180' }}" in text
     assert "EDITORIAL_ZH_WRITER_MODEL" not in text
@@ -51,6 +52,7 @@ def test_env_example_lists_editorial_ai_and_firecrawl_placeholders():
         "EDITORIAL_SELECTION_EDITOR_MODEL=deepseek-ai/DeepSeek-V4-Flash",
         "EDITORIAL_ZH_EDITOR_MODEL=zai-org/GLM-5.2",
         "EDITORIAL_EN_EDITOR_MODEL=deepseek-ai/DeepSeek-V4-Flash",
+        "EDITORIAL_REVIEW_EDITOR_MODEL=deepseek-ai/DeepSeek-V4-Flash",
         "EDITORIAL_AGENT_TIMEOUT_SECONDS=180",
         "EDITORIAL_AGENT_MAX_CONCURRENCY=6",
         "EDITORIAL_AGENT_MAX_ATTEMPTS=1",
