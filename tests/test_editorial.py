@@ -107,6 +107,23 @@ def test_editorial_scoring_ignores_goal_prevented_rows_in_existing_database():
     assert tajon["role_scores"]["impact"] == 0
 
 
+def test_editorial_candidate_goals_prefer_official_timeline_totals():
+    conn = sqlite3.connect("data/latest.sqlite")
+    conn.row_factory = sqlite3.Row
+    try:
+        haaland = next(
+            row
+            for row in _player_rows_for_date(conn, "2026-06-16")
+            if row["match_no"] == 18 and row["player_name"] == "Erling HAALAND"
+        )
+    finally:
+        conn.close()
+
+    assert haaland["goals"] == 2
+    assert haaland["goal_involvements"] == 2
+    assert haaland["brace"] == 1
+
+
 def test_editorial_selection_gate_rebalances_contextual_risks():
     report = build_editorial_report("data/latest.sqlite", match_date="2026-06-18")
     choices_by_award = {choice["award_type"]: choice for choice in report["choices"]}

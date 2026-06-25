@@ -27,6 +27,7 @@ class EditorialReviewOutput(BaseModel):
     review_profile: str
     status: str
     reviewed_dimensions: list[str] = Field(default_factory=list)
+    slate_assessment: dict[str, Any] = Field(default_factory=dict)
     selected_player_reviews: list[PlayerReview] = Field(default_factory=list)
     unselected_candidate_reviews: list[PlayerReview] = Field(default_factory=list)
     blocking_findings: list[BlockingFinding] = Field(default_factory=list)
@@ -101,6 +102,13 @@ def build_editorial_review_payload(
     )
     if public_card_count:
         payload["public_card_count"] = public_card_count
+    match_coverage = _match_coverage_context(
+        selected=selected,
+        candidate_pool=candidate_pool,
+        selection_config=selection_config,
+    )
+    if match_coverage:
+        payload["match_coverage"] = match_coverage
     return payload
 
 
@@ -144,6 +152,20 @@ def validate_editorial_review(
     for dimension in required_dimensions:
         if dimension not in reviewed_dimensions:
             warnings.append(f"missing reviewed dimension {dimension}")
+
+    slate_assessment = review.get("slate_assessment")
+    required_slate_fields = [
+        str(item)
+        for item in review_profile.get("required_slate_assessment_fields", [])
+        if str(item).strip()
+    ]
+    if required_slate_fields:
+        if not isinstance(slate_assessment, dict):
+            warnings.append("editorial_review.slate_assessment must be an object")
+            slate_assessment = {}
+        for field in required_slate_fields:
+            if not _has_review_value(slate_assessment.get(field)):
+                warnings.append(f"missing slate_assessment.{field}")
 
     selected_review_ids = {
         str(item.get("player_id") or "")
@@ -206,6 +228,7 @@ def passing_editorial_review(
         "review_profile": review_profile["id"],
         "status": "pass",
         "reviewed_dimensions": list(review_profile.get("required_dimensions", [])),
+        "slate_assessment": _passing_slate_assessment(review_profile, review_payload),
         "selected_player_reviews": [
             {
                 "player_id": item["player_id"],
@@ -225,6 +248,142 @@ def passing_editorial_review(
         "blocking_findings": [],
         "revision_summary": revision_summary,
     }
+
+
+def _has_review_value(value: Any) -> bool:
+    if isinstance(value, str):
+        return bool(value.strip())
+    if isinstance(value, list):
+        return bool(value)
+    if isinstance(value, dict):
+        return bool(value)
+    return value is not None
+
+
+def _passing_slate_assessment(
+    review_profile: dict[str, Any],
+    review_payload: dict[str, Any],
+) -> dict[str, Any]:
+    required = [
+        str(item)
+        for item in review_profile.get("required_slate_assessment_fields", [])
+        if str(item).strip()
+    ]
+    if not required:
+        return {}
+    match_coverage = review_payload.get("match_coverage") if isinstance(review_payload, dict) else {}
+    selected = int((match_coverage or {}).get("selected_count") or 0)
+    recommended = int((match_coverage or {}).get("recommended_public_cards") or 0)
+    default_values: dict[str, Any] = {
+        "match_coverage_pressure": (
+            f"Selected {selected} cards against a recommended {recommended}; remaining cases were reviewed."
+            if recommended
+            else "Slate size reviewed against match-day context."
+        ),
+        "reader_questions": [
+            "Would a reader see an obvious omitted direct-impact player?",
+            "Does the slate size fit the number of matches?",
+        ],
+        "alternative_slate_comparison": [
+            {"card_count": selected, "tradeoff": "current editor slate"},
+        ],
+        "weakest_selected_card": "No selected card raised a blocking concern.",
+        "strongest_omitted_card": "No omitted card required revision after review.",
+        "revision_decision": "No blocking reader-intuition issue remains.",
+    }
+    return {field: default_values.get(field, "Reviewed.") for field in required}
+
+
+def _match_coverage_context(
+    *,
+    selected: list[dict[str, Any]],
+    candidate_pool: dict[str, Any],
+    selection_config: dict[str, Any] | None,
+) -> dict[str, Any] | None:
+    candidates = [
+        candidate
+        for candidate in candidate_pool.get("selectable_candidates", [])
+        if isinstance(candidate, dict) and candidate.get("match_key")
+    ]
+    if not candidates:
+        return None
+    selected_match_keys = {
+        str(item.get("match_key") or "")
+        for item in selected
+        if isinstance(item, dict) and item.get("match_key")
+    }
+    matches: dict[str, dict[str, Any]] = {}
+    for candidate in candidates:
+        match_key = str(candidate.get("match_key") or "")
+        if not match_key:
+            continue
+        match = matches.setdefault(
+            match_key,
+            {
+                "match_key": match_key,
+                "match_no": candidate.get("match_no"),
+                "home_team": candidate.get("home_team"),
+                "away_team": candidate.get("away_team"),
+                "home_score": candidate.get("home_score"),
+                "away_score": candidate.get("away_score"),
+                "top_candidates": [],
+            },
+        )
+        if len(match["top_candidates"]) < 3:
+            match["top_candidates"].append(_coverage_candidate(candidate))
+    top_candidates_by_match = sorted(
+        matches.values(),
+        key=lambda item: int(item.get("match_no") or 9999),
+    )
+    unrepresented = [
+        {
+            key: value
+            for key, value in match.items()
+            if key != "top_candidates" or value
+        }
+        for match in top_candidates_by_match
+        if str(match.get("match_key") or "") not in selected_match_keys
+    ]
+    match_count = len(matches)
+    return {
+        "selected_count": len(selected),
+        "match_count": match_count,
+        "selected_match_count": len(selected_match_keys),
+        "unrepresented_match_count": len(unrepresented),
+        "recommended_public_cards": _recommended_public_cards(selection_config, match_count),
+        "unrepresented_matches": unrepresented,
+        "top_candidates_by_match": top_candidates_by_match,
+    }
+
+
+def _coverage_candidate(candidate: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "player_id": candidate.get("player_id"),
+        "player_name": candidate.get("player_name"),
+        "team": candidate.get("team"),
+        "headline_rank": candidate.get("headline_rank"),
+        "headline_score": candidate.get("headline_score"),
+        "eligible_awards": candidate.get("eligible_awards", []),
+        "metrics": candidate.get("metrics", {}),
+        "evidence_chips": candidate.get("evidence_chips", {}),
+    }
+
+
+def _recommended_public_cards(
+    selection_config: dict[str, Any] | None,
+    match_count: int,
+) -> int | None:
+    if not isinstance(selection_config, dict):
+        return None
+    public_card_count = selection_config.get("public_card_count")
+    if not isinstance(public_card_count, dict):
+        return None
+    for item in public_card_count.get("recommended_by_match_count", []):
+        if not isinstance(item, dict):
+            continue
+        if int(item.get("match_count_min") or 0) <= match_count <= int(item.get("match_count_max") or 0):
+            return int(item.get("recommended") or 0)
+    return None
 
 
 def _public_card_count_context(

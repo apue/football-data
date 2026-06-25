@@ -414,6 +414,15 @@ def _player_rows_for_date(conn: sqlite3.Connection, match_date: str) -> list[sql
           where assister_name is not null
           group by match_key, team_name, upper(assister_name)
         ),
+        official_scorer_totals as (
+          select match_key,
+                 team_name as team,
+                 upper(scorer_name) as player_name,
+                 count(*) as goals
+          from goal_involvements
+          where scorer_name is not null
+          group by match_key, team_name, upper(scorer_name)
+        ),
         goal_rows as (
           select
             s.match_key,
@@ -532,15 +541,15 @@ def _player_rows_for_date(conn: sqlite3.Connection, match_date: str) -> list[sql
           a.started,
           coalesce(s.shots, d.attempts_at_goal, 0) as shots,
           coalesce(s.on_target, 0) as on_target,
-          coalesce(s.goals, d.goals, 0) as goals,
+          coalesce(os.goals, s.goals, d.goals, 0) as goals,
           coalesce(ast.assists, 0) as assists,
-          coalesce(s.goals, d.goals, 0) + coalesce(ast.assists, 0) as goal_involvements,
-          case when coalesce(s.goals, d.goals, 0) >= 2 then 1 else 0 end as brace,
-          case when coalesce(s.goals, d.goals, 0) >= 3 then 1 else 0 end as hat_trick,
-          case when a.started = 0 then coalesce(s.goals, d.goals, 0) else 0 end as substitute_goal,
-          case when a.started = 0 and coalesce(s.goals, d.goals, 0) >= 2 then 1 else 0 end as substitute_brace,
+          coalesce(os.goals, s.goals, d.goals, 0) + coalesce(ast.assists, 0) as goal_involvements,
+          case when coalesce(os.goals, s.goals, d.goals, 0) >= 2 then 1 else 0 end as brace,
+          case when coalesce(os.goals, s.goals, d.goals, 0) >= 3 then 1 else 0 end as hat_trick,
+          case when a.started = 0 then coalesce(os.goals, s.goals, d.goals, 0) else 0 end as substitute_goal,
+          case when a.started = 0 and coalesce(os.goals, s.goals, d.goals, 0) >= 2 then 1 else 0 end as substitute_brace,
           case
-            when coalesce(s.goals, d.goals, 0) > 0
+            when coalesce(os.goals, s.goals, d.goals, 0) > 0
              and (
                (a.team = m.home_team and m.home_score = 1 and m.away_score = 0)
                or (a.team = m.away_team and m.away_score = 1 and m.home_score = 0)
@@ -614,6 +623,10 @@ def _player_rows_for_date(conn: sqlite3.Connection, match_date: str) -> list[sql
           on s.match_key = a.match_key
          and s.team = a.team
          and s.player_name = upper(a.player_name)
+        left join official_scorer_totals os
+          on os.match_key = a.match_key
+         and os.team = a.team
+         and os.player_name = upper(a.player_name)
         left join assist_totals ast
           on ast.match_key = a.match_key
          and ast.team = a.team

@@ -87,3 +87,23 @@ def test_match_flow_counts_penalty_goals_from_official_timeline():
 
     impacts = player_flow_impacts(flows)
     assert impacts[("FIFA-2026-M08-QAT-SUI", "Switzerland", "BREEL EMBOLO")]["opening_goal"] == 1
+
+
+def test_match_flow_orders_first_half_stoppage_before_second_half_goals():
+    flows = build_match_flows("data/latest.sqlite", match_date="2026-06-17")
+    flow = flows["FIFA-2026-M22-ENG-CRO"]
+
+    assert [
+        (goal["player_name"], goal["score_before"], goal["score_after"])
+        for goal in flow["goals"]
+    ] == [
+        ("Harry KANE", "0-0", "1-0"),
+        ("Martin BATURINA", "1-0", "1-1"),
+        ("Harry KANE", "1-1", "2-1"),
+        ("Petar MUSA", "2-1", "2-2"),
+        ("Jude BELLINGHAM", "2-2", "3-2"),
+        ("Marcus RASHFORD", "3-2", "4-2"),
+    ]
+
+    bellingham = flow["goals"][4]
+    assert "go_ahead_goal" in bellingham["tags"]

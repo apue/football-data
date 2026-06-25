@@ -84,7 +84,7 @@ Outputs:
 - `site/editorial/index.html`
 - `site/index.html`
 
-The active production experiment is `ai_rerank_slate_self_review_v4`, using the `ai_rerank_selection_v1` workflow variant:
+The active production experiment is `ai_rerank_reader_loop_v5`, using the `ai_rerank_selection_v1` workflow variant:
 
 ```text
 load active experiment registry
@@ -93,7 +93,7 @@ load active experiment registry
   -> deterministic selection validation
   -> English and Chinese copy from selected evidence packets
   -> deterministic copy validation
-  -> local reader-intuition review and deterministic review validation
+  -> local reader-intuition loop review with slate coverage, reader questions, alternative slate comparison, weakest selected, strongest omitted, and deterministic review validation
   -> compile public editorial artifacts
   -> rebuild homepage
 ```

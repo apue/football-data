@@ -1,10 +1,32 @@
 {
-  "schema_version": 2,
-  "generated_at": "2026-06-18T05:15:47+00:00",
-  "compiled_at": "2026-06-18T05:17:21+00:00",
+  "schema_version": 3,
+  "generated_at": "2026-06-25T07:38:06+00:00",
+  "compiled_at": "2026-06-25T07:38:06+00:00",
   "match_date": "2026-06-16",
-  "scoring_version": "v0.1",
-  "source_markdown_path": "reports/editorial/2026-06-16.md",
+  "scoring_version": "v0.4",
+  "editorial_generation": {
+    "workflow_variant": "ai_rerank_selection_v1",
+    "experiment_id": "ai_rerank_reader_loop_v5",
+    "selection_mode": "ai_rerank_only",
+    "review_profile": "reader_intuition_loop_v2",
+    "revision_policy": {
+      "mode": "reader_critic_revise_review_loop",
+      "max_revision_rounds": 2,
+      "blocking_review_requires_revision": true,
+      "revision_targets": [
+        "selection_decision",
+        "copy",
+        "review"
+      ]
+    },
+    "editorial_review_status": "pass",
+    "uses_official_assists": true,
+    "uses_goal_involvements": true,
+    "event_source": "fifa_timeline_api",
+    "event_sources": {
+      "goal_involvements": "fifa_timeline_api"
+    }
+  },
   "matches": [
     {
       "match_key": "FIFA-2026-M17-FRA-SEN",
@@ -51,501 +73,568 @@
       "away_score": 1
     }
   ],
+  "match_flows": {
+    "FIFA-2026-M17-FRA-SEN": {
+      "match_key": "FIFA-2026-M17-FRA-SEN",
+      "match_no": 17,
+      "match_date": "2026-06-16",
+      "home_team": "France",
+      "away_team": "Senegal",
+      "home_score": 3,
+      "away_score": 1,
+      "winner_team": "France",
+      "home_trailing_at_any_point": false,
+      "away_trailing_at_any_point": true,
+      "home_came_from_behind_to_win": false,
+      "away_came_from_behind_to_win": false,
+      "goals": [
+        {
+          "goal_order": 1,
+          "minute": 66,
+          "team": "France",
+          "player_team": "France",
+          "player_name": "Kylian MBAPPE",
+          "own_goal": false,
+          "score_before": "0-0",
+          "score_after": "1-0",
+          "team_score_before": 0,
+          "opponent_score_before": 0,
+          "team_score_after": 1,
+          "opponent_score_after": 0,
+          "tags": [
+            "opening_goal",
+            "go_ahead_goal"
+          ]
+        },
+        {
+          "goal_order": 2,
+          "minute": 82,
+          "team": "France",
+          "player_team": "France",
+          "player_name": "Bradley BARCOLA",
+          "own_goal": false,
+          "score_before": "1-0",
+          "score_after": "2-0",
+          "team_score_before": 1,
+          "opponent_score_before": 0,
+          "team_score_after": 2,
+          "opponent_score_after": 0,
+          "tags": [
+            "late_goal"
+          ]
+        },
+        {
+          "goal_order": 3,
+          "minute": 95,
+          "team": "Senegal",
+          "player_team": "Senegal",
+          "player_name": "Ibrahim MBAYE",
+          "own_goal": false,
+          "score_before": "2-0",
+          "score_after": "2-1",
+          "team_score_before": 0,
+          "opponent_score_before": 2,
+          "team_score_after": 1,
+          "opponent_score_after": 2,
+          "tags": [
+            "late_goal",
+            "stoppage_time_goal"
+          ]
+        },
+        {
+          "goal_order": 4,
+          "minute": 96,
+          "team": "France",
+          "player_team": "France",
+          "player_name": "Kylian MBAPPE",
+          "own_goal": false,
+          "score_before": "2-1",
+          "score_after": "3-1",
+          "team_score_before": 2,
+          "opponent_score_before": 1,
+          "team_score_after": 3,
+          "opponent_score_after": 1,
+          "tags": [
+            "late_goal",
+            "stoppage_time_goal"
+          ]
+        }
+      ],
+      "decisive_goal": null
+    },
+    "FIFA-2026-M18-IRQ-NOR": {
+      "match_key": "FIFA-2026-M18-IRQ-NOR",
+      "match_no": 18,
+      "match_date": "2026-06-16",
+      "home_team": "Iraq",
+      "away_team": "Norway",
+      "home_score": 1,
+      "away_score": 4,
+      "winner_team": "Norway",
+      "home_trailing_at_any_point": true,
+      "away_trailing_at_any_point": false,
+      "home_came_from_behind_to_win": false,
+      "away_came_from_behind_to_win": false,
+      "goals": [
+        {
+          "goal_order": 1,
+          "minute": 29,
+          "team": "Norway",
+          "player_team": "Norway",
+          "player_name": "Erling HAALAND",
+          "own_goal": false,
+          "score_before": "0-0",
+          "score_after": "0-1",
+          "team_score_before": 0,
+          "opponent_score_before": 0,
+          "team_score_after": 1,
+          "opponent_score_after": 0,
+          "tags": [
+            "opening_goal",
+            "go_ahead_goal"
+          ]
+        },
+        {
+          "goal_order": 2,
+          "minute": 39,
+          "team": "Iraq",
+          "player_team": "Iraq",
+          "player_name": "AYMEN HUSSEIN",
+          "own_goal": false,
+          "score_before": "0-1",
+          "score_after": "1-1",
+          "team_score_before": 0,
+          "opponent_score_before": 1,
+          "team_score_after": 1,
+          "opponent_score_after": 1,
+          "tags": [
+            "equalizer",
+            "comeback_equalizer"
+          ]
+        },
+        {
+          "goal_order": 3,
+          "minute": 43,
+          "team": "Norway",
+          "player_team": "Norway",
+          "player_name": "Erling HAALAND",
+          "own_goal": false,
+          "score_before": "1-1",
+          "score_after": "1-2",
+          "team_score_before": 1,
+          "opponent_score_before": 1,
+          "team_score_after": 2,
+          "opponent_score_after": 1,
+          "tags": [
+            "go_ahead_goal"
+          ]
+        },
+        {
+          "goal_order": 4,
+          "minute": 76,
+          "team": "Norway",
+          "player_team": "Norway",
+          "player_name": "Leo OSTIGARD",
+          "own_goal": false,
+          "score_before": "1-2",
+          "score_after": "1-3",
+          "team_score_before": 2,
+          "opponent_score_before": 1,
+          "team_score_after": 3,
+          "opponent_score_after": 1,
+          "tags": [
+            "late_goal"
+          ]
+        },
+        {
+          "goal_order": 5,
+          "minute": 96,
+          "team": "Norway",
+          "player_team": "Iraq",
+          "player_name": "AYMEN HUSSEIN",
+          "own_goal": true,
+          "score_before": "1-3",
+          "score_after": "1-4",
+          "team_score_before": 3,
+          "opponent_score_before": 1,
+          "team_score_after": 4,
+          "opponent_score_after": 1,
+          "tags": [
+            "late_goal",
+            "stoppage_time_goal"
+          ]
+        }
+      ],
+      "decisive_goal": null
+    },
+    "FIFA-2026-M19-ARG-ALG": {
+      "match_key": "FIFA-2026-M19-ARG-ALG",
+      "match_no": 19,
+      "match_date": "2026-06-16",
+      "home_team": "Argentina",
+      "away_team": "Algeria",
+      "home_score": 3,
+      "away_score": 0,
+      "winner_team": "Argentina",
+      "home_trailing_at_any_point": false,
+      "away_trailing_at_any_point": true,
+      "home_came_from_behind_to_win": false,
+      "away_came_from_behind_to_win": false,
+      "goals": [
+        {
+          "goal_order": 1,
+          "minute": 17,
+          "team": "Argentina",
+          "player_team": "Argentina",
+          "player_name": "Lionel MESSI",
+          "own_goal": false,
+          "score_before": "0-0",
+          "score_after": "1-0",
+          "team_score_before": 0,
+          "opponent_score_before": 0,
+          "team_score_after": 1,
+          "opponent_score_after": 0,
+          "tags": [
+            "opening_goal",
+            "go_ahead_goal"
+          ]
+        },
+        {
+          "goal_order": 2,
+          "minute": 60,
+          "team": "Argentina",
+          "player_team": "Argentina",
+          "player_name": "Lionel MESSI",
+          "own_goal": false,
+          "score_before": "1-0",
+          "score_after": "2-0",
+          "team_score_before": 1,
+          "opponent_score_before": 0,
+          "team_score_after": 2,
+          "opponent_score_after": 0,
+          "tags": []
+        },
+        {
+          "goal_order": 3,
+          "minute": 76,
+          "team": "Argentina",
+          "player_team": "Argentina",
+          "player_name": "Lionel MESSI",
+          "own_goal": false,
+          "score_before": "2-0",
+          "score_after": "3-0",
+          "team_score_before": 2,
+          "opponent_score_before": 0,
+          "team_score_after": 3,
+          "opponent_score_after": 0,
+          "tags": [
+            "late_goal"
+          ]
+        }
+      ],
+      "decisive_goal": null
+    },
+    "FIFA-2026-M20-AUT-JOR": {
+      "match_key": "FIFA-2026-M20-AUT-JOR",
+      "match_no": 20,
+      "match_date": "2026-06-16",
+      "home_team": "Austria",
+      "away_team": "Jordan",
+      "home_score": 3,
+      "away_score": 1,
+      "winner_team": "Austria",
+      "home_trailing_at_any_point": false,
+      "away_trailing_at_any_point": true,
+      "home_came_from_behind_to_win": false,
+      "away_came_from_behind_to_win": false,
+      "goals": [
+        {
+          "goal_order": 1,
+          "minute": 20,
+          "team": "Austria",
+          "player_team": "Austria",
+          "player_name": "Romano SCHMID",
+          "own_goal": false,
+          "score_before": "0-0",
+          "score_after": "1-0",
+          "team_score_before": 0,
+          "opponent_score_before": 0,
+          "team_score_after": 1,
+          "opponent_score_after": 0,
+          "tags": [
+            "opening_goal",
+            "go_ahead_goal"
+          ]
+        },
+        {
+          "goal_order": 2,
+          "minute": 50,
+          "team": "Jordan",
+          "player_team": "Jordan",
+          "player_name": "ALI OLWAN",
+          "own_goal": false,
+          "score_before": "1-0",
+          "score_after": "1-1",
+          "team_score_before": 0,
+          "opponent_score_before": 1,
+          "team_score_after": 1,
+          "opponent_score_after": 1,
+          "tags": [
+            "equalizer",
+            "comeback_equalizer"
+          ]
+        },
+        {
+          "goal_order": 3,
+          "minute": 76,
+          "team": "Austria",
+          "player_team": "Jordan",
+          "player_name": "YAZAN ALARAB",
+          "own_goal": true,
+          "score_before": "1-1",
+          "score_after": "2-1",
+          "team_score_before": 1,
+          "opponent_score_before": 1,
+          "team_score_after": 2,
+          "opponent_score_after": 1,
+          "tags": [
+            "go_ahead_goal",
+            "late_goal"
+          ]
+        },
+        {
+          "goal_order": 4,
+          "minute": 102,
+          "team": "Austria",
+          "player_team": "Austria",
+          "player_name": "Marko ARNAUTOVIC",
+          "own_goal": false,
+          "score_before": "2-1",
+          "score_after": "3-1",
+          "team_score_before": 2,
+          "opponent_score_before": 1,
+          "team_score_after": 3,
+          "opponent_score_after": 1,
+          "tags": [
+            "late_goal",
+            "stoppage_time_goal"
+          ]
+        }
+      ],
+      "decisive_goal": null
+    }
+  },
   "choices": [
     {
       "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
       "award_label": {
         "en": "Player of the Day",
         "zh": "每日最佳球员"
       },
-      "rank": 1,
-      "match_key": "FIFA-2026-M19-ARG-ALG",
-      "match_no": 19,
-      "player_no": 10,
+      "player_id": "FIFA-2026-M19-ARG-ALG|Argentina|10",
       "player_name": "Lionel MESSI",
       "team": "Argentina",
       "opponent": "Algeria",
+      "match_key": "FIFA-2026-M19-ARG-ALG",
+      "match_no": 19,
+      "player_no": 10,
       "position": "FW",
-      "score": 68.6,
-      "primary_score": "composite_score",
-      "role_scores": {
-        "attacking_threat": 35.05,
-        "progressor": 30.6,
-        "off_ball": 29.0,
-        "defensive": 6.45,
-        "physical": 12.69
+      "score": 134.4,
+      "metrics": {
+        "shots": 6,
+        "on_target": 4,
+        "goals": 3,
+        "goal_involvements": 3,
+        "brace": 1,
+        "hat_trick": 1,
+        "opening_goal": 1,
+        "go_ahead_goal": 1,
+        "late_goal": 1
       },
-      "score_components": [
-        {
-          "metric": "line_breaks_completed",
-          "value": 12,
-          "weight": 2.0,
-          "contribution": 24.0,
-          "score": "progressor"
-        },
-        {
-          "metric": "goals",
-          "value": 3,
-          "weight": 6.0,
-          "contribution": 18.0,
-          "score": "attacking_threat"
-        },
-        {
-          "metric": "offers_received",
-          "value": 16,
-          "weight": 1.0,
-          "contribution": 16.0,
-          "score": "off_ball"
-        },
-        {
-          "metric": "on_target",
-          "value": 4,
-          "weight": 2.0,
-          "contribution": 8.0,
-          "score": "attacking_threat"
-        },
-        {
-          "metric": "total_distance_m",
-          "value": 6808.4,
-          "weight": 0.001,
-          "contribution": 6.81,
-          "score": "physical"
-        },
-        {
-          "metric": "top_speed_kmh",
-          "value": 29.4,
-          "weight": 0.2,
-          "contribution": 5.88,
-          "score": "physical"
-        }
-      ],
       "evidence_chips": {
         "en": [
           "hat-trick",
+          "opening goal",
           "high shot quality"
         ],
         "zh": [
           "帽子戏法",
+          "首开纪录",
           "射门质量突出"
         ]
       },
+      "selection_reason": "Selected because he scored all three Argentina goals in the 3-0 win over Algeria, including the opener.",
       "content": {
         "en": {
-          "title": "Three goals, no debate",
-          "html": "<p>Lionel MESSI made this one straightforward. Argentina scored three against Algeria and he scored all three, with four shots on target. The extra detail is useful too: 12 completed line breaks kept him involved beyond the finish.</p>"
+          "title": "Messi scored all three",
+          "html": "<p>Argentina beat Algeria 3-0, and Lionel Messi had every goal. He opened the scoring, added two more after half-time, and finished with four shots on target.</p>"
         },
         "zh": {
-          "title": "帽子戏法就是答案",
-          "html": "<p>梅西这场不用绕。阿根廷3-0阿尔及利亚，他一个人进了三个，4次射正也够干脆；12次打穿防线说明他不只是等在门前收尾。</p>"
+          "title": "梅西帽子戏法",
+          "html": "<p>阿根廷3-0阿尔及利亚，三个球全是梅西进的。第17分钟先开纪录，下半场又进两个，6脚射门4次射正，够完整了。</p>"
         }
       }
     },
     {
       "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
       "award_label": {
         "en": "Player of the Day",
         "zh": "每日最佳球员"
       },
-      "rank": 2,
-      "match_key": "FIFA-2026-M17-FRA-SEN",
-      "match_no": 17,
-      "player_no": 10,
+      "player_id": "FIFA-2026-M17-FRA-SEN|France|10",
       "player_name": "Kylian MBAPPE",
       "team": "France",
       "opponent": "Senegal",
+      "match_key": "FIFA-2026-M17-FRA-SEN",
+      "match_no": 17,
+      "player_no": 10,
       "position": "FW",
-      "score": 60.7,
-      "primary_score": "composite_score",
-      "role_scores": {
-        "attacking_threat": 32.1,
-        "progressor": 17.78,
-        "off_ball": 39.6,
-        "defensive": 5.15,
-        "physical": 16.71
+      "score": 105.22,
+      "metrics": {
+        "shots": 4,
+        "on_target": 4,
+        "goals": 2,
+        "goal_involvements": 2,
+        "brace": 1,
+        "opening_goal": 1,
+        "go_ahead_goal": 1,
+        "late_goal": 1,
+        "stoppage_time_goal": 1
       },
-      "score_components": [
-        {
-          "metric": "in_behind",
-          "value": 30,
-          "weight": 0.6,
-          "contribution": 18.0,
-          "score": "off_ball"
-        },
-        {
-          "metric": "goals",
-          "value": 2,
-          "weight": 6.0,
-          "contribution": 12.0,
-          "score": "attacking_threat"
-        },
-        {
-          "metric": "offers_received",
-          "value": 11,
-          "weight": 1.0,
-          "contribution": 11.0,
-          "score": "off_ball"
-        },
-        {
-          "metric": "total_distance_m",
-          "value": 9686.1,
-          "weight": 0.001,
-          "contribution": 9.69,
-          "score": "physical"
-        },
-        {
-          "metric": "ball_progressions",
-          "value": 9,
-          "weight": 1.0,
-          "contribution": 9.0,
-          "score": "progressor"
-        },
-        {
-          "metric": "on_target",
-          "value": 4,
-          "weight": 2.0,
-          "contribution": 8.0,
-          "score": "attacking_threat"
-        }
-      ],
       "evidence_chips": {
         "en": [
           "brace",
+          "opening goal",
           "high shot quality"
         ],
         "zh": [
           "梅开二度",
+          "首开纪录",
           "射门质量突出"
         ]
       },
+      "selection_reason": "Selected because he scored twice in France's 3-1 win over Senegal, opening the scoring and adding the stoppage-time third.",
       "content": {
         "en": {
-          "title": "Always stretching Senegal",
-          "html": "<p>Kylian MBAPPE’s two goals make the case easy to see, but the pattern around them matters. His 30 in-behind offers kept Senegal defending depth, and four shots on target turned that movement into direct threat.</p>"
+          "title": "Mbappe scored at both ends of it",
+          "html": "<p>Kylian Mbappe opened the scoring against Senegal and added France's third in stoppage time. Four shots, four on target, two goals.</p>"
         },
         "zh": {
-          "title": "姆巴佩一直冲身后",
-          "html": "<p>梅开二度足够醒目，但他入选不是只靠进球。30次身后接应让塞内加尔防线很难往前压；他一旦拿到机会，4次射正又能把威胁落到门框范围内。</p>"
+          "title": "姆巴佩梅开二度",
+          "html": "<p>法国3-1塞内加尔，姆巴佩第66分钟打开局面，补时第96分钟又进一球。4脚射门全部射正，这场收得很干脆。</p>"
         }
       }
     },
     {
       "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
       "award_label": {
         "en": "Player of the Day",
         "zh": "每日最佳球员"
       },
-      "rank": 3,
-      "match_key": "FIFA-2026-M20-AUT-JOR",
-      "match_no": 20,
-      "player_no": 6,
-      "player_name": "Nicolas SEIWALD",
-      "team": "Austria",
-      "opponent": "Jordan",
-      "position": "MF",
-      "score": 59.8,
-      "primary_score": "composite_score",
-      "role_scores": {
-        "attacking_threat": 7.75,
-        "progressor": 35.74,
-        "off_ball": 50.7,
-        "defensive": 22.5,
-        "physical": 18.26
+      "player_id": "FIFA-2026-M18-IRQ-NOR|Norway|9",
+      "player_name": "Erling HAALAND",
+      "team": "Norway",
+      "opponent": "Iraq",
+      "match_key": "FIFA-2026-M18-IRQ-NOR",
+      "match_no": 18,
+      "player_no": 9,
+      "position": "FW",
+      "score": 80.93,
+      "metrics": {
+        "shots": 4,
+        "on_target": 3,
+        "goals": 2,
+        "goal_involvements": 2,
+        "brace": 1,
+        "opening_goal": 1,
+        "go_ahead_goal": 2
       },
-      "score_components": [
-        {
-          "metric": "offers_received",
-          "value": 35,
-          "weight": 1.0,
-          "contribution": 35.0,
-          "score": "off_ball"
-        },
-        {
-          "metric": "line_breaks_completed",
-          "value": 15,
-          "weight": 2.0,
-          "contribution": 30.0,
-          "score": "progressor"
-        },
-        {
-          "metric": "total_distance_m",
-          "value": 11721.4,
-          "weight": 0.001,
-          "contribution": 11.72,
-          "score": "physical"
-        },
-        {
-          "metric": "possession_regains",
-          "value": 6,
-          "weight": 1.3,
-          "contribution": 7.8,
-          "score": "defensive"
-        },
-        {
-          "metric": "total_offers",
-          "value": 71,
-          "weight": 0.1,
-          "contribution": 7.1,
-          "score": "off_ball"
-        },
-        {
-          "metric": "offers_received",
-          "value": 35,
-          "weight": 0.2,
-          "contribution": 7.0,
-          "score": "attacking_threat"
-        }
-      ],
       "evidence_chips": {
         "en": [
-          "repeated line breaks",
-          "found again and again",
-          "between-line presence"
+          "brace",
+          "opening goal",
+          "high shot quality"
         ],
         "zh": [
-          "持续打穿防线",
-          "持续接应",
-          "在防线之间活跃"
+          "梅开二度",
+          "首开纪录",
+          "射门质量突出"
         ]
       },
+      "selection_reason": "Selected because official timeline evidence now correctly shows a brace in Norway's 4-1 win over Iraq: the opener and the 43rd-minute go-ahead goal.",
       "content": {
         "en": {
-          "title": "The link Austria kept using",
-          "html": "<p>Nicolas SEIWALD did the connective work that keeps a midfield moving. Austria found him 35 times, and his 15 completed line breaks gave those possessions somewhere more useful to go.</p>"
+          "title": "Haaland put Norway ahead twice",
+          "html": "<p>Erling Haaland scored Norway's first goal against Iraq, then struck again four minutes after Iraq had levelled. His brace pushed Norway back in front before the 4-1 finish.</p>"
         },
         "zh": {
-          "title": "塞瓦尔德让中场转起来",
-          "html": "<p>这不是最容易被记住的那类表现，但奥地利中场很多回合需要这样的接口。塞瓦尔德35次接应成功、15次打穿防线，一直在给队友一个向前处理的选项。</p>"
-        }
-      }
-    },
-    {
-      "award_type": "progression_pick",
-      "award_label": {
-        "en": "Progression Pick",
-        "zh": "推进精选"
-      },
-      "rank": 1,
-      "match_key": "FIFA-2026-M19-ARG-ALG",
-      "match_no": 19,
-      "player_no": 15,
-      "player_name": "Rayan AIT-NOURI",
-      "team": "Algeria",
-      "opponent": "Argentina",
-      "position": "DF",
-      "score": 53.6,
-      "primary_score": "progressor",
-      "role_scores": {
-        "attacking_threat": 3.45,
-        "progressor": 53.58,
-        "off_ball": 17.1,
-        "defensive": 15.8,
-        "physical": 15.83
-      },
-      "score_components": [
-        {
-          "metric": "line_breaks_completed",
-          "value": 15,
-          "weight": 2.0,
-          "contribution": 30.0
-        },
-        {
-          "metric": "ball_progressions",
-          "value": 15,
-          "weight": 1.0,
-          "contribution": 15.0
-        },
-        {
-          "metric": "take_ons",
-          "value": 11,
-          "weight": 0.5,
-          "contribution": 5.5
-        },
-        {
-          "metric": "step_ins",
-          "value": 4,
-          "weight": 0.5,
-          "contribution": 2.0
-        },
-        {
-          "metric": "passes_completed",
-          "value": 54,
-          "weight": 0.02,
-          "contribution": 1.08
-        }
-      ],
-      "evidence_chips": {
-        "en": [
-          "repeated line breaks",
-          "constant carries"
-        ],
-        "zh": [
-          "持续打穿防线",
-          "推进很活跃"
-        ]
-      },
-      "content": {
-        "en": {
-          "title": "Algeria’s route out",
-          "html": "<p>The match went Argentina’s way, but Rayan AIT-NOURI still gave Algeria a way up the pitch. Fifteen ball progressions, 15 completed line breaks, and 11 take-ons point to a player trying to carry the ball through pressure.</p>"
-        },
-        "zh": {
-          "title": "最能把球带出去的人",
-          "html": "<p>阿尔及利亚输了球，但艾特-努里这条线有东西。15次推进、15次打穿防线，加上11次尝试过人，他做的不是保守回传，而是把球从压力里带出来。</p>"
+          "title": "哈兰德梅开二度",
+          "html": "<p>挪威4-1伊拉克，哈兰德第29分钟首开纪录，第43分钟又把比分改成2-1。4脚射门3次射正，两个进球都在关键节点上。</p>"
         }
       }
     },
     {
       "award_type": "defensive_pick",
+      "award_types": [
+        "defensive_pick"
+      ],
       "award_label": {
         "en": "Defensive Pick",
         "zh": "防守精选"
       },
-      "rank": 1,
+      "player_id": "FIFA-2026-M20-AUT-JOR|Austria|4",
+      "player_name": "Xaver SCHLAGER",
+      "team": "Austria",
+      "opponent": "Jordan",
       "match_key": "FIFA-2026-M20-AUT-JOR",
       "match_no": 20,
-      "player_no": 3,
-      "player_name": "ABDALLAH NASIB",
-      "team": "Jordan",
-      "opponent": "Austria",
-      "position": "DF",
-      "score": 41.0,
-      "primary_score": "defensive",
-      "role_scores": {
-        "attacking_threat": 0.0,
-        "progressor": 19.9,
-        "off_ball": 0.3,
-        "defensive": 40.95,
-        "physical": 14.0
-      },
-      "score_components": [
-        {
-          "metric": "possession_regains",
-          "value": 12,
-          "weight": 1.3,
-          "contribution": 15.6
-        },
-        {
-          "metric": "blocks",
-          "value": 9,
-          "weight": 1.0,
-          "contribution": 9.0
-        },
-        {
-          "metric": "possession_interrupted",
-          "value": 8,
-          "weight": 1.0,
-          "contribution": 8.0
-        },
-        {
-          "metric": "clearances",
-          "value": 8,
-          "weight": 0.5,
-          "contribution": 4.0
-        },
-        {
-          "metric": "tackles_won",
-          "value": 2,
-          "weight": 1.5,
-          "contribution": 3.0
-        },
-        {
-          "metric": "pressing_direct",
-          "value": 3,
-          "weight": 0.3,
-          "contribution": 0.9
-        }
-      ],
-      "evidence_chips": {
-        "en": [
-          "ball-winning profile",
-          "disrupted attacks"
-        ],
-        "zh": [
-          "夺回球权能力突出",
-          "持续破坏进攻"
-        ]
-      },
-      "content": {
-        "en": {
-          "title": "Making Austria restart",
-          "html": "<p>ABDALLAH NASIB’s value was in the stops before the next wave. Jordan still conceded three, but his 12 possession regains, nine blocks, and eight interruptions kept forcing Austria to build again.</p>"
-        },
-        "zh": {
-          "title": "他让奥地利一遍遍重来",
-          "html": "<p>约旦丢了三个，但纳西布的防守量很实在。12次夺回球权、9次封堵、8次破坏进攻，都是那种不漂亮但很顶用的活。</p>"
-        }
-      }
-    },
-    {
-      "award_type": "hidden_gem",
-      "award_label": {
-        "en": "Hidden Gem",
-        "zh": "隐藏亮点"
-      },
-      "rank": 1,
-      "match_key": "FIFA-2026-M19-ARG-ALG",
-      "match_no": 19,
-      "player_no": 7,
-      "player_name": "Rodrigo DE PAUL",
-      "team": "Argentina",
-      "opponent": "Algeria",
+      "player_no": 4,
       "position": "MF",
-      "score": 54.3,
-      "primary_score": "off_ball",
-      "role_scores": {
-        "attacking_threat": 8.55,
-        "progressor": 17.48,
-        "off_ball": 54.3,
-        "defensive": 16.7,
-        "physical": 16.39
+      "score": 66.09,
+      "metrics": {
+        "possession_regains": 11,
+        "possession_interrupted": 5,
+        "tackles_won": 3,
+        "interceptions": 3,
+        "blocks": 4,
+        "clearances": 2
       },
-      "score_components": [
-        {
-          "metric": "offers_received",
-          "value": 34,
-          "weight": 1.0,
-          "contribution": 34.0
-        },
-        {
-          "metric": "in_between",
-          "value": 21,
-          "weight": 0.4,
-          "contribution": 8.4
-        },
-        {
-          "metric": "total_offers",
-          "value": 77,
-          "weight": 0.1,
-          "contribution": 7.7
-        },
-        {
-          "metric": "in_behind",
-          "value": 7,
-          "weight": 0.6,
-          "contribution": 4.2
-        }
-      ],
       "evidence_chips": {
         "en": [
-          "found again and again",
-          "between-line presence"
+          "assist",
+          "ball-winning profile"
         ],
         "zh": [
-          "持续接应",
-          "在防线之间活跃"
+          "送出助攻",
+          "夺回球权能力突出"
         ]
       },
+      "selection_reason": "Selected as the fourth card because Austria-Jordan would otherwise be unrepresented on a four-match day, and Schlager combines a first-goal assist with the match's strongest Austria defensive packet.",
       "content": {
         "en": {
-          "title": "The quiet connector",
-          "html": "<p>Rodrigo DE PAUL was not the headline act, which is the point of this pick. Argentina received through him 34 times, including 21 between-line offers, giving the players ahead of him a steady angle to keep attacks alive.</p>"
+          "title": "Schlager gave Austria both sides",
+          "html": "<p>Xaver Schlager assisted Austria's first goal against Jordan, then kept working through midfield. His 11 regains and 4 blocks give the fourth card a different shape.</p>"
         },
         "zh": {
-          "title": "不抢镜的连接器",
-          "html": "<p>阿根廷最热闹的部分在梅西那里，德保罗做的是把球接到前场能继续打的位置。34次接应成功、21次两线间接应，他一直在给队友一个舒服的出球角度。</p>"
+          "title": "施拉格中场抢回球权",
+          "html": "<p>奥地利3-1约旦，施拉格送出首球助攻。中场还有11次夺回球权和4次封堵，攻防两头都有痕迹。</p>"
         }
       }
     }
   ],
+  "selection_validation": {
+    "schema_version": 1,
+    "status": "pass",
+    "warnings": []
+  },
   "audit": []
 }

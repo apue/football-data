@@ -78,8 +78,9 @@ def _zh_title_core_fact_warnings(
     match_winning_goal = int(metrics.get("match_winning_goal") or 0)
     comeback_winner = int(metrics.get("comeback_winner") or 0)
     late_match_winning_goal = int(metrics.get("late_match_winning_goal") or 0)
-    if goals >= 3 and not _has_any(title, ["帽子戏法"]):
-        warnings.append(f"missing zh title core fact hat_trick in {player_id}")
+    if goals >= 3:
+        if not _has_any(title, ["帽子戏法"]):
+            warnings.append(f"missing zh title core fact hat_trick in {player_id}")
     elif goals >= 2 and not _has_any(title, ["梅开二度", "双响", "两球", "两度破门", "独中两元"]):
         warnings.append(f"missing zh title core fact goals>=2 in {player_id}")
     if goals >= 2 and (match_winning_goal or comeback_winner or late_match_winning_goal):

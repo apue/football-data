@@ -20,9 +20,19 @@
     .choice-card aside strong { display: block; font-size: 34px; }
     .choice-card aside > span { color: #59677c; font-size: 12px; text-transform: uppercase; }
     .meta { margin: 0; color: #59677c; }
+    .award-badges { display: flex; flex-wrap: wrap; gap: 6px; margin: -6px 0 10px; }
+    .award-badge { border: 1px solid #dce5f2; background: #f7f9fc; color: #35465d; border-radius: 999px; padding: 4px 8px; font-size: 12px; font-weight: 700; }
     .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
     .chips span { background: #edf2fa; border: 1px solid #dce5f2; border-radius: 999px; padding: 5px 9px; font-size: 12px; }
+    .archive-list { display: grid; gap: 10px; margin-top: 22px; }
+    .archive-row { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; align-items: center; gap: 12px; padding: 14px 16px; color: inherit; text-decoration: none; background: #fff; border: 1px solid #dde3ee; border-radius: 8px; }
+    .archive-row:hover { border-color: #b7c4d4; }
+    .archive-row span { color: #59677c; font-size: 13px; }
+    .badge { justify-self: end; border-radius: 999px; padding: 4px 9px; border: 1px solid #dce5f2; background: #edf2fa; color: #35465d; font-size: 12px; }
+    .badge.official { border-color: #b7dfd4; background: #e7f7f1; color: #0f766e; }
+    .badge.legacy { border-color: #e7d8ad; background: #fff7df; color: #806215; }
     @media (max-width: 720px) { .choice-card { grid-template-columns: 1fr; } .choice-card aside { border-left: 0; border-top: 1px solid #e8edf5; padding-left: 0; padding-top: 14px; } }
+    @media (max-width: 720px) { .archive-row { grid-template-columns: 1fr; align-items: start; } .badge { justify-self: start; } }
     </style>
 </head>
 <body>
@@ -30,114 +40,70 @@
     <p class="eyebrow">FIFA PMSR Data</p>
     <h1>Editor's Choices · 2026-06-16</h1>
     <p class="lede">Data-informed selections from the latest structured PMSR dataset. These are not official awards.</p>
-    
-    <article class="choice-card">
+        <article class="choice-card">
       <div>
         <p class="award">Player of the Day</p>
-        <h2>Lionel MESSI</h2>
-        <p class="meta">Argentina vs Algeria · Match 19</p>
-        <h3>Three goals, no debate</h3>
-        <p>Lionel MESSI made this one straightforward. Argentina scored three against Algeria and he scored all three, with four shots on target. The extra detail is useful too: 12 completed line breaks kept him involved beyond the finish.</p>
-        <h3>帽子戏法就是答案</h3>
-        <p>梅西这场不用绕。阿根廷3-0阿尔及利亚，他一个人进了三个，4次射正也够干脆；12次打穿防线说明他不只是等在门前收尾。</p>
+        <div class="award-badges"></div>
+        <h2>🇦🇷 Lionel MESSI</h2>
+        <p class="meta">🇦🇷 Argentina vs 🇩🇿 Algeria · Match 19</p>
+        <h3>Messi scored all three</h3>
+        <p>Argentina beat Algeria 3-0, and Lionel Messi had every goal. He opened the scoring, added two more after half-time, and finished with four shots on target.</p>
+        <h3>梅西帽子戏法</h3>
+        <p>阿根廷3-0阿尔及利亚，三个球全是梅西进的。第17分钟先开纪录，下半场又进两个，6脚射门4次射正，够完整了。</p>
       </div>
       <aside>
-        <strong>68.6</strong>
-        <span>score</span>
-        <div class="chips"><span>hat-trick</span><span>high shot quality</span></div>
+        <div class="chips"><span>hat-trick</span><span>opening goal</span><span>high shot quality</span></div>
       </aside>
     </article>
-            
 
     <article class="choice-card">
       <div>
         <p class="award">Player of the Day</p>
-        <h2>Kylian MBAPPE</h2>
-        <p class="meta">France vs Senegal · Match 17</p>
-        <h3>Always stretching Senegal</h3>
-        <p>Kylian MBAPPE’s two goals make the case easy to see, but the pattern around them matters. His 30 in-behind offers kept Senegal defending depth, and four shots on target turned that movement into direct threat.</p>
-        <h3>姆巴佩一直冲身后</h3>
-        <p>梅开二度足够醒目，但他入选不是只靠进球。30次身后接应让塞内加尔防线很难往前压；他一旦拿到机会，4次射正又能把威胁落到门框范围内。</p>
+        <div class="award-badges"></div>
+        <h2>🇫🇷 Kylian MBAPPE</h2>
+        <p class="meta">🇫🇷 France vs 🇸🇳 Senegal · Match 17</p>
+        <h3>Mbappe scored at both ends of it</h3>
+        <p>Kylian Mbappe opened the scoring against Senegal and added France's third in stoppage time. Four shots, four on target, two goals.</p>
+        <h3>姆巴佩梅开二度</h3>
+        <p>法国3-1塞内加尔，姆巴佩第66分钟打开局面，补时第96分钟又进一球。4脚射门全部射正，这场收得很干脆。</p>
       </div>
       <aside>
-        <strong>60.7</strong>
-        <span>score</span>
-        <div class="chips"><span>brace</span><span>high shot quality</span></div>
+        <div class="chips"><span>brace</span><span>opening goal</span><span>high shot quality</span></div>
       </aside>
     </article>
-            
 
     <article class="choice-card">
       <div>
         <p class="award">Player of the Day</p>
-        <h2>Nicolas SEIWALD</h2>
-        <p class="meta">Austria vs Jordan · Match 20</p>
-        <h3>The link Austria kept using</h3>
-        <p>Nicolas SEIWALD did the connective work that keeps a midfield moving. Austria found him 35 times, and his 15 completed line breaks gave those possessions somewhere more useful to go.</p>
-        <h3>塞瓦尔德让中场转起来</h3>
-        <p>这不是最容易被记住的那类表现，但奥地利中场很多回合需要这样的接口。塞瓦尔德35次接应成功、15次打穿防线，一直在给队友一个向前处理的选项。</p>
+        <div class="award-badges"></div>
+        <h2>🇳🇴 Erling HAALAND</h2>
+        <p class="meta">🇳🇴 Norway vs 🇮🇶 Iraq · Match 18</p>
+        <h3>Haaland put Norway ahead twice</h3>
+        <p>Erling Haaland scored Norway's first goal against Iraq, then struck again four minutes after Iraq had levelled. His brace pushed Norway back in front before the 4-1 finish.</p>
+        <h3>哈兰德梅开二度</h3>
+        <p>挪威4-1伊拉克，哈兰德第29分钟首开纪录，第43分钟又把比分改成2-1。4脚射门3次射正，两个进球都在关键节点上。</p>
       </div>
       <aside>
-        <strong>59.8</strong>
-        <span>score</span>
-        <div class="chips"><span>repeated line breaks</span><span>found again and again</span><span>between-line presence</span></div>
+        <div class="chips"><span>brace</span><span>opening goal</span><span>high shot quality</span></div>
       </aside>
     </article>
-            
-
-    <article class="choice-card">
-      <div>
-        <p class="award">Progression Pick</p>
-        <h2>Rayan AIT-NOURI</h2>
-        <p class="meta">Algeria vs Argentina · Match 19</p>
-        <h3>Algeria’s route out</h3>
-        <p>The match went Argentina’s way, but Rayan AIT-NOURI still gave Algeria a way up the pitch. Fifteen ball progressions, 15 completed line breaks, and 11 take-ons point to a player trying to carry the ball through pressure.</p>
-        <h3>最能把球带出去的人</h3>
-        <p>阿尔及利亚输了球，但艾特-努里这条线有东西。15次推进、15次打穿防线，加上11次尝试过人，他做的不是保守回传，而是把球从压力里带出来。</p>
-      </div>
-      <aside>
-        <strong>53.6</strong>
-        <span>score</span>
-        <div class="chips"><span>repeated line breaks</span><span>constant carries</span></div>
-      </aside>
-    </article>
-            
 
     <article class="choice-card">
       <div>
         <p class="award">Defensive Pick</p>
-        <h2>ABDALLAH NASIB</h2>
-        <p class="meta">Jordan vs Austria · Match 20</p>
-        <h3>Making Austria restart</h3>
-        <p>ABDALLAH NASIB’s value was in the stops before the next wave. Jordan still conceded three, but his 12 possession regains, nine blocks, and eight interruptions kept forcing Austria to build again.</p>
-        <h3>他让奥地利一遍遍重来</h3>
-        <p>约旦丢了三个，但纳西布的防守量很实在。12次夺回球权、9次封堵、8次破坏进攻，都是那种不漂亮但很顶用的活。</p>
+        <div class="award-badges"></div>
+        <h2>🇦🇹 Xaver SCHLAGER</h2>
+        <p class="meta">🇦🇹 Austria vs 🇯🇴 Jordan · Match 20</p>
+        <h3>Schlager gave Austria both sides</h3>
+        <p>Xaver Schlager assisted Austria's first goal against Jordan, then kept working through midfield. His 11 regains and 4 blocks give the fourth card a different shape.</p>
+        <h3>施拉格中场抢回球权</h3>
+        <p>奥地利3-1约旦，施拉格送出首球助攻。中场还有11次夺回球权和4次封堵，攻防两头都有痕迹。</p>
       </div>
       <aside>
-        <strong>41.0</strong>
-        <span>score</span>
-        <div class="chips"><span>ball-winning profile</span><span>disrupted attacks</span></div>
+        <div class="chips"><span>assist</span><span>ball-winning profile</span></div>
       </aside>
     </article>
-            
 
-    <article class="choice-card">
-      <div>
-        <p class="award">Hidden Gem</p>
-        <h2>Rodrigo DE PAUL</h2>
-        <p class="meta">Argentina vs Algeria · Match 19</p>
-        <h3>The quiet connector</h3>
-        <p>Rodrigo DE PAUL was not the headline act, which is the point of this pick. Argentina received through him 34 times, including 21 between-line offers, giving the players ahead of him a steady angle to keep attacks alive.</p>
-        <h3>不抢镜的连接器</h3>
-        <p>阿根廷最热闹的部分在梅西那里，德保罗做的是把球接到前场能继续打的位置。34次接应成功、21次两线间接应，他一直在给队友一个舒服的出球角度。</p>
-      </div>
-      <aside>
-        <strong>54.3</strong>
-        <span>score</span>
-        <div class="chips"><span>found again and again</span><span>between-line presence</span></div>
-      </aside>
-    </article>
-            
   </main>
 </body>
 </html>

@@ -103,7 +103,7 @@ def test_run_editorial_queue_falls_back_to_static_copy_when_agent_fails(tmp_path
             raise RuntimeError("agent balance is insufficient")
         return {
             "status": "success",
-            "experiment_id": "ai_rerank_slate_self_review_v4",
+            "experiment_id": "ai_rerank_reader_loop_v5",
             "workflow_variant": "ai_rerank_selection_v1",
             "selection_validation": {"status": "pass"},
             "choices": [

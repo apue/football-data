@@ -1,10 +1,32 @@
 {
-  "schema_version": 2,
-  "generated_at": "2026-06-19T07:56:43+00:00",
-  "compiled_at": "2026-06-19T08:06:59+00:00",
+  "schema_version": 3,
+  "generated_at": "2026-06-25T08:04:19+00:00",
+  "compiled_at": "2026-06-25T08:04:19+00:00",
   "match_date": "2026-06-17",
-  "scoring_version": "v0.2",
-  "source_markdown_path": "reports/editorial/2026-06-17.md",
+  "scoring_version": "v0.4",
+  "editorial_generation": {
+    "workflow_variant": "ai_rerank_selection_v1",
+    "experiment_id": "ai_rerank_reader_loop_v5",
+    "selection_mode": "ai_rerank_only",
+    "review_profile": "reader_intuition_loop_v2",
+    "revision_policy": {
+      "mode": "reader_critic_revise_review_loop",
+      "max_revision_rounds": 2,
+      "blocking_review_requires_revision": true,
+      "revision_targets": [
+        "selection_decision",
+        "copy",
+        "review"
+      ]
+    },
+    "editorial_review_status": "pass",
+    "uses_official_assists": true,
+    "uses_goal_involvements": true,
+    "event_source": "fifa_timeline_api",
+    "event_sources": {
+      "goal_involvements": "fifa_timeline_api"
+    }
+  },
   "matches": [
     {
       "match_key": "FIFA-2026-M21-GHA-PAN",
@@ -51,217 +73,541 @@
       "away_score": 3
     }
   ],
+  "match_flows": {
+    "FIFA-2026-M21-GHA-PAN": {
+      "match_key": "FIFA-2026-M21-GHA-PAN",
+      "match_no": 21,
+      "match_date": "2026-06-17",
+      "home_team": "Ghana",
+      "away_team": "Panama",
+      "home_score": 1,
+      "away_score": 0,
+      "winner_team": "Ghana",
+      "home_trailing_at_any_point": false,
+      "away_trailing_at_any_point": true,
+      "home_came_from_behind_to_win": false,
+      "away_came_from_behind_to_win": false,
+      "goals": [
+        {
+          "goal_order": 1,
+          "minute": 95,
+          "team": "Ghana",
+          "player_team": "Ghana",
+          "player_name": "Caleb YIRENKYI",
+          "own_goal": false,
+          "score_before": "0-0",
+          "score_after": "1-0",
+          "team_score_before": 0,
+          "opponent_score_before": 0,
+          "team_score_after": 1,
+          "opponent_score_after": 0,
+          "tags": [
+            "opening_goal",
+            "go_ahead_goal",
+            "match_winning_goal",
+            "late_goal",
+            "stoppage_time_goal",
+            "late_match_winning_goal"
+          ]
+        }
+      ],
+      "decisive_goal": {
+        "goal_order": 1,
+        "minute": 95,
+        "team": "Ghana",
+        "player_team": "Ghana",
+        "player_name": "Caleb YIRENKYI",
+        "own_goal": false,
+        "score_before": "0-0",
+        "score_after": "1-0",
+        "team_score_before": 0,
+        "opponent_score_before": 0,
+        "team_score_after": 1,
+        "opponent_score_after": 0,
+        "tags": [
+          "opening_goal",
+          "go_ahead_goal",
+          "match_winning_goal",
+          "late_goal",
+          "stoppage_time_goal",
+          "late_match_winning_goal"
+        ]
+      }
+    },
+    "FIFA-2026-M22-ENG-CRO": {
+      "match_key": "FIFA-2026-M22-ENG-CRO",
+      "match_no": 22,
+      "match_date": "2026-06-17",
+      "home_team": "England",
+      "away_team": "Croatia",
+      "home_score": 4,
+      "away_score": 2,
+      "winner_team": "England",
+      "home_trailing_at_any_point": false,
+      "away_trailing_at_any_point": true,
+      "home_came_from_behind_to_win": false,
+      "away_came_from_behind_to_win": false,
+      "goals": [
+        {
+          "goal_order": 1,
+          "minute": 12,
+          "team": "England",
+          "player_team": "England",
+          "player_name": "Harry KANE",
+          "own_goal": false,
+          "score_before": "0-0",
+          "score_after": "1-0",
+          "team_score_before": 0,
+          "opponent_score_before": 0,
+          "team_score_after": 1,
+          "opponent_score_after": 0,
+          "tags": [
+            "opening_goal",
+            "go_ahead_goal"
+          ]
+        },
+        {
+          "goal_order": 2,
+          "minute": 36,
+          "team": "Croatia",
+          "player_team": "Croatia",
+          "player_name": "Martin BATURINA",
+          "own_goal": false,
+          "score_before": "1-0",
+          "score_after": "1-1",
+          "team_score_before": 0,
+          "opponent_score_before": 1,
+          "team_score_after": 1,
+          "opponent_score_after": 1,
+          "tags": [
+            "equalizer",
+            "comeback_equalizer"
+          ]
+        },
+        {
+          "goal_order": 3,
+          "minute": 42,
+          "team": "England",
+          "player_team": "England",
+          "player_name": "Harry KANE",
+          "own_goal": false,
+          "score_before": "1-1",
+          "score_after": "2-1",
+          "team_score_before": 1,
+          "opponent_score_before": 1,
+          "team_score_after": 2,
+          "opponent_score_after": 1,
+          "tags": [
+            "go_ahead_goal"
+          ]
+        },
+        {
+          "goal_order": 4,
+          "minute": 50,
+          "team": "Croatia",
+          "player_team": "Croatia",
+          "player_name": "Petar MUSA",
+          "own_goal": false,
+          "score_before": "2-1",
+          "score_after": "2-2",
+          "team_score_before": 1,
+          "opponent_score_before": 2,
+          "team_score_after": 2,
+          "opponent_score_after": 2,
+          "tags": [
+            "equalizer",
+            "comeback_equalizer"
+          ]
+        },
+        {
+          "goal_order": 5,
+          "minute": 47,
+          "team": "England",
+          "player_team": "England",
+          "player_name": "Jude BELLINGHAM",
+          "own_goal": false,
+          "score_before": "2-2",
+          "score_after": "3-2",
+          "team_score_before": 2,
+          "opponent_score_before": 2,
+          "team_score_after": 3,
+          "opponent_score_after": 2,
+          "tags": [
+            "go_ahead_goal"
+          ]
+        },
+        {
+          "goal_order": 6,
+          "minute": 85,
+          "team": "England",
+          "player_team": "England",
+          "player_name": "Marcus RASHFORD",
+          "own_goal": false,
+          "score_before": "3-2",
+          "score_after": "4-2",
+          "team_score_before": 3,
+          "opponent_score_before": 2,
+          "team_score_after": 4,
+          "opponent_score_after": 2,
+          "tags": [
+            "late_goal"
+          ]
+        }
+      ],
+      "decisive_goal": null
+    },
+    "FIFA-2026-M23-POR-COD": {
+      "match_key": "FIFA-2026-M23-POR-COD",
+      "match_no": 23,
+      "match_date": "2026-06-17",
+      "home_team": "Portugal",
+      "away_team": "Congo DR",
+      "home_score": 1,
+      "away_score": 1,
+      "winner_team": null,
+      "home_trailing_at_any_point": false,
+      "away_trailing_at_any_point": true,
+      "home_came_from_behind_to_win": false,
+      "away_came_from_behind_to_win": false,
+      "goals": [
+        {
+          "goal_order": 1,
+          "minute": 6,
+          "team": "Portugal",
+          "player_team": "Portugal",
+          "player_name": "JOAO NEVES",
+          "own_goal": false,
+          "score_before": "0-0",
+          "score_after": "1-0",
+          "team_score_before": 0,
+          "opponent_score_before": 0,
+          "team_score_after": 1,
+          "opponent_score_after": 0,
+          "tags": [
+            "opening_goal",
+            "go_ahead_goal"
+          ]
+        },
+        {
+          "goal_order": 2,
+          "minute": 50,
+          "team": "Congo DR",
+          "player_team": "Congo DR",
+          "player_name": "Yoane WISSA",
+          "own_goal": false,
+          "score_before": "1-0",
+          "score_after": "1-1",
+          "team_score_before": 0,
+          "opponent_score_before": 1,
+          "team_score_after": 1,
+          "opponent_score_after": 1,
+          "tags": [
+            "equalizer",
+            "comeback_equalizer"
+          ]
+        }
+      ],
+      "decisive_goal": null
+    },
+    "FIFA-2026-M24-UZB-COL": {
+      "match_key": "FIFA-2026-M24-UZB-COL",
+      "match_no": 24,
+      "match_date": "2026-06-17",
+      "home_team": "Uzbekistan",
+      "away_team": "Colombia",
+      "home_score": 1,
+      "away_score": 3,
+      "winner_team": "Colombia",
+      "home_trailing_at_any_point": true,
+      "away_trailing_at_any_point": false,
+      "home_came_from_behind_to_win": false,
+      "away_came_from_behind_to_win": false,
+      "goals": [
+        {
+          "goal_order": 1,
+          "minute": 40,
+          "team": "Colombia",
+          "player_team": "Colombia",
+          "player_name": "Daniel MUNOZ",
+          "own_goal": false,
+          "score_before": "0-0",
+          "score_after": "0-1",
+          "team_score_before": 0,
+          "opponent_score_before": 0,
+          "team_score_after": 1,
+          "opponent_score_after": 0,
+          "tags": [
+            "opening_goal",
+            "go_ahead_goal"
+          ]
+        },
+        {
+          "goal_order": 2,
+          "minute": 60,
+          "team": "Uzbekistan",
+          "player_team": "Uzbekistan",
+          "player_name": "Abbosbek FAYZULLAEV",
+          "own_goal": false,
+          "score_before": "0-1",
+          "score_after": "1-1",
+          "team_score_before": 0,
+          "opponent_score_before": 1,
+          "team_score_after": 1,
+          "opponent_score_after": 1,
+          "tags": [
+            "equalizer",
+            "comeback_equalizer"
+          ]
+        },
+        {
+          "goal_order": 3,
+          "minute": 65,
+          "team": "Colombia",
+          "player_team": "Colombia",
+          "player_name": "Luis DIAZ",
+          "own_goal": false,
+          "score_before": "1-1",
+          "score_after": "1-2",
+          "team_score_before": 1,
+          "opponent_score_before": 1,
+          "team_score_after": 2,
+          "opponent_score_after": 1,
+          "tags": [
+            "go_ahead_goal"
+          ]
+        },
+        {
+          "goal_order": 4,
+          "minute": 99,
+          "team": "Colombia",
+          "player_team": "Colombia",
+          "player_name": "Jaminton CAMPAZ",
+          "own_goal": false,
+          "score_before": "1-2",
+          "score_after": "1-3",
+          "team_score_before": 2,
+          "opponent_score_before": 1,
+          "team_score_after": 3,
+          "opponent_score_after": 1,
+          "tags": [
+            "late_goal",
+            "stoppage_time_goal"
+          ]
+        }
+      ],
+      "decisive_goal": null
+    }
+  },
   "choices": [
     {
       "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
       "award_label": {
         "en": "Player of the Day",
         "zh": "每日最佳球员"
       },
-      "rank": 1,
-      "match_key": "FIFA-2026-M21-GHA-PAN",
-      "match_no": 21,
-      "player_no": 3,
+      "player_id": "FIFA-2026-M21-GHA-PAN|Ghana|3",
       "player_name": "Caleb YIRENKYI",
       "team": "Ghana",
       "opponent": "Panama",
+      "match_key": "FIFA-2026-M21-GHA-PAN",
+      "match_no": 21,
+      "player_no": 3,
       "position": "MF",
+      "score": 127.5,
+      "metrics": {
+        "shots": 2,
+        "on_target": 1,
+        "goals": 1,
+        "goal_involvements": 1,
+        "opening_goal": 1,
+        "go_ahead_goal": 1,
+        "match_winning_goal": 1,
+        "late_goal": 1,
+        "stoppage_time_goal": 1,
+        "late_match_winning_goal": 1,
+        "only_goal_winner": 1
+      },
       "evidence_chips": {
         "en": [
+          "only goal",
           "late winner",
           "goal scorer"
         ],
         "zh": [
+          "全场唯一进球",
           "补时制胜",
           "取得进球"
         ]
       },
+      "selection_reason": "Selected because he scored the only goal of Ghana's 1-0 win over Panama in stoppage time.",
       "content": {
         "en": {
-          "title": "The late answer",
-          "html": "<p>Yirenkyi gave Ghana the cleanest kind of impact: the winner at the end of a 1-0 match. The finish is the headline, but the rest of the profile matters too: he covered 12.6 km and still had enough left to decide the match in stoppage time.</p>"
+          "title": "Yirenkyi won it at the end",
+          "html": "<p>Ghana and Panama were still 0-0 deep into stoppage time. Caleb Yirenkyi scored in the 95th minute, the only goal in a 1-0 win.</p>"
         },
         "zh": {
-          "title": "绝杀就是最硬的答案",
-          "html": "<p>加纳这场等到补时才破局，Yirenkyi 把最后一脚踢成了制胜球。更关键的是，他不是只等机会：全场跑了12.6公里，还完成5次夺回球权，最后还能出现在决定比赛的位置。</p>"
+          "title": "伊伦基补时制胜",
+          "html": "<p>加纳1-0巴拿马，伊伦基第95分钟打进全场唯一进球。比赛憋到最后才分出胜负，这一下来得够狠。</p>"
         }
       }
     },
     {
       "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
       "award_label": {
         "en": "Player of the Day",
         "zh": "每日最佳球员"
       },
-      "rank": 2,
-      "match_key": "FIFA-2026-M24-UZB-COL",
-      "match_no": 24,
-      "player_no": 7,
+      "player_id": "FIFA-2026-M24-UZB-COL|Colombia|7",
       "player_name": "Luis DIAZ",
       "team": "Colombia",
       "opponent": "Uzbekistan",
+      "match_key": "FIFA-2026-M24-UZB-COL",
+      "match_no": 24,
+      "player_no": 7,
       "position": "FW",
+      "score": 88.85,
+      "metrics": {
+        "shots": 2,
+        "on_target": 1,
+        "goals": 1,
+        "assists": 1,
+        "goal_involvements": 2,
+        "go_ahead_goal": 1
+      },
       "evidence_chips": {
         "en": [
-          "match-winning goal",
+          "go-ahead goal",
           "goal scorer",
-          "found again and again"
+          "assist"
         ],
         "zh": [
-          "打入制胜球",
+          "取得领先",
           "取得进球",
-          "持续接应"
+          "送出助攻"
         ]
       },
+      "selection_reason": "Selected because he assisted Colombia's opener and then scored the 65th-minute go-ahead goal in the 3-1 win over Uzbekistan.",
       "content": {
         "en": {
-          "title": "The goal that tilted it",
-          "html": "<p>Diaz gave Colombia the decisive touch after Uzbekistan had pulled the match level. The goal is the simple reason he belongs here, but his wider attacking profile backs it up: 25 received offers and 30 in-behind offers made him the forward target Colombia kept finding.</p>"
+          "title": "Diaz had the goal and the assist",
+          "html": "<p>Luis Diaz set up Colombia's opener against Uzbekistan, then scored five minutes after the equaliser. His goal put Colombia back in front on the way to a 3-1 win.</p>"
         },
         "zh": {
-          "title": "迪亚斯站到了关键位置",
-          "html": "<p>乌兹别克斯坦扳平之后，哥伦比亚需要有人把比分再拿回来，迪亚斯完成了那一下。更有意思的是，他全场不是只等最后一脚：25次接应成功、30次身后接应，说明进攻很多时候都在找他。</p>"
+          "title": "迪亚斯一传一射",
+          "html": "<p>哥伦比亚3-1乌兹别克斯坦，迪亚斯先助攻穆尼奥斯首开纪录。1-1之后，他又自己打进2-1，把局面重新拉回来。</p>"
         }
       }
     },
     {
       "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
       "award_label": {
         "en": "Player of the Day",
         "zh": "每日最佳球员"
       },
-      "rank": 3,
-      "match_key": "FIFA-2026-M21-GHA-PAN",
-      "match_no": 21,
-      "player_no": 16,
-      "player_name": "Andres ANDRADE",
-      "team": "Panama",
-      "opponent": "Ghana",
-      "position": "DF",
+      "player_id": "FIFA-2026-M22-ENG-CRO|England|9",
+      "player_name": "Harry KANE",
+      "team": "England",
+      "opponent": "Croatia",
+      "match_key": "FIFA-2026-M22-ENG-CRO",
+      "match_no": 22,
+      "player_no": 9,
+      "position": "FW",
+      "score": 86.61,
+      "metrics": {
+        "shots": 7,
+        "on_target": 3,
+        "goals": 2,
+        "goal_involvements": 2,
+        "brace": 1,
+        "opening_goal": 1,
+        "go_ahead_goal": 2
+      },
       "evidence_chips": {
         "en": [
-          "repeated line breaks",
-          "ball-winning profile"
+          "brace",
+          "opening goal",
+          "high shot quality"
         ],
         "zh": [
-          "持续打穿防线",
-          "夺回球权能力突出"
+          "梅开二度",
+          "首开纪录",
+          "射门质量突出"
         ]
       },
+      "selection_reason": "Selected because he scored twice before half-time in England's 4-2 win over Croatia, including the opener and the 42nd-minute go-ahead goal.",
       "content": {
         "en": {
-          "title": "Panama's case despite the score",
-          "html": "<p>The decisive goals take the headline, but Andrade still stays in the top group because his all-round game was too heavy to ignore. For a defender, 34 completed line breaks is a huge passing footprint; adding 11 possession regains makes the case stronger.</p>"
+          "title": "Kane scored twice before the break",
+          "html": "<p>Harry Kane opened England's scoring from the spot and added another before half-time. Seven shots and three on target matched the directness of his brace.</p>"
         },
         "zh": {
-          "title": "安德拉德没被比分盖住",
-          "html": "<p>巴拿马输了球，但安德拉德这场很难被比分盖掉。一个后卫34次打穿防线已经够突出；再加11次夺回球权，他不是只在后场出球，也一直在把回合抢回来。</p>"
+          "title": "凯恩梅开二度",
+          "html": "<p>英格兰4-2克罗地亚，凯恩第12分钟点球先进，42分钟又把比分改成2-1。7脚射门3次射正，英格兰前半场两个球都由他包了。</p>"
         }
       }
     },
     {
-      "award_type": "progression_pick",
+      "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
       "award_label": {
-        "en": "Progression Pick",
-        "zh": "推进精选"
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
       },
-      "rank": 1,
-      "match_key": "FIFA-2026-M23-POR-COD",
-      "match_no": 23,
-      "player_no": 4,
-      "player_name": "TOMAS ARAUJO",
+      "player_id": "FIFA-2026-M23-POR-COD|Portugal|15",
+      "player_name": "JOAO NEVES",
       "team": "Portugal",
       "opponent": "Congo DR",
-      "position": "DF",
-      "evidence_chips": {
-        "en": [
-          "repeated line breaks"
-        ],
-        "zh": [
-          "持续打穿防线"
-        ]
-      },
-      "content": {
-        "en": {
-          "title": "Forward passes from the back",
-          "html": "<p>Araujo's progression case is mostly about the first pass into better territory. With 32 completed line breaks, he gave Portugal a steady route out from deeper areas even when the match itself stayed tight.</p>"
-        },
-        "zh": {
-          "title": "阿劳若把后场往前接",
-          "html": "<p>这个推进不是带球一路冲，而是从后场把传球线路打出来。阿劳若32次打穿防线，说明葡萄牙很多向前的第一脚，是从他这里出去的。</p>"
-        }
-      }
-    },
-    {
-      "award_type": "defensive_pick",
-      "award_label": {
-        "en": "Defensive Pick",
-        "zh": "防守精选"
-      },
-      "rank": 1,
-      "match_key": "FIFA-2026-M21-GHA-PAN",
-      "match_no": 21,
-      "player_no": 4,
-      "player_name": "Jonas ADJETEY",
-      "team": "Ghana",
-      "opponent": "Panama",
-      "position": "DF",
-      "evidence_chips": {
-        "en": [
-          "ball-winning profile",
-          "disrupted attacks"
-        ],
-        "zh": [
-          "夺回球权能力突出",
-          "持续破坏进攻"
-        ]
-      },
-      "content": {
-        "en": {
-          "title": "The stops behind Ghana's 1-0",
-          "html": "<p>Ghana's winner needed protecting, and Adjetey gave them the right kind of defensive volume. His nine possession regains, nine interruptions and four blocks kept turning Panama attacks into resets.</p>"
-        },
-        "zh": {
-          "title": "阿杰泰守住了加纳的1-0",
-          "html": "<p>加纳能把1-0守住，阿杰泰这种后场硬活很关键。9次夺回球权、9次破坏进攻，还有4次封堵，他让巴拿马很多回合刚起势就断掉。</p>"
-        }
-      }
-    },
-    {
-      "award_type": "hidden_gem",
-      "award_label": {
-        "en": "Hidden Gem",
-        "zh": "隐藏亮点"
-      },
-      "rank": 1,
       "match_key": "FIFA-2026-M23-POR-COD",
       "match_no": 23,
-      "player_no": 23,
-      "player_name": "VITINHA",
-      "team": "Portugal",
-      "opponent": "Congo DR",
+      "player_no": 15,
       "position": "MF",
+      "score": 78.12,
+      "metrics": {
+        "shots": 1,
+        "on_target": 1,
+        "goals": 1,
+        "goal_involvements": 1,
+        "opening_goal": 1,
+        "go_ahead_goal": 1
+      },
       "evidence_chips": {
         "en": [
-          "repeated line breaks",
-          "found again and again"
+          "opening goal",
+          "goal scorer"
         ],
         "zh": [
-          "持续打穿防线",
-          "持续接应"
+          "首开纪录",
+          "取得进球"
         ]
       },
+      "selection_reason": "Selected as the fourth card because he scored Portugal's early goal in the 1-1 draw with Congo DR and also had the strongest Portugal midfield involvement profile in the candidate pool.",
       "content": {
         "en": {
-          "title": "The quiet connector",
-          "html": "<p>Vitinha is the quieter pick because the match had louder moments elsewhere. Still, 27 completed line breaks and 27 received offers show how often Portugal used him to keep possession moving instead of letting the draw become static.</p>"
+          "title": "Joao Neves gave Portugal the lead",
+          "html": "<p>Joao Neves scored after six minutes in Portugal's 1-1 draw with Congo DR. His midfield packet was busy too: 23 received offers and 14 completed line breaks.</p>"
         },
         "zh": {
-          "title": "维蒂尼亚把进攻接起来了",
-          "html": "<p>这张 hidden gem 不是给进球，而是给连续性。维蒂尼亚27次打穿防线，把球送过第一道压力；27次接应成功，又让队友一直有能继续打的出口。</p>"
+          "title": "若昂·内维斯早早破门",
+          "html": "<p>葡萄牙1-1刚果民主共和国，若昂·内维斯第6分钟先破门。后面比分被追平，但他还在中场持续接球向前，23次接应、14次打穿防线，葡萄牙这边还是他最完整。</p>"
         }
       }
     }
   ],
+  "selection_validation": {
+    "schema_version": 1,
+    "status": "pass",
+    "warnings": []
+  },
   "audit": []
 }

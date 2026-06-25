@@ -20,9 +20,19 @@
     .choice-card aside strong { display: block; font-size: 34px; }
     .choice-card aside > span { color: #59677c; font-size: 12px; text-transform: uppercase; }
     .meta { margin: 0; color: #59677c; }
+    .award-badges { display: flex; flex-wrap: wrap; gap: 6px; margin: -6px 0 10px; }
+    .award-badge { border: 1px solid #dce5f2; background: #f7f9fc; color: #35465d; border-radius: 999px; padding: 4px 8px; font-size: 12px; font-weight: 700; }
     .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
     .chips span { background: #edf2fa; border: 1px solid #dce5f2; border-radius: 999px; padding: 5px 9px; font-size: 12px; }
+    .archive-list { display: grid; gap: 10px; margin-top: 22px; }
+    .archive-row { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; align-items: center; gap: 12px; padding: 14px 16px; color: inherit; text-decoration: none; background: #fff; border: 1px solid #dde3ee; border-radius: 8px; }
+    .archive-row:hover { border-color: #b7c4d4; }
+    .archive-row span { color: #59677c; font-size: 13px; }
+    .badge { justify-self: end; border-radius: 999px; padding: 4px 9px; border: 1px solid #dce5f2; background: #edf2fa; color: #35465d; font-size: 12px; }
+    .badge.official { border-color: #b7dfd4; background: #e7f7f1; color: #0f766e; }
+    .badge.legacy { border-color: #e7d8ad; background: #fff7df; color: #806215; }
     @media (max-width: 720px) { .choice-card { grid-template-columns: 1fr; } .choice-card aside { border-left: 0; border-top: 1px solid #e8edf5; padding-left: 0; padding-top: 14px; } }
+    @media (max-width: 720px) { .archive-row { grid-template-columns: 1fr; align-items: start; } .badge { justify-self: start; } }
     </style>
 </head>
 <body>
@@ -30,102 +40,70 @@
     <p class="eyebrow">FIFA PMSR Data</p>
     <h1>Editor's Choices · 2026-06-17</h1>
     <p class="lede">Data-informed selections from the latest structured PMSR dataset. These are not official awards.</p>
-    
-    <article class="choice-card">
+        <article class="choice-card">
       <div>
         <p class="award">Player of the Day</p>
+        <div class="award-badges"></div>
         <h2>🇬🇭 Caleb YIRENKYI</h2>
         <p class="meta">🇬🇭 Ghana vs 🇵🇦 Panama · Match 21</p>
-        <h3>The late answer</h3>
-        <p>Yirenkyi gave Ghana the cleanest kind of impact: the winner at the end of a 1-0 match. The finish is the headline, but the rest of the profile matters too: he covered 12.6 km and still had enough left to decide the match in stoppage time.</p>
-        <h3>绝杀就是最硬的答案</h3>
-        <p>加纳这场等到补时才破局，Yirenkyi 把最后一脚踢成了制胜球。更关键的是，他不是只等机会：全场跑了12.6公里，还完成5次夺回球权，最后还能出现在决定比赛的位置。</p>
+        <h3>Yirenkyi won it at the end</h3>
+        <p>Ghana and Panama were still 0-0 deep into stoppage time. Caleb Yirenkyi scored in the 95th minute, the only goal in a 1-0 win.</p>
+        <h3>伊伦基补时制胜</h3>
+        <p>加纳1-0巴拿马，伊伦基第95分钟打进全场唯一进球。比赛憋到最后才分出胜负，这一下来得够狠。</p>
       </div>
       <aside>
-        <div class="chips"><span>late winner</span><span>goal scorer</span></div>
+        <div class="chips"><span>only goal</span><span>late winner</span><span>goal scorer</span></div>
       </aside>
     </article>
-            
 
     <article class="choice-card">
       <div>
         <p class="award">Player of the Day</p>
+        <div class="award-badges"></div>
         <h2>🇨🇴 Luis DIAZ</h2>
         <p class="meta">🇨🇴 Colombia vs 🇺🇿 Uzbekistan · Match 24</p>
-        <h3>The goal that tilted it</h3>
-        <p>Diaz gave Colombia the decisive touch after Uzbekistan had pulled the match level. The goal is the simple reason he belongs here, but his wider attacking profile backs it up: 25 received offers and 30 in-behind offers made him the forward target Colombia kept finding.</p>
-        <h3>迪亚斯站到了关键位置</h3>
-        <p>乌兹别克斯坦扳平之后，哥伦比亚需要有人把比分再拿回来，迪亚斯完成了那一下。更有意思的是，他全场不是只等最后一脚：25次接应成功、30次身后接应，说明进攻很多时候都在找他。</p>
+        <h3>Diaz had the goal and the assist</h3>
+        <p>Luis Diaz set up Colombia's opener against Uzbekistan, then scored five minutes after the equaliser. His goal put Colombia back in front on the way to a 3-1 win.</p>
+        <h3>迪亚斯一传一射</h3>
+        <p>哥伦比亚3-1乌兹别克斯坦，迪亚斯先助攻穆尼奥斯首开纪录。1-1之后，他又自己打进2-1，把局面重新拉回来。</p>
       </div>
       <aside>
-        <div class="chips"><span>match-winning goal</span><span>goal scorer</span><span>found again and again</span></div>
+        <div class="chips"><span>go-ahead goal</span><span>goal scorer</span><span>assist</span></div>
       </aside>
     </article>
-            
 
     <article class="choice-card">
       <div>
         <p class="award">Player of the Day</p>
-        <h2>🇵🇦 Andres ANDRADE</h2>
-        <p class="meta">🇵🇦 Panama vs 🇬🇭 Ghana · Match 21</p>
-        <h3>Panama's case despite the score</h3>
-        <p>The decisive goals take the headline, but Andrade still stays in the top group because his all-round game was too heavy to ignore. For a defender, 34 completed line breaks is a huge passing footprint; adding 11 possession regains makes the case stronger.</p>
-        <h3>安德拉德没被比分盖住</h3>
-        <p>巴拿马输了球，但安德拉德这场很难被比分盖掉。一个后卫34次打穿防线已经够突出；再加11次夺回球权，他不是只在后场出球，也一直在把回合抢回来。</p>
+        <div class="award-badges"></div>
+        <h2>🏴󠁧󠁢󠁥󠁮󠁧󠁿 Harry KANE</h2>
+        <p class="meta">🏴󠁧󠁢󠁥󠁮󠁧󠁿 England vs 🇭🇷 Croatia · Match 22</p>
+        <h3>Kane scored twice before the break</h3>
+        <p>Harry Kane opened England's scoring from the spot and added another before half-time. Seven shots and three on target matched the directness of his brace.</p>
+        <h3>凯恩梅开二度</h3>
+        <p>英格兰4-2克罗地亚，凯恩第12分钟点球先进，42分钟又把比分改成2-1。7脚射门3次射正，英格兰前半场两个球都由他包了。</p>
       </div>
       <aside>
-        <div class="chips"><span>repeated line breaks</span><span>ball-winning profile</span></div>
+        <div class="chips"><span>brace</span><span>opening goal</span><span>high shot quality</span></div>
       </aside>
     </article>
-            
 
     <article class="choice-card">
       <div>
-        <p class="award">Progression Pick</p>
-        <h2>🇵🇹 TOMAS ARAUJO</h2>
+        <p class="award">Player of the Day</p>
+        <div class="award-badges"></div>
+        <h2>🇵🇹 JOAO NEVES</h2>
         <p class="meta">🇵🇹 Portugal vs 🇨🇩 Congo DR · Match 23</p>
-        <h3>Forward passes from the back</h3>
-        <p>Araujo's progression case is mostly about the first pass into better territory. With 32 completed line breaks, he gave Portugal a steady route out from deeper areas even when the match itself stayed tight.</p>
-        <h3>阿劳若把后场往前接</h3>
-        <p>这个推进不是带球一路冲，而是从后场把传球线路打出来。阿劳若32次打穿防线，说明葡萄牙很多向前的第一脚，是从他这里出去的。</p>
+        <h3>Joao Neves gave Portugal the lead</h3>
+        <p>Joao Neves scored after six minutes in Portugal's 1-1 draw with Congo DR. His midfield packet was busy too: 23 received offers and 14 completed line breaks.</p>
+        <h3>若昂·内维斯早早破门</h3>
+        <p>葡萄牙1-1刚果民主共和国，若昂·内维斯第6分钟先破门。后面比分被追平，但他还在中场持续接球向前，23次接应、14次打穿防线，葡萄牙这边还是他最完整。</p>
       </div>
       <aside>
-        <div class="chips"><span>repeated line breaks</span></div>
+        <div class="chips"><span>opening goal</span><span>goal scorer</span></div>
       </aside>
     </article>
-            
 
-    <article class="choice-card">
-      <div>
-        <p class="award">Defensive Pick</p>
-        <h2>🇬🇭 Jonas ADJETEY</h2>
-        <p class="meta">🇬🇭 Ghana vs 🇵🇦 Panama · Match 21</p>
-        <h3>The stops behind Ghana's 1-0</h3>
-        <p>Ghana's winner needed protecting, and Adjetey gave them the right kind of defensive volume. His nine possession regains, nine interruptions and four blocks kept turning Panama attacks into resets.</p>
-        <h3>阿杰泰守住了加纳的1-0</h3>
-        <p>加纳能把1-0守住，阿杰泰这种后场硬活很关键。9次夺回球权、9次破坏进攻，还有4次封堵，他让巴拿马很多回合刚起势就断掉。</p>
-      </div>
-      <aside>
-        <div class="chips"><span>ball-winning profile</span><span>disrupted attacks</span></div>
-      </aside>
-    </article>
-            
-
-    <article class="choice-card">
-      <div>
-        <p class="award">Hidden Gem</p>
-        <h2>🇵🇹 VITINHA</h2>
-        <p class="meta">🇵🇹 Portugal vs 🇨🇩 Congo DR · Match 23</p>
-        <h3>The quiet connector</h3>
-        <p>Vitinha is the quieter pick because the match had louder moments elsewhere. Still, 27 completed line breaks and 27 received offers show how often Portugal used him to keep possession moving instead of letting the draw become static.</p>
-        <h3>维蒂尼亚把进攻接起来了</h3>
-        <p>这张 hidden gem 不是给进球，而是给连续性。维蒂尼亚27次打穿防线，把球送过第一道压力；27次接应成功，又让队友一直有能继续打的出口。</p>
-      </div>
-      <aside>
-        <div class="chips"><span>repeated line breaks</span><span>found again and again</span></div>
-      </aside>
-    </article>
-            
   </main>
 </body>
 </html>
