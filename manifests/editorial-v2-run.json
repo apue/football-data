@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-06-25T08:04:19+00:00",
+  "generated_at": "2026-06-25T08:27:13+00:00",
   "status": "success",
-  "match_date": "2026-06-17",
+  "match_date": "2026-06-18",
   "workflow_variant": "ai_rerank_selection_v1",
   "experiment_id": "ai_rerank_reader_loop_v5",
   "editor_runtime": "local_codex",
@@ -25,23 +25,23 @@
   "choices": [
     {
       "award_type": "player_of_the_day",
-      "player_name": "Caleb YIRENKYI",
-      "team": "Ghana"
+      "player_name": "Jonathan DAVID",
+      "team": "Canada"
     },
     {
       "award_type": "player_of_the_day",
-      "player_name": "Luis DIAZ",
-      "team": "Colombia"
+      "player_name": "Johan MANZAMBI",
+      "team": "Switzerland"
     },
     {
       "award_type": "player_of_the_day",
-      "player_name": "Harry KANE",
-      "team": "England"
+      "player_name": "Luis ROMO",
+      "team": "Mexico"
     },
     {
       "award_type": "player_of_the_day",
-      "player_name": "JOAO NEVES",
-      "team": "Portugal"
+      "player_name": "Teboho MOKOENA",
+      "team": "South Africa"
     }
   ]
 }
