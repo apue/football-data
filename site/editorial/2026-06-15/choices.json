@@ -1,0 +1,493 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-06-25T07:03:36+00:00",
+  "compiled_at": "2026-06-25T07:03:36+00:00",
+  "match_date": "2026-06-15",
+  "scoring_version": "v0.4",
+  "editorial_generation": {
+    "workflow_variant": "ai_rerank_selection_v1",
+    "experiment_id": "ai_rerank_slate_self_review_v4",
+    "selection_mode": "ai_rerank_only",
+    "review_profile": "reader_intuition_v1",
+    "revision_policy": {
+      "mode": "local_editor_revise_until_review_passes",
+      "max_revision_rounds": 2,
+      "blocking_review_requires_revision": true
+    },
+    "editorial_review_status": "pass",
+    "uses_official_assists": true,
+    "uses_goal_involvements": true,
+    "event_source": "fifa_timeline_api",
+    "event_sources": {
+      "goal_involvements": "fifa_timeline_api"
+    }
+  },
+  "matches": [
+    {
+      "match_key": "FIFA-2026-M13-KSA-URU",
+      "match_no": 13,
+      "match_date": "2026-06-15",
+      "kickoff_time": "18:00",
+      "stadium": "Miami Stadium",
+      "home_team": "Saudi Arabia",
+      "away_team": "Uruguay",
+      "home_score": 1,
+      "away_score": 1
+    },
+    {
+      "match_key": "FIFA-2026-M14-ESP-CPV",
+      "match_no": 14,
+      "match_date": "2026-06-15",
+      "kickoff_time": "12:00",
+      "stadium": "Atlanta Stadium",
+      "home_team": "Spain",
+      "away_team": "Cabo Verde",
+      "home_score": 0,
+      "away_score": 0
+    },
+    {
+      "match_key": "FIFA-2026-M15-IRN-NZL",
+      "match_no": 15,
+      "match_date": "2026-06-15",
+      "kickoff_time": "18:00",
+      "stadium": "Los Angeles Stadium",
+      "home_team": "IR Iran",
+      "away_team": "New Zealand",
+      "home_score": 2,
+      "away_score": 2
+    },
+    {
+      "match_key": "FIFA-2026-M16-BEL-EGY",
+      "match_no": 16,
+      "match_date": "2026-06-15",
+      "kickoff_time": "12:00",
+      "stadium": "Seattle Stadium",
+      "home_team": "Belgium",
+      "away_team": "Egypt",
+      "home_score": 1,
+      "away_score": 1
+    }
+  ],
+  "match_flows": {
+    "FIFA-2026-M13-KSA-URU": {
+      "match_key": "FIFA-2026-M13-KSA-URU",
+      "match_no": 13,
+      "match_date": "2026-06-15",
+      "home_team": "Saudi Arabia",
+      "away_team": "Uruguay",
+      "home_score": 1,
+      "away_score": 1,
+      "winner_team": null,
+      "home_trailing_at_any_point": false,
+      "away_trailing_at_any_point": true,
+      "home_came_from_behind_to_win": false,
+      "away_came_from_behind_to_win": false,
+      "goals": [
+        {
+          "goal_order": 1,
+          "minute": 41,
+          "team": "Saudi Arabia",
+          "player_team": "Saudi Arabia",
+          "player_name": "ABDULELAH ALAMRI",
+          "own_goal": false,
+          "score_before": "0-0",
+          "score_after": "1-0",
+          "team_score_before": 0,
+          "opponent_score_before": 0,
+          "team_score_after": 1,
+          "opponent_score_after": 0,
+          "tags": [
+            "opening_goal",
+            "go_ahead_goal"
+          ]
+        },
+        {
+          "goal_order": 2,
+          "minute": 80,
+          "team": "Uruguay",
+          "player_team": "Uruguay",
+          "player_name": "Maxi ARAUJO",
+          "own_goal": false,
+          "score_before": "1-0",
+          "score_after": "1-1",
+          "team_score_before": 0,
+          "opponent_score_before": 1,
+          "team_score_after": 1,
+          "opponent_score_after": 1,
+          "tags": [
+            "equalizer",
+            "comeback_equalizer",
+            "late_goal"
+          ]
+        }
+      ],
+      "decisive_goal": null
+    },
+    "FIFA-2026-M14-ESP-CPV": {
+      "match_key": "FIFA-2026-M14-ESP-CPV",
+      "match_no": 14,
+      "match_date": "2026-06-15",
+      "home_team": "Spain",
+      "away_team": "Cabo Verde",
+      "home_score": 0,
+      "away_score": 0,
+      "winner_team": null,
+      "home_trailing_at_any_point": false,
+      "away_trailing_at_any_point": false,
+      "home_came_from_behind_to_win": false,
+      "away_came_from_behind_to_win": false,
+      "goals": [],
+      "decisive_goal": null
+    },
+    "FIFA-2026-M15-IRN-NZL": {
+      "match_key": "FIFA-2026-M15-IRN-NZL",
+      "match_no": 15,
+      "match_date": "2026-06-15",
+      "home_team": "IR Iran",
+      "away_team": "New Zealand",
+      "home_score": 2,
+      "away_score": 2,
+      "winner_team": null,
+      "home_trailing_at_any_point": true,
+      "away_trailing_at_any_point": false,
+      "home_came_from_behind_to_win": false,
+      "away_came_from_behind_to_win": false,
+      "goals": [
+        {
+          "goal_order": 1,
+          "minute": 7,
+          "team": "New Zealand",
+          "player_team": "New Zealand",
+          "player_name": "Elijah JUST",
+          "own_goal": false,
+          "score_before": "0-0",
+          "score_after": "0-1",
+          "team_score_before": 0,
+          "opponent_score_before": 0,
+          "team_score_after": 1,
+          "opponent_score_after": 0,
+          "tags": [
+            "opening_goal",
+            "go_ahead_goal"
+          ]
+        },
+        {
+          "goal_order": 2,
+          "minute": 32,
+          "team": "IR Iran",
+          "player_team": "IR Iran",
+          "player_name": "Ramin REZAEIAN",
+          "own_goal": false,
+          "score_before": "0-1",
+          "score_after": "1-1",
+          "team_score_before": 0,
+          "opponent_score_before": 1,
+          "team_score_after": 1,
+          "opponent_score_after": 1,
+          "tags": [
+            "equalizer",
+            "comeback_equalizer"
+          ]
+        },
+        {
+          "goal_order": 3,
+          "minute": 54,
+          "team": "New Zealand",
+          "player_team": "New Zealand",
+          "player_name": "Elijah JUST",
+          "own_goal": false,
+          "score_before": "1-1",
+          "score_after": "1-2",
+          "team_score_before": 1,
+          "opponent_score_before": 1,
+          "team_score_after": 2,
+          "opponent_score_after": 1,
+          "tags": [
+            "go_ahead_goal"
+          ]
+        },
+        {
+          "goal_order": 4,
+          "minute": 64,
+          "team": "IR Iran",
+          "player_team": "IR Iran",
+          "player_name": "Mohammad MOHEBBI",
+          "own_goal": false,
+          "score_before": "1-2",
+          "score_after": "2-2",
+          "team_score_before": 1,
+          "opponent_score_before": 2,
+          "team_score_after": 2,
+          "opponent_score_after": 2,
+          "tags": [
+            "equalizer",
+            "comeback_equalizer"
+          ]
+        }
+      ],
+      "decisive_goal": null
+    },
+    "FIFA-2026-M16-BEL-EGY": {
+      "match_key": "FIFA-2026-M16-BEL-EGY",
+      "match_no": 16,
+      "match_date": "2026-06-15",
+      "home_team": "Belgium",
+      "away_team": "Egypt",
+      "home_score": 1,
+      "away_score": 1,
+      "winner_team": null,
+      "home_trailing_at_any_point": true,
+      "away_trailing_at_any_point": false,
+      "home_came_from_behind_to_win": false,
+      "away_came_from_behind_to_win": false,
+      "goals": [
+        {
+          "goal_order": 1,
+          "minute": 19,
+          "team": "Egypt",
+          "player_team": "Egypt",
+          "player_name": "EMAM ASHOUR",
+          "own_goal": false,
+          "score_before": "0-0",
+          "score_after": "0-1",
+          "team_score_before": 0,
+          "opponent_score_before": 0,
+          "team_score_after": 1,
+          "opponent_score_after": 0,
+          "tags": [
+            "opening_goal",
+            "go_ahead_goal"
+          ]
+        },
+        {
+          "goal_order": 2,
+          "minute": 66,
+          "team": "Belgium",
+          "player_team": "Egypt",
+          "player_name": "MOHAMED HANY",
+          "own_goal": true,
+          "score_before": "0-1",
+          "score_after": "1-1",
+          "team_score_before": 0,
+          "opponent_score_before": 1,
+          "team_score_after": 1,
+          "opponent_score_after": 1,
+          "tags": [
+            "equalizer",
+            "comeback_equalizer"
+          ]
+        }
+      ],
+      "decisive_goal": null
+    }
+  },
+  "choices": [
+    {
+      "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
+      "award_label": {
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
+      },
+      "player_id": "FIFA-2026-M15-IRN-NZL|IR Iran|23",
+      "player_name": "Ramin REZAEIAN",
+      "team": "IR Iran",
+      "opponent": "New Zealand",
+      "match_key": "FIFA-2026-M15-IRN-NZL",
+      "match_no": 15,
+      "player_no": 23,
+      "position": "DF",
+      "score": 106.3,
+      "metrics": {
+        "shots": 1,
+        "on_target": 1,
+        "goals": 1,
+        "assists": 1,
+        "goal_involvements": 2,
+        "equalizing_goal": 1,
+        "comeback_equalizer": 1
+      },
+      "evidence_chips": {
+        "en": [
+          "comeback equaliser",
+          "equaliser",
+          "goal scorer",
+          "assist"
+        ],
+        "zh": [
+          "逆转扳平",
+          "扳平进球",
+          "取得进球",
+          "送出助攻"
+        ]
+      },
+      "selection_reason": "Selected because he scored Iran's first equaliser and assisted the second in the 2-2 draw with New Zealand.",
+      "content": {
+        "en": {
+          "title": "Rezaeian kept Iran attached",
+          "html": "<p>Iran fell behind twice against New Zealand. Ramin Rezaeian scored the first equaliser and assisted the second, so both Iran goals ran through him.</p>"
+        },
+        "zh": {
+          "title": "雷扎伊安一传一射",
+          "html": "<p>伊朗两次落后都追了回来。雷扎伊安先在第32分钟扳平，又助攻第二个扳平球，两个节点都踩得很准。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
+      "award_label": {
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
+      },
+      "player_id": "FIFA-2026-M15-IRN-NZL|New Zealand|11",
+      "player_name": "Elijah JUST",
+      "team": "New Zealand",
+      "opponent": "IR Iran",
+      "match_key": "FIFA-2026-M15-IRN-NZL",
+      "match_no": 15,
+      "player_no": 11,
+      "position": "MF",
+      "score": 101.53,
+      "metrics": {
+        "shots": 2,
+        "on_target": 2,
+        "goals": 2,
+        "goal_involvements": 2,
+        "brace": 1,
+        "opening_goal": 1,
+        "go_ahead_goal": 2
+      },
+      "evidence_chips": {
+        "en": [
+          "brace",
+          "opening goal"
+        ],
+        "zh": [
+          "梅开二度",
+          "首开纪录"
+        ]
+      },
+      "selection_reason": "Selected because he scored both New Zealand goals, putting them ahead twice in the 2-2 draw with Iran.",
+      "content": {
+        "en": {
+          "title": "Just put New Zealand ahead twice",
+          "html": "<p>Elijah Just had two shots on target and scored both. New Zealand led 1-0 and then 2-1 because he took both of those chances.</p>"
+        },
+        "zh": {
+          "title": "贾斯特梅开二度",
+          "html": "<p>新西兰两次领先，都是贾斯特打进去的。两脚射正换来两个进球，最后没赢下来，但他的个人表现已经很清楚。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
+      "award_label": {
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
+      },
+      "player_id": "FIFA-2026-M13-KSA-URU|Uruguay|20",
+      "player_name": "Maxi ARAUJO",
+      "team": "Uruguay",
+      "opponent": "Saudi Arabia",
+      "match_key": "FIFA-2026-M13-KSA-URU",
+      "match_no": 13,
+      "player_no": 20,
+      "position": "MF",
+      "score": 70.35,
+      "metrics": {
+        "shots": 2,
+        "on_target": 2,
+        "goals": 1,
+        "goal_involvements": 1,
+        "equalizing_goal": 1,
+        "late_goal": 1,
+        "comeback_equalizer": 1
+      },
+      "evidence_chips": {
+        "en": [
+          "comeback equaliser",
+          "equaliser",
+          "goal scorer"
+        ],
+        "zh": [
+          "逆转扳平",
+          "扳平进球",
+          "取得进球"
+        ]
+      },
+      "selection_reason": "Selected because his 80th-minute equaliser took Uruguay from a 1-0 deficit to a 1-1 draw with Saudi Arabia.",
+      "content": {
+        "en": {
+          "title": "Araujo rescued Uruguay late",
+          "html": "<p>Uruguay were still trailing Saudi Arabia until the 80th minute. Maxi Araujo's equaliser turned a loss into a 1-1 draw.</p>"
+        },
+        "zh": {
+          "title": "阿劳霍第80分钟扳平",
+          "html": "<p>乌拉圭一直落后到第80分钟，马克西·阿劳霍把比分扳成1-1。两脚射正里有这一脚，至少把比赛从输球拉回平局。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "hidden_gem",
+      "award_types": [
+        "hidden_gem"
+      ],
+      "award_label": {
+        "en": "Hidden Gem",
+        "zh": "隐藏亮点"
+      },
+      "player_id": "FIFA-2026-M14-ESP-CPV|Cabo Verde|4",
+      "player_name": "PICO LOPES",
+      "team": "Cabo Verde",
+      "opponent": "Spain",
+      "match_key": "FIFA-2026-M14-ESP-CPV",
+      "match_no": 14,
+      "player_no": 4,
+      "position": "DF",
+      "score": 33.94,
+      "metrics": {
+        "offers_received": 6,
+        "line_breaks_completed": 10,
+        "ball_progressions": 1,
+        "possession_regains": 9,
+        "possession_interrupted": 9,
+        "blocks": 8
+      },
+      "evidence_chips": {
+        "en": [
+          "ball-winning profile",
+          "disrupted attacks"
+        ],
+        "zh": [
+          "夺回球权能力突出",
+          "持续破坏进攻"
+        ]
+      },
+      "selection_reason": "Selected as the hidden-gem defensive card because Cabo Verde held Spain to 0-0 despite Spain producing 27 attempts and 2.26 xG, and his packet shows 8 blocks, 9 regains, 9 interruptions, and 10 clearances.",
+      "content": {
+        "en": {
+          "title": "Pico Lopes held the line",
+          "html": "<p>Spain had 27 attempts and 2.26 xG, but Cabo Verde still left with a 0-0 draw. Pico Lopes finished with 8 blocks, 9 regains, 9 interruptions, and 10 clearances.</p>"
+        },
+        "zh": {
+          "title": "皮科守住这一分",
+          "html": "<p>西班牙27脚射门、2.26 xG，佛得角最后还是0-0。皮科·洛佩斯有8次封堵、9次夺回球权和10次解围，是防线里最硬的一段。</p>"
+        }
+      }
+    }
+  ],
+  "selection_validation": {
+    "schema_version": 1,
+    "status": "pass",
+    "warnings": []
+  },
+  "audit": []
+}
