@@ -1,37 +1,7 @@
 from __future__ import annotations
 
-import json
 from collections import Counter
 from typing import Any
-
-from pydantic import BaseModel, Field
-
-from football_data.llm_client import AgentTextClient
-
-
-class PlayerReview(BaseModel):
-    player_id: str
-    verdict: str
-    note: str
-
-
-class BlockingFinding(BaseModel):
-    category: str
-    severity: str
-    evidence: str
-    recommended_action: str
-
-
-class EditorialReviewOutput(BaseModel):
-    schema_version: int = 1
-    review_profile: str
-    status: str
-    reviewed_dimensions: list[str] = Field(default_factory=list)
-    slate_assessment: dict[str, Any] = Field(default_factory=dict)
-    selected_player_reviews: list[PlayerReview] = Field(default_factory=list)
-    unselected_candidate_reviews: list[PlayerReview] = Field(default_factory=list)
-    blocking_findings: list[BlockingFinding] = Field(default_factory=list)
-    revision_summary: str
 
 
 def build_editorial_review_payload(
@@ -109,27 +79,6 @@ def build_editorial_review_payload(
     )
     if match_coverage:
         payload["match_coverage"] = match_coverage
-    return payload
-
-
-def run_ai_editorial_review(
-    review_payload: dict[str, Any],
-    text_client: AgentTextClient,
-    review_profile: dict[str, Any],
-    *,
-    model: str,
-) -> dict[str, Any]:
-    instructions = "\n".join(str(item) for item in review_profile.get("instructions", []))
-    response = text_client.complete(
-        role="review_editor",
-        model=model,
-        instructions=instructions,
-        user_input=json.dumps(review_payload, ensure_ascii=False),
-        output_type=EditorialReviewOutput,
-    )
-    payload = json.loads(response)
-    if not isinstance(payload, dict):
-        raise ValueError("Editorial review agent must return a JSON object")
     return payload
 
 

@@ -35,9 +35,7 @@ Assists are not available as structured fields in the PMSR PDFs. The pipeline su
 - `manifests/sources.json` - source document manifest
 - `manifests/discovered-sources.json` - current FIFA hub discovery result
 - `manifests/update-events.json` - new matches, version updates, downloads, and failures
-- `manifests/editorial-queue.json` - pending Editor's Choices dates after data updates
-- `manifests/editorial-run.json` - latest autonomous editorial workflow status
-- `manifests/editorial-v2-run.json` - latest v2 AI rerank workflow audit
+- `manifests/editorial-v2-run.json` - latest local editorial packet/compile status
 - `examples/*.sql` - reusable SQL examples
 - `notebooks/*.ipynb` - notebook-style demo examples
 - `reports/editorial/*.md` - human-readable Editor's Choices reports when published
@@ -80,69 +78,43 @@ python scripts/backfill_fifa_timelines.py
 sqlite3 data/latest.sqlite < examples/top_fastest_players.sql
 sqlite3 data/latest.sqlite < examples/top_attacking_threats.sql
 sqlite3 data/latest.sqlite < examples/top_goal_involvements.sql
-python scripts/run_editorial_queue.py --fake --no-research --max-dates 1
+python scripts/prepare_editorial_packet.py --date YYYY-MM-DD --json
 python scripts/check_status.py
 ```
 
 ## Editor's Choices
 
-Editor's Choices are data-informed editorial picks generated from structured PMSR evidence. They are not official FIFA awards. The production path is `ai_rerank_selection_v1`: deterministic scoring builds a rich Top 8 candidate pool, an AI selection editor reranks only that pool, and separate English/Chinese copy editor calls write the published cards from the selected candidates' evidence packets. Deterministic Python owns scoring, candidate-pool construction, selection validation, artifact writing, and homepage rebuilds; LLM calls use the OpenAI Agents SDK with structured outputs.
+Editor's Choices are data-informed editorial picks generated from structured PMSR evidence. They are not official FIFA awards. The production path is local-first: deterministic scoring builds a rich candidate pool, local Codex acts as the editor, and deterministic validation compiles the approved `selection_decision.json`, `copy.json`, and `editorial_review.json` into static site artifacts.
 
 The active experiment is resolved from `config/editorial/production.json`. Each experiment pins the scoring config, candidate-pool profile, selector profile, copy profiles, selection slots, and candidate ordering strategy. This keeps experimentation visible without inventing a generic workflow framework.
 
 The default scoring config is `config/scoring/v0.4.json`. It keeps the role-style performance scores and adds a structured impact layer for goals and official assists that change the match state and match story: opening goals, equalisers, go-ahead goals, contextual match-winning goals, late goals, stoppage-time goals, late match-winning goals, comeback equalisers, comeback winners, only-goal winners, assists, goal involvements, braces, hat-tricks, and substitute scoring bursts. These features are derived from the PMSR shot table, lineup status, final scoreline, deterministic match-flow reconstruction, and FIFA public match timeline goal-involvement records. POTM labels and media opinions are not scoring inputs.
 
-Run the autonomous queue used by GitHub Actions:
+Prepare the deterministic local handoff packet:
 
 ```bash
-python scripts/run_editorial_queue.py
+python scripts/prepare_editorial_packet.py --date YYYY-MM-DD --json
 ```
 
-For a targeted backfill run on one match date:
+Then write these local editor artifacts under `agent-runs/YYYY-MM-DD/`:
+
+- `selection_decision.json`
+- `copy.json`
+- `editorial_review.json`
+
+Compile the approved local result:
 
 ```bash
-python scripts/run_editorial_queue.py --date YYYY-MM-DD
-```
-
-For a deterministic smoke test without credentials:
-
-```bash
-python scripts/run_editorial_queue.py --fake --no-research --max-dates 1
-```
-
-For low-level v2 debugging on a single date:
-
-```bash
-python scripts/run_editorial_v2.py --date YYYY-MM-DD --fake --no-research --json
+python scripts/compile_local_editorial.py --date YYYY-MM-DD --json
 ```
 
 The compiled frontend artifacts are written to `site/editorial/`, and the homepage is rebuilt with the latest cards. Audit files are written under `agent-runs/YYYY-MM-DD/`, including `rankings.json`, `candidate_pool.json`, `selector_input.json`, `selection_decision.json`, `selection_validation.json`, `copy_validation.json`, `editorial_review_payload.json`, `editorial_review.json`, `editorial_review_validation.json`, and `run.json`.
 
 ## Editorial Automation
 
-`.github/workflows/editorial.yml` runs after the `Update Dataset` workflow succeeds and can also be started manually. The automatic queue publishes only the latest data match date; older input-hash changes are listed as stale and can be backfilled with `--date`. The workflow checks `manifests/editorial-queue.json`, runs the active editorial experiment for pending match dates, commits published editorial outputs with `[skip ci]`, and deploys GitHub Pages.
+GitHub Actions fetches and rebuilds the deterministic dataset, regenerates the homepage, and deploys GitHub Pages. Editorial publication is intentionally manual-first: generate the local packet, review the result locally, compile the approved static artifacts, then publish through a PR.
 
-Configure repository secrets with these names when you want the cloud workflow to publish new editorial copy:
-
-```text
-OPENAI_API_KEY
-KEYPOOL_KEY
-```
-
-The default OpenAI-compatible base URL is `https://api.siliconflow.cn/v1`, and default model routing is listed in `.env.example`. Add repository variables only when you want to override those defaults:
-
-```text
-OPENAI_BASE_URL
-EDITORIAL_SELECTION_EDITOR_MODEL
-EDITORIAL_ZH_EDITOR_MODEL
-EDITORIAL_EN_EDITOR_MODEL
-EDITORIAL_AGENT_TIMEOUT_SECONDS
-EDITORIAL_AGENT_MAX_CONCURRENCY
-EDITORIAL_AGENT_MAX_ATTEMPTS
-KEYPOOL_URL
-```
-
-Missing OpenAI credentials do not publish drafts; the workflow writes `manifests/editorial-run.json` with `needs_credentials` and exits cleanly so the data update pipeline stays healthy. Agent calls run with `EDITORIAL_AGENT_MAX_CONCURRENCY` and retry with `EDITORIAL_AGENT_MAX_ATTEMPTS`. `KEYPOOL_URL` is your KeyPool base URL and is required only for Firecrawl-backed evidence discovery; missing Firecrawl configuration does not block PMSR-only publishing.
+Future API editor agents should use `docs/editorial-api-agent-spec.md` and run in shadow mode before replacing local Codex output.
 
 ## POTM Calibration
 
@@ -157,7 +129,7 @@ python scripts/search_potm_evidence.py "FIFA 2026 Match 21 Ghana Panama Player o
 python scripts/calibrate_potm.py --date YYYY-MM-DD
 ```
 
-Keep `OPENAI_API_KEY`, `KEYPOOL_KEY`, and `KEYPOOL_URL` in local `.env.local`. Do not commit secrets or use external pages as a direct replacement for structured PMSR evidence.
+Keep `KEYPOOL_KEY` and `KEYPOOL_URL` in local `.env.local` when using Firecrawl-backed POTM evidence discovery. Do not commit secrets or use external pages as a direct replacement for structured PMSR evidence.
 
 ## Update Policy
 
@@ -172,9 +144,9 @@ The intended automated update schedule is daily around 12:00 Asia/Shanghai. The 
 7. backfills FIFA public match timeline events for goals and assists,
 8. validates outputs,
 9. regenerates demo pages and update status,
-10. triggers the editorial workflow after the update workflow succeeds.
+10. deploys the rebuilt static site to GitHub Pages.
 
-Failures are reported in `manifests/latest-run.json`, `manifests/update-events.json`, `manifests/editorial-run.json`, and GitHub Actions logs. A Codex/agent-assisted recovery flow can inspect failures, use browser diagnostics when static discovery breaks, update discovery/parser code, and push a corrective change.
+Failures are reported in `manifests/latest-run.json`, `manifests/update-events.json`, and GitHub Actions logs. A Codex/agent-assisted recovery flow can inspect failures, use browser diagnostics when static discovery breaks, update discovery/parser code, and push a corrective change.
 
 ## Example Questions
 

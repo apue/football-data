@@ -3,35 +3,6 @@ from __future__ import annotations
 import json
 from typing import Any
 
-from pydantic import BaseModel, Field
-
-from football_data.llm_client import AgentTextClient
-
-
-class SelectionItem(BaseModel):
-    award_type: str
-    player_id: str
-    player_name: str
-    team: str
-    editorial_reason: str
-    evidence_used: list[str] = Field(default_factory=list)
-    selection_risk: str = ""
-
-
-class SkippedCandidate(BaseModel):
-    award_type: str
-    player_id: str
-    player_name: str
-    coarse_rank: int | None = None
-    reason: str
-
-
-class SelectionDecision(BaseModel):
-    selected: list[SelectionItem]
-    skipped_higher_ranked: list[SkippedCandidate] = Field(default_factory=list)
-    skipped_notable_candidates: list[SkippedCandidate] = Field(default_factory=list)
-    warnings: list[str] = Field(default_factory=list)
-
 
 def build_selector_input(
     candidate_pool: dict[str, Any],
@@ -60,24 +31,6 @@ def build_selector_input(
             ],
         },
     }
-
-
-def run_ai_rerank_selector(
-    selector_input: dict[str, Any],
-    text_client: AgentTextClient,
-    profile: dict[str, Any],
-    *,
-    model: str,
-) -> dict[str, Any]:
-    instructions = "\n".join(str(item) for item in profile.get("instructions", []))
-    response = text_client.complete(
-        role="selection_editor",
-        model=model,
-        instructions=instructions,
-        user_input=json.dumps(selector_input, ensure_ascii=False),
-        output_type=SelectionDecision,
-    )
-    return normalize_selection_decision(_extract_json(response))
 
 
 AWARD_TYPE_ALIASES = {
@@ -645,7 +598,6 @@ def _compact_candidate(candidate: dict[str, Any]) -> dict[str, Any]:
         }
     return compact
 
-
 def _compact_near_miss(candidate: dict[str, Any]) -> dict[str, Any]:
     keys = [
         "player_id",
@@ -663,14 +615,3 @@ def _compact_near_miss(candidate: dict[str, Any]) -> dict[str, Any]:
     compact = {key: candidate.get(key) for key in keys if key in candidate}
     compact["score_components"] = list(candidate.get("score_components", []))[:4]
     return compact
-
-
-def _extract_json(text: str) -> dict[str, Any]:
-    try:
-        return json.loads(text)
-    except json.JSONDecodeError:
-        start = text.find("{")
-        end = text.rfind("}")
-        if start == -1 or end == -1 or end < start:
-            raise
-        return json.loads(text[start : end + 1])

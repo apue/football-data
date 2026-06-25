@@ -5,14 +5,13 @@ import sqlite3
 from pathlib import Path
 from typing import Any
 
-from football_data.editorial import (
-    _attach_flow_contexts,
-    _choice_metrics,
-    _evidence_chips,
-    _load_scoring_config,
-    _matches_for_date,
-    _player_rows_for_date,
-    _score_player,
+from football_data.editorial_evidence import choice_metrics, evidence_chips
+from football_data.editorial_scoring import (
+    attach_flow_contexts,
+    load_scoring_config,
+    matches_for_date,
+    player_rows_for_date,
+    score_player,
 )
 from football_data.match_flow import build_match_flows, player_flow_impacts
 
@@ -32,18 +31,18 @@ def build_editorial_rankings(
     match_date: str,
     scoring_config_path: str | Path,
 ) -> dict[str, Any]:
-    scoring = _load_scoring_config(scoring_config_path)
+    scoring = load_scoring_config(scoring_config_path)
     conn = sqlite3.connect(db_path)
     conn.row_factory = sqlite3.Row
     try:
-        matches = _matches_for_date(conn, match_date)
+        matches = matches_for_date(conn, match_date)
         match_flows = build_match_flows(db_path, match_date=match_date)
         flow_impacts = player_flow_impacts(match_flows)
         players = [
-            _public_player(_score_player(row, scoring, flow_impacts=flow_impacts))
-            for row in _player_rows_for_date(conn, match_date)
+            _public_player(score_player(row, scoring, flow_impacts=flow_impacts))
+            for row in player_rows_for_date(conn, match_date)
         ]
-        _attach_flow_contexts(players, match_flows)
+        attach_flow_contexts(players, match_flows)
     finally:
         conn.close()
 
@@ -106,8 +105,8 @@ def _public_player(player: dict[str, Any]) -> dict[str, Any]:
     public = dict(player)
     public["player_id"] = player_id(public)
     public["score_components"] = _top_components(public)
-    public["metrics"] = _choice_metrics(public, "player_of_the_day")
-    public["evidence_chips"] = _evidence_chips(public, "player_of_the_day")
+    public["metrics"] = choice_metrics(public, "player_of_the_day")
+    public["evidence_chips"] = evidence_chips(public, "player_of_the_day")
     return public
 
 

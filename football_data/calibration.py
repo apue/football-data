@@ -6,11 +6,11 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Callable
 
-from football_data.editorial import (
-    DEFAULT_SCORING_CONFIG,
-    _load_scoring_config,
-    _player_rows_for_date,
-    _score_player,
+from football_data.editorial_constants import DEFAULT_SCORING_CONFIG
+from football_data.editorial_scoring import (
+    load_scoring_config,
+    player_rows_for_date,
+    score_player,
 )
 
 
@@ -22,7 +22,7 @@ def build_potm_calibration_report(
     scoring_config_path: str | Path = DEFAULT_SCORING_CONFIG,
     top_n: int = 3,
 ) -> dict[str, Any]:
-    scoring = _load_scoring_config(scoring_config_path)
+    scoring = load_scoring_config(scoring_config_path)
     labels = _load_potm_labels(labels_path, match_date=match_date)
     rankings = _rank_players_by_match(db_path, match_date, scoring)
     items = [_calibration_item(label, rankings, top_n=top_n) for label in labels]
@@ -184,7 +184,7 @@ def _rank_players_by_match(
     conn = sqlite3.connect(db_path)
     conn.row_factory = sqlite3.Row
     try:
-        players = [_score_player(row, scoring) for row in _player_rows_for_date(conn, match_date)]
+        players = [score_player(row, scoring) for row in player_rows_for_date(conn, match_date)]
     finally:
         conn.close()
     rankings: dict[int, list[dict[str, Any]]] = {}

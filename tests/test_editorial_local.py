@@ -2,12 +2,8 @@ import json
 from pathlib import Path
 
 
-def test_editorial_workflow_is_manual_only_for_local_editor_review():
-    workflow = Path(".github/workflows/editorial.yml").read_text(encoding="utf-8")
-
-    assert "workflow_dispatch:" in workflow
-    assert "workflow_run:" not in workflow
-    assert "workflows: [\"Update Dataset\"]" not in workflow
+def test_cloud_editorial_workflow_is_retired():
+    assert not Path(".github/workflows/editorial.yml").exists()
 
 
 def test_prepare_editorial_packet_writes_handoff_audit_without_public_artifacts(tmp_path):
