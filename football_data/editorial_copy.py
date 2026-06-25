@@ -1,27 +1,10 @@
 from __future__ import annotations
 
 import html
-import json
 import re
 from typing import Any
 
-from pydantic import BaseModel, Field
-
 from football_data.editorial_display_names import player_display_name
-from football_data.llm_client import AgentTextClient
-
-
-class CopyItem(BaseModel):
-    award_type: str
-    player_id: str
-    title: str
-    body: str
-    warnings: list[str] = Field(default_factory=list)
-
-
-class CopyOutput(BaseModel):
-    items: list[CopyItem]
-    warnings: list[str] = Field(default_factory=list)
 
 
 def build_copy_payloads(
@@ -56,22 +39,20 @@ def build_copy_payloads(
 def generate_copy(
     payload: dict[str, Any],
     *,
-    fake: bool,
-    text_client: AgentTextClient | None = None,
+    fake: bool = True,
+    text_client: object | None = None,
     profiles: dict[str, dict[str, Any]] | None = None,
     models: dict[str, str] | None = None,
 ) -> dict[str, Any]:
-    if fake or text_client is None:
+    del profiles, models
+    if fake and text_client is None:
         return {
             "en": _fake_language_copy(payload, "en"),
             "zh": _fake_language_copy(payload, "zh"),
         }
-    profiles = profiles or {}
-    models = models or {}
-    return {
-        "en": _agent_language_copy(payload, "en", text_client, profiles["en"], models),
-        "zh": _agent_language_copy(payload, "zh", text_client, profiles["zh"], models),
-    }
+    raise RuntimeError(
+        "Cloud copy generation has been retired. Write copy.json through the local editor workflow."
+    )
 
 
 def _fake_language_copy(payload: dict[str, Any], language: str) -> dict[str, Any]:
@@ -229,37 +210,7 @@ def _join_chips(chips: list[str], *, language: str = "en") -> str:
 def _display_player_name(player_name: str, language: str) -> str:
     if language != "zh":
         return player_name
-    from football_data.editorial import ZH_PLAYER_NAMES
-
-    fallback = ZH_PLAYER_NAMES.get(player_name, player_name)
-    return player_display_name(player_name, language, fallback=fallback)
-
-
-def _agent_language_copy(
-    payload: dict[str, Any],
-    language: str,
-    text_client: AgentTextClient,
-    profile: dict[str, Any],
-    models: dict[str, str],
-) -> dict[str, Any]:
-    model_key = str(profile.get("model_key") or "en_editor")
-    model = models.get(model_key, next(iter(models.values())))
-    base_instructions = [
-        "Write final editorial card copy from the provided JSON only.",
-        "Use active_award_context, metrics, evidence_chips, and selection as the primary source for each card.",
-        "Do not use a candidate's other award_contexts unless they support the selected award_type.",
-        "Return strict JSON with items containing award_type, player_id, title, body.",
-        "Do not add unsupported facts.",
-    ]
-    instructions = "\n".join([*base_instructions, *[str(item) for item in profile.get("instructions", [])]])
-    response = text_client.complete(
-        role=f"{language}_copy_editor",
-        model=model,
-        instructions=instructions,
-        user_input=json.dumps({"language": language, **payload}, ensure_ascii=False),
-        output_type=CopyOutput,
-    )
-    return json.loads(response)
+    return player_display_name(player_name, language, fallback=player_name)
 
 
 def content_html(body: str) -> str:

@@ -1,12 +1,14 @@
 from __future__ import annotations
 
+import html
 import json
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from football_data.editorial import AWARD_LABELS, write_compiled_editorial_artifacts
+from football_data.editorial_constants import AWARD_LABELS
 from football_data.editorial_copy import content_html
+from football_data.flags import format_player, format_team
 
 
 def build_compiled_report(
@@ -245,6 +247,222 @@ def _remove_retired_sidecars(
         path = dated_path / filename
         if path.exists():
             path.unlink()
+
+
+def write_compiled_editorial_artifacts(
+    compiled: dict[str, Any],
+    site_dir: str | Path = "site",
+) -> None:
+    site_path = Path(site_dir)
+    editorial_path = site_path / "editorial"
+    dated_path = editorial_path / compiled["match_date"]
+    dated_path.mkdir(parents=True, exist_ok=True)
+    editorial_path.mkdir(parents=True, exist_ok=True)
+
+    json_text = json.dumps(compiled, ensure_ascii=False, indent=2) + "\n"
+    (dated_path / "choices.json").write_text(json_text, encoding="utf-8")
+    (dated_path / "index.html").write_text(_render_editorial_page(compiled), encoding="utf-8")
+    latest = _latest_editorial_report(editorial_path, compiled)
+    (editorial_path / "latest.json").write_text(
+        json.dumps(latest, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    archive_items = _editorial_archive_items(editorial_path, compiled)
+    (editorial_path / "index.html").write_text(
+        _render_editorial_index(archive_items),
+        encoding="utf-8",
+    )
+
+
+def _latest_editorial_report(editorial_path: Path, current: dict[str, Any]) -> dict[str, Any]:
+    reports = [current]
+    latest = _load_json(editorial_path / "latest.json")
+    if latest:
+        reports.append(latest)
+    for choices_path in editorial_path.glob("*/choices.json"):
+        report = _load_json(choices_path)
+        if report:
+            reports.append(report)
+    return max(reports, key=lambda report: str(report.get("match_date") or ""))
+
+
+def _editorial_archive_items(
+    editorial_path: Path,
+    current: dict[str, Any],
+) -> list[dict[str, Any]]:
+    by_date: dict[str, dict[str, Any]] = {}
+    for choices_path in editorial_path.glob("*/choices.json"):
+        report = _load_json(choices_path)
+        match_date = str(report.get("match_date") or "")
+        if match_date:
+            by_date[match_date] = _archive_item(report)
+    by_date[str(current["match_date"])] = _archive_item(current)
+    return [by_date[match_date] for match_date in sorted(by_date, reverse=True)]
+
+
+def _archive_item(report: dict[str, Any]) -> dict[str, Any]:
+    generation = report.get("editorial_generation")
+    if not isinstance(generation, dict):
+        generation = {}
+    matches = report.get("matches")
+    return {
+        "match_date": str(report.get("match_date") or ""),
+        "match_count": len(matches) if isinstance(matches, list) else 0,
+        "generated_at": report.get("generated_at"),
+        "compiled_at": report.get("compiled_at"),
+        "scoring_version": report.get("scoring_version"),
+        "uses_official_assists": bool(generation.get("uses_official_assists")),
+        "uses_goal_involvements": bool(generation.get("uses_goal_involvements")),
+    }
+
+
+def _load_json(path: Path) -> dict[str, Any]:
+    if not path.exists():
+        return {}
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def _render_editorial_page(report: dict[str, Any]) -> str:
+    return f"""<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="data:,">
+  <title>Editor's Choices - {html.escape(report["match_date"], quote=False)}</title>
+  <style>{_editorial_css()}</style>
+</head>
+<body>
+  <main>
+    <p class="eyebrow">FIFA PMSR Data</p>
+    <h1>Editor's Choices · {html.escape(report["match_date"], quote=False)}</h1>
+    <p class="lede">Data-informed selections from the latest structured PMSR dataset. These are not official awards.</p>
+    {_choices_html(report["choices"])}
+  </main>
+</body>
+</html>
+"""
+
+
+def _render_editorial_index(items: list[dict[str, Any]]) -> str:
+    latest = items[0] if items else {}
+    latest_date = html.escape(str(latest.get("match_date") or ""), quote=False)
+    latest_line = (
+        f'Latest available match-day editorial picks: <a href="{latest_date}/">{latest_date}</a>.'
+        if latest_date
+        else "No editorial reports have been published yet."
+    )
+    links = "\n".join(_archive_item_html(item) for item in items)
+    if not links:
+        links = '<p class="lede">Run the editorial workflow to publish the first report.</p>'
+    return f"""<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="data:,">
+  <title>Editor's Choices</title>
+  <style>{_editorial_css()}</style>
+</head>
+<body>
+  <main>
+    <p class="eyebrow">FIFA PMSR Data</p>
+    <h1>Editor's Choices</h1>
+    <p class="lede">{latest_line}</p>
+    <section class="archive-list" aria-label="Editorial archive">
+      {links}
+    </section>
+  </main>
+</body>
+</html>
+"""
+
+
+def _archive_item_html(item: dict[str, Any]) -> str:
+    match_date = html.escape(str(item["match_date"]), quote=False)
+    badge_class = "badge official" if item["uses_official_assists"] else "badge legacy"
+    badge_label = "official assists" if item["uses_official_assists"] else "legacy: no official assists"
+    match_count = int(item.get("match_count") or 0)
+    match_label = "match" if match_count == 1 else "matches"
+    return (
+        '<a class="archive-row" href="'
+        f'{match_date}/">'
+        f"<strong>{match_date}</strong>"
+        f'<span>{match_count} {match_label}</span>'
+        f'<span class="{badge_class}">{html.escape(badge_label, quote=False)}</span>'
+        "</a>"
+    )
+
+
+def _choices_html(choices: list[dict[str, Any]]) -> str:
+    cards = []
+    for choice in choices:
+        en = choice["content"]["en"]
+        zh = choice["content"]["zh"]
+        chips = "".join(
+            f"<span>{html.escape(chip, quote=False)}</span>"
+            for chip in choice["evidence_chips"]["en"]
+        )
+        badges = "".join(
+            (
+                '<span class="award-badge">'
+                f'{html.escape(str(badge.get("label", {}).get("en") or ""), quote=False)}'
+                "</span>"
+            )
+            for badge in choice.get("badges", [])
+            if isinstance(badge, dict)
+        )
+        card = f"""
+    <article class="choice-card">
+      <div>
+        <p class="award">{html.escape(choice["award_label"]["en"], quote=False)}</p>
+        <div class="award-badges">{badges}</div>
+        <h2>{html.escape(format_player(choice["player_name"], choice["team"]), quote=False)}</h2>
+        <p class="meta">{html.escape(format_team(choice["team"]), quote=False)} vs {html.escape(format_team(choice["opponent"]), quote=False)} · Match {choice["match_no"]}</p>
+        <h3>{html.escape(en["title"], quote=False)}</h3>
+        {en["html"]}
+        <h3>{html.escape(zh["title"], quote=False)}</h3>
+        {zh["html"]}
+      </div>
+      <aside>
+        <div class="chips">{chips}</div>
+      </aside>
+    </article>
+        """
+        cards.append("\n".join(line.rstrip() for line in card.strip("\n").splitlines()))
+    return "\n".join(cards) if cards else "<p>No editorial choices generated.</p>"
+
+
+def _editorial_css() -> str:
+    return """
+    :root { font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: #17202a; background: #f5f7fb; }
+    body { margin: 0; }
+    main { max-width: 980px; margin: 0 auto; padding: 36px 20px 56px; }
+    h1 { margin: 0 0 8px; font-size: 32px; }
+    h2 { margin: 0 0 4px; font-size: 24px; }
+    h3 { margin: 18px 0 6px; font-size: 16px; }
+    p { line-height: 1.55; color: #435268; }
+    .eyebrow, .award { color: #59677c; font-size: 12px; letter-spacing: 0; text-transform: uppercase; font-weight: 700; }
+    .lede { margin-bottom: 24px; }
+    .choice-card { display: grid; grid-template-columns: minmax(0, 1fr) 190px; gap: 18px; background: #fff; border: 1px solid #dde3ee; border-radius: 8px; padding: 22px; margin: 18px 0; }
+    .choice-card aside { border-left: 1px solid #e8edf5; padding-left: 18px; }
+    .choice-card aside strong { display: block; font-size: 34px; }
+    .choice-card aside > span { color: #59677c; font-size: 12px; text-transform: uppercase; }
+    .meta { margin: 0; color: #59677c; }
+    .award-badges { display: flex; flex-wrap: wrap; gap: 6px; margin: -6px 0 10px; }
+    .award-badge { border: 1px solid #dce5f2; background: #f7f9fc; color: #35465d; border-radius: 999px; padding: 4px 8px; font-size: 12px; font-weight: 700; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+    .chips span { background: #edf2fa; border: 1px solid #dce5f2; border-radius: 999px; padding: 5px 9px; font-size: 12px; }
+    .archive-list { display: grid; gap: 10px; margin-top: 22px; }
+    .archive-row { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; align-items: center; gap: 12px; padding: 14px 16px; color: inherit; text-decoration: none; background: #fff; border: 1px solid #dde3ee; border-radius: 8px; }
+    .archive-row:hover { border-color: #b7c4d4; }
+    .archive-row span { color: #59677c; font-size: 13px; }
+    .badge { justify-self: end; border-radius: 999px; padding: 4px 9px; border: 1px solid #dce5f2; background: #edf2fa; color: #35465d; font-size: 12px; }
+    .badge.official { border-color: #b7dfd4; background: #e7f7f1; color: #0f766e; }
+    .badge.legacy { border-color: #e7d8ad; background: #fff7df; color: #806215; }
+    @media (max-width: 720px) { .choice-card { grid-template-columns: 1fr; } .choice-card aside { border-left: 0; border-top: 1px solid #e8edf5; padding-left: 0; padding-top: 14px; } }
+    @media (max-width: 720px) { .archive-row { grid-template-columns: 1fr; align-items: start; } .badge { justify-self: start; } }
+    """
     pre_review = reports_path / f"{match_date}.pre-review.md"
     if pre_review.exists():
         pre_review.unlink()

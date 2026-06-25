@@ -52,18 +52,6 @@ python scripts/compile_local_editorial.py --date YYYY-MM-DD --json
 
 This validates local selection, writes public editorial artifacts, and rebuilds the homepage.
 
-For deterministic smoke testing without OpenAI credentials:
-
-```bash
-python scripts/run_editorial_queue.py --date YYYY-MM-DD --fake --no-research --json
-```
-
-For low-level v2 debugging:
-
-```bash
-python scripts/run_editorial_v2.py --date YYYY-MM-DD --fake --no-research --json
-```
-
 Outputs:
 
 - `manifests/editorial-v2-run.json`
@@ -98,7 +86,7 @@ load active experiment registry
   -> rebuild homepage
 ```
 
-The GitHub `Update Dataset` workflow should fetch and rebuild data. The GitHub `Editorial` workflow is manual-only and defaults to fake mode for smoke testing; do not rely on it for final daily publication unless the user explicitly asks for an OpenAI Agents SDK run.
+The GitHub `Update Dataset` workflow should fetch and rebuild data and deploy the static site. Editorial publication is local-first: prepare the packet, write the local editor artifacts, compile them, and publish through a PR. Future API editor agents should follow `docs/editorial-api-agent-spec.md` and run in shadow mode before replacing local Codex output.
 
 7. Review local audit files:
 

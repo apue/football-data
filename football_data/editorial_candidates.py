@@ -2,7 +2,8 @@ from __future__ import annotations
 
 from typing import Any
 
-from football_data.editorial import AWARD_LABELS, _choice_metrics, _evidence_chips
+from football_data.editorial_constants import AWARD_LABELS
+from football_data.editorial_evidence import choice_metrics, evidence_chips
 from football_data.editorial_display_names import player_display_entry
 
 
@@ -224,8 +225,8 @@ def _add_candidate(
         candidate["pool_reasons"].append(reason)
     candidate["award_contexts"][award_type] = {
         "award_label": AWARD_LABELS.get(award_type, {"en": award_type, "zh": award_type}),
-        "metrics": _choice_metrics(candidate, award_type),
-        "evidence_chips": _evidence_chips(candidate, award_type),
+        "metrics": choice_metrics(candidate, award_type),
+        "evidence_chips": evidence_chips(candidate, award_type),
         "role_scores": candidate.get("role_scores", {}),
         "score_components": candidate.get("score_components", []),
     }

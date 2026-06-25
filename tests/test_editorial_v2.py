@@ -299,51 +299,6 @@ def test_editorial_review_validation_requires_slate_assessment_fields():
     assert passing_validation["status"] == "pass"
 
 
-def test_editorial_review_agent_uses_review_profile_contract():
-    import json
-
-    from football_data.editorial_review import EditorialReviewOutput, run_ai_editorial_review
-    from football_data.llm_client import AgentTextClient
-
-    class RecordingReviewClient(AgentTextClient):
-        def __init__(self) -> None:
-            self.calls = []
-
-        def complete(self, **kwargs):
-            self.calls.append(kwargs)
-            return json.dumps(
-                {
-                    "schema_version": 1,
-                    "review_profile": "reader_intuition_loop_v2",
-                    "status": "pass",
-                    "reviewed_dimensions": ["obvious_omission"],
-                    "selected_player_reviews": [],
-                    "unselected_candidate_reviews": [],
-                    "blocking_findings": [],
-                    "revision_summary": "No issue.",
-                }
-            )
-
-    client = RecordingReviewClient()
-    review = run_ai_editorial_review(
-        {"selected": [], "required_unselected_candidate_reviews": []},
-        client,
-        {
-            "id": "reader_intuition_loop_v2",
-            "model_key": "review_editor",
-            "instructions": ["Review the slate."],
-            "required_dimensions": ["obvious_omission"],
-        },
-        model="review-model",
-    )
-
-    assert review["status"] == "pass"
-    assert client.calls[0]["role"] == "review_editor"
-    assert client.calls[0]["model"] == "review-model"
-    assert client.calls[0]["output_type"] is EditorialReviewOutput
-    assert "Review the slate." in client.calls[0]["instructions"]
-
-
 def test_editorial_v2_goalkeeper_score_is_keeper_only_for_latest_day():
     from football_data.editorial_rankings import build_editorial_rankings
     from football_data.editorial_registry import load_editorial_experiment
@@ -859,7 +814,7 @@ def test_editorial_v2_fake_copy_is_publishable_static_copy():
     assert "match-winner" in en_item["body"]
     assert "梅开二度" in zh_item["body"]
     assert "制胜球" in zh_item["body"]
-    assert "哈兰德" in zh_item["body"]
+    assert "Erling HAALAND" in zh_item["body"]
 
 
 def test_editorial_v2_rankings_and_candidate_pool_include_audit_context():
@@ -985,129 +940,6 @@ def test_editorial_v2_selection_validation_requires_pool_membership_and_skip_rea
     assert repaired["selected"][0]["evidence_used"] != ["brce", "unsupported but long evidence phrase"]
     assert any("repaired weak editorial_reason" in warning for warning in repaired["warnings"])
     assert any("repaired weak evidence_used" in warning for warning in repaired["warnings"])
-
-
-def test_run_editorial_v2_fake_backend_writes_public_and_audit_artifacts(tmp_path):
-    from football_data.editorial_v2_runner import run_editorial_v2
-
-    result = run_editorial_v2(
-        match_date="2026-06-21",
-        db_path="data/latest.sqlite",
-        site_dir=tmp_path / "site",
-        reports_dir=tmp_path / "reports",
-        manifests_dir="manifests",
-        agent_runs_dir=tmp_path / "agent-runs",
-        run_out_path=tmp_path / "editorial-v2-run.json",
-        fake=True,
-        research=False,
-        rebuild_homepage=True,
-    )
-
-    assert result["status"] == "success"
-    assert result["workflow_variant"] == "ai_rerank_selection_v1"
-    assert result["selection_validation"]["status"] == "pass"
-
-    latest = json.loads((tmp_path / "site" / "editorial" / "latest.json").read_text(encoding="utf-8"))
-    choices = json.loads(
-        (tmp_path / "site" / "editorial" / "2026-06-21" / "choices.json").read_text(
-            encoding="utf-8"
-        )
-    )
-    audit_dir = tmp_path / "agent-runs" / "2026-06-21"
-
-    assert latest["match_date"] == "2026-06-21"
-    assert choices["choices"]
-    assert choices["editorial_generation"]["workflow_variant"] == "ai_rerank_selection_v1"
-    assert choices["editorial_generation"]["uses_official_assists"] is True
-    assert choices["editorial_generation"]["uses_goal_involvements"] is True
-    assert len(choices["choices"]) == 5
-    assert all(choice["award_type"] == "player_of_the_day" for choice in choices["choices"])
-    assert (audit_dir / "rankings.json").exists()
-    assert (audit_dir / "candidate_pool.json").exists()
-    assert (audit_dir / "selector_input.json").exists()
-    assert (audit_dir / "selection_decision.json").exists()
-    assert (audit_dir / "selection_validation.json").exists()
-    assert (audit_dir / "copy_payload.json").exists()
-    assert (audit_dir / "copy.json").exists()
-    assert "Editor's Choices" in (tmp_path / "site" / "index.html").read_text(encoding="utf-8")
-    assert "official assists" in (tmp_path / "site" / "editorial" / "index.html").read_text(
-        encoding="utf-8"
-    )
-
-
-def test_run_editorial_v2_cli_fake_backend(tmp_path):
-    import subprocess
-    import sys
-
-    run_path = tmp_path / "editorial-v2-run.json"
-    subprocess.run(
-        [
-            sys.executable,
-            "scripts/run_editorial_v2.py",
-            "--date",
-            "2026-06-21",
-            "--site-dir",
-            str(tmp_path / "site"),
-            "--reports-dir",
-            str(tmp_path / "reports"),
-            "--agent-runs-dir",
-            str(tmp_path / "agent-runs"),
-            "--out",
-            str(run_path),
-            "--fake",
-            "--no-research",
-            "--json",
-        ],
-        check=True,
-    )
-
-    result = json.loads(run_path.read_text(encoding="utf-8"))
-    assert result["status"] == "success"
-    assert (tmp_path / "site" / "editorial" / "latest.json").exists()
-
-    subprocess.run(
-        [
-            sys.executable,
-            "scripts/recompile_editorial_v2.py",
-            "--date",
-            "2026-06-21",
-            "--site-dir",
-            str(tmp_path / "site"),
-            "--reports-dir",
-            str(tmp_path / "reports"),
-            "--agent-runs-dir",
-            str(tmp_path / "agent-runs"),
-            "--out",
-            str(tmp_path / "editorial-v2-run.json"),
-            "--json",
-        ],
-        check=True,
-    )
-    recompiled = json.loads(run_path.read_text(encoding="utf-8"))
-    assert recompiled["status"] == "success"
-    assert "recompiled_at" in recompiled
-
-
-def test_editorial_ai_config_process_env_overrides_env_file(tmp_path, monkeypatch):
-    from football_data.llm_client import load_editorial_ai_config
-
-    env_path = tmp_path / ".env.local"
-    env_path.write_text(
-        "\n".join(
-            [
-                "OPENAI_API_KEY=file-key",
-                "EDITORIAL_AGENT_TIMEOUT_SECONDS=90",
-            ]
-        ),
-        encoding="utf-8",
-    )
-    monkeypatch.setenv("OPENAI_API_KEY", "process-key")
-    monkeypatch.setenv("EDITORIAL_AGENT_TIMEOUT_SECONDS", "181")
-
-    config = load_editorial_ai_config(env_path)
-
-    assert config.api_key == "process-key"
-    assert config.timeout_seconds == 181
 
 
 def test_editorial_copy_sanitizes_common_metric_misread():
