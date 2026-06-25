@@ -26,7 +26,6 @@ Read these before acting:
 - Let Codex repair code, scoring, registry config, prompts, copy profiles, or local selection/copy files when output fails review; do not hand-edit compiled frontend JSON.
 - Generate both English and Chinese copy from the same selected candidate evidence packet. They should express the same judgment but do not need to be literal translations.
 - Run the workflow validation gates before accepting output: `selection_validation.json`, `copy_validation.json`, `editorial_review_validation.json`, copy warnings, and homepage/site artifacts.
-- Run the POTM calibration gate with `calibrate-potm-labels` when labels or external evidence are available for the date.
 - Use local match dates from `matches.match_date`, not Beijing date or workflow run time.
 - Prefer a short, human editorial note over metric dumping.
 - Do not push directly to `main` for editorial content unless the user explicitly asks.
