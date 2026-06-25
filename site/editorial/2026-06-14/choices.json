@@ -1,0 +1,796 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-06-25T06:49:54+00:00",
+  "compiled_at": "2026-06-25T06:49:54+00:00",
+  "match_date": "2026-06-14",
+  "scoring_version": "v0.4",
+  "editorial_generation": {
+    "workflow_variant": "ai_rerank_selection_v1",
+    "experiment_id": "ai_rerank_slate_self_review_v4",
+    "selection_mode": "ai_rerank_only",
+    "review_profile": "reader_intuition_v1",
+    "revision_policy": {
+      "mode": "local_editor_revise_until_review_passes",
+      "max_revision_rounds": 2,
+      "blocking_review_requires_revision": true
+    },
+    "editorial_review_status": "pass",
+    "uses_official_assists": true,
+    "uses_goal_involvements": true,
+    "event_source": "fifa_timeline_api",
+    "event_sources": {
+      "goal_involvements": "fifa_timeline_api"
+    }
+  },
+  "matches": [
+    {
+      "match_key": "FIFA-2026-M09-CIV-ECU",
+      "match_no": 9,
+      "match_date": "2026-06-14",
+      "kickoff_time": "19:00",
+      "stadium": "Philadelphia Stadium",
+      "home_team": "Côte d'Ivoire",
+      "away_team": "Ecuador",
+      "home_score": 1,
+      "away_score": 0
+    },
+    {
+      "match_key": "FIFA-2026-M10-GER-CUW",
+      "match_no": 10,
+      "match_date": "2026-06-14",
+      "kickoff_time": "12:00",
+      "stadium": "Houston Stadium",
+      "home_team": "Germany",
+      "away_team": "Curaçao",
+      "home_score": 7,
+      "away_score": 1
+    },
+    {
+      "match_key": "FIFA-2026-M11-NED-JPN",
+      "match_no": 11,
+      "match_date": "2026-06-14",
+      "kickoff_time": "15:00",
+      "stadium": "Dallas Stadium",
+      "home_team": "Netherlands",
+      "away_team": "Japan",
+      "home_score": 2,
+      "away_score": 2
+    },
+    {
+      "match_key": "FIFA-2026-M12-SWE-TUN",
+      "match_no": 12,
+      "match_date": "2026-06-14",
+      "kickoff_time": "20:00",
+      "stadium": "Monterrey Stadium",
+      "home_team": "Sweden",
+      "away_team": "Tunisia",
+      "home_score": 5,
+      "away_score": 1
+    }
+  ],
+  "match_flows": {
+    "FIFA-2026-M09-CIV-ECU": {
+      "match_key": "FIFA-2026-M09-CIV-ECU",
+      "match_no": 9,
+      "match_date": "2026-06-14",
+      "home_team": "Côte d'Ivoire",
+      "away_team": "Ecuador",
+      "home_score": 1,
+      "away_score": 0,
+      "winner_team": "Côte d'Ivoire",
+      "home_trailing_at_any_point": false,
+      "away_trailing_at_any_point": true,
+      "home_came_from_behind_to_win": false,
+      "away_came_from_behind_to_win": false,
+      "goals": [
+        {
+          "goal_order": 1,
+          "minute": 90,
+          "team": "Côte d'Ivoire",
+          "player_team": "Côte d'Ivoire",
+          "player_name": "Amad DIALLO",
+          "own_goal": false,
+          "score_before": "0-0",
+          "score_after": "1-0",
+          "team_score_before": 0,
+          "opponent_score_before": 0,
+          "team_score_after": 1,
+          "opponent_score_after": 0,
+          "tags": [
+            "opening_goal",
+            "go_ahead_goal",
+            "match_winning_goal",
+            "late_goal",
+            "stoppage_time_goal",
+            "late_match_winning_goal"
+          ]
+        }
+      ],
+      "decisive_goal": {
+        "goal_order": 1,
+        "minute": 90,
+        "team": "Côte d'Ivoire",
+        "player_team": "Côte d'Ivoire",
+        "player_name": "Amad DIALLO",
+        "own_goal": false,
+        "score_before": "0-0",
+        "score_after": "1-0",
+        "team_score_before": 0,
+        "opponent_score_before": 0,
+        "team_score_after": 1,
+        "opponent_score_after": 0,
+        "tags": [
+          "opening_goal",
+          "go_ahead_goal",
+          "match_winning_goal",
+          "late_goal",
+          "stoppage_time_goal",
+          "late_match_winning_goal"
+        ]
+      }
+    },
+    "FIFA-2026-M10-GER-CUW": {
+      "match_key": "FIFA-2026-M10-GER-CUW",
+      "match_no": 10,
+      "match_date": "2026-06-14",
+      "home_team": "Germany",
+      "away_team": "Curaçao",
+      "home_score": 7,
+      "away_score": 1,
+      "winner_team": "Germany",
+      "home_trailing_at_any_point": false,
+      "away_trailing_at_any_point": true,
+      "home_came_from_behind_to_win": false,
+      "away_came_from_behind_to_win": false,
+      "goals": [
+        {
+          "goal_order": 1,
+          "minute": 6,
+          "team": "Germany",
+          "player_team": "Germany",
+          "player_name": "Felix NMECHA",
+          "own_goal": false,
+          "score_before": "0-0",
+          "score_after": "1-0",
+          "team_score_before": 0,
+          "opponent_score_before": 0,
+          "team_score_after": 1,
+          "opponent_score_after": 0,
+          "tags": [
+            "opening_goal",
+            "go_ahead_goal"
+          ]
+        },
+        {
+          "goal_order": 2,
+          "minute": 21,
+          "team": "Curaçao",
+          "player_team": "Curaçao",
+          "player_name": "Livano COMENENCIA",
+          "own_goal": false,
+          "score_before": "1-0",
+          "score_after": "1-1",
+          "team_score_before": 0,
+          "opponent_score_before": 1,
+          "team_score_after": 1,
+          "opponent_score_after": 1,
+          "tags": [
+            "equalizer",
+            "comeback_equalizer"
+          ]
+        },
+        {
+          "goal_order": 3,
+          "minute": 38,
+          "team": "Germany",
+          "player_team": "Germany",
+          "player_name": "Nico SCHLOTTERBECK",
+          "own_goal": false,
+          "score_before": "1-1",
+          "score_after": "2-1",
+          "team_score_before": 1,
+          "opponent_score_before": 1,
+          "team_score_after": 2,
+          "opponent_score_after": 1,
+          "tags": [
+            "go_ahead_goal"
+          ]
+        },
+        {
+          "goal_order": 4,
+          "minute": 47,
+          "team": "Germany",
+          "player_team": "Germany",
+          "player_name": "Jamal MUSIALA",
+          "own_goal": false,
+          "score_before": "2-1",
+          "score_after": "3-1",
+          "team_score_before": 2,
+          "opponent_score_before": 1,
+          "team_score_after": 3,
+          "opponent_score_after": 1,
+          "tags": []
+        },
+        {
+          "goal_order": 5,
+          "minute": 50,
+          "team": "Germany",
+          "player_team": "Germany",
+          "player_name": "Kai HAVERTZ",
+          "own_goal": false,
+          "score_before": "3-1",
+          "score_after": "4-1",
+          "team_score_before": 3,
+          "opponent_score_before": 1,
+          "team_score_after": 4,
+          "opponent_score_after": 1,
+          "tags": []
+        },
+        {
+          "goal_order": 6,
+          "minute": 68,
+          "team": "Germany",
+          "player_team": "Germany",
+          "player_name": "Nathaniel BROWN",
+          "own_goal": false,
+          "score_before": "4-1",
+          "score_after": "5-1",
+          "team_score_before": 4,
+          "opponent_score_before": 1,
+          "team_score_after": 5,
+          "opponent_score_after": 1,
+          "tags": []
+        },
+        {
+          "goal_order": 7,
+          "minute": 78,
+          "team": "Germany",
+          "player_team": "Germany",
+          "player_name": "Deniz UNDAV",
+          "own_goal": false,
+          "score_before": "5-1",
+          "score_after": "6-1",
+          "team_score_before": 5,
+          "opponent_score_before": 1,
+          "team_score_after": 6,
+          "opponent_score_after": 1,
+          "tags": [
+            "late_goal"
+          ]
+        },
+        {
+          "goal_order": 8,
+          "minute": 88,
+          "team": "Germany",
+          "player_team": "Germany",
+          "player_name": "Kai HAVERTZ",
+          "own_goal": false,
+          "score_before": "6-1",
+          "score_after": "7-1",
+          "team_score_before": 6,
+          "opponent_score_before": 1,
+          "team_score_after": 7,
+          "opponent_score_after": 1,
+          "tags": [
+            "late_goal"
+          ]
+        }
+      ],
+      "decisive_goal": null
+    },
+    "FIFA-2026-M11-NED-JPN": {
+      "match_key": "FIFA-2026-M11-NED-JPN",
+      "match_no": 11,
+      "match_date": "2026-06-14",
+      "home_team": "Netherlands",
+      "away_team": "Japan",
+      "home_score": 2,
+      "away_score": 2,
+      "winner_team": null,
+      "home_trailing_at_any_point": false,
+      "away_trailing_at_any_point": true,
+      "home_came_from_behind_to_win": false,
+      "away_came_from_behind_to_win": false,
+      "goals": [
+        {
+          "goal_order": 1,
+          "minute": 50,
+          "team": "Netherlands",
+          "player_team": "Netherlands",
+          "player_name": "Virgil VAN DIJK",
+          "own_goal": false,
+          "score_before": "0-0",
+          "score_after": "1-0",
+          "team_score_before": 0,
+          "opponent_score_before": 0,
+          "team_score_after": 1,
+          "opponent_score_after": 0,
+          "tags": [
+            "opening_goal",
+            "go_ahead_goal"
+          ]
+        },
+        {
+          "goal_order": 2,
+          "minute": 57,
+          "team": "Japan",
+          "player_team": "Japan",
+          "player_name": "Keito NAKAMURA",
+          "own_goal": false,
+          "score_before": "1-0",
+          "score_after": "1-1",
+          "team_score_before": 0,
+          "opponent_score_before": 1,
+          "team_score_after": 1,
+          "opponent_score_after": 1,
+          "tags": [
+            "equalizer",
+            "comeback_equalizer"
+          ]
+        },
+        {
+          "goal_order": 3,
+          "minute": 64,
+          "team": "Netherlands",
+          "player_team": "Netherlands",
+          "player_name": "Crysencio SUMMERVILLE",
+          "own_goal": false,
+          "score_before": "1-1",
+          "score_after": "2-1",
+          "team_score_before": 1,
+          "opponent_score_before": 1,
+          "team_score_after": 2,
+          "opponent_score_after": 1,
+          "tags": [
+            "go_ahead_goal"
+          ]
+        },
+        {
+          "goal_order": 4,
+          "minute": 88,
+          "team": "Japan",
+          "player_team": "Japan",
+          "player_name": "Daichi KAMADA",
+          "own_goal": false,
+          "score_before": "2-1",
+          "score_after": "2-2",
+          "team_score_before": 1,
+          "opponent_score_before": 2,
+          "team_score_after": 2,
+          "opponent_score_after": 2,
+          "tags": [
+            "equalizer",
+            "comeback_equalizer",
+            "late_goal"
+          ]
+        }
+      ],
+      "decisive_goal": null
+    },
+    "FIFA-2026-M12-SWE-TUN": {
+      "match_key": "FIFA-2026-M12-SWE-TUN",
+      "match_no": 12,
+      "match_date": "2026-06-14",
+      "home_team": "Sweden",
+      "away_team": "Tunisia",
+      "home_score": 5,
+      "away_score": 1,
+      "winner_team": "Sweden",
+      "home_trailing_at_any_point": false,
+      "away_trailing_at_any_point": true,
+      "home_came_from_behind_to_win": false,
+      "away_came_from_behind_to_win": false,
+      "goals": [
+        {
+          "goal_order": 1,
+          "minute": 7,
+          "team": "Sweden",
+          "player_team": "Sweden",
+          "player_name": "Yasin AYARI",
+          "own_goal": false,
+          "score_before": "0-0",
+          "score_after": "1-0",
+          "team_score_before": 0,
+          "opponent_score_before": 0,
+          "team_score_after": 1,
+          "opponent_score_after": 0,
+          "tags": [
+            "opening_goal",
+            "go_ahead_goal"
+          ]
+        },
+        {
+          "goal_order": 2,
+          "minute": 30,
+          "team": "Sweden",
+          "player_team": "Sweden",
+          "player_name": "Alexander ISAK",
+          "own_goal": false,
+          "score_before": "1-0",
+          "score_after": "2-0",
+          "team_score_before": 1,
+          "opponent_score_before": 0,
+          "team_score_after": 2,
+          "opponent_score_after": 0,
+          "tags": []
+        },
+        {
+          "goal_order": 3,
+          "minute": 43,
+          "team": "Tunisia",
+          "player_team": "Tunisia",
+          "player_name": "Omar REKIK",
+          "own_goal": false,
+          "score_before": "2-0",
+          "score_after": "2-1",
+          "team_score_before": 0,
+          "opponent_score_before": 2,
+          "team_score_after": 1,
+          "opponent_score_after": 2,
+          "tags": []
+        },
+        {
+          "goal_order": 4,
+          "minute": 59,
+          "team": "Sweden",
+          "player_team": "Sweden",
+          "player_name": "Viktor GYOKERES",
+          "own_goal": false,
+          "score_before": "2-1",
+          "score_after": "3-1",
+          "team_score_before": 2,
+          "opponent_score_before": 1,
+          "team_score_after": 3,
+          "opponent_score_after": 1,
+          "tags": []
+        },
+        {
+          "goal_order": 5,
+          "minute": 84,
+          "team": "Sweden",
+          "player_team": "Sweden",
+          "player_name": "Mattias SVANBERG",
+          "own_goal": false,
+          "score_before": "3-1",
+          "score_after": "4-1",
+          "team_score_before": 3,
+          "opponent_score_before": 1,
+          "team_score_after": 4,
+          "opponent_score_after": 1,
+          "tags": [
+            "late_goal"
+          ]
+        },
+        {
+          "goal_order": 6,
+          "minute": 96,
+          "team": "Sweden",
+          "player_team": "Sweden",
+          "player_name": "Yasin AYARI",
+          "own_goal": false,
+          "score_before": "4-1",
+          "score_after": "5-1",
+          "team_score_before": 4,
+          "opponent_score_before": 1,
+          "team_score_after": 5,
+          "opponent_score_after": 1,
+          "tags": [
+            "late_goal",
+            "stoppage_time_goal"
+          ]
+        }
+      ],
+      "decisive_goal": null
+    }
+  },
+  "choices": [
+    {
+      "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
+      "award_label": {
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
+      },
+      "player_id": "FIFA-2026-M09-CIV-ECU|Côte d'Ivoire|15",
+      "player_name": "Amad DIALLO",
+      "team": "Côte d'Ivoire",
+      "opponent": "Ecuador",
+      "match_key": "FIFA-2026-M09-CIV-ECU",
+      "match_no": 9,
+      "player_no": 15,
+      "position": "FW",
+      "score": 134.19,
+      "metrics": {
+        "shots": 2,
+        "on_target": 2,
+        "goals": 1,
+        "goal_involvements": 1,
+        "opening_goal": 1,
+        "go_ahead_goal": 1,
+        "match_winning_goal": 1,
+        "late_goal": 1,
+        "stoppage_time_goal": 1,
+        "late_match_winning_goal": 1,
+        "only_goal_winner": 1,
+        "substitute_goal": 1
+      },
+      "evidence_chips": {
+        "en": [
+          "substitute goal",
+          "only goal",
+          "late winner",
+          "goal scorer"
+        ],
+        "zh": [
+          "替补进球",
+          "全场唯一进球",
+          "补时制胜",
+          "取得进球"
+        ]
+      },
+      "selection_reason": "Selected because he came off the bench and scored the 90th-minute winner, the only goal in Côte d'Ivoire's 1-0 win over Ecuador.",
+      "content": {
+        "en": {
+          "title": "Diallo won it at 90",
+          "html": "<p>Amad Diallo came off the bench and scored the only goal in Côte d'Ivoire's 1-0 win over Ecuador. Both of his shots were on target, and the second one decided the match.</p>"
+        },
+        "zh": {
+          "title": "阿马德第90分钟制胜",
+          "html": "<p>阿马德替补出场后第90分钟破门，科特迪瓦1-0击败厄瓜多尔。全场唯一进球由他打进，这脚来得太及时。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
+      "award_label": {
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
+      },
+      "player_id": "FIFA-2026-M12-SWE-TUN|Sweden|18",
+      "player_name": "Yasin AYARI",
+      "team": "Sweden",
+      "opponent": "Tunisia",
+      "match_key": "FIFA-2026-M12-SWE-TUN",
+      "match_no": 12,
+      "player_no": 18,
+      "position": "MF",
+      "score": 94.66,
+      "metrics": {
+        "shots": 2,
+        "on_target": 2,
+        "goals": 2,
+        "goal_involvements": 2,
+        "brace": 1,
+        "opening_goal": 1,
+        "go_ahead_goal": 1,
+        "late_goal": 1,
+        "stoppage_time_goal": 1
+      },
+      "evidence_chips": {
+        "en": [
+          "brace",
+          "opening goal"
+        ],
+        "zh": [
+          "梅开二度",
+          "首开纪录"
+        ]
+      },
+      "selection_reason": "Selected because he scored twice in Sweden's 5-1 win over Tunisia, including the opening goal.",
+      "content": {
+        "en": {
+          "title": "Ayari scored twice for Sweden",
+          "html": "<p>Yasin Ayari opened the scoring and later added another goal as Sweden beat Tunisia 5-1. Two shots, two on target, two goals.</p>"
+        },
+        "zh": {
+          "title": "阿亚里梅开二度",
+          "html": "<p>阿亚里第7分钟首开纪录，补时阶段又进一球，瑞典5-1击败突尼斯。两脚射门全都射正，也全都进了。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
+      "award_label": {
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
+      },
+      "player_id": "FIFA-2026-M10-GER-CUW|Germany|7",
+      "player_name": "Kai HAVERTZ",
+      "team": "Germany",
+      "opponent": "Curaçao",
+      "match_key": "FIFA-2026-M10-GER-CUW",
+      "match_no": 10,
+      "player_no": 7,
+      "position": "FW",
+      "score": 80.37,
+      "metrics": {
+        "shots": 4,
+        "on_target": 2,
+        "goals": 2,
+        "goal_involvements": 2,
+        "brace": 1,
+        "late_goal": 1
+      },
+      "evidence_chips": {
+        "en": [
+          "brace"
+        ],
+        "zh": [
+          "梅开二度"
+        ]
+      },
+      "selection_reason": "Selected because his cleanly parsed candidate packet now shows a brace in Germany's 7-1 win over Curaçao.",
+      "content": {
+        "en": {
+          "title": "Havertz scored twice for Germany",
+          "html": "<p>Kai Havertz scored twice as Germany beat Curaçao 7-1. Four shots and two on target give the brace enough weight on a crowded German scoresheet.</p>"
+        },
+        "zh": {
+          "title": "哈弗茨梅开二度",
+          "html": "<p>哈弗茨第50分钟和第88分钟各进一球，德国7-1大胜库拉索。4脚射门、2次射正，这两下收得很干净。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
+      "award_label": {
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
+      },
+      "player_id": "FIFA-2026-M12-SWE-TUN|Sweden|9",
+      "player_name": "Alexander ISAK",
+      "team": "Sweden",
+      "opponent": "Tunisia",
+      "match_key": "FIFA-2026-M12-SWE-TUN",
+      "match_no": 12,
+      "player_no": 9,
+      "position": "FW",
+      "score": 78.26,
+      "metrics": {
+        "shots": 3,
+        "on_target": 2,
+        "goals": 1,
+        "assists": 2,
+        "goal_involvements": 3
+      },
+      "evidence_chips": {
+        "en": [
+          "goal scorer",
+          "multiple assists"
+        ],
+        "zh": [
+          "取得进球",
+          "多次助攻"
+        ]
+      },
+      "selection_reason": "Selected because he had a goal and two assists in the same 5-1 Sweden win, giving him the day's strongest multi-involvement attacking packet.",
+      "content": {
+        "en": {
+          "title": "Isak had a goal and two assists",
+          "html": "<p>Alexander Isak scored once and assisted twice in Sweden's 5-1 win over Tunisia. Three direct goal involvements make his case easy to read.</p>"
+        },
+        "zh": {
+          "title": "伊萨克一球两助",
+          "html": "<p>伊萨克第30分钟破门，全场还送出两次助攻。瑞典这场进了5个，他直接参与了3个。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
+      "award_label": {
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
+      },
+      "player_id": "FIFA-2026-M11-NED-JPN|Japan|15",
+      "player_name": "Daichi KAMADA",
+      "team": "Japan",
+      "opponent": "Netherlands",
+      "match_key": "FIFA-2026-M11-NED-JPN",
+      "match_no": 11,
+      "player_no": 15,
+      "position": "MF",
+      "score": 70.78,
+      "metrics": {
+        "goals": 1,
+        "goal_involvements": 1,
+        "equalizing_goal": 1,
+        "late_goal": 1,
+        "comeback_equalizer": 1
+      },
+      "evidence_chips": {
+        "en": [
+          "comeback equaliser",
+          "equaliser",
+          "goal scorer"
+        ],
+        "zh": [
+          "逆转扳平",
+          "扳平进球",
+          "取得进球"
+        ]
+      },
+      "selection_reason": "Selected because he scored Japan's 88th-minute equaliser in the 2-2 draw with the Netherlands.",
+      "content": {
+        "en": {
+          "title": "Kamada levelled it late",
+          "html": "<p>Daichi Kamada scored Japan's 88th-minute equaliser in the 2-2 draw with the Netherlands. It was the late action that changed the match result.</p>"
+        },
+        "zh": {
+          "title": "镰田大地第88分钟扳平",
+          "html": "<p>镰田大地第88分钟为日本扳成2-2，把和荷兰的比赛拉回平局。这个时间点还能追上来，很提气。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "impact_pick",
+      "award_types": [
+        "impact_pick"
+      ],
+      "award_label": {
+        "en": "Impact Pick",
+        "zh": "影响力精选"
+      },
+      "player_id": "FIFA-2026-M10-GER-CUW|Germany|26",
+      "player_name": "Deniz UNDAV",
+      "team": "Germany",
+      "opponent": "Curaçao",
+      "match_key": "FIFA-2026-M10-GER-CUW",
+      "match_no": 10,
+      "player_no": 26,
+      "position": "FW",
+      "score": 64.98,
+      "metrics": {
+        "shots": 1,
+        "on_target": 1,
+        "goals": 1,
+        "assists": 2,
+        "goal_involvements": 3,
+        "late_goal": 1,
+        "substitute_goal": 1
+      },
+      "evidence_chips": {
+        "en": [
+          "substitute goal",
+          "goal scorer",
+          "multiple assists"
+        ],
+        "zh": [
+          "替补进球",
+          "取得进球",
+          "多次助攻"
+        ]
+      },
+      "selection_reason": "Selected because he came off the bench and finished with one goal and two assists in Germany's 7-1 win over Curaçao.",
+      "content": {
+        "en": {
+          "title": "Undav added one goal and two assists",
+          "html": "<p>Deniz Undav came off the bench and was involved in three goals as Germany beat Curaçao 7-1. He scored once and assisted twice.</p>"
+        },
+        "zh": {
+          "title": "翁达夫替补一球两助",
+          "html": "<p>翁达夫替补出场后1球2助，德国7-1大胜库拉索。最后三个德国进球都有他参与，这段替补时间很值。</p>"
+        }
+      }
+    }
+  ],
+  "selection_validation": {
+    "schema_version": 1,
+    "status": "pass",
+    "warnings": []
+  },
+  "audit": []
+}

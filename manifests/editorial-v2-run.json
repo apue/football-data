@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-06-25T03:32:54+00:00",
+  "generated_at": "2026-06-25T06:49:54+00:00",
   "status": "success",
-  "match_date": "2026-06-13",
+  "match_date": "2026-06-14",
   "workflow_variant": "ai_rerank_selection_v1",
   "experiment_id": "ai_rerank_slate_self_review_v4",
   "editor_runtime": "local_codex",
@@ -25,28 +25,33 @@
   "choices": [
     {
       "award_type": "player_of_the_day",
-      "player_name": "John McGINN",
-      "team": "Scotland"
+      "player_name": "Amad DIALLO",
+      "team": "Côte d'Ivoire"
     },
     {
       "award_type": "player_of_the_day",
-      "player_name": "VINICIUS JUNIOR",
-      "team": "Brazil"
+      "player_name": "Yasin AYARI",
+      "team": "Sweden"
     },
     {
       "award_type": "player_of_the_day",
-      "player_name": "Ismael SAIBARI",
-      "team": "Morocco"
+      "player_name": "Kai HAVERTZ",
+      "team": "Germany"
+    },
+    {
+      "award_type": "player_of_the_day",
+      "player_name": "Alexander ISAK",
+      "team": "Sweden"
+    },
+    {
+      "award_type": "player_of_the_day",
+      "player_name": "Daichi KAMADA",
+      "team": "Japan"
     },
     {
       "award_type": "impact_pick",
-      "player_name": "Breel EMBOLO",
-      "team": "Switzerland"
-    },
-    {
-      "award_type": "impact_pick",
-      "player_name": "Nestory IRANKUNDA",
-      "team": "Australia"
+      "player_name": "Deniz UNDAV",
+      "team": "Germany"
     }
   ]
 }
