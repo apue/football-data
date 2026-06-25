@@ -17,6 +17,7 @@ def build_compiled_report(
     selection_decision: dict[str, Any],
     selection_validation: dict[str, Any],
     copy: dict[str, Any],
+    editorial_review_validation: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     candidates = {
         str(candidate["player_id"]): candidate
@@ -81,6 +82,9 @@ def build_compiled_report(
             "workflow_variant": experiment["workflow_variant"],
             "experiment_id": experiment["id"],
             "selection_mode": experiment["selection"]["mode"],
+            "review_profile": experiment.get("review_profile"),
+            "revision_policy": experiment.get("revision_policy"),
+            "editorial_review_status": (editorial_review_validation or {}).get("status"),
             "uses_official_assists": uses_goal_involvements,
             "uses_goal_involvements": uses_goal_involvements,
             "event_source": "fifa_timeline_api" if uses_goal_involvements else None,
@@ -110,6 +114,9 @@ def write_v2_artifacts(
     agent_runs_dir: str | Path,
     run_out_path: str | Path,
     copy_validation: dict[str, Any] | None = None,
+    editorial_review_payload: dict[str, Any] | None = None,
+    editorial_review: dict[str, Any] | None = None,
+    editorial_review_validation: dict[str, Any] | None = None,
 ) -> None:
     write_compiled_editorial_artifacts(compiled, site_dir)
     reports_path = Path(reports_dir) / "editorial"
@@ -133,6 +140,12 @@ def write_v2_artifacts(
     }
     if copy_validation is not None:
         audit_payloads["copy_validation"] = copy_validation
+    if editorial_review_payload is not None:
+        audit_payloads["editorial_review_payload"] = editorial_review_payload
+    if editorial_review is not None:
+        audit_payloads["editorial_review"] = editorial_review
+    if editorial_review_validation is not None:
+        audit_payloads["editorial_review_validation"] = editorial_review_validation
     for name, payload in audit_payloads.items():
         (audit_dir / f"{name}.json").write_text(
             json.dumps(payload, ensure_ascii=False, indent=2) + "\n",

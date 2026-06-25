@@ -20,7 +20,14 @@ from football_data.editorial_registry import (
     load_candidate_pool_config,
     load_copy_profile,
     load_editorial_experiment,
+    load_review_profile,
     load_selector_profile,
+)
+from football_data.editorial_review import (
+    build_editorial_review_payload,
+    passing_editorial_review,
+    run_ai_editorial_review,
+    validate_editorial_review,
 )
 from football_data.editorial_selection import (
     build_selector_input,
@@ -87,6 +94,44 @@ def run_editorial_v2(
     copy_validation = validate_copy(copy, copy_profiles, copy_payload=copy_payload)
     if copy_validation["status"] != "pass":
         raise RuntimeError(f"Editorial v2 copy validation failed: {copy_validation['warnings']}")
+    editorial_review_payload = None
+    editorial_review = None
+    editorial_review_validation = None
+    review_profile_id = experiment.get("review_profile")
+    if review_profile_id:
+        review_profile = load_review_profile(str(review_profile_id), config_dir)
+        editorial_review_payload = build_editorial_review_payload(
+            selection_decision=selection_decision,
+            candidate_pool=candidate_pool,
+            copy=copy,
+            selection_validation=selection_validation,
+            copy_validation=copy_validation,
+            review_profile=review_profile,
+            selection_config=experiment.get("selection"),
+        )
+        if fake:
+            editorial_review = passing_editorial_review(
+                review_profile,
+                editorial_review_payload,
+                revision_summary="Legacy smoke runner produced a structurally reviewed fake pass.",
+            )
+        else:
+            model_key = str(review_profile.get("model_key") or "review_editor")
+            editorial_review = run_ai_editorial_review(
+                editorial_review_payload,
+                text_client,
+                review_profile,
+                model=config.models[model_key],
+            )
+        editorial_review_validation = validate_editorial_review(
+            editorial_review,
+            review_profile,
+            editorial_review_payload,
+        )
+        if editorial_review_validation["status"] != "pass":
+            raise RuntimeError(
+                f"Editorial v2 review validation failed: {editorial_review_validation['warnings']}"
+            )
     compiled = build_compiled_report(
         experiment=experiment,
         rankings=rankings,
@@ -94,6 +139,7 @@ def run_editorial_v2(
         selection_decision=selection_decision,
         selection_validation=selection_validation,
         copy=copy,
+        editorial_review_validation=editorial_review_validation,
     )
     run_payload: dict[str, Any] = {
         "schema_version": 1,
@@ -105,6 +151,7 @@ def run_editorial_v2(
         "scoring_version": rankings["scoring_version"],
         "selection_validation": selection_validation,
         "copy_validation": copy_validation,
+        "editorial_review_validation": editorial_review_validation,
         "choices": [
             {
                 "award_type": choice["award_type"],
@@ -123,6 +170,9 @@ def run_editorial_v2(
         selection_validation=selection_validation,
         copy_payload=copy_payload,
         copy=copy,
+        editorial_review_payload=editorial_review_payload,
+        editorial_review=editorial_review,
+        editorial_review_validation=editorial_review_validation,
         run_payload=run_payload,
         copy_validation=copy_validation,
         site_dir=site_dir,

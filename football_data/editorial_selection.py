@@ -282,9 +282,7 @@ def _fake_overall_slate_decision(
     slate_constraints = selection_config.get("slate_constraints", {})
     if not isinstance(slate_constraints, dict):
         slate_constraints = {}
-    target_count = int(selection_config.get("target_public_cards") or 0)
-    if target_count <= 0:
-        target_count = sum(int(value or 0) for value in award_limits.values())
+    target_count = _target_public_card_count(candidate_pool, selection_config, award_limits)
     award_preference = [
         str(item)
         for item in selection_config.get(
@@ -403,6 +401,41 @@ def _selection_required_slots(selection_config: dict[str, Any]) -> dict[str, int
         for award_type, expected_count in raw_slots.items()
         if str(award_type) not in optional_slots
     }
+
+
+def _target_public_card_count(
+    candidate_pool: dict[str, Any],
+    selection_config: dict[str, Any],
+    award_limits: dict[str, int],
+) -> int:
+    target_count = int(selection_config.get("target_public_cards") or 0)
+    if target_count > 0:
+        return target_count
+    public_card_count = selection_config.get("public_card_count")
+    if not isinstance(public_card_count, dict):
+        return sum(int(value or 0) for value in award_limits.values())
+    min_count = int(public_card_count.get("min") or 0)
+    max_count = int(public_card_count.get("max") or 0)
+    if min_count <= 0 or max_count <= 0:
+        return sum(int(value or 0) for value in award_limits.values())
+    if min_count > max_count:
+        min_count, max_count = max_count, min_count
+    match_count = len(
+        {
+            str(candidate.get("match_key") or "")
+            for candidate in candidate_pool.get("selectable_candidates", [])
+            if candidate.get("match_key")
+        }
+    )
+    for item in public_card_count.get("recommended_by_match_count", []):
+        if not isinstance(item, dict):
+            continue
+        lower = int(item.get("match_count_min") or 0)
+        upper = int(item.get("match_count_max") or 0)
+        recommended = int(item.get("recommended") or 0)
+        if lower <= match_count <= upper and recommended > 0:
+            return max(min_count, min(max_count, recommended))
+    return max_count
 
 
 def _overall_slate_score(candidate: dict[str, Any]) -> tuple[float, float, float, float, float]:

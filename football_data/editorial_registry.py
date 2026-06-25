@@ -49,6 +49,16 @@ def load_copy_profile(
     return profile
 
 
+def load_review_profile(
+    profile_id: str,
+    config_dir: str | Path = DEFAULT_CONFIG_DIR,
+) -> dict[str, Any]:
+    root = Path(config_dir)
+    profile = _load_registry_json(root / "review_profiles" / f"{profile_id}.json")
+    _require_id(profile, profile_id, "review profile")
+    return profile
+
+
 def _active_experiment_id(root: Path) -> str:
     production = _load_registry_json(root / "production.json")
     value = production.get("active_experiment")

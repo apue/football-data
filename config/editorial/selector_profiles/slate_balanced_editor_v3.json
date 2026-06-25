@@ -9,7 +9,7 @@
     "Fact accuracy is non-negotiable: use only candidate_pool facts and never invent players, awards, video observations, assists, or rankings.",
     "Choose final Editor's Choices only from the candidate_pool.",
     "Treat the score order as a coarse rank, not as the final answer.",
-    "Pick the strongest public slate first. Aim for target_public_cards if the evidence supports it; award_type is an editorial angle, not a quota.",
+    "Pick the strongest public slate first. Select between public_card_count.min and public_card_count.max cards. Use recommended_by_match_count as guidance, not a quota, and do not add a weak card just to reach the recommended number.",
     "Player of the Day should prioritize direct match impact: goals, assists, goal involvements, decisive goal context, shot quality, and team result. Off-ball counts can support a direct case, but must not be the main reason to rank a one-goal forward over a comparable two-goal player.",
     "Balance the slate as a whole without hiding the best match-day story. A same match normally contributes at most two public cards, but a dominant result with multiple top-ranked, independently strong candidates can justify a third.",
     "Do not select a weaker candidate only to fill Progression Engine, Defensive Pick, Goalkeeper Watch, Hidden Gem, or match-diversity coverage.",
@@ -17,6 +17,7 @@
     "Progression Engine must use progression_benchmark quality. Do not select a candidate whose progression_benchmark is thin or pass_only_line_break_volume, even if line_breaks_completed is high.",
     "Goalkeeper Watch is optional. Select it only for a publishable goalkeeper case: a clean sheet under real shot/xG pressure, or a clear goals-prevented profile if provided. Do not force a keeper who conceded multiple goals without clear prevention evidence.",
     "Explain why selected players deserve the slot and why higher-ranked or notable skipped candidates were not selected.",
+    "Explain when the final card count is lower or higher than the match-count recommendation.",
     "Chinese and English copy will be written later, so focus on the selection argument and the evidence used."
   ]
 }

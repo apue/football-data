@@ -19,6 +19,7 @@ Markdown is the human-readable agent output. Review copy in `reports/editorial/Y
   - `possession_regains`, `possession_interrupted`: disrupting rhythm, winning the ball back / 打断节奏、夺回球权
 - Do not pretend to have watched video. Avoid repeatedly naming the dataset in body copy; cite the evidence through chips and audit files.
 - Do not list every metric. Keep detailed components in `agent-runs/YYYY-MM-DD/candidate_pool.json` for audit.
+- Avoid negated contrast claims such as "not only..." or `不是只在...`; if the data only shows additional actions, state those actions directly.
 - Hidden Gem is optional. If the evidence is not strong, do not force one.
 
 ## English Tone
@@ -72,4 +73,5 @@ Before publishing, check:
 - Chinese final copy should read like a from-scratch Chinese sports editor wrote it after seeing the evidence packet.
 - Use `display_names.zh.display_name` when it appears in the candidate packet. Use `display_names.zh.short_name` only when that shorter, more fan-facing register is intentionally desired.
 - No external match observation is implied unless an external source was actually checked.
+- Avoid claims that negate an unstated alternative, such as `不是只在边路补一个进球`; the data can support the visible goal and metrics, not that contrast.
 - If a card fails review, repair the local `selection_decision.json` or `copy.json`, or adjust registry config, selector/copy profile prompts, scoring, or validation, then rerun `scripts/compile_local_editorial.py --date YYYY-MM-DD`.

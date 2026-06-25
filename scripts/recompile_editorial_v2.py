@@ -9,7 +9,8 @@ from pathlib import Path
 from football_data.demo import build_demo_site
 from football_data.editorial_artifacts import build_compiled_report, write_v2_artifacts
 from football_data.editorial_copy_validation import validate_copy
-from football_data.editorial_registry import load_copy_profile, load_editorial_experiment
+from football_data.editorial_registry import load_copy_profile, load_editorial_experiment, load_review_profile
+from football_data.editorial_review import build_editorial_review_payload, validate_editorial_review
 
 
 def main() -> int:
@@ -46,6 +47,29 @@ def main() -> int:
     copy_validation = validate_copy(copy, copy_profiles, copy_payload=copy_payload)
     if copy_validation["status"] != "pass":
         raise RuntimeError(f"Editorial v2 copy validation failed: {copy_validation['warnings']}")
+    editorial_review_payload = None
+    editorial_review = None
+    editorial_review_validation = None
+    review_profile_id = experiment.get("review_profile")
+    if review_profile_id:
+        review_profile = load_review_profile(str(review_profile_id), args.config_dir)
+        editorial_review_payload = build_editorial_review_payload(
+            selection_decision=selection_decision,
+            candidate_pool=candidate_pool,
+            copy=copy,
+            selection_validation=selection_validation,
+            copy_validation=copy_validation,
+            review_profile=review_profile,
+            selection_config=experiment.get("selection"),
+        )
+        editorial_review = _load_json(audit_dir / "editorial_review.json")
+        editorial_review_validation = validate_editorial_review(
+            editorial_review,
+            review_profile,
+            editorial_review_payload,
+        )
+        if editorial_review_validation["status"] != "pass":
+            raise RuntimeError(f"Editorial v2 review validation failed: {editorial_review_validation['warnings']}")
     compiled = build_compiled_report(
         experiment=experiment,
         rankings=rankings,
@@ -53,11 +77,13 @@ def main() -> int:
         selection_decision=selection_decision,
         selection_validation=selection_validation,
         copy=copy,
+        editorial_review_validation=editorial_review_validation,
     )
     run_payload = {
         **previous_run,
         "status": "success",
         "copy_validation": copy_validation,
+        "editorial_review_validation": editorial_review_validation,
         "recompiled_at": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
     }
     write_v2_artifacts(
@@ -69,6 +95,9 @@ def main() -> int:
         selection_validation=selection_validation,
         copy_payload=copy_payload,
         copy=copy,
+        editorial_review_payload=editorial_review_payload,
+        editorial_review=editorial_review,
+        editorial_review_validation=editorial_review_validation,
         run_payload=run_payload,
         copy_validation=copy_validation,
         site_dir=args.site_dir,

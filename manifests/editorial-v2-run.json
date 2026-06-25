@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-06-24T13:45:55+00:00",
+  "generated_at": "2026-06-25T00:34:06+00:00",
   "status": "success",
   "match_date": "2026-06-23",
   "workflow_variant": "ai_rerank_selection_v1",
-  "experiment_id": "ai_rerank_slate_copy_v3",
+  "experiment_id": "ai_rerank_slate_self_review_v4",
   "editor_runtime": "local_codex",
   "scoring_version": "v0.4",
   "selection_validation": {
@@ -13,6 +13,11 @@
     "warnings": []
   },
   "copy_validation": {
+    "schema_version": 1,
+    "status": "pass",
+    "warnings": []
+  },
+  "editorial_review_validation": {
     "schema_version": 1,
     "status": "pass",
     "warnings": []
@@ -29,11 +34,6 @@
       "team": "Portugal"
     },
     {
-      "award_type": "impact_pick",
-      "player_name": "BRUNO FERNANDES",
-      "team": "Portugal"
-    },
-    {
       "award_type": "player_of_the_day",
       "player_name": "Ante BUDIMIR",
       "team": "Croatia"
@@ -41,6 +41,11 @@
     {
       "award_type": "player_of_the_day",
       "player_name": "NUNO MENDES",
+      "team": "Portugal"
+    },
+    {
+      "award_type": "impact_pick",
+      "player_name": "BRUNO FERNANDES",
       "team": "Portugal"
     }
   ]

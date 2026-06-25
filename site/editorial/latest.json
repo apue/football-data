@@ -1,13 +1,20 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-06-24T13:45:55+00:00",
-  "compiled_at": "2026-06-24T13:45:55+00:00",
+  "generated_at": "2026-06-25T00:34:06+00:00",
+  "compiled_at": "2026-06-25T00:34:06+00:00",
   "match_date": "2026-06-23",
   "scoring_version": "v0.4",
   "editorial_generation": {
     "workflow_variant": "ai_rerank_selection_v1",
-    "experiment_id": "ai_rerank_slate_copy_v3",
+    "experiment_id": "ai_rerank_slate_self_review_v4",
     "selection_mode": "ai_rerank_only",
+    "review_profile": "reader_intuition_v1",
+    "revision_policy": {
+      "mode": "local_editor_revise_until_review_passes",
+      "max_revision_rounds": 2,
+      "blocking_review_requires_revision": true
+    },
+    "editorial_review_status": "pass",
     "uses_official_assists": true,
     "uses_goal_involvements": true,
     "event_source": "fifa_timeline_api",
@@ -297,15 +304,15 @@
           "取得进球"
         ]
       },
-      "selection_reason": "Scored the only goal in Colombia's 1-0 win over Congo DR, with a 75th-minute match-winning finish.",
+      "selection_reason": "Selected because he scored the only goal in Colombia's 1-0 win, and the late match-winning context is the cleanest public case on the day.",
       "content": {
         "en": {
-          "title": "Munoz Hit Colombia's Winner",
-          "html": "<p>Munoz scored the only goal in Colombia's 1-0 win over Congo DR. It came in the 75th minute, enough to decide a tight game.</p>"
+          "title": "Munoz settled Colombia's 1-0 win",
+          "html": "<p>Daniel Munoz scored the only goal in the 76th minute, giving Colombia the 1-0 win over Congo DR. In a tight match, that one finish carries the case.</p>"
         },
         "zh": {
-          "title": "穆尼奥斯第75分钟制胜",
-          "html": "<p>穆尼奥斯打进哥伦比亚1-0击败刚果（金）的唯一进球。第75分钟这一下，够把一场僵局敲开。</p>"
+          "title": "穆尼奥斯第76分钟制胜",
+          "html": "<p>穆尼奥斯第76分钟打进全场唯一进球，哥伦比亚1-0拿下刚果（金）。一场卡得很紧的比赛，他这脚处理得很干脆。</p>"
         }
       }
     },
@@ -348,59 +355,15 @@
           "射门质量突出"
         ]
       },
-      "selection_reason": "Opened the scoring and completed a brace in Portugal's 5-0 win over Uzbekistan, with five shots on target.",
+      "selection_reason": "Selected because two goals, including the opener, are the clearest individual attacking case from Portugal's 5-0 win.",
       "content": {
         "en": {
-          "title": "Ronaldo Scored Twice",
-          "html": "<p>Ronaldo opened the scoring after five minutes and added another before half-time. Portugal won 5-0, and his five shots on target kept the case simple.</p>"
+          "title": "Cristiano Ronaldo scored twice",
+          "html": "<p>Cristiano Ronaldo opened the scoring in the 6th minute and added another in the 39th. Portugal won 5-0, and his seven shots with five on target make the headline straightforward.</p>"
         },
         "zh": {
           "title": "C罗梅开二度",
-          "html": "<p>C罗第5分钟首开纪录，半场前又进一个。葡萄牙5-0赢乌兹别克斯坦，他全场5次射正，火力压得很满。</p>"
-        }
-      }
-    },
-    {
-      "award_type": "impact_pick",
-      "award_types": [
-        "impact_pick"
-      ],
-      "award_label": {
-        "en": "Impact Pick",
-        "zh": "影响力精选"
-      },
-      "player_id": "FIFA-2026-M47-POR-GHA|Portugal|8",
-      "player_name": "BRUNO FERNANDES",
-      "team": "Portugal",
-      "opponent": "Uzbekistan",
-      "match_key": "FIFA-2026-M47-POR-GHA",
-      "match_no": 47,
-      "player_no": 8,
-      "position": "MF",
-      "score": 81.02,
-      "metrics": {
-        "shots": 2,
-        "on_target": 1,
-        "assists": 1,
-        "goal_involvements": 1
-      },
-      "evidence_chips": {
-        "en": [
-          "assist"
-        ],
-        "zh": [
-          "送出助攻"
-        ]
-      },
-      "selection_reason": "Supplied an assist and added an all-round Portugal packet in a dominant 5-0 win.",
-      "content": {
-        "en": {
-          "title": "Fernandes Supplied the Assist",
-          "html": "<p>Fernandes added an assist in Portugal's 5-0 win and kept showing for the ball. With 32 received offers, his game was more than a footnote to the scoreline.</p>"
-        },
-        "zh": {
-          "title": "布鲁诺-费尔南德斯送出助攻",
-          "html": "<p>布鲁诺-费尔南德斯在葡萄牙5-0这场送出助攻，也一直在中前场接应串联。32次接到队友传球，他不是只在比分后面补一笔。</p>"
+          "html": "<p>C罗第6分钟先破门，第39分钟又进一个，葡萄牙很早就把比分拉开。全场7脚射门、5次射正，门前处理很干净。</p>"
         }
       }
     },
@@ -447,15 +410,15 @@
           "取得进球"
         ]
       },
-      "selection_reason": "Came off the bench and scored the only goal in Croatia's 1-0 win over Panama.",
+      "selection_reason": "Selected because he came off the bench and scored the only goal in Croatia's 1-0 win over Panama.",
       "content": {
         "en": {
-          "title": "Budimir Changed It off the Bench",
-          "html": "<p>Budimir came on and scored the only goal against Panama in the 53rd minute. Croatia won 1-0, so the substitute finish carried the match.</p>"
+          "title": "Budimir came off the bench to win it",
+          "html": "<p>Ante Budimir scored in the 54th minute after coming on as a substitute. Croatia beat Panama 1-0, so his only shot on target became the match-winner.</p>"
         },
         "zh": {
           "title": "布季米尔替补制胜",
-          "html": "<p>布季米尔替补登场后，第53分钟打进全场唯一进球。克罗地亚1-0赢巴拿马，这一脚把替补价值踢出来了。</p>"
+          "html": "<p>布季米尔替补出场后第54分钟破门，克罗地亚1-0赢巴拿马。全场只有这一个进球，替补席给出的回应很及时。</p>"
         }
       }
     },
@@ -491,15 +454,59 @@
           "取得进球"
         ]
       },
-      "selection_reason": "Scored Portugal's second goal and carried a strong progression profile in the same dominant 5-0 win.",
+      "selection_reason": "Selected because he scored Portugal's second goal and also carried a strong two-way profile with progression and ball-winning evidence.",
       "content": {
         "en": {
-          "title": "Nuno Mendes Added a Goal and Drive",
-          "html": "<p>Nuno Mendes scored Portugal's second goal and kept moving possession forward. Eight ball progressions and 11 completed line breaks gave his game a separate shape.</p>"
+          "title": "Nuno Mendes added the second",
+          "html": "<p>Nuno Mendes scored Portugal's second goal in the 17th minute, then backed it up with 11 line breaks, 8 ball progressions and 6 regains. It was a goal with a real two-way packet behind it.</p>"
         },
         "zh": {
           "title": "努诺-门德斯进球又推进",
-          "html": "<p>努诺-门德斯第16分钟进球，帮葡萄牙把比分带到2-0。他还有8次带球推进、11次打穿防线，边路存在感很足。</p>"
+          "html": "<p>努诺-门德斯第17分钟进球，把葡萄牙的领先扩大到2-0。数据里还能看到11次打穿防线、8次推进和6次夺回球权。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "impact_pick",
+      "award_types": [
+        "impact_pick"
+      ],
+      "award_label": {
+        "en": "Impact Pick",
+        "zh": "影响力精选"
+      },
+      "player_id": "FIFA-2026-M47-POR-GHA|Portugal|8",
+      "player_name": "BRUNO FERNANDES",
+      "team": "Portugal",
+      "opponent": "Uzbekistan",
+      "match_key": "FIFA-2026-M47-POR-GHA",
+      "match_no": 47,
+      "player_no": 8,
+      "position": "MF",
+      "score": 81.02,
+      "metrics": {
+        "shots": 2,
+        "on_target": 1,
+        "assists": 1,
+        "goal_involvements": 1
+      },
+      "evidence_chips": {
+        "en": [
+          "assist"
+        ],
+        "zh": [
+          "送出助攻"
+        ]
+      },
+      "selection_reason": "Selected as an impact angle because he assisted Ronaldo's second goal and adds a credible midfield control case behind Portugal's 5-0 win.",
+      "content": {
+        "en": {
+          "title": "Bruno Fernandes supplied Ronaldo",
+          "html": "<p>Bruno Fernandes assisted Ronaldo's second goal in the 39th minute, taking Portugal to 3-0 before half-time. His 19 line breaks and 32 receptions add the midfield control behind the direct contribution.</p>"
+        },
+        "zh": {
+          "title": "布鲁诺-费尔南德斯送出助攻",
+          "html": "<p>布鲁诺-费尔南德斯第39分钟助攻C罗完成第二球，葡萄牙半场前已经到3-0。他全场19次打穿防线、32次接应，更多是在中场把球路续上。</p>"
         }
       }
     }

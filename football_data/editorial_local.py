@@ -19,6 +19,11 @@ from football_data.editorial_registry import (
     load_candidate_pool_config,
     load_copy_profile,
     load_editorial_experiment,
+    load_review_profile,
+)
+from football_data.editorial_review import (
+    build_editorial_review_payload,
+    validate_editorial_review,
 )
 from football_data.editorial_selection import (
     build_selector_input,
@@ -49,6 +54,7 @@ def prepare_editorial_packet(
         rankings=rankings,
         selection_validation=None,
         copy_validation=None,
+        editorial_review_validation=None,
         choices=[],
     )
 
@@ -58,8 +64,11 @@ def prepare_editorial_packet(
         "selection_decision",
         "selection_validation",
         "copy_validation",
+        "editorial_review_payload",
+        "editorial_review_validation",
         "copy_payload",
         "copy",
+        "editorial_review",
     ):
         stale_path = audit_dir / f"{stale_name}.json"
         if stale_path.exists():
@@ -113,6 +122,41 @@ def compile_local_editorial(
     if copy_validation["status"] != "pass":
         raise RuntimeError(f"Local editorial copy validation failed: {copy_validation['warnings']}")
 
+    editorial_review = None
+    editorial_review_payload = None
+    editorial_review_validation = None
+    review_profile_id = experiment.get("review_profile")
+    if review_profile_id:
+        review_profile = load_review_profile(str(review_profile_id), config_dir)
+        editorial_review_payload = build_editorial_review_payload(
+            selection_decision=selection_decision,
+            candidate_pool=candidate_pool,
+            copy=copy,
+            selection_validation=selection_validation,
+            copy_validation=copy_validation,
+            review_profile=review_profile,
+            selection_config=experiment.get("selection"),
+        )
+        _write_json(audit_dir / "editorial_review_payload.json", editorial_review_payload)
+        try:
+            editorial_review = _load_json(audit_dir / "editorial_review.json")
+            editorial_review_validation = validate_editorial_review(
+                editorial_review,
+                review_profile,
+                editorial_review_payload,
+            )
+        except FileNotFoundError as exc:
+            editorial_review_validation = {
+                "schema_version": 1,
+                "status": "failed",
+                "warnings": [str(exc)],
+            }
+        _write_json(audit_dir / "editorial_review_validation.json", editorial_review_validation)
+        if editorial_review_validation["status"] != "pass":
+            raise RuntimeError(
+                f"Local editorial review failed: {editorial_review_validation['warnings']}"
+            )
+
     compiled = build_compiled_report(
         experiment=experiment,
         rankings=rankings,
@@ -120,6 +164,7 @@ def compile_local_editorial(
         selection_decision=selection_decision,
         selection_validation=selection_validation,
         copy=copy,
+        editorial_review_validation=editorial_review_validation,
     )
     run_payload = _run_payload(
         status="success",
@@ -128,6 +173,7 @@ def compile_local_editorial(
         rankings=rankings,
         selection_validation=selection_validation,
         copy_validation=copy_validation,
+        editorial_review_validation=editorial_review_validation,
         choices=[
             {
                 "award_type": choice["award_type"],
@@ -146,6 +192,9 @@ def compile_local_editorial(
         selection_validation=selection_validation,
         copy_payload=copy_payload,
         copy=copy,
+        editorial_review_payload=editorial_review_payload,
+        editorial_review=editorial_review,
+        editorial_review_validation=editorial_review_validation,
         run_payload=run_payload,
         copy_validation=copy_validation,
         site_dir=site_dir,
@@ -166,6 +215,7 @@ def _run_payload(
     rankings: dict[str, Any],
     selection_validation: dict[str, Any] | None,
     copy_validation: dict[str, Any] | None,
+    editorial_review_validation: dict[str, Any] | None,
     choices: list[dict[str, Any]],
 ) -> dict[str, Any]:
     return {
@@ -179,6 +229,7 @@ def _run_payload(
         "scoring_version": rankings["scoring_version"],
         "selection_validation": selection_validation,
         "copy_validation": copy_validation,
+        "editorial_review_validation": editorial_review_validation,
         "choices": choices,
     }
 

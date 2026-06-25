@@ -57,10 +57,18 @@ def validate_selection_decision(
         if award_counts[award_type] < int(expected_count):
             warnings.append(f"missing required slot {award_type}")
     target_public_cards = int(selection_config.get("target_public_cards") or 0)
+    public_card_count = _selection_public_card_count(selection_config)
     if target_public_cards and len(selected) != target_public_cards:
         warnings.append(
             f"selected public card count {len(selected)} does not match target_public_cards {target_public_cards}"
         )
+    elif public_card_count:
+        min_count, max_count = public_card_count
+        if len(selected) < min_count or len(selected) > max_count:
+            warnings.append(
+                "selected public card count "
+                f"{len(selected)} outside public_card_count range {min_count}-{max_count}"
+            )
 
     slate_constraints = selection_config.get("slate_constraints", {})
     if isinstance(slate_constraints, dict):
@@ -162,6 +170,19 @@ def _selection_required_slots(selection_config: dict[str, Any]) -> dict[str, int
         for award_type, expected_count in raw_slots.items()
         if str(award_type) not in optional_slots
     }
+
+
+def _selection_public_card_count(selection_config: dict[str, Any]) -> tuple[int, int] | None:
+    raw_count = selection_config.get("public_card_count")
+    if not isinstance(raw_count, dict):
+        return None
+    min_count = int(raw_count.get("min") or 0)
+    max_count = int(raw_count.get("max") or 0)
+    if min_count <= 0 or max_count <= 0:
+        return None
+    if min_count > max_count:
+        min_count, max_count = max_count, min_count
+    return min_count, max_count
 
 
 def _goalkeeper_watch_publishable(candidate: dict[str, Any]) -> bool:
