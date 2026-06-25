@@ -20,9 +20,19 @@
     .choice-card aside strong { display: block; font-size: 34px; }
     .choice-card aside > span { color: #59677c; font-size: 12px; text-transform: uppercase; }
     .meta { margin: 0; color: #59677c; }
+    .award-badges { display: flex; flex-wrap: wrap; gap: 6px; margin: -6px 0 10px; }
+    .award-badge { border: 1px solid #dce5f2; background: #f7f9fc; color: #35465d; border-radius: 999px; padding: 4px 8px; font-size: 12px; font-weight: 700; }
     .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
     .chips span { background: #edf2fa; border: 1px solid #dce5f2; border-radius: 999px; padding: 5px 9px; font-size: 12px; }
+    .archive-list { display: grid; gap: 10px; margin-top: 22px; }
+    .archive-row { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; align-items: center; gap: 12px; padding: 14px 16px; color: inherit; text-decoration: none; background: #fff; border: 1px solid #dde3ee; border-radius: 8px; }
+    .archive-row:hover { border-color: #b7c4d4; }
+    .archive-row span { color: #59677c; font-size: 13px; }
+    .badge { justify-self: end; border-radius: 999px; padding: 4px 9px; border: 1px solid #dce5f2; background: #edf2fa; color: #35465d; font-size: 12px; }
+    .badge.official { border-color: #b7dfd4; background: #e7f7f1; color: #0f766e; }
+    .badge.legacy { border-color: #e7d8ad; background: #fff7df; color: #806215; }
     @media (max-width: 720px) { .choice-card { grid-template-columns: 1fr; } .choice-card aside { border-left: 0; border-top: 1px solid #e8edf5; padding-left: 0; padding-top: 14px; } }
+    @media (max-width: 720px) { .archive-row { grid-template-columns: 1fr; align-items: start; } .badge { justify-self: start; } }
     </style>
 </head>
 <body>
@@ -30,102 +40,70 @@
     <p class="eyebrow">FIFA PMSR Data</p>
     <h1>Editor's Choices · 2026-06-18</h1>
     <p class="lede">Data-informed selections from the latest structured PMSR dataset. These are not official awards.</p>
-    
-    <article class="choice-card">
+        <article class="choice-card">
       <div>
         <p class="award">Player of the Day</p>
+        <div class="award-badges"></div>
         <h2>🇨🇦 Jonathan DAVID</h2>
         <p class="meta">🇨🇦 Canada vs 🇶🇦 Qatar · Match 27</p>
-        <h3>The hat-trick was enough</h3>
-        <p>Jonathan David made the Player of the Day decision straightforward by scoring three goals in Canada's 6-0 win over Qatar. Six shots on target underline how often he turned Canada's attacks into clean finishes.</p>
-        <h3>戴维戴帽，加拿大六球横扫卡塔尔</h3>
-        <p>戴维上演帽子戏法，加拿大 6-0 横扫卡塔尔。3个进球、6次射正，终结效率摆在台面上。除了最后一脚，他还有15次接应成功，说明他不只是站在禁区里等球。</p>
+        <h3>David finished the hat-trick</h3>
+        <p>Jonathan David scored three times in Canada's 6-0 win over Qatar. He put six of his eight shots on target, then completed the hat-trick in stoppage time.</p>
+        <h3>乔纳森·戴维帽子戏法</h3>
+        <p>加拿大6-0卡塔尔，乔纳森·戴维包下三球。第29分钟、45+3分钟和90+2分钟各进一个，8脚射门6次射正。</p>
       </div>
       <aside>
         <div class="chips"><span>hat-trick</span><span>high shot quality</span></div>
       </aside>
     </article>
-            
 
     <article class="choice-card">
       <div>
         <p class="award">Player of the Day</p>
-        <h2>🇿🇦 Teboho MOKOENA</h2>
-        <p class="meta">🇿🇦 South Africa vs 🇨🇿 Czechia · Match 25</p>
-        <h3>The midfield connector</h3>
-        <p>Teboho Mokoena served as South Africa's midfield connector, repeatedly breaking Czechia's defensive lines and giving teammates a reliable passing outlet. He completed 29 line breaks and received 38 offers, then scored the equaliser.</p>
-        <h3>莫科埃纳扳平救主，中场接应撑起南非攻势</h3>
-        <p>莫科埃纳的扳平进球帮助南非1-1逼平捷克。落后时，他在中场不停接应、反复打穿捷克防线，让南非始终有路向前。全场38次接应成功、29次打穿防线，跑动超过10.5公里，6次抢回球权，这些动作把进攻和防守都串了起来。</p>
-      </div>
-      <aside>
-        <div class="chips"><span>equaliser</span><span>goal scorer</span><span>repeated line breaks</span><span>found again and again</span></div>
-      </aside>
-    </article>
-            
-
-    <article class="choice-card">
-      <div>
-        <p class="award">Player of the Day</p>
+        <div class="award-badges"></div>
         <h2>🇨🇭 Johan MANZAMBI</h2>
         <p class="meta">🇨🇭 Switzerland vs 🇧🇦 Bosnia and Herzegovina · Match 26</p>
-        <h3>The substitute who changed it</h3>
-        <p>Johan Manzambi's two goals off the bench turned the match for Switzerland. The substitute brace gave a clear reason for his place here and helped Switzerland pull away to a 4-1 win.</p>
-        <h3>替补登场双响，Manzambi 把比分带开</h3>
-        <p>瑞士4比1大胜波黑，替补登场的 Manzambi 把比分打开了。他上场后先首开纪录，再进一球完成双响，比赛也从僵持变成瑞士占优。</p><p>除了进球，7次成功接应也说明他进入比赛很快。替补双响已经是最直接的理由。</p>
+        <h3>Manzambi changed Switzerland's night</h3>
+        <p>Johan Manzambi came off the bench and scored twice against Bosnia and Herzegovina. His first goal opened the scoring, and his second made it 3-0 before Switzerland finished 4-1.</p>
+        <h3>曼赞比替补双响</h3>
+        <p>瑞士4-1波黑，曼赞比替补登场后第74分钟先破门，90分钟又进一球。两脚都进，瑞士后半段很快拉开。</p>
       </div>
       <aside>
         <div class="chips"><span>brace</span><span>substitute brace</span><span>opening goal</span></div>
       </aside>
     </article>
-            
 
     <article class="choice-card">
       <div>
-        <p class="award">Impact Pick</p>
+        <p class="award">Player of the Day</p>
+        <div class="award-badges"></div>
         <h2>🇲🇽 Luis ROMO</h2>
         <p class="meta">🇲🇽 Mexico vs 🇰🇷 Korea Republic · Match 28</p>
-        <h3>The only goal mattered</h3>
-        <p>Luis Romo delivered the decisive moment in a tight 1-0 win over Korea Republic, scoring the match's only goal. His strike helped Mexico secure a narrow but vital victory with no margin for error.</p>
-        <h3>罗莫制胜一击，墨西哥1比0力克韩国</h3>
-        <p>路易斯·罗莫打入全场唯一进球，墨西哥1比0拿下韩国。他多次在韩国防线之间接应，把中场和前场串了起来，最终亲自完成致命一击。</p>
+        <h3>Romo scored the only goal</h3>
+        <p>Mexico needed one goal against Korea Republic, and Luis Romo supplied it after half-time. One shot, one on target, one 1-0 win.</p>
+        <h3>罗莫一球制胜</h3>
+        <p>墨西哥1-0韩国，罗莫第50分钟打进全场唯一进球。1脚射门1次射正，墨西哥就靠这球拿下来了。</p>
       </div>
       <aside>
-        <div class="chips"><span>only goal</span><span>match-winning goal</span><span>goal scorer</span><span>between-line presence</span></div>
+        <div class="chips"><span>only goal</span><span>match-winning goal</span><span>goal scorer</span></div>
       </aside>
     </article>
-            
 
     <article class="choice-card">
       <div>
-        <p class="award">Progression Pick</p>
-        <h2>🇨🇭 Granit XHAKA</h2>
-        <p class="meta">🇨🇭 Switzerland vs 🇧🇦 Bosnia and Herzegovina · Match 26</p>
-        <h3>The best route forward</h3>
-        <p>Granit Xhaka gave Switzerland a consistent route forward, repeatedly breaking Bosnia's lines with 31 completed line breaks and scoring a goal to cap his influence.</p>
-        <h3>扎卡：进球之外，31次打穿防线撑起瑞士推进</h3>
-        <p>瑞士4-1击败波黑，扎卡不仅自己进球，还在中场反复打穿波黑防线。全场31次打穿防线、2次带球推进，再加上大量接应，他就是瑞士最稳定的向前出口之一。</p>
+        <p class="award">Player of the Day</p>
+        <div class="award-badges"></div>
+        <h2>🇿🇦 Teboho MOKOENA</h2>
+        <p class="meta">🇿🇦 South Africa vs 🇨🇿 Czechia · Match 25</p>
+        <h3>Mokoena saved South Africa a point</h3>
+        <p>Teboho Mokoena equalised in the 83rd minute against Czechia. The late goal carries the card, with 29 completed line breaks and 6 regains behind it.</p>
+        <h3>莫科纳第83分钟扳平</h3>
+        <p>捷克1-1南非，莫科纳第83分钟把比分追平。他在中场也够忙，29次打穿防线、6次夺回球权。</p>
       </div>
       <aside>
-        <div class="chips"><span>goal scorer</span><span>repeated line breaks</span><span>found again and again</span></div>
+        <div class="chips"><span>comeback equaliser</span><span>equaliser</span><span>goal scorer</span></div>
       </aside>
     </article>
-            
 
-    <article class="choice-card">
-      <div>
-        <p class="award">Hidden Gem</p>
-        <h2>🇰🇷 LEE Gihyuk</h2>
-        <p class="meta">🇰🇷 Korea Republic vs 🇲🇽 Mexico · Match 28</p>
-        <h3>The hidden defensive note</h3>
-        <p>Lee Gihyuk was the hidden defensive note in a narrow Korea Republic loss. He won the ball back nine times, broke up seven opposition moves, and helped keep a 1-0 match within reach.</p>
-        <h3>李基赫：输球方也有防守亮点</h3>
-        <p>韩国0比1负于墨西哥，李基赫的防守动作很密。9次抢回球权、7次破坏对方推进，再加上2次封堵，这些不是标题里最容易出现的东西，但足够解释他为什么值得被挑出来。</p>
-      </div>
-      <aside>
-        <div class="chips"><span>ball-winning profile</span></div>
-      </aside>
-    </article>
-            
   </main>
 </body>
 </html>

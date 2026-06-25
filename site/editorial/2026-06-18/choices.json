@@ -1,98 +1,32 @@
 {
-  "schema_version": 2,
-  "generated_at": "2026-06-19T15:36:40+00:00",
-  "compiled_at": "2026-06-19T15:36:40+00:00",
+  "schema_version": 3,
+  "generated_at": "2026-06-25T08:27:13+00:00",
+  "compiled_at": "2026-06-25T08:27:13+00:00",
   "match_date": "2026-06-18",
-  "scoring_version": "v0.3",
-  "editorial_input_hash": "46f47d3c0a14e3a28c434e84a4dbae6fc13885a86781129cd5e7ba7f2b459faf",
-  "editorial_input": {
-    "schema_version": "4",
-    "match_date": "2026-06-18",
-    "scoring_version": "v0.3",
-    "scoring_config_sha256": "450c692cebd49691c3517eb7dbc750beddbd91a01a7487b6598de50ac808b92c",
-    "matches": [
-      {
-        "match_key": "FIFA-2026-M25-CZE-RSA",
-        "source_id": "fifa-world-cup-2026-pmsr-m25-cze-rsa-v1",
-        "match_no": 25,
-        "match_date": "2026-06-18",
-        "home_team": "Czechia",
-        "away_team": "South Africa",
-        "home_score": 1,
-        "away_score": 1
-      },
-      {
-        "match_key": "FIFA-2026-M26-SUI-BIH",
-        "source_id": "fifa-world-cup-2026-pmsr-m26-sui-bih-v1",
-        "match_no": 26,
-        "match_date": "2026-06-18",
-        "home_team": "Switzerland",
-        "away_team": "Bosnia and Herzegovina",
-        "home_score": 4,
-        "away_score": 1
-      },
-      {
-        "match_key": "FIFA-2026-M27-CAN-QAT",
-        "source_id": "fifa-world-cup-2026-pmsr-m27-can-qat-v1",
-        "match_no": 27,
-        "match_date": "2026-06-18",
-        "home_team": "Canada",
-        "away_team": "Qatar",
-        "home_score": 6,
-        "away_score": 0
-      },
-      {
-        "match_key": "FIFA-2026-M28-MEX-KOR",
-        "source_id": "fifa-world-cup-2026-pmsr-m28-mex-kor-v1",
-        "match_no": 28,
-        "match_date": "2026-06-18",
-        "home_team": "Mexico",
-        "away_team": "Korea Republic",
-        "home_score": 1,
-        "away_score": 0
-      }
-    ],
-    "source_documents": [
-      {
-        "source_id": "fifa-world-cup-2026-pmsr-m25-cze-rsa-v1",
-        "match_key": "FIFA-2026-M25-CZE-RSA",
-        "match_no": 25,
-        "version": 1,
-        "sha256": "70eac257248c9e8f5eb7df07d660f3224ebd04306fe4f195ff8c5b146f7ef857",
-        "file_size": 5639790,
-        "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M25-CZE-V-RSA.pdf"
-      },
-      {
-        "source_id": "fifa-world-cup-2026-pmsr-m26-sui-bih-v1",
-        "match_key": "FIFA-2026-M26-SUI-BIH",
-        "match_no": 26,
-        "version": 1,
-        "sha256": "ef2e8713092b94e6137bc12c78fc8e12e7760b2af4c1a17f17b39a2bcc09957e",
-        "file_size": 5768975,
-        "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M26-SUI-V-BIH.pdf"
-      },
-      {
-        "source_id": "fifa-world-cup-2026-pmsr-m27-can-qat-v1",
-        "match_key": "FIFA-2026-M27-CAN-QAT",
-        "match_no": 27,
-        "version": 1,
-        "sha256": "066e71c7d48b42e0e212936a5dc3aecfa2a7dd9e7f872565c033b27123bf9a67",
-        "file_size": 5807367,
-        "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M27-CAN-V-QAT.pdf"
-      },
-      {
-        "source_id": "fifa-world-cup-2026-pmsr-m28-mex-kor-v1",
-        "match_key": "FIFA-2026-M28-MEX-KOR",
-        "match_no": 28,
-        "version": 1,
-        "sha256": "40e5663887806285da56121cd2e97a45e7c7094933bec0fcf925e9ac5cb684bc",
-        "file_size": 5758019,
-        "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M28-MEX-V-KOR.pdf"
-      }
-    ],
-    "input_hash": "46f47d3c0a14e3a28c434e84a4dbae6fc13885a86781129cd5e7ba7f2b459faf"
+  "scoring_version": "v0.4",
+  "editorial_generation": {
+    "workflow_variant": "ai_rerank_selection_v1",
+    "experiment_id": "ai_rerank_reader_loop_v5",
+    "selection_mode": "ai_rerank_only",
+    "review_profile": "reader_intuition_loop_v2",
+    "revision_policy": {
+      "mode": "reader_critic_revise_review_loop",
+      "max_revision_rounds": 2,
+      "blocking_review_requires_revision": true,
+      "revision_targets": [
+        "selection_decision",
+        "copy",
+        "review"
+      ]
+    },
+    "editorial_review_status": "pass",
+    "uses_official_assists": true,
+    "uses_goal_involvements": true,
+    "event_source": "fifa_timeline_api",
+    "event_sources": {
+      "goal_involvements": "fifa_timeline_api"
+    }
   },
-  "source_markdown_path": "reports/editorial/2026-06-18.md",
   "matches": [
     {
       "match_key": "FIFA-2026-M25-CZE-RSA",
@@ -139,35 +73,365 @@
       "away_score": 0
     }
   ],
+  "match_flows": {
+    "FIFA-2026-M25-CZE-RSA": {
+      "match_key": "FIFA-2026-M25-CZE-RSA",
+      "match_no": 25,
+      "match_date": "2026-06-18",
+      "home_team": "Czechia",
+      "away_team": "South Africa",
+      "home_score": 1,
+      "away_score": 1,
+      "winner_team": null,
+      "home_trailing_at_any_point": false,
+      "away_trailing_at_any_point": true,
+      "home_came_from_behind_to_win": false,
+      "away_came_from_behind_to_win": false,
+      "goals": [
+        {
+          "goal_order": 1,
+          "minute": 6,
+          "team": "Czechia",
+          "player_team": "Czechia",
+          "player_name": "Michal SADILEK",
+          "own_goal": false,
+          "score_before": "0-0",
+          "score_after": "1-0",
+          "team_score_before": 0,
+          "opponent_score_before": 0,
+          "team_score_after": 1,
+          "opponent_score_after": 0,
+          "tags": [
+            "opening_goal",
+            "go_ahead_goal"
+          ]
+        },
+        {
+          "goal_order": 2,
+          "minute": 83,
+          "team": "South Africa",
+          "player_team": "South Africa",
+          "player_name": "Teboho MOKOENA",
+          "own_goal": false,
+          "score_before": "1-0",
+          "score_after": "1-1",
+          "team_score_before": 0,
+          "opponent_score_before": 1,
+          "team_score_after": 1,
+          "opponent_score_after": 1,
+          "tags": [
+            "equalizer",
+            "comeback_equalizer",
+            "late_goal"
+          ]
+        }
+      ],
+      "decisive_goal": null
+    },
+    "FIFA-2026-M26-SUI-BIH": {
+      "match_key": "FIFA-2026-M26-SUI-BIH",
+      "match_no": 26,
+      "match_date": "2026-06-18",
+      "home_team": "Switzerland",
+      "away_team": "Bosnia and Herzegovina",
+      "home_score": 4,
+      "away_score": 1,
+      "winner_team": "Switzerland",
+      "home_trailing_at_any_point": false,
+      "away_trailing_at_any_point": true,
+      "home_came_from_behind_to_win": false,
+      "away_came_from_behind_to_win": false,
+      "goals": [
+        {
+          "goal_order": 1,
+          "minute": 74,
+          "team": "Switzerland",
+          "player_team": "Switzerland",
+          "player_name": "Johan MANZAMBI",
+          "own_goal": false,
+          "score_before": "0-0",
+          "score_after": "1-0",
+          "team_score_before": 0,
+          "opponent_score_before": 0,
+          "team_score_after": 1,
+          "opponent_score_after": 0,
+          "tags": [
+            "opening_goal",
+            "go_ahead_goal"
+          ]
+        },
+        {
+          "goal_order": 2,
+          "minute": 84,
+          "team": "Switzerland",
+          "player_team": "Switzerland",
+          "player_name": "Ruben VARGAS",
+          "own_goal": false,
+          "score_before": "1-0",
+          "score_after": "2-0",
+          "team_score_before": 1,
+          "opponent_score_before": 0,
+          "team_score_after": 2,
+          "opponent_score_after": 0,
+          "tags": [
+            "late_goal"
+          ]
+        },
+        {
+          "goal_order": 3,
+          "minute": 90,
+          "team": "Switzerland",
+          "player_team": "Switzerland",
+          "player_name": "Johan MANZAMBI",
+          "own_goal": false,
+          "score_before": "2-0",
+          "score_after": "3-0",
+          "team_score_before": 2,
+          "opponent_score_before": 0,
+          "team_score_after": 3,
+          "opponent_score_after": 0,
+          "tags": [
+            "late_goal",
+            "stoppage_time_goal"
+          ]
+        },
+        {
+          "goal_order": 4,
+          "minute": 93,
+          "team": "Bosnia and Herzegovina",
+          "player_team": "Bosnia and Herzegovina",
+          "player_name": "Ermin MAHMIC",
+          "own_goal": false,
+          "score_before": "3-0",
+          "score_after": "3-1",
+          "team_score_before": 0,
+          "opponent_score_before": 3,
+          "team_score_after": 1,
+          "opponent_score_after": 3,
+          "tags": [
+            "late_goal",
+            "stoppage_time_goal"
+          ]
+        },
+        {
+          "goal_order": 5,
+          "minute": 97,
+          "team": "Switzerland",
+          "player_team": "Switzerland",
+          "player_name": "Granit XHAKA",
+          "own_goal": false,
+          "score_before": "3-1",
+          "score_after": "4-1",
+          "team_score_before": 3,
+          "opponent_score_before": 1,
+          "team_score_after": 4,
+          "opponent_score_after": 1,
+          "tags": [
+            "late_goal",
+            "stoppage_time_goal"
+          ]
+        }
+      ],
+      "decisive_goal": null
+    },
+    "FIFA-2026-M27-CAN-QAT": {
+      "match_key": "FIFA-2026-M27-CAN-QAT",
+      "match_no": 27,
+      "match_date": "2026-06-18",
+      "home_team": "Canada",
+      "away_team": "Qatar",
+      "home_score": 6,
+      "away_score": 0,
+      "winner_team": "Canada",
+      "home_trailing_at_any_point": false,
+      "away_trailing_at_any_point": true,
+      "home_came_from_behind_to_win": false,
+      "away_came_from_behind_to_win": false,
+      "goals": [
+        {
+          "goal_order": 1,
+          "minute": 16,
+          "team": "Canada",
+          "player_team": "Canada",
+          "player_name": "Cyle LARIN",
+          "own_goal": false,
+          "score_before": "0-0",
+          "score_after": "1-0",
+          "team_score_before": 0,
+          "opponent_score_before": 0,
+          "team_score_after": 1,
+          "opponent_score_after": 0,
+          "tags": [
+            "opening_goal",
+            "go_ahead_goal"
+          ]
+        },
+        {
+          "goal_order": 2,
+          "minute": 29,
+          "team": "Canada",
+          "player_team": "Canada",
+          "player_name": "Jonathan DAVID",
+          "own_goal": false,
+          "score_before": "1-0",
+          "score_after": "2-0",
+          "team_score_before": 1,
+          "opponent_score_before": 0,
+          "team_score_after": 2,
+          "opponent_score_after": 0,
+          "tags": []
+        },
+        {
+          "goal_order": 3,
+          "minute": 48,
+          "team": "Canada",
+          "player_team": "Canada",
+          "player_name": "Jonathan DAVID",
+          "own_goal": false,
+          "score_before": "2-0",
+          "score_after": "3-0",
+          "team_score_before": 2,
+          "opponent_score_before": 0,
+          "team_score_after": 3,
+          "opponent_score_after": 0,
+          "tags": []
+        },
+        {
+          "goal_order": 4,
+          "minute": 64,
+          "team": "Canada",
+          "player_team": "Canada",
+          "player_name": "Nathan SALIBA",
+          "own_goal": false,
+          "score_before": "3-0",
+          "score_after": "4-0",
+          "team_score_before": 3,
+          "opponent_score_before": 0,
+          "team_score_after": 4,
+          "opponent_score_after": 0,
+          "tags": []
+        },
+        {
+          "goal_order": 5,
+          "minute": 75,
+          "team": "Canada",
+          "player_team": "Qatar",
+          "player_name": "MOHAMED MANAI",
+          "own_goal": true,
+          "score_before": "4-0",
+          "score_after": "5-0",
+          "team_score_before": 4,
+          "opponent_score_before": 0,
+          "team_score_after": 5,
+          "opponent_score_after": 0,
+          "tags": [
+            "late_goal"
+          ]
+        },
+        {
+          "goal_order": 6,
+          "minute": 92,
+          "team": "Canada",
+          "player_team": "Canada",
+          "player_name": "Jonathan DAVID",
+          "own_goal": false,
+          "score_before": "5-0",
+          "score_after": "6-0",
+          "team_score_before": 5,
+          "opponent_score_before": 0,
+          "team_score_after": 6,
+          "opponent_score_after": 0,
+          "tags": [
+            "late_goal",
+            "stoppage_time_goal"
+          ]
+        }
+      ],
+      "decisive_goal": null
+    },
+    "FIFA-2026-M28-MEX-KOR": {
+      "match_key": "FIFA-2026-M28-MEX-KOR",
+      "match_no": 28,
+      "match_date": "2026-06-18",
+      "home_team": "Mexico",
+      "away_team": "Korea Republic",
+      "home_score": 1,
+      "away_score": 0,
+      "winner_team": "Mexico",
+      "home_trailing_at_any_point": false,
+      "away_trailing_at_any_point": true,
+      "home_came_from_behind_to_win": false,
+      "away_came_from_behind_to_win": false,
+      "goals": [
+        {
+          "goal_order": 1,
+          "minute": 50,
+          "team": "Mexico",
+          "player_team": "Mexico",
+          "player_name": "Luis ROMO",
+          "own_goal": false,
+          "score_before": "0-0",
+          "score_after": "1-0",
+          "team_score_before": 0,
+          "opponent_score_before": 0,
+          "team_score_after": 1,
+          "opponent_score_after": 0,
+          "tags": [
+            "opening_goal",
+            "go_ahead_goal",
+            "match_winning_goal"
+          ]
+        }
+      ],
+      "decisive_goal": {
+        "goal_order": 1,
+        "minute": 50,
+        "team": "Mexico",
+        "player_team": "Mexico",
+        "player_name": "Luis ROMO",
+        "own_goal": false,
+        "score_before": "0-0",
+        "score_after": "1-0",
+        "team_score_before": 0,
+        "opponent_score_before": 0,
+        "team_score_after": 1,
+        "opponent_score_after": 0,
+        "tags": [
+          "opening_goal",
+          "go_ahead_goal",
+          "match_winning_goal"
+        ]
+      }
+    }
+  },
   "choices": [
     {
       "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
       "award_label": {
         "en": "Player of the Day",
         "zh": "每日最佳球员"
       },
-      "rank": 1,
-      "match_key": "FIFA-2026-M27-CAN-QAT",
-      "match_no": 27,
-      "player_no": 10,
+      "player_id": "FIFA-2026-M27-CAN-QAT|Canada|10",
       "player_name": "Jonathan DAVID",
       "team": "Canada",
       "opponent": "Qatar",
-      "home_score": 6,
-      "away_score": 0,
-      "team_final_goals": 6,
-      "opponent_final_goals": 0,
+      "match_key": "FIFA-2026-M27-CAN-QAT",
+      "match_no": 27,
+      "player_no": 10,
       "position": "FW",
-      "progression_benchmark": {
-        "score": 1.7,
-        "quality": "thin",
-        "support_actions": 0.0,
-        "pass_only_line_break_volume": false
-      },
-      "hidden_gem_profile": {
-        "eligible": false,
-        "profile": "insufficient_evidence",
-        "score": 32.9
+      "score": 123.67,
+      "metrics": {
+        "shots": 8,
+        "on_target": 6,
+        "goals": 3,
+        "goal_involvements": 3,
+        "brace": 1,
+        "hat_trick": 1,
+        "late_goal": 1,
+        "stoppage_time_goal": 1
       },
       "evidence_chips": {
         "en": [
@@ -179,99 +443,48 @@
           "射门质量突出"
         ]
       },
+      "selection_reason": "Selected because he scored a hat-trick in Canada's 6-0 win over Qatar, with six shots on target.",
       "content": {
         "en": {
-          "title": "The hat-trick was enough",
-          "html": "<p>Jonathan David made the Player of the Day decision straightforward by scoring three goals in Canada's 6-0 win over Qatar. Six shots on target underline how often he turned Canada's attacks into clean finishes.</p>"
+          "title": "David finished the hat-trick",
+          "html": "<p>Jonathan David scored three times in Canada's 6-0 win over Qatar. He put six of his eight shots on target, then completed the hat-trick in stoppage time.</p>"
         },
         "zh": {
-          "title": "戴维戴帽，加拿大六球横扫卡塔尔",
-          "html": "<p>戴维上演帽子戏法，加拿大 6-0 横扫卡塔尔。3个进球、6次射正，终结效率摆在台面上。除了最后一脚，他还有15次接应成功，说明他不只是站在禁区里等球。</p>"
+          "title": "乔纳森·戴维帽子戏法",
+          "html": "<p>加拿大6-0卡塔尔，乔纳森·戴维包下三球。第29分钟、45+3分钟和90+2分钟各进一个，8脚射门6次射正。</p>"
         }
       }
     },
     {
       "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
       "award_label": {
         "en": "Player of the Day",
         "zh": "每日最佳球员"
       },
-      "rank": 2,
-      "match_key": "FIFA-2026-M25-CZE-RSA",
-      "match_no": 25,
-      "player_no": 4,
-      "player_name": "Teboho MOKOENA",
-      "team": "South Africa",
-      "opponent": "Czechia",
-      "home_score": 1,
-      "away_score": 1,
-      "team_final_goals": 1,
-      "opponent_final_goals": 1,
-      "position": "MF",
-      "progression_benchmark": {
-        "score": 24.3,
-        "quality": "strong",
-        "support_actions": 3.0,
-        "pass_only_line_break_volume": false
-      },
-      "hidden_gem_profile": {
-        "eligible": true,
-        "profile": "progression_engine",
-        "score": 24.3
-      },
-      "evidence_chips": {
-        "en": [
-          "equaliser",
-          "goal scorer",
-          "repeated line breaks",
-          "found again and again"
-        ],
-        "zh": [
-          "扳平进球",
-          "取得进球",
-          "持续打穿防线",
-          "持续接应"
-        ]
-      },
-      "content": {
-        "en": {
-          "title": "The midfield connector",
-          "html": "<p>Teboho Mokoena served as South Africa's midfield connector, repeatedly breaking Czechia's defensive lines and giving teammates a reliable passing outlet. He completed 29 line breaks and received 38 offers, then scored the equaliser.</p>"
-        },
-        "zh": {
-          "title": "莫科埃纳扳平救主，中场接应撑起南非攻势",
-          "html": "<p>莫科埃纳的扳平进球帮助南非1-1逼平捷克。落后时，他在中场不停接应、反复打穿捷克防线，让南非始终有路向前。全场38次接应成功、29次打穿防线，跑动超过10.5公里，6次抢回球权，这些动作把进攻和防守都串了起来。</p>"
-        }
-      }
-    },
-    {
-      "award_type": "player_of_the_day",
-      "award_label": {
-        "en": "Player of the Day",
-        "zh": "每日最佳球员"
-      },
-      "rank": 3,
-      "match_key": "FIFA-2026-M26-SUI-BIH",
-      "match_no": 26,
-      "player_no": 9,
+      "player_id": "FIFA-2026-M26-SUI-BIH|Switzerland|9",
       "player_name": "Johan MANZAMBI",
       "team": "Switzerland",
       "opponent": "Bosnia and Herzegovina",
-      "home_score": 4,
-      "away_score": 1,
-      "team_final_goals": 4,
-      "opponent_final_goals": 1,
+      "match_key": "FIFA-2026-M26-SUI-BIH",
+      "match_no": 26,
+      "player_no": 9,
       "position": "MF",
-      "progression_benchmark": {
-        "score": 8.1,
-        "quality": "thin",
-        "support_actions": 4.0,
-        "pass_only_line_break_volume": false
-      },
-      "hidden_gem_profile": {
-        "eligible": false,
-        "profile": "insufficient_evidence",
-        "score": 12.2
+      "score": 103.56,
+      "metrics": {
+        "shots": 2,
+        "on_target": 2,
+        "goals": 2,
+        "goal_involvements": 2,
+        "brace": 1,
+        "opening_goal": 1,
+        "go_ahead_goal": 1,
+        "late_goal": 1,
+        "stoppage_time_goal": 1,
+        "substitute_goal": 2,
+        "substitute_brace": 1
       },
       "evidence_chips": {
         "en": [
@@ -285,260 +498,126 @@
           "首开纪录"
         ]
       },
+      "selection_reason": "Selected because he scored twice as a substitute in Switzerland's 4-1 win over Bosnia and Herzegovina, including the opening goal.",
       "content": {
         "en": {
-          "title": "The substitute who changed it",
-          "html": "<p>Johan Manzambi's two goals off the bench turned the match for Switzerland. The substitute brace gave a clear reason for his place here and helped Switzerland pull away to a 4-1 win.</p>"
+          "title": "Manzambi changed Switzerland's night",
+          "html": "<p>Johan Manzambi came off the bench and scored twice against Bosnia and Herzegovina. His first goal opened the scoring, and his second made it 3-0 before Switzerland finished 4-1.</p>"
         },
         "zh": {
-          "title": "替补登场双响，Manzambi 把比分带开",
-          "html": "<p>瑞士4比1大胜波黑，替补登场的 Manzambi 把比分打开了。他上场后先首开纪录，再进一球完成双响，比赛也从僵持变成瑞士占优。</p><p>除了进球，7次成功接应也说明他进入比赛很快。替补双响已经是最直接的理由。</p>"
+          "title": "曼赞比替补双响",
+          "html": "<p>瑞士4-1波黑，曼赞比替补登场后第74分钟先破门，90分钟又进一球。两脚都进，瑞士后半段很快拉开。</p>"
         }
       }
     },
     {
-      "award_type": "impact_pick",
+      "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
       "award_label": {
-        "en": "Impact Pick",
-        "zh": "影响力精选"
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
       },
-      "rank": 1,
-      "match_key": "FIFA-2026-M28-MEX-KOR",
-      "match_no": 28,
-      "player_no": 7,
+      "player_id": "FIFA-2026-M28-MEX-KOR|Mexico|7",
       "player_name": "Luis ROMO",
       "team": "Mexico",
       "opponent": "Korea Republic",
-      "home_score": 1,
-      "away_score": 0,
-      "team_final_goals": 1,
-      "opponent_final_goals": 0,
+      "match_key": "FIFA-2026-M28-MEX-KOR",
+      "match_no": 28,
+      "player_no": 7,
       "position": "MF",
-      "progression_benchmark": {
-        "score": 7.75,
-        "quality": "thin",
-        "support_actions": 0.0,
-        "pass_only_line_break_volume": false
-      },
-      "hidden_gem_profile": {
-        "eligible": false,
-        "profile": "insufficient_evidence",
-        "score": 36.5
+      "score": 91.11,
+      "metrics": {
+        "shots": 1,
+        "on_target": 1,
+        "goals": 1,
+        "goal_involvements": 1,
+        "opening_goal": 1,
+        "go_ahead_goal": 1,
+        "match_winning_goal": 1,
+        "only_goal_winner": 1
       },
       "evidence_chips": {
         "en": [
           "only goal",
           "match-winning goal",
-          "goal scorer",
-          "between-line presence"
+          "goal scorer"
         ],
         "zh": [
           "全场唯一进球",
           "打入制胜球",
-          "取得进球",
-          "在防线之间活跃"
+          "取得进球"
         ]
       },
+      "selection_reason": "Selected because he scored the only goal in Mexico's 1-0 win over Korea Republic.",
       "content": {
         "en": {
-          "title": "The only goal mattered",
-          "html": "<p>Luis Romo delivered the decisive moment in a tight 1-0 win over Korea Republic, scoring the match's only goal. His strike helped Mexico secure a narrow but vital victory with no margin for error.</p>"
+          "title": "Romo scored the only goal",
+          "html": "<p>Mexico needed one goal against Korea Republic, and Luis Romo supplied it after half-time. One shot, one on target, one 1-0 win.</p>"
         },
         "zh": {
-          "title": "罗莫制胜一击，墨西哥1比0力克韩国",
-          "html": "<p>路易斯·罗莫打入全场唯一进球，墨西哥1比0拿下韩国。他多次在韩国防线之间接应，把中场和前场串了起来，最终亲自完成致命一击。</p>"
+          "title": "罗莫一球制胜",
+          "html": "<p>墨西哥1-0韩国，罗莫第50分钟打进全场唯一进球。1脚射门1次射正，墨西哥就靠这球拿下来了。</p>"
         }
       }
     },
     {
-      "award_type": "progression_pick",
+      "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
       "award_label": {
-        "en": "Progression Pick",
-        "zh": "推进精选"
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
       },
-      "rank": 1,
-      "match_key": "FIFA-2026-M26-SUI-BIH",
-      "match_no": 26,
-      "player_no": 10,
-      "player_name": "Granit XHAKA",
-      "team": "Switzerland",
-      "opponent": "Bosnia and Herzegovina",
-      "home_score": 4,
-      "away_score": 1,
-      "team_final_goals": 4,
-      "opponent_final_goals": 1,
+      "player_id": "FIFA-2026-M25-CZE-RSA|South Africa|4",
+      "player_name": "Teboho MOKOENA",
+      "team": "South Africa",
+      "opponent": "Czechia",
+      "match_key": "FIFA-2026-M25-CZE-RSA",
+      "match_no": 25,
+      "player_no": 4,
       "position": "MF",
-      "progression_benchmark": {
-        "score": 32.55,
-        "quality": "strong",
-        "support_actions": 6.0,
-        "pass_only_line_break_volume": false
-      },
-      "hidden_gem_profile": {
-        "eligible": true,
-        "profile": "progression_engine",
-        "score": 32.55
+      "score": 105.86,
+      "metrics": {
+        "shots": 2,
+        "on_target": 1,
+        "goals": 1,
+        "goal_involvements": 1,
+        "equalizing_goal": 1,
+        "late_goal": 1,
+        "comeback_equalizer": 1
       },
       "evidence_chips": {
         "en": [
-          "goal scorer",
-          "repeated line breaks",
-          "found again and again"
+          "comeback equaliser",
+          "equaliser",
+          "goal scorer"
         ],
         "zh": [
-          "取得进球",
-          "持续打穿防线",
-          "持续接应"
+          "逆转扳平",
+          "扳平进球",
+          "取得进球"
         ]
       },
+      "selection_reason": "Selected because he scored South Africa's 83rd-minute equaliser in the 1-1 draw with Czechia and also had the strongest midfield involvement packet from that match.",
       "content": {
         "en": {
-          "title": "The best route forward",
-          "html": "<p>Granit Xhaka gave Switzerland a consistent route forward, repeatedly breaking Bosnia's lines with 31 completed line breaks and scoring a goal to cap his influence.</p>"
+          "title": "Mokoena saved South Africa a point",
+          "html": "<p>Teboho Mokoena equalised in the 83rd minute against Czechia. The late goal carries the card, with 29 completed line breaks and 6 regains behind it.</p>"
         },
         "zh": {
-          "title": "扎卡：进球之外，31次打穿防线撑起瑞士推进",
-          "html": "<p>瑞士4-1击败波黑，扎卡不仅自己进球，还在中场反复打穿波黑防线。全场31次打穿防线、2次带球推进，再加上大量接应，他就是瑞士最稳定的向前出口之一。</p>"
-        }
-      }
-    },
-    {
-      "award_type": "hidden_gem",
-      "award_label": {
-        "en": "Hidden Gem",
-        "zh": "隐藏亮点"
-      },
-      "rank": 1,
-      "match_key": "FIFA-2026-M28-MEX-KOR",
-      "match_no": 28,
-      "player_no": 3,
-      "player_name": "LEE Gihyuk",
-      "team": "Korea Republic",
-      "opponent": "Mexico",
-      "home_score": 1,
-      "away_score": 0,
-      "team_final_goals": 0,
-      "opponent_final_goals": 1,
-      "position": "MF",
-      "progression_benchmark": {
-        "score": 16.3,
-        "quality": "thin",
-        "support_actions": 2.0,
-        "pass_only_line_break_volume": false
-      },
-      "hidden_gem_profile": {
-        "eligible": true,
-        "profile": "defensive_resistance",
-        "score": 50.85
-      },
-      "evidence_chips": {
-        "en": [
-          "ball-winning profile"
-        ],
-        "zh": [
-          "夺回球权能力突出"
-        ]
-      },
-      "content": {
-        "en": {
-          "title": "The hidden defensive note",
-          "html": "<p>Lee Gihyuk was the hidden defensive note in a narrow Korea Republic loss. He won the ball back nine times, broke up seven opposition moves, and helped keep a 1-0 match within reach.</p>"
-        },
-        "zh": {
-          "title": "李基赫：输球方也有防守亮点",
-          "html": "<p>韩国0比1负于墨西哥，李基赫的防守动作很密。9次抢回球权、7次破坏对方推进，再加上2次封堵，这些不是标题里最容易出现的东西，但足够解释他为什么值得被挑出来。</p>"
+          "title": "莫科纳第83分钟扳平",
+          "html": "<p>捷克1-1南非，莫科纳第83分钟把比分追平。他在中场也够忙，29次打穿防线、6次夺回球权。</p>"
         }
       }
     }
   ],
-  "selection_review": {
-    "status": "publishable",
-    "alerts": [
-      {
-        "level": "info",
-        "code": "same_team_multiple_picks",
-        "message": "Multiple picks can still come from one team when roles are clearly distinct.",
-        "teams": [
-          {
-            "team": "Switzerland",
-            "count": 2
-          }
-        ]
-      }
-    ],
-    "iterations": [
-      {
-        "iteration": 1,
-        "status": "needs_adjustment",
-        "alerts": [
-          {
-            "level": "high",
-            "code": "defensive_pick_from_heavy_loss",
-            "message": "Nikola KATIC has the top defensive score, but Bosnia and Herzegovina conceded 4 in a heavy loss.",
-            "player_name": "Nikola KATIC",
-            "team": "Bosnia and Herzegovina",
-            "replacement_candidate": "LEE Gihyuk"
-          },
-          {
-            "level": "high",
-            "code": "hidden_gem_duplicates_existing_team",
-            "message": "Oswin APPOLLIS is a strong hidden-gem profile, but South Africa already has another pick and LEE Gihyuk gives the slate a distinct match angle.",
-            "player_name": "Oswin APPOLLIS",
-            "team": "South Africa",
-            "replacement_candidate": "LEE Gihyuk"
-          },
-          {
-            "level": "info",
-            "code": "same_team_multiple_picks",
-            "message": "Multiple picks can still come from one team when roles are clearly distinct.",
-            "teams": [
-              {
-                "team": "South Africa",
-                "count": 2
-              },
-              {
-                "team": "Switzerland",
-                "count": 2
-              }
-            ]
-          }
-        ],
-        "choice_names": [
-          "Jonathan DAVID",
-          "Teboho MOKOENA",
-          "Johan MANZAMBI",
-          "Luis ROMO",
-          "Granit XHAKA",
-          "Oswin APPOLLIS",
-          "Nikola KATIC"
-        ]
-      },
-      {
-        "iteration": 2,
-        "status": "publishable",
-        "alerts": [
-          {
-            "level": "info",
-            "code": "same_team_multiple_picks",
-            "message": "Multiple picks can still come from one team when roles are clearly distinct.",
-            "teams": [
-              {
-                "team": "Switzerland",
-                "count": 2
-              }
-            ]
-          }
-        ],
-        "choice_names": [
-          "Jonathan DAVID",
-          "Teboho MOKOENA",
-          "Johan MANZAMBI",
-          "Luis ROMO",
-          "Granit XHAKA",
-          "LEE Gihyuk"
-        ]
-      }
-    ]
+  "selection_validation": {
+    "schema_version": 1,
+    "status": "pass",
+    "warnings": []
   },
   "audit": []
 }
