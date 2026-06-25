@@ -148,7 +148,7 @@ def _load_official_goal_events(
           and lower(coalesce(e.event_type_name, '')) in ('goal!', 'penalty goal', 'own goal')
           and e.home_goals is not null
           and e.away_goals is not null
-        order by e.match_key, e.absolute_minute, e.event_id
+        order by e.match_key, e.period, e.absolute_minute, e.event_id
         """,
         params,
     ).fetchall()

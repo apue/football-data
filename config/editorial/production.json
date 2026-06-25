@@ -1,3 +1,32 @@
 {
-  "active_experiment": "ai_rerank_slate_self_review_v4"
+  "active_experiment": "ai_rerank_reader_loop_v5",
+  "stable_mainline": [
+    "pmsr_and_fifa_timeline_sources",
+    "deterministic_candidate_pool",
+    "ai_rerank_only_from_candidate_pool",
+    "deterministic_selection_validation",
+    "local_codex_copy_and_review",
+    "compiled_static_pages"
+  ],
+  "active_variants": {
+    "selection": "ai_rerank_selection_v1",
+    "scoring": "v0.4",
+    "candidate_pool": "guarded_packet_v2",
+    "selector_profile": "slate_balanced_editor_v3",
+    "review_loop": "reader_intuition_loop_v2",
+    "copy_profiles": [
+      "en_plain_v1",
+      "zh_matchnote_light_emotion_v1"
+    ]
+  },
+  "retired_experiments": [
+    {
+      "id": "ai_rerank_slate_copy_v3",
+      "reason": "Superseded by local reader-intuition review and copy validation."
+    },
+    {
+      "id": "ai_rerank_slate_self_review_v4",
+      "reason": "Superseded by explicit slate-level critic/revision loop."
+    }
+  ]
 }

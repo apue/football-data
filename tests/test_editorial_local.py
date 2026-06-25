@@ -72,7 +72,7 @@ def test_compile_local_editorial_uses_local_decision_and_copy(tmp_path):
     assert result["status"] == "success"
     assert result["editor_runtime"] == "local_codex"
     assert result["selection_validation"]["status"] == "pass"
-    assert choices["editorial_generation"]["experiment_id"] == "ai_rerank_slate_self_review_v4"
+    assert choices["editorial_generation"]["experiment_id"] == "ai_rerank_reader_loop_v5"
     assert choices["editorial_generation"]["editorial_review_status"] == "pass"
     assert [choice["player_name"] for choice in choices["choices"]][:3] == [
         "Kylian MBAPPE",
