@@ -221,10 +221,10 @@ def test_editorial_evidence_exposes_match_flow_for_comeback_winner(tmp_path):
     fact_bank_text = json.dumps(fact_bank, ensure_ascii=False)
     brief_text = json.dumps(brief, ensure_ascii=False)
     assert "德国 0-1 落后后 2-1 逆转取胜" in fact_bank_text
-    assert "67' 扳平" in fact_bank_text
-    assert "93' 补时制胜" in fact_bank_text
+    assert "68' 扳平" in fact_bank_text
+    assert "94' 补时制胜" in fact_bank_text
     assert "Germany came from behind to win 2-1" in brief_text
-    assert "93' stoppage-time winner" in brief_text
+    assert "94' stoppage-time winner" in brief_text
 
 
 def test_editorial_evidence_keeps_blowout_goals_out_of_winner_claims():

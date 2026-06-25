@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-06-25T00:34:06+00:00",
+  "generated_at": "2026-06-25T03:09:57+00:00",
   "status": "success",
-  "match_date": "2026-06-23",
+  "match_date": "2026-06-12",
   "workflow_variant": "ai_rerank_selection_v1",
   "experiment_id": "ai_rerank_slate_self_review_v4",
   "editor_runtime": "local_codex",
@@ -25,28 +25,23 @@
   "choices": [
     {
       "award_type": "player_of_the_day",
-      "player_name": "Daniel MUNOZ",
-      "team": "Colombia"
+      "player_name": "Folarin BALOGUN",
+      "team": "USA"
     },
     {
       "award_type": "player_of_the_day",
-      "player_name": "CRISTIANO RONALDO",
-      "team": "Portugal"
+      "player_name": "Cyle LARIN",
+      "team": "Canada"
     },
     {
       "award_type": "player_of_the_day",
-      "player_name": "Ante BUDIMIR",
-      "team": "Croatia"
+      "player_name": "Malik TILLMAN",
+      "team": "USA"
     },
     {
       "award_type": "player_of_the_day",
-      "player_name": "NUNO MENDES",
-      "team": "Portugal"
-    },
-    {
-      "award_type": "impact_pick",
-      "player_name": "BRUNO FERNANDES",
-      "team": "Portugal"
+      "player_name": "Alex FREEMAN",
+      "team": "USA"
     }
   ]
 }
