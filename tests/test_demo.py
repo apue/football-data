@@ -105,13 +105,28 @@ def test_demo_uses_player_first_bilingual_dashboard(tmp_path):
     assert 'class="language-toggle"' in html
     assert 'data-lang-button="zh"' in html
     assert 'data-i18n="hero.title"' in html
-    assert 'data-scope="round1"' in html
-    assert 'data-scope="round2"' in html
+    assert 'data-scope="group_round_1"' in html
+    assert 'data-scope="group_round_2"' in html
+    assert 'data-scope="group_round_3"' in html
     assert 'data-scope="overall"' in html
     assert 'data-mode="single"' in html
     assert 'data-mode="accumulated"' in html
     assert 'id="leaderboard-grid"' in html
     assert "Player Leaderboards" in html
+    assert "Goal Involvements" in html
+    assert "进球参与" in html
+    assert "Progressive Line Breaks" in html
+    assert "推进型打穿防线" in html
+    assert "Completed Crosses" in html
+    assert "成功传中" in html
+    assert "Top Speed" in html
+    assert "最高速度" in html
+    assert "Distance Covered" in html
+    assert "跑动距离" in html
+    assert "Sprints" in html
+    assert "冲刺次数" in html
+    assert "In-Behind Offers" not in html
+    assert "身后接应" not in html
 
 
 def test_demo_does_not_show_stale_editorial_cards_as_latest(tmp_path):
@@ -158,26 +173,3 @@ def _latest_data_date() -> str:
         conn.close()
     assert row and row[0]
     return str(row[0])
-    assert "球员榜单" in html
-    assert "Most Shots on Target" in html
-    assert "射正最多" in html
-    assert "Completed Line Breaks" in html
-    assert "打穿防线" in html
-    assert "In-Behind Offers" in html
-    assert "身后接应" in html
-    assert "Ball Progressions" in html
-    assert "推进球" in html
-    assert "Possession Regains" in html
-    assert "夺回球权" in html
-    assert "Single-match peak" in html
-    assert "单场峰值" in html
-    assert "Accumulated" in html
-    assert "累计" in html
-    assert "Group Round 1" in html
-    assert "小组赛第一轮" in html
-    assert "🇵🇦 Andres ANDRADE" in html
-    assert "Top 5 Fastest Players" not in html
-    assert "Top 5 Total Distance" not in html
-    assert "Top 5 Completed Line Breaks" not in html
-    assert "Top 5 Final Third Receptions" not in html
-    assert "Goals and On-Target Shots" not in html

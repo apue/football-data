@@ -12,18 +12,67 @@ from football_data.flags import format_player, format_team
 
 SCOPE_SPECS = [
     {
-        "id": "round1",
+        "id": "group_round_1",
         "match_min": 1,
         "match_max": 24,
-        "label": {"en": "Group Round 1", "zh": "小组赛第一轮"},
-        "short": {"en": "Round 1", "zh": "第一轮"},
+        "label": {"en": "Group Round 1", "zh": "小组赛第1轮"},
+        "short": {"en": "Group R1", "zh": "小组第1轮"},
     },
     {
-        "id": "round2",
+        "id": "group_round_2",
         "match_min": 25,
         "match_max": 48,
-        "label": {"en": "Group Round 2", "zh": "小组赛第二轮"},
-        "short": {"en": "Round 2", "zh": "第二轮"},
+        "label": {"en": "Group Round 2", "zh": "小组赛第2轮"},
+        "short": {"en": "Group R2", "zh": "小组第2轮"},
+    },
+    {
+        "id": "group_round_3",
+        "match_min": 49,
+        "match_max": 72,
+        "label": {"en": "Group Round 3", "zh": "小组赛第3轮"},
+        "short": {"en": "Group R3", "zh": "小组第3轮"},
+    },
+    {
+        "id": "round_of_32",
+        "match_min": 73,
+        "match_max": 88,
+        "label": {"en": "Round of 32", "zh": "1/16决赛"},
+        "short": {"en": "R32", "zh": "1/16"},
+    },
+    {
+        "id": "round_of_16",
+        "match_min": 89,
+        "match_max": 96,
+        "label": {"en": "Round of 16", "zh": "1/8决赛"},
+        "short": {"en": "R16", "zh": "1/8"},
+    },
+    {
+        "id": "quarter_finals",
+        "match_min": 97,
+        "match_max": 100,
+        "label": {"en": "Quarter-finals", "zh": "1/4决赛"},
+        "short": {"en": "QF", "zh": "1/4"},
+    },
+    {
+        "id": "semi_finals",
+        "match_min": 101,
+        "match_max": 102,
+        "label": {"en": "Semi-finals", "zh": "半决赛"},
+        "short": {"en": "SF", "zh": "半决赛"},
+    },
+    {
+        "id": "third_place",
+        "match_min": 103,
+        "match_max": 103,
+        "label": {"en": "Third-place Play-off", "zh": "三四名决赛"},
+        "short": {"en": "3rd", "zh": "三四名"},
+    },
+    {
+        "id": "final",
+        "match_min": 104,
+        "match_max": 104,
+        "label": {"en": "Final", "zh": "决赛"},
+        "short": {"en": "Final", "zh": "决赛"},
     },
     {
         "id": "overall",
@@ -35,6 +84,21 @@ SCOPE_SPECS = [
 ]
 
 CATEGORY_SPECS = [
+    {
+        "id": "goalInvolvements",
+        "metric": "goal_involvements",
+        "title": {"en": "Goal Involvements", "zh": "进球参与"},
+        "metric_label": {"en": "G+A", "zh": "进球+助攻"},
+        "description": {
+            "en": "Official goals and assists from the FIFA match timeline.",
+            "zh": "来自 FIFA 比赛时间线的官方进球和助攻。",
+        },
+        "secondary": [
+            ("goals", {"en": "Goals", "zh": "进球"}),
+            ("assists", {"en": "Assists", "zh": "助攻"}),
+        ],
+        "tie_breakers": ["goals", "shots_on_target", "assists"],
+    },
     {
         "id": "shotsOnTarget",
         "metric": "shots_on_target",
@@ -50,17 +114,17 @@ CATEGORY_SPECS = [
         ],
     },
     {
-        "id": "lineBreaks",
-        "metric": "line_breaks_completed",
-        "title": {"en": "Completed Line Breaks", "zh": "打穿防线"},
-        "metric_label": {"en": "Completed", "zh": "成功次数"},
+        "id": "takeOns",
+        "metric": "take_ons",
+        "title": {"en": "Take-ons", "zh": "持球突破"},
+        "metric_label": {"en": "Take-ons", "zh": "突破"},
         "description": {
-            "en": "Passes or actions that broke an opposition line.",
-            "zh": "用传球或处理球越过对手一条防线的成功次数。",
+            "en": "On-ball actions that beat or engaged defenders.",
+            "zh": "持球直接挑战防守人的突破动作。",
         },
         "secondary": [
-            ("passes_completed", {"en": "Passes", "zh": "成功传球"}),
             ("ball_progressions", {"en": "Progressions", "zh": "推进球"}),
+            ("progressive_line_breaks", {"en": "Progressive breaks", "zh": "推进打穿"}),
         ],
     },
     {
@@ -73,53 +137,103 @@ CATEGORY_SPECS = [
             "zh": "把球权持续带到更有威胁区域的球员。",
         },
         "secondary": [
-            ("line_breaks_completed", {"en": "Line breaks", "zh": "打穿防线"}),
+            ("progressive_line_breaks", {"en": "Progressive breaks", "zh": "推进打穿"}),
             ("take_ons", {"en": "Take-ons", "zh": "持球突破"}),
         ],
     },
     {
-        "id": "inBehindOffers",
-        "metric": "in_behind",
-        "title": {"en": "In-Behind Offers", "zh": "身后接应"},
-        "metric_label": {"en": "Offers", "zh": "接应"},
+        "id": "progressiveLineBreaks",
+        "metric": "progressive_line_breaks",
+        "title": {"en": "Progressive Line Breaks", "zh": "推进型打穿防线"},
+        "metric_label": {"en": "Breaks", "zh": "次数"},
         "description": {
-            "en": "Runs and movement that threatened the space behind defenders.",
-            "zh": "持续冲击后卫身后空间的无球接应。",
+            "en": "Line breaks created by carries or crosses, not raw pass volume.",
+            "zh": "由带球推进或传中完成的打穿防线，不把普通传球堆量放在首位。",
         },
         "secondary": [
-            ("offers_received", {"en": "Received", "zh": "接到球"}),
-            ("total_offers", {"en": "All offers", "zh": "全部接应"}),
+            ("line_break_ball_progression", {"en": "Carries", "zh": "带球"}),
+            ("line_break_cross", {"en": "Crosses", "zh": "传中"}),
         ],
     },
     {
-        "id": "takeOns",
-        "metric": "take_ons",
-        "title": {"en": "Take-ons", "zh": "持球突破"},
-        "metric_label": {"en": "Take-ons", "zh": "突破"},
+        "id": "completedCrosses",
+        "metric": "crosses_completed",
+        "title": {"en": "Completed Crosses", "zh": "成功传中"},
+        "metric_label": {"en": "Completed", "zh": "成功"},
         "description": {
-            "en": "On-ball actions that beat or engaged defenders.",
-            "zh": "持球直接挑战防守人的突破动作。",
+            "en": "Wide or final-third delivery that reached a teammate.",
+            "zh": "边路或前场传中真正找到队友的次数。",
         },
         "secondary": [
-            ("ball_progressions", {"en": "Progressions", "zh": "推进球"}),
-            ("line_breaks_completed", {"en": "Line breaks", "zh": "打穿防线"}),
+            ("crosses_attempted", {"en": "Attempts", "zh": "尝试"}),
+            ("progressive_line_breaks", {"en": "Progressive breaks", "zh": "推进打穿"}),
         ],
     },
     {
-        "id": "regains",
-        "metric": "possession_regains",
-        "title": {"en": "Possession Regains", "zh": "夺回球权"},
-        "metric_label": {"en": "Regains", "zh": "夺回"},
+        "id": "defensiveStops",
+        "metric": "defensive_stops",
+        "title": {"en": "Defensive Stops", "zh": "防守阻断"},
+        "metric_label": {"en": "Stops", "zh": "阻断"},
         "description": {
-            "en": "Defensive work that turned the ball back over.",
-            "zh": "把球权重新抢回来的防守贡献。",
+            "en": "Tackles won, interceptions and blocks in one defensive view.",
+            "zh": "把成功抢断、拦截和封堵合在一起看防守存在感。",
         },
         "secondary": [
+            ("tackles_won", {"en": "Tackles", "zh": "抢断"}),
             ("interceptions", {"en": "Interceptions", "zh": "拦截"}),
             ("blocks", {"en": "Blocks", "zh": "封堵"}),
         ],
     },
+    {
+        "id": "topSpeed",
+        "metric": "top_speed_kmh",
+        "title": {"en": "Top Speed", "zh": "最高速度"},
+        "metric_label": {"en": "km/h", "zh": "km/h"},
+        "description": {
+            "en": "The fastest peak speed recorded in a match.",
+            "zh": "单场比赛中被记录到的最高瞬时速度。",
+        },
+        "secondary": [
+            ("sprints", {"en": "Sprints", "zh": "冲刺"}),
+            ("high_speed_runs", {"en": "High-speed runs", "zh": "高速跑"}),
+        ],
+        "tie_breakers": ["sprints", "high_speed_runs", "total_distance_m"],
+    },
+    {
+        "id": "distanceCovered",
+        "metric": "total_distance_m",
+        "title": {"en": "Distance Covered", "zh": "跑动距离"},
+        "metric_label": {"en": "m", "zh": "米"},
+        "description": {
+            "en": "Total distance covered, best read with role and minutes in mind.",
+            "zh": "全场跑动总距离，适合结合位置和出场时间一起看。",
+        },
+        "secondary": [
+            ("high_speed_runs", {"en": "High-speed runs", "zh": "高速跑"}),
+            ("sprints", {"en": "Sprints", "zh": "冲刺"}),
+        ],
+        "tie_breakers": ["high_speed_runs", "sprints", "top_speed_kmh"],
+    },
+    {
+        "id": "sprints",
+        "metric": "sprints",
+        "title": {"en": "Sprints", "zh": "冲刺次数"},
+        "metric_label": {"en": "Sprints", "zh": "冲刺"},
+        "description": {
+            "en": "Repeated high-intensity running actions.",
+            "zh": "反复高速冲刺的身体输出。",
+        },
+        "secondary": [
+            ("top_speed_kmh", {"en": "Top speed", "zh": "最高速度"}),
+            ("total_distance_m", {"en": "Distance", "zh": "跑动距离"}),
+        ],
+        "tie_breakers": ["top_speed_kmh", "high_speed_runs", "total_distance_m"],
+    },
 ]
+
+METRIC_AGGREGATES = {
+    "top_speed_kmh": "max",
+}
 
 
 def build_demo_site(
@@ -169,6 +283,25 @@ def build_demo_site(
                 sum(is_goal) as goals
               from shots
               group by match_key, team, upper(player_name)
+            ),
+            event_goals as (
+              select
+                match_key,
+                team_name as team,
+                upper(scorer_name) as player_name,
+                count(*) as goals
+              from goal_involvements
+              group by match_key, team_name, upper(scorer_name)
+            ),
+            event_assists as (
+              select
+                match_key,
+                team_name as team,
+                upper(assister_name) as player_name,
+                count(*) as assists
+              from goal_involvements
+              where assister_name is not null and assister_name != ''
+              group by match_key, team_name, upper(assister_name)
             )
             select
               a.match_key,
@@ -182,12 +315,20 @@ def build_demo_site(
               a.started,
               coalesce(s.shots, ip.attempts_at_goal, 0) as shots,
               coalesce(s.shots_on_target, 0) as shots_on_target,
-              coalesce(s.goals, ip.goals, 0) as goals,
+              coalesce(eg.goals, s.goals, ip.goals, 0) as goals,
+              coalesce(ea.assists, 0) as assists,
+              coalesce(eg.goals, s.goals, ip.goals, 0) + coalesce(ea.assists, 0) as goal_involvements,
               coalesce(ip.passes_completed, 0) as passes_completed,
+              coalesce(ip.crosses_attempted, 0) as crosses_attempted,
+              coalesce(ip.crosses_completed, 0) as crosses_completed,
               coalesce(ip.line_breaks_completed, 0) as line_breaks_completed,
               coalesce(ip.ball_progressions, 0) as ball_progressions,
               coalesce(ip.take_ons, 0) as take_ons,
               coalesce(ip.step_ins, 0) as step_ins,
+              coalesce(lb.distribution_ball_progression, 0) as line_break_ball_progression,
+              coalesce(lb.distribution_cross, 0) as line_break_cross,
+              coalesce(lb.distribution_pass, 0) as line_break_pass,
+              coalesce(lb.distribution_ball_progression, 0) + coalesce(lb.distribution_cross, 0) as progressive_line_breaks,
               coalesce(o.total_offers, 0) as total_offers,
               coalesce(o.offers_received, 0) as offers_received,
               coalesce(o.in_behind, 0) as in_behind,
@@ -195,9 +336,13 @@ def build_demo_site(
               coalesce(da.tackles_won, 0) as tackles_won,
               coalesce(da.blocks, 0) as blocks,
               coalesce(da.interceptions, 0) as interceptions,
+              coalesce(da.clearances, 0) as clearances,
+              coalesce(da.tackles_won, 0) + coalesce(da.interceptions, 0) + coalesce(da.blocks, 0) as defensive_stops,
               coalesce(da.possession_regains, 0) as possession_regains,
               coalesce(da.possession_interrupted, 0) as possession_interrupted,
               coalesce(p.total_distance_m, 0) as total_distance_m,
+              coalesce(p.high_speed_runs, 0) as high_speed_runs,
+              coalesce(p.sprints, 0) as sprints,
               coalesce(p.top_speed_kmh, 0) as top_speed_kmh
             from player_appearances a
             join matches m on m.match_key = a.match_key
@@ -205,6 +350,10 @@ def build_demo_site(
               on ip.match_key = a.match_key
              and ip.team = a.team
              and ip.player_no = a.player_no
+            left join player_line_breaks lb
+              on lb.match_key = a.match_key
+             and lb.team = a.team
+             and lb.player_no = a.player_no
             left join player_offers_receptions o
               on o.match_key = a.match_key
              and o.team = a.team
@@ -221,6 +370,14 @@ def build_demo_site(
               on s.match_key = a.match_key
              and s.team = a.team
              and s.player_name = upper(a.player_name)
+            left join event_goals eg
+              on eg.match_key = a.match_key
+             and eg.team = a.team
+             and eg.player_name = upper(a.player_name)
+            left join event_assists ea
+              on ea.match_key = a.match_key
+             and ea.team = a.team
+             and ea.player_name = upper(a.player_name)
             order by m.match_no, a.team, a.player_no
             """,
         )
@@ -288,6 +445,7 @@ def _page(
     .eyebrow {{ margin-bottom: 6px; color: #0f766e; font-size: 12px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }}
     .lede {{ max-width: 760px; font-size: 16px; }}
     .language-toggle, .segmented {{ display: inline-flex; max-width: 100%; border: 1px solid #cfd9e5; border-radius: 8px; overflow: hidden; background: #f8fafc; }}
+    #scope-controls {{ flex-wrap: wrap; overflow: visible; }}
     button {{ font: inherit; }}
     .language-toggle button, .segmented button {{ min-height: 38px; border: 0; border-right: 1px solid #cfd9e5; background: transparent; color: #425166; padding: 0 13px; cursor: pointer; }}
     .language-toggle button:last-child, .segmented button:last-child {{ border-right: 0; }}
@@ -364,7 +522,7 @@ def _page(
       <div>
         <p class="eyebrow" data-i18n="hero.eyebrow">FIFA PMSR database</p>
         <h1 data-i18n="hero.title">Player-first World Cup data</h1>
-        <p class="lede" data-i18n="hero.lede">Leaderboards built from FIFA Training Centre PMSR reports, with scopes for group-stage rounds and accumulated tournament views.</p>
+        <p class="lede" data-i18n="hero.lede">Leaderboards built from FIFA Training Centre PMSR reports, with scopes for each active tournament phase and accumulated views.</p>
       </div>
       <div class="language-toggle" aria-label="Language">
         <button type="button" data-lang-button="en">EN</button>
@@ -378,13 +536,13 @@ def _page(
         <div>
           <p class="eyebrow" data-i18n="leaderboards.eyebrow">Player Leaderboards</p>
           <h2 id="leaderboard-title" data-i18n="leaderboards.title">Player Leaderboards</h2>
-          <p data-i18n="leaderboards.copy">Switch between matchday peaks and accumulated totals. Round filters are prepared for the second group-stage cycle.</p>
+          <p data-i18n="leaderboards.copy">Switch between matchday peaks and accumulated totals. Phase filters appear as soon as that part of the tournament has data.</p>
         </div>
       </div>
       <div class="toolbar">
         <div class="control-group">
           <span class="control-label" data-i18n="controls.scope">Scope</span>
-          <div class="segmented" id="scope-controls" aria-label="Scope">{_scope_buttons_html()}</div>
+          <div class="segmented" id="scope-controls" aria-label="Scope">{_scope_buttons_html(leaderboard_payload["scopes"])}</div>
         </div>
         <div class="control-group">
           <span class="control-label" data-i18n="controls.mode">Mode</span>
@@ -428,10 +586,10 @@ def _page(
       en: {{
         "hero.eyebrow": "FIFA PMSR database",
         "hero.title": "Player-first World Cup data",
-        "hero.lede": "Leaderboards built from FIFA Training Centre PMSR reports, with scopes for group-stage rounds and accumulated tournament views.",
+        "hero.lede": "Leaderboards built from FIFA Training Centre PMSR reports, with scopes for each active tournament phase and accumulated views.",
         "leaderboards.eyebrow": "Player Leaderboards",
         "leaderboards.title": "Player Leaderboards",
-        "leaderboards.copy": "Switch between matchday peaks and accumulated totals. Round filters are prepared for the second group-stage cycle.",
+        "leaderboards.copy": "Switch between matchday peaks and accumulated totals. Phase filters appear as soon as that part of the tournament has data.",
         "controls.scope": "Scope",
         "controls.mode": "Mode",
         "modes.single": "Single-match peak",
@@ -445,10 +603,10 @@ def _page(
       zh: {{
         "hero.eyebrow": "FIFA PMSR 数据库",
         "hero.title": "以球员为中心的世界杯数据",
-        "hero.lede": "基于 FIFA Training Centre PMSR 报告生成榜单，支持小组赛轮次与赛事累计视角。",
+        "hero.lede": "基于 FIFA Training Centre PMSR 报告生成榜单，按已经有数据的赛事阶段和累计视角切换。",
         "leaderboards.eyebrow": "球员榜单",
         "leaderboards.title": "球员榜单",
-        "leaderboards.copy": "在单场峰值和累计数据之间切换；第二轮小组赛数据进入后会自动填充。",
+        "leaderboards.copy": "在单场峰值和累计数据之间切换；某个赛事阶段有数据后，对应筛选会自动出现。",
         "controls.scope": "范围",
         "controls.mode": "模式",
         "modes.single": "单场峰值",
@@ -462,7 +620,7 @@ def _page(
     }};
     const state = {{
       lang: localStorage.getItem("footballDataLang") || "en",
-      scope: "round1",
+      scope: DATA.scopes[0]?.id || "overall",
       mode: "single"
     }};
     function tr(key) {{ return I18N[state.lang][key] || I18N.en[key] || key; }}
@@ -495,6 +653,7 @@ def _page(
     function renderLeaderboards() {{
       document.querySelectorAll("[data-mode]").forEach(button => button.classList.toggle("active", button.dataset.mode === state.mode));
       const scope = DATA.scopes.find(item => item.id === state.scope) || DATA.scopes[0];
+      state.scope = scope.id;
       const modeLabel = tr(`modes.${{state.mode}}`);
       document.getElementById("leaderboard-summary").textContent = tr("summary")
         .replace("{{scope}}", label(scope.label))
@@ -540,9 +699,11 @@ def _page(
 
 def _leaderboard_payload(rows: list[sqlite3.Row]) -> dict[str, Any]:
     records = [_record_from_row(row) for row in rows]
-    scopes = [_scope_payload(scope, records) for scope in SCOPE_SPECS]
+    scopes = _active_scope_payloads(records)
     leaderboards: dict[str, dict[str, dict[str, list[dict[str, Any]]]]] = {}
-    for scope in SCOPE_SPECS:
+    scope_by_id = {scope["id"]: scope for scope in SCOPE_SPECS}
+    for scope_payload in scopes:
+        scope = scope_by_id[scope_payload["id"]]
         scoped_records = _records_for_scope(records, scope)
         leaderboards[scope["id"]] = {
             "single": _category_boards(scoped_records, mode="single"),
@@ -563,14 +724,15 @@ def _leaderboard_payload(rows: list[sqlite3.Row]) -> dict[str, Any]:
     }
 
 
-def _scope_buttons_html() -> str:
+def _scope_buttons_html(scopes: list[dict[str, Any]]) -> str:
+    first_scope_id = scopes[0]["id"] if scopes else ""
     return "".join(
         (
             f'<button type="button" data-scope="{html.escape(scope["id"])}"'
-            f' class="{"active" if scope["id"] == "round1" else ""}">'
+            f' class="{"active" if scope["id"] == first_scope_id else ""}">'
             f'{html.escape(scope["short"]["en"])}</button>'
         )
-        for scope in SCOPE_SPECS
+        for scope in scopes
     )
 
 
@@ -587,6 +749,15 @@ def _scope_payload(scope: dict[str, Any], records: list[dict[str, Any]]) -> dict
         "match_count": len({record["match_key"] for record in scoped_records}),
         "player_count": len(scoped_records),
     }
+
+
+def _active_scope_payloads(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    payloads = [_scope_payload(scope, records) for scope in SCOPE_SPECS]
+    return [
+        payload
+        for payload in payloads
+        if payload["id"] == "overall" or int(payload["match_count"]) > 0
+    ]
 
 
 def _records_for_scope(
@@ -614,16 +785,7 @@ def _category_boards(records: list[dict[str, Any]], *, mode: str) -> dict[str, l
             for record in board_records
             if _numeric(record.get(metric)) > 0
         ]
-        ranked.sort(
-            key=lambda record: (
-                _numeric(record.get(metric)),
-                _numeric(record.get("goals")),
-                _numeric(record.get("shots_on_target")),
-                _numeric(record.get("line_breaks_completed")),
-                _numeric(record.get("possession_regains")),
-            ),
-            reverse=True,
-        )
+        ranked.sort(key=lambda record, spec=spec: _leaderboard_sort_key(record, spec), reverse=True)
         boards[spec["id"]] = [
             _leaderboard_row(record, spec, rank=index, mode=mode)
             for index, record in enumerate(ranked[:5], start=1)
@@ -650,7 +812,7 @@ def _accumulated_records(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
         aggregate["matches"].add(record["match_key"])
         aggregate["opponents"].append(record["opponent"])
         for metric in metric_names:
-            aggregate[metric] = _numeric(aggregate.get(metric)) + _numeric(record.get(metric))
+            aggregate[metric] = _accumulate_metric(metric, aggregate.get(metric), record.get(metric))
     results: list[dict[str, Any]] = []
     for aggregate in grouped.values():
         aggregate["match_count"] = len(aggregate.pop("matches"))
@@ -670,6 +832,25 @@ def _leaderboard_metric_names() -> set[str]:
     return {str(spec["metric"]) for spec in CATEGORY_SPECS} | _secondary_metric_names()
 
 
+def _leaderboard_sort_key(record: dict[str, Any], spec: dict[str, Any]) -> tuple[float, ...]:
+    metrics = [str(spec["metric"])] + [
+        str(metric)
+        for metric in spec.get(
+            "tie_breakers",
+            ["goals", "shots_on_target", "line_breaks_completed", "possession_regains"],
+        )
+    ]
+    return tuple(_numeric(record.get(metric)) for metric in metrics)
+
+
+def _accumulate_metric(metric: str, current: object, value: object) -> float:
+    current_number = _numeric(current)
+    next_number = _numeric(value)
+    if METRIC_AGGREGATES.get(metric) == "max":
+        return max(current_number, next_number)
+    return current_number + next_number
+
+
 def _leaderboard_row(
     record: dict[str, Any],
     spec: dict[str, Any],
@@ -683,12 +864,12 @@ def _leaderboard_row(
         "rank": rank,
         "player": format_player(record.get("player_name"), record.get("team")),
         "team": format_team(record.get("team")),
-        "value": _format_leaderboard_value(record.get(metric)),
+        "value": _format_leaderboard_value(record.get(metric), metric=metric),
         "context": context,
         "secondary": [
             {
                 "label": label,
-                "value": _format_leaderboard_value(record.get(metric_name)),
+                "value": _format_leaderboard_value(record.get(metric_name), metric=metric_name),
             }
             for metric_name, label in spec["secondary"]
         ],
@@ -714,8 +895,12 @@ def _row_context(record: dict[str, Any], *, mode: str) -> dict[str, str]:
     }
 
 
-def _format_leaderboard_value(value: object) -> str:
+def _format_leaderboard_value(value: object, *, metric: str | None = None) -> str:
     numeric = _numeric(value)
+    if metric == "total_distance_m":
+        return f"{numeric:,.0f}"
+    if metric == "top_speed_kmh":
+        return f"{numeric:.1f}"
     return str(int(numeric)) if numeric == int(numeric) else f"{numeric:.1f}"
 
 
