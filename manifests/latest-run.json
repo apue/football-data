@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-06-25T03:13:54+00:00",
+  "generated_at": "2026-06-25T03:29:58+00:00",
   "status": "success",
   "failure_code": null,
   "hub_url": "https://www.fifatrainingcentre.com/en/fifa-world-cup-2026/match-report-hub.php",
   "discovered": 48,
   "active_sources": 48,
-  "downloaded": 48,
+  "downloaded": 0,
   "parsed": 48,
   "matches": 48,
   "source_documents": 48,
@@ -13,16 +13,16 @@
   "version_updates": [],
   "supplemental": {
     "fifa_timeline": {
-      "generated_at": "2026-06-25T03:14:49+00:00",
+      "generated_at": "2026-06-25T03:30:33+00:00",
       "source": "fifa_timeline_api",
       "status": "success",
       "matches": 48,
       "linked_matches": 48,
       "timeline_matches": 48,
       "events": 4274,
-      "goals": 126,
+      "goals": 132,
       "assists": 96,
-      "goal_involvements": 126,
+      "goal_involvements": 132,
       "failures": []
     }
   },

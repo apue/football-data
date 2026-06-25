@@ -145,7 +145,7 @@ def _load_official_goal_events(
         from official_match_events e
         join matches m using(match_key)
         {where}
-          and lower(coalesce(e.event_type_name, '')) in ('goal!', 'own goal')
+          and lower(coalesce(e.event_type_name, '')) in ('goal!', 'penalty goal', 'own goal')
           and e.home_goals is not null
           and e.away_goals is not null
         order by e.match_key, e.absolute_minute, e.event_id
@@ -361,7 +361,10 @@ def _table_exists(conn: sqlite3.Connection, table_name: str) -> bool:
 
 
 def _player_name_from_description(description: str) -> str:
-    match = re.match(r"(.+?) \([^)]+\) scores", description.strip())
+    match = re.match(
+        r"(.+?) \([^)]+\) (?:scores|successfully converts the penalty)",
+        description.strip(),
+    )
     if match:
         return match.group(1).strip()
     return ""

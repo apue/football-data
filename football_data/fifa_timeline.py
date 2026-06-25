@@ -17,6 +17,8 @@ FIFA_WORLD_CUP_2026_SEASON_ID = "285023"
 SOURCE_NAME = "fifa_timeline_api"
 GOAL_EVENT_TYPE = 0
 ASSIST_EVENT_TYPE = 1
+PENALTY_GOAL_EVENT_TYPE = 41
+GOAL_EVENT_TYPES = {GOAL_EVENT_TYPE, PENALTY_GOAL_EVENT_TYPE}
 
 FetchJson = Callable[[str], Mapping[str, Any]]
 
@@ -388,7 +390,7 @@ def _replace_timeline(
     )
     return {
         "events": len(event_rows),
-        "goals": len([row for row in event_rows if row["event_type"] == GOAL_EVENT_TYPE]),
+        "goals": len([row for row in event_rows if row["event_type"] in GOAL_EVENT_TYPES]),
         "assists": len([row for row in event_rows if row["event_type"] == ASSIST_EVENT_TYPE]),
         "goal_involvements": len(goal_rows),
     }
@@ -441,7 +443,7 @@ def _goal_involvement_rows(
     goal_rows: list[dict[str, Any]] = []
     goal_order = 0
     for row in event_rows:
-        if row["event_type"] != GOAL_EVENT_TYPE:
+        if row["event_type"] not in GOAL_EVENT_TYPES:
             continue
         goal_order += 1
         assist = _assist_for_goal(row, assists, used_assists)
@@ -582,7 +584,7 @@ def _team_name(team: Mapping[str, Any]) -> str | None:
 def _event_player_name(event_type: int | None, description: str | None) -> str | None:
     if event_type == ASSIST_EVENT_TYPE:
         return _name_from_assist_description(description)
-    if event_type == GOAL_EVENT_TYPE:
+    if event_type in GOAL_EVENT_TYPES:
         return _name_from_goal_description(description)
     return None
 
@@ -597,7 +599,10 @@ def _name_from_assist_description(description: str | None) -> str | None:
 def _name_from_goal_description(description: str | None) -> str | None:
     if not description:
         return None
-    match = re.match(r"^(.+?)\s+\(.+?\)\s+scores", description.strip())
+    match = re.match(
+        r"^(.+?)\s+\(.+?\)\s+(?:scores|successfully converts the penalty)",
+        description.strip(),
+    )
     return match.group(1).strip() if match else None
 
 
