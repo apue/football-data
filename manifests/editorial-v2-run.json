@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-06-25T08:27:13+00:00",
+  "generated_at": "2026-06-25T10:59:24+00:00",
   "status": "success",
-  "match_date": "2026-06-18",
+  "match_date": "2026-06-24",
   "workflow_variant": "ai_rerank_selection_v1",
   "experiment_id": "ai_rerank_reader_loop_v5",
   "editor_runtime": "local_codex",
@@ -25,8 +25,18 @@
   "choices": [
     {
       "award_type": "player_of_the_day",
-      "player_name": "Jonathan DAVID",
-      "team": "Canada"
+      "player_name": "Soufiane RAHIMI",
+      "team": "Morocco"
+    },
+    {
+      "award_type": "player_of_the_day",
+      "player_name": "VINICIUS JUNIOR",
+      "team": "Brazil"
+    },
+    {
+      "award_type": "player_of_the_day",
+      "player_name": "Thapelo MASEKO",
+      "team": "South Africa"
     },
     {
       "award_type": "player_of_the_day",
@@ -35,13 +45,13 @@
     },
     {
       "award_type": "player_of_the_day",
-      "player_name": "Luis ROMO",
-      "team": "Mexico"
+      "player_name": "Kerim ALAJBEGOVIC",
+      "team": "Bosnia and Herzegovina"
     },
     {
-      "award_type": "player_of_the_day",
-      "player_name": "Teboho MOKOENA",
-      "team": "South Africa"
+      "award_type": "defensive_pick",
+      "player_name": "Cesar MONTES",
+      "team": "Mexico"
     }
   ]
 }
