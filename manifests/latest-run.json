@@ -1,28 +1,60 @@
 {
-  "generated_at": "2026-06-25T06:52:05+00:00",
+  "generated_at": "2026-06-25T07:08:19+00:00",
   "status": "success",
   "failure_code": null,
   "hub_url": "https://www.fifatrainingcentre.com/en/fifa-world-cup-2026/match-report-hub.php",
-  "discovered": 48,
-  "active_sources": 48,
-  "downloaded": 48,
-  "parsed": 48,
-  "matches": 48,
-  "source_documents": 48,
-  "new_matches": [],
-  "version_updates": [],
+  "discovered": 54,
+  "active_sources": 54,
+  "downloaded": 54,
+  "parsed": 54,
+  "matches": 54,
+  "source_documents": 54,
+  "new_matches": [
+    {
+      "match_no": 49,
+      "source_id": "fifa-world-cup-2026-pmsr-m49-sco-bra-v1"
+    },
+    {
+      "match_no": 50,
+      "source_id": "fifa-world-cup-2026-pmsr-m50-mar-hai-v1"
+    },
+    {
+      "match_no": 51,
+      "source_id": "fifa-world-cup-2026-pmsr-m51-sui-can-v1"
+    },
+    {
+      "match_no": 52,
+      "source_id": "fifa-world-cup-2026-pmsr-m52-bih-qat-v1"
+    },
+    {
+      "match_no": 53,
+      "source_id": "fifa-world-cup-2026-pmsr-m53-cze-mex-v1"
+    },
+    {
+      "match_no": 54,
+      "source_id": "fifa-world-cup-2026-pmsr-m54-rsa-kor-v1"
+    }
+  ],
+  "version_updates": [
+    {
+      "match_no": 48,
+      "from_version": 1,
+      "to_version": 2,
+      "source_id": "fifa-world-cup-2026-pmsr-m48-col-cod-v2"
+    }
+  ],
   "supplemental": {
     "fifa_timeline": {
-      "generated_at": "2026-06-25T06:52:59+00:00",
+      "generated_at": "2026-06-25T07:09:56+00:00",
       "source": "fifa_timeline_api",
       "status": "success",
-      "matches": 48,
-      "linked_matches": 48,
-      "timeline_matches": 48,
-      "events": 4274,
-      "goals": 132,
-      "assists": 96,
-      "goal_involvements": 132,
+      "matches": 54,
+      "linked_matches": 54,
+      "timeline_matches": 54,
+      "events": 4846,
+      "goals": 150,
+      "assists": 113,
+      "goal_involvements": 150,
       "failures": []
     }
   },
