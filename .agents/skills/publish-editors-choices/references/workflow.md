@@ -100,14 +100,6 @@ The GitHub `Update Dataset` workflow should fetch and rebuild data and deploy th
 - `editorial_review_validation.json`: deterministic check that the review covered required dimensions, selected players, required unselected candidates, and has no blocking findings.
 - `reports/editorial/YYYY-MM-DD.md`: human-readable generated report.
 
-Before changing scoring weights, run the POTM calibration gate when labels exist or when Firecrawl can find credible match recognition for the date:
-
-```bash
-python scripts/calibrate_potm.py --date YYYY-MM-DD
-```
-
-If labels are missing, use the `calibrate-potm-labels` skill and `scripts/discover_potm_evidence.py --date YYYY-MM-DD` to find match-day candidate sources through Firecrawl/Keypool. Use `scripts/search_potm_evidence.py` only for targeted follow-up searches, then add only confirmed labels to `calibration/potm-labels.json`. POTM calibration is a sanity check: if the POTM is outside the model Top 3, pause and explain whether this is a known model gap, a one-off narrative choice, or a data extraction issue. Do not silently bend Editor's Choices around POTM.
-
 If output is poor, repair the source of the problem: scoring config, candidate-pool profile, selector profile, copy profile, prompts, or deterministic validation. Avoid hand-editing compiled frontend JSON.
 
 8. Review gates before accepting output:

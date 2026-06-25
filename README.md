@@ -41,14 +41,8 @@ Assists are not available as structured fields in the PMSR PDFs. The pipeline su
 - `reports/editorial/*.md` - human-readable Editor's Choices reports when published
 - `agent-runs/*/*.json` - local editor audit files, including rankings, candidate pools, selector input, decisions, and validation
 - `config/editorial/` - active editorial experiment registry, selector profiles, candidate-pool profiles, and copy profiles
-- `calibration/potm-labels.json` - optional weak labels for Player of the Match calibration
-- `calibration/reports/*.md` - POTM/model rank-diff reports when calibration is run
-- `calibration/evaluation/*.md` - POTM evidence quality and calibration-readiness reports
 - `site/editorial/` - rendered Editor's Choices JSON/HTML for the demo site
 - `.agents/skills/publish-editors-choices/` - repo-scoped Codex skill for the editorial publishing workflow
-- `.agents/skills/calibrate-potm-labels/` - repo-scoped Codex skill for Firecrawl-assisted scoring calibration
-- `.agents/skills/evaluate-potm-workflow/` - repo-scoped Codex skill for POTM workflow evaluation
-- `.env.example` - blank local/GitHub secret template for editorial agent and Firecrawl settings
 - GitHub Pages demo generated from the latest SQLite database: https://apue.github.io/football-data/
 
 ## Current SQLite Coverage
@@ -88,7 +82,7 @@ Editor's Choices are data-informed editorial picks generated from structured PMS
 
 The active experiment is resolved from `config/editorial/production.json`. Each experiment pins the scoring config, candidate-pool profile, selector profile, copy profiles, selection slots, and candidate ordering strategy. This keeps experimentation visible without inventing a generic workflow framework.
 
-The default scoring config is `config/scoring/v0.4.json`. It keeps the role-style performance scores and adds a structured impact layer for goals and official assists that change the match state and match story: opening goals, equalisers, go-ahead goals, contextual match-winning goals, late goals, stoppage-time goals, late match-winning goals, comeback equalisers, comeback winners, only-goal winners, assists, goal involvements, braces, hat-tricks, and substitute scoring bursts. These features are derived from the PMSR shot table, lineup status, final scoreline, deterministic match-flow reconstruction, and FIFA public match timeline goal-involvement records. POTM labels and media opinions are not scoring inputs.
+The default scoring config is `config/scoring/v0.4.json`. It keeps the role-style performance scores and adds a structured impact layer for goals and official assists that change the match state and match story: opening goals, equalisers, go-ahead goals, contextual match-winning goals, late goals, stoppage-time goals, late match-winning goals, comeback equalisers, comeback winners, only-goal winners, assists, goal involvements, braces, hat-tricks, and substitute scoring bursts. These features are derived from the PMSR shot table, lineup status, final scoreline, deterministic match-flow reconstruction, and FIFA public match timeline goal-involvement records. Media opinions are not scoring inputs.
 
 Prepare the deterministic local handoff packet:
 
@@ -115,21 +109,6 @@ The compiled frontend artifacts are written to `site/editorial/`, and the homepa
 GitHub Actions fetches and rebuilds the deterministic dataset, regenerates the homepage, and deploys GitHub Pages. Editorial publication is intentionally manual-first: generate the local packet, review the result locally, compile the approved static artifacts, then publish through a PR.
 
 Future API editor agents should use `docs/editorial-api-agent-spec.md` and run in shadow mode before replacing local Codex output.
-
-## POTM Calibration
-
-POTM calibration compares external Player of the Match labels with this project's per-match model ranking. It is a weak-label sanity check, not an official scoring input. If a confirmed POTM is outside the model Top 3, the report flags the miss so the scoring weights can be reviewed for patterns such as late winners, decisive goal involvements, defensive performances, or extraction/name-matching issues. Current calibration defaults to `config/scoring/v0.4.json`.
-
-Optional Firecrawl search is supported through Keypool for evidence discovery:
-
-```bash
-python scripts/discover_potm_evidence.py --date YYYY-MM-DD
-python scripts/evaluate_potm_workflow.py --date YYYY-MM-DD
-python scripts/search_potm_evidence.py "FIFA 2026 Match 21 Ghana Panama Player of the Match" --limit 5
-python scripts/calibrate_potm.py --date YYYY-MM-DD
-```
-
-Keep `KEYPOOL_KEY` and `KEYPOOL_URL` in local `.env.local` when using Firecrawl-backed POTM evidence discovery. Do not commit secrets or use external pages as a direct replacement for structured PMSR evidence.
 
 ## Update Policy
 
