@@ -851,7 +851,7 @@ def _minute_from_marker(value: str) -> int | None:
 
 
 def _is_minute_marker(value: str) -> bool:
-    return bool(re.fullmatch(r"\d{1,3}'(?:\+\d+)?", value))
+    return bool(re.fullmatch(r"\d{1,3}'(?:\+\d+'?)?|\d{1,3}\+\d+'", value))
 
 
 def _parse_attempts(value: str) -> tuple[int, int | None]:

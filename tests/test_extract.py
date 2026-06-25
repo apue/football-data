@@ -243,3 +243,24 @@ def test_extract_lineup_name_continuation_rows():
     assert summerville.player_name == "Crysencio SUMMERVILLE"
     assert summerville.position == "FW"
     assert len(record.player_appearances) == 52
+
+
+def test_extract_lineup_names_ignore_stoppage_time_markers():
+    matches = sorted(RAW_DIR.glob("**/PMSR-M10*.pdf"))
+    if not matches:
+        pytest.skip("M10 PDF is downloaded by the update pipeline")
+    record = extract_pdf(matches[-1])
+
+    havertz = next(
+        row
+        for row in record.player_appearances
+        if row.team == "Germany" and row.player_no == 7
+    )
+    assert havertz.player_name == "Kai HAVERTZ"
+
+    dirty_names = [
+        row.player_name
+        for row in record.player_appearances
+        if "45+5'" in row.player_name or "90+3'" in row.player_name
+    ]
+    assert dirty_names == []
