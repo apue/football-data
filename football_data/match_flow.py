@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 import sqlite3
 from pathlib import Path
 from typing import Any
@@ -19,7 +20,7 @@ def build_match_flows(
     finally:
         conn.close()
 
-    goals_by_match: dict[str, list[sqlite3.Row]] = {}
+    goals_by_match: dict[str, list[dict[str, Any]]] = {}
     for goal in goals:
         goals_by_match.setdefault(str(goal["match_key"]), []).append(goal)
     return {
@@ -46,6 +47,8 @@ def player_flow_impacts(
     }
     for match_key, flow in match_flows.items():
         for goal in flow.get("goals", []):
+            if goal.get("own_goal"):
+                continue
             key = (str(match_key), str(goal["team"]), str(goal["player_name"]).upper())
             metrics = impacts.setdefault(key, {metric: 0 for metric in tag_metric_map.values()})
             for tag in goal.get("tags", []):
@@ -79,9 +82,25 @@ def _load_goals(
     *,
     match_date: str | None,
     match_keys: list[str] | None,
-) -> list[sqlite3.Row]:
+) -> list[dict[str, Any]]:
+    official_goals = _load_official_goal_events(
+        conn,
+        match_date=match_date,
+        match_keys=match_keys,
+    )
+    if official_goals:
+        return official_goals
+    return _load_shot_goals(conn, match_date=match_date, match_keys=match_keys)
+
+
+def _load_shot_goals(
+    conn: sqlite3.Connection,
+    *,
+    match_date: str | None,
+    match_keys: list[str] | None,
+) -> list[dict[str, Any]]:
     where, params = _where_clause(match_date=match_date, match_keys=match_keys, table_alias="m")
-    return conn.execute(
+    rows = conn.execute(
         f"""
         select s.match_key, s.team, s.player_name, s.minute, s.shot_no,
                m.home_team, m.away_team, m.home_score, m.away_score
@@ -95,6 +114,78 @@ def _load_goals(
         """,
         params,
     ).fetchall()
+    return [
+        {
+            "match_key": row["match_key"],
+            "team": row["team"],
+            "player_team": row["team"],
+            "player_name": row["player_name"],
+            "minute": int(row["minute"] or 0),
+            "own_goal": False,
+        }
+        for row in rows
+    ]
+
+
+def _load_official_goal_events(
+    conn: sqlite3.Connection,
+    *,
+    match_date: str | None,
+    match_keys: list[str] | None,
+) -> list[dict[str, Any]]:
+    if not _table_exists(conn, "official_match_events"):
+        return []
+    where, params = _where_clause(match_date=match_date, match_keys=match_keys, table_alias="m")
+    rows = conn.execute(
+        f"""
+        select e.match_key, e.event_id, e.event_type_name, e.match_minute,
+               e.minute, e.stoppage_minute, e.absolute_minute, e.team_name,
+               e.player_name, e.home_goals, e.away_goals, e.description,
+               m.home_team, m.away_team
+        from official_match_events e
+        join matches m using(match_key)
+        {where}
+          and lower(coalesce(e.event_type_name, '')) in ('goal!', 'own goal')
+          and e.home_goals is not null
+          and e.away_goals is not null
+        order by e.match_key, e.absolute_minute, e.event_id
+        """,
+        params,
+    ).fetchall()
+    goals: list[dict[str, Any]] = []
+    scores: dict[str, tuple[int, int]] = {}
+    for row in rows:
+        match_key = str(row["match_key"])
+        home_team = str(row["home_team"])
+        away_team = str(row["away_team"])
+        home_before, away_before = scores.get(match_key, (0, 0))
+        home_after = int(row["home_goals"] or 0)
+        away_after = int(row["away_goals"] or 0)
+        event_team = str(row["team_name"] or "")
+        is_own_goal = str(row["event_type_name"] or "").lower() == "own goal"
+        if home_after > home_before:
+            scoring_team = home_team
+        elif away_after > away_before:
+            scoring_team = away_team
+        elif is_own_goal:
+            scoring_team = away_team if event_team == home_team else home_team
+        else:
+            scoring_team = event_team
+        player_name = str(row["player_name"] or "").strip() or _player_name_from_description(
+            str(row["description"] or "")
+        )
+        goals.append(
+            {
+                "match_key": match_key,
+                "team": scoring_team,
+                "player_team": event_team or scoring_team,
+                "player_name": player_name,
+                "minute": int(row["absolute_minute"] or row["minute"] or 0),
+                "own_goal": is_own_goal,
+            }
+        )
+        scores[match_key] = (home_after, away_after)
+    return goals
 
 
 def _where_clause(
@@ -115,7 +206,7 @@ def _where_clause(
     return "where " + " and ".join(conditions), params
 
 
-def _build_match_flow(match: sqlite3.Row, goals: list[sqlite3.Row]) -> dict[str, Any]:
+def _build_match_flow(match: sqlite3.Row, goals: list[dict[str, Any]]) -> dict[str, Any]:
     home_team = str(match["home_team"])
     away_team = str(match["away_team"])
     home_final = int(match["home_score"] or 0)
@@ -174,7 +265,9 @@ def _build_match_flow(match: sqlite3.Row, goals: list[sqlite3.Row]) -> dict[str,
                 "goal_order": index,
                 "minute": int(goal["minute"] or 0),
                 "team": team,
+                "player_team": str(goal.get("player_team") or team),
                 "player_name": str(goal["player_name"]),
+                "own_goal": bool(goal.get("own_goal")),
                 "score_before": f"{home_before}-{away_before}",
                 "score_after": f"{home_after}-{away_after}",
                 "team_score_before": team_before,
@@ -257,3 +350,18 @@ def _winner_team(
     if away_score > home_score:
         return away_team
     return None
+
+
+def _table_exists(conn: sqlite3.Connection, table_name: str) -> bool:
+    row = conn.execute(
+        "select 1 from sqlite_master where type = 'table' and name = ?",
+        (table_name,),
+    ).fetchone()
+    return row is not None
+
+
+def _player_name_from_description(description: str) -> str:
+    match = re.match(r"(.+?) \([^)]+\) scores", description.strip())
+    if match:
+        return match.group(1).strip()
+    return ""

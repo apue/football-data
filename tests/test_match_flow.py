@@ -1,4 +1,4 @@
-from football_data.match_flow import build_match_flows
+from football_data.match_flow import build_match_flows, player_flow_impacts
 
 
 def test_match_flow_marks_germany_comeback_against_cote_divoire():
@@ -15,9 +15,9 @@ def test_match_flow_marks_germany_comeback_against_cote_divoire():
         (goal["minute"], goal["team"], goal["player_name"], goal["score_before"], goal["score_after"])
         for goal in goals
     ] == [
-        (29, "Côte d'Ivoire", "Franck KESSIE", "0-0", "0-1"),
-        (67, "Germany", "Deniz UNDAV", "0-1", "1-1"),
-        (93, "Germany", "Deniz UNDAV", "1-1", "2-1"),
+        (30, "Côte d'Ivoire", "Franck KESSIE", "0-0", "0-1"),
+        (68, "Germany", "Deniz UNDAV", "0-1", "1-1"),
+        (94, "Germany", "Deniz UNDAV", "1-1", "2-1"),
     ]
     assert "equalizer" in goals[1]["tags"]
     assert "comeback_equalizer" in goals[1]["tags"]
@@ -49,3 +49,24 @@ def test_match_flow_does_not_label_routine_blowout_opener_as_winner():
     assert "opening_goal" in first_goal["tags"]
     assert "go_ahead_goal" in first_goal["tags"]
     assert "match_winning_goal" not in first_goal["tags"]
+
+
+def test_match_flow_counts_own_goals_without_crediting_opener_to_next_scorer():
+    flows = build_match_flows("data/latest.sqlite", match_date="2026-06-12")
+    flow = flows["FIFA-2026-M04-USA-PAR"]
+
+    goals = flow["goals"]
+    assert goals[0]["own_goal"] is True
+    assert goals[0]["team"] == "USA"
+    assert goals[0]["player_team"] == "Paraguay"
+    assert goals[0]["player_name"] == "Damian BOBADILLA"
+    assert goals[0]["score_before"] == "0-0"
+    assert goals[0]["score_after"] == "1-0"
+    assert "opening_goal" in goals[0]["tags"]
+
+    balogun_goals = [goal for goal in goals if goal["player_name"] == "Folarin BALOGUN"]
+    assert len(balogun_goals) == 2
+    assert all("opening_goal" not in goal["tags"] for goal in balogun_goals)
+
+    impacts = player_flow_impacts(flows)
+    assert impacts[("FIFA-2026-M04-USA-PAR", "USA", "FOLARIN BALOGUN")]["opening_goal"] == 0
