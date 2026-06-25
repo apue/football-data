@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-06-25T03:09:57+00:00",
+  "generated_at": "2026-06-25T03:32:54+00:00",
   "status": "success",
-  "match_date": "2026-06-12",
+  "match_date": "2026-06-13",
   "workflow_variant": "ai_rerank_selection_v1",
   "experiment_id": "ai_rerank_slate_self_review_v4",
   "editor_runtime": "local_codex",
@@ -25,23 +25,28 @@
   "choices": [
     {
       "award_type": "player_of_the_day",
-      "player_name": "Folarin BALOGUN",
-      "team": "USA"
+      "player_name": "John McGINN",
+      "team": "Scotland"
     },
     {
       "award_type": "player_of_the_day",
-      "player_name": "Cyle LARIN",
-      "team": "Canada"
+      "player_name": "VINICIUS JUNIOR",
+      "team": "Brazil"
     },
     {
       "award_type": "player_of_the_day",
-      "player_name": "Malik TILLMAN",
-      "team": "USA"
+      "player_name": "Ismael SAIBARI",
+      "team": "Morocco"
     },
     {
-      "award_type": "player_of_the_day",
-      "player_name": "Alex FREEMAN",
-      "team": "USA"
+      "award_type": "impact_pick",
+      "player_name": "Breel EMBOLO",
+      "team": "Switzerland"
+    },
+    {
+      "award_type": "impact_pick",
+      "player_name": "Nestory IRANKUNDA",
+      "team": "Australia"
     }
   ]
 }

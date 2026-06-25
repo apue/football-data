@@ -1,0 +1,541 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-06-25T03:32:54+00:00",
+  "compiled_at": "2026-06-25T03:32:54+00:00",
+  "match_date": "2026-06-13",
+  "scoring_version": "v0.4",
+  "editorial_generation": {
+    "workflow_variant": "ai_rerank_selection_v1",
+    "experiment_id": "ai_rerank_slate_self_review_v4",
+    "selection_mode": "ai_rerank_only",
+    "review_profile": "reader_intuition_v1",
+    "revision_policy": {
+      "mode": "local_editor_revise_until_review_passes",
+      "max_revision_rounds": 2,
+      "blocking_review_requires_revision": true
+    },
+    "editorial_review_status": "pass",
+    "uses_official_assists": true,
+    "uses_goal_involvements": true,
+    "event_source": "fifa_timeline_api",
+    "event_sources": {
+      "goal_involvements": "fifa_timeline_api"
+    }
+  },
+  "matches": [
+    {
+      "match_key": "FIFA-2026-M05-HAI-SCO",
+      "match_no": 5,
+      "match_date": "2026-06-13",
+      "kickoff_time": "21:00",
+      "stadium": "Boston Stadium",
+      "home_team": "Haiti",
+      "away_team": "Scotland",
+      "home_score": 0,
+      "away_score": 1
+    },
+    {
+      "match_key": "FIFA-2026-M06-AUS-TUR",
+      "match_no": 6,
+      "match_date": "2026-06-13",
+      "kickoff_time": "21:00",
+      "stadium": "BC Place Vancouver",
+      "home_team": "Australia",
+      "away_team": "Türkiye",
+      "home_score": 2,
+      "away_score": 0
+    },
+    {
+      "match_key": "FIFA-2026-M07-BRA-MAR",
+      "match_no": 7,
+      "match_date": "2026-06-13",
+      "kickoff_time": "18:00",
+      "stadium": "New York/New Jersey Stadium",
+      "home_team": "Brazil",
+      "away_team": "Morocco",
+      "home_score": 1,
+      "away_score": 1
+    },
+    {
+      "match_key": "FIFA-2026-M08-QAT-SUI",
+      "match_no": 8,
+      "match_date": "2026-06-13",
+      "kickoff_time": "12:00",
+      "stadium": "San Francisco Bay Area Stadium",
+      "home_team": "Qatar",
+      "away_team": "Switzerland",
+      "home_score": 1,
+      "away_score": 1
+    }
+  ],
+  "match_flows": {
+    "FIFA-2026-M05-HAI-SCO": {
+      "match_key": "FIFA-2026-M05-HAI-SCO",
+      "match_no": 5,
+      "match_date": "2026-06-13",
+      "home_team": "Haiti",
+      "away_team": "Scotland",
+      "home_score": 0,
+      "away_score": 1,
+      "winner_team": "Scotland",
+      "home_trailing_at_any_point": true,
+      "away_trailing_at_any_point": false,
+      "home_came_from_behind_to_win": false,
+      "away_came_from_behind_to_win": false,
+      "goals": [
+        {
+          "goal_order": 1,
+          "minute": 28,
+          "team": "Scotland",
+          "player_team": "Scotland",
+          "player_name": "John McGINN",
+          "own_goal": false,
+          "score_before": "0-0",
+          "score_after": "0-1",
+          "team_score_before": 0,
+          "opponent_score_before": 0,
+          "team_score_after": 1,
+          "opponent_score_after": 0,
+          "tags": [
+            "opening_goal",
+            "go_ahead_goal",
+            "match_winning_goal"
+          ]
+        }
+      ],
+      "decisive_goal": {
+        "goal_order": 1,
+        "minute": 28,
+        "team": "Scotland",
+        "player_team": "Scotland",
+        "player_name": "John McGINN",
+        "own_goal": false,
+        "score_before": "0-0",
+        "score_after": "0-1",
+        "team_score_before": 0,
+        "opponent_score_before": 0,
+        "team_score_after": 1,
+        "opponent_score_after": 0,
+        "tags": [
+          "opening_goal",
+          "go_ahead_goal",
+          "match_winning_goal"
+        ]
+      }
+    },
+    "FIFA-2026-M06-AUS-TUR": {
+      "match_key": "FIFA-2026-M06-AUS-TUR",
+      "match_no": 6,
+      "match_date": "2026-06-13",
+      "home_team": "Australia",
+      "away_team": "Türkiye",
+      "home_score": 2,
+      "away_score": 0,
+      "winner_team": "Australia",
+      "home_trailing_at_any_point": false,
+      "away_trailing_at_any_point": true,
+      "home_came_from_behind_to_win": false,
+      "away_came_from_behind_to_win": false,
+      "goals": [
+        {
+          "goal_order": 1,
+          "minute": 27,
+          "team": "Australia",
+          "player_team": "Australia",
+          "player_name": "Nestory IRANKUNDA",
+          "own_goal": false,
+          "score_before": "0-0",
+          "score_after": "1-0",
+          "team_score_before": 0,
+          "opponent_score_before": 0,
+          "team_score_after": 1,
+          "opponent_score_after": 0,
+          "tags": [
+            "opening_goal",
+            "go_ahead_goal"
+          ]
+        },
+        {
+          "goal_order": 2,
+          "minute": 75,
+          "team": "Australia",
+          "player_team": "Australia",
+          "player_name": "Connor METCALFE",
+          "own_goal": false,
+          "score_before": "1-0",
+          "score_after": "2-0",
+          "team_score_before": 1,
+          "opponent_score_before": 0,
+          "team_score_after": 2,
+          "opponent_score_after": 0,
+          "tags": [
+            "late_goal"
+          ]
+        }
+      ],
+      "decisive_goal": null
+    },
+    "FIFA-2026-M07-BRA-MAR": {
+      "match_key": "FIFA-2026-M07-BRA-MAR",
+      "match_no": 7,
+      "match_date": "2026-06-13",
+      "home_team": "Brazil",
+      "away_team": "Morocco",
+      "home_score": 1,
+      "away_score": 1,
+      "winner_team": null,
+      "home_trailing_at_any_point": true,
+      "away_trailing_at_any_point": false,
+      "home_came_from_behind_to_win": false,
+      "away_came_from_behind_to_win": false,
+      "goals": [
+        {
+          "goal_order": 1,
+          "minute": 21,
+          "team": "Morocco",
+          "player_team": "Morocco",
+          "player_name": "Ismael SAIBARI",
+          "own_goal": false,
+          "score_before": "0-0",
+          "score_after": "0-1",
+          "team_score_before": 0,
+          "opponent_score_before": 0,
+          "team_score_after": 1,
+          "opponent_score_after": 0,
+          "tags": [
+            "opening_goal",
+            "go_ahead_goal"
+          ]
+        },
+        {
+          "goal_order": 2,
+          "minute": 32,
+          "team": "Brazil",
+          "player_team": "Brazil",
+          "player_name": "VINICIUS JUNIOR",
+          "own_goal": false,
+          "score_before": "0-1",
+          "score_after": "1-1",
+          "team_score_before": 0,
+          "opponent_score_before": 1,
+          "team_score_after": 1,
+          "opponent_score_after": 1,
+          "tags": [
+            "equalizer",
+            "comeback_equalizer"
+          ]
+        }
+      ],
+      "decisive_goal": null
+    },
+    "FIFA-2026-M08-QAT-SUI": {
+      "match_key": "FIFA-2026-M08-QAT-SUI",
+      "match_no": 8,
+      "match_date": "2026-06-13",
+      "home_team": "Qatar",
+      "away_team": "Switzerland",
+      "home_score": 1,
+      "away_score": 1,
+      "winner_team": null,
+      "home_trailing_at_any_point": true,
+      "away_trailing_at_any_point": false,
+      "home_came_from_behind_to_win": false,
+      "away_came_from_behind_to_win": false,
+      "goals": [
+        {
+          "goal_order": 1,
+          "minute": 17,
+          "team": "Switzerland",
+          "player_team": "Switzerland",
+          "player_name": "Breel EMBOLO",
+          "own_goal": false,
+          "score_before": "0-0",
+          "score_after": "0-1",
+          "team_score_before": 0,
+          "opponent_score_before": 0,
+          "team_score_after": 1,
+          "opponent_score_after": 0,
+          "tags": [
+            "opening_goal",
+            "go_ahead_goal"
+          ]
+        },
+        {
+          "goal_order": 2,
+          "minute": 94,
+          "team": "Qatar",
+          "player_team": "Switzerland",
+          "player_name": "Miro MUHEIM",
+          "own_goal": true,
+          "score_before": "0-1",
+          "score_after": "1-1",
+          "team_score_before": 0,
+          "opponent_score_before": 1,
+          "team_score_after": 1,
+          "opponent_score_after": 1,
+          "tags": [
+            "equalizer",
+            "comeback_equalizer",
+            "late_goal",
+            "stoppage_time_goal"
+          ]
+        }
+      ],
+      "decisive_goal": null
+    }
+  },
+  "choices": [
+    {
+      "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
+      "award_label": {
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
+      },
+      "player_id": "FIFA-2026-M05-HAI-SCO|Scotland|7",
+      "player_name": "John McGINN",
+      "team": "Scotland",
+      "opponent": "Haiti",
+      "match_key": "FIFA-2026-M05-HAI-SCO",
+      "match_no": 5,
+      "player_no": 7,
+      "position": "MF",
+      "score": 78.11,
+      "metrics": {
+        "shots": 2,
+        "on_target": 1,
+        "goals": 1,
+        "goal_involvements": 1,
+        "opening_goal": 1,
+        "go_ahead_goal": 1,
+        "match_winning_goal": 1,
+        "only_goal_winner": 1
+      },
+      "evidence_chips": {
+        "en": [
+          "only goal",
+          "match-winning goal",
+          "goal scorer"
+        ],
+        "zh": [
+          "全场唯一进球",
+          "打入制胜球",
+          "取得进球"
+        ]
+      },
+      "selection_reason": "Selected because he scored the only goal in Scotland's 1-0 win over Haiti, making him the clearest match-winning case on the day.",
+      "content": {
+        "en": {
+          "title": "McGinn scored the winner",
+          "html": "<p>John McGinn's 28th-minute goal was the only one in Scotland's 1-0 win over Haiti. Two shots were enough to decide the match.</p>"
+        },
+        "zh": {
+          "title": "麦金打进制胜球",
+          "html": "<p>麦金第28分钟打进全场唯一进球，苏格兰1-0击败海地。两脚射门换来这一下，赢球就靠它。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
+      "award_label": {
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
+      },
+      "player_id": "FIFA-2026-M07-BRA-MAR|Brazil|7",
+      "player_name": "VINICIUS JUNIOR",
+      "team": "Brazil",
+      "opponent": "Morocco",
+      "match_key": "FIFA-2026-M07-BRA-MAR",
+      "match_no": 7,
+      "player_no": 7,
+      "position": "FW",
+      "score": 73.94,
+      "metrics": {
+        "shots": 1,
+        "on_target": 1,
+        "goals": 1,
+        "goal_involvements": 1,
+        "equalizing_goal": 1,
+        "comeback_equalizer": 1
+      },
+      "evidence_chips": {
+        "en": [
+          "comeback equaliser",
+          "equaliser",
+          "goal scorer"
+        ],
+        "zh": [
+          "逆转扳平",
+          "扳平进球",
+          "取得进球"
+        ]
+      },
+      "selection_reason": "Selected because he scored Brazil's 32nd-minute equaliser in the 1-1 draw with Morocco.",
+      "content": {
+        "en": {
+          "title": "Vinicius levelled for Brazil",
+          "html": "<p>Vinicius Junior scored Brazil's 32nd-minute equaliser against Morocco. His only shot was on target, and it kept the match at 1-1.</p>"
+        },
+        "zh": {
+          "title": "维尼修斯第32分钟扳平",
+          "html": "<p>维尼修斯第32分钟为巴西扳平，1-1留住了和摩洛哥的平局。全场只有1脚射门、1次射正，这次处理很准。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
+      "award_label": {
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
+      },
+      "player_id": "FIFA-2026-M07-BRA-MAR|Morocco|11",
+      "player_name": "Ismael SAIBARI",
+      "team": "Morocco",
+      "opponent": "Brazil",
+      "match_key": "FIFA-2026-M07-BRA-MAR",
+      "match_no": 7,
+      "player_no": 11,
+      "position": "MF",
+      "score": 65.48,
+      "metrics": {
+        "shots": 3,
+        "on_target": 1,
+        "goals": 1,
+        "goal_involvements": 1,
+        "opening_goal": 1,
+        "go_ahead_goal": 1
+      },
+      "evidence_chips": {
+        "en": [
+          "opening goal",
+          "goal scorer"
+        ],
+        "zh": [
+          "首开纪录",
+          "取得进球"
+        ]
+      },
+      "selection_reason": "Selected because he opened the scoring for Morocco against Brazil and added enough attacking activity to stand beside Vinicius from the same draw.",
+      "content": {
+        "en": {
+          "title": "Saibari opened against Brazil",
+          "html": "<p>Ismael Saibari put Morocco ahead in the 21st minute of the 1-1 draw with Brazil. Three shots and one on target back up the direct scoring case.</p>"
+        },
+        "zh": {
+          "title": "塞巴里首开纪录",
+          "html": "<p>塞巴里第21分钟为摩洛哥首开纪录，面对巴西先把比分带到1-0。3脚射门、1次射正，门前这次机会抓住了。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "impact_pick",
+      "award_types": [
+        "impact_pick"
+      ],
+      "award_label": {
+        "en": "Impact Pick",
+        "zh": "影响力精选"
+      },
+      "player_id": "FIFA-2026-M08-QAT-SUI|Switzerland|7",
+      "player_name": "Breel EMBOLO",
+      "team": "Switzerland",
+      "opponent": "Qatar",
+      "match_key": "FIFA-2026-M08-QAT-SUI",
+      "match_no": 8,
+      "player_no": 7,
+      "position": "FW",
+      "score": 52.93,
+      "metrics": {
+        "shots": 4,
+        "on_target": 1,
+        "goals": 1,
+        "goal_involvements": 1,
+        "opening_goal": 1,
+        "go_ahead_goal": 1
+      },
+      "evidence_chips": {
+        "en": [
+          "opening goal",
+          "goal scorer"
+        ],
+        "zh": [
+          "首开纪录",
+          "取得进球"
+        ]
+      },
+      "selection_reason": "Selected because he converted the 17th-minute penalty that put Switzerland ahead in the 1-1 draw with Qatar.",
+      "content": {
+        "en": {
+          "title": "Embolo converted early",
+          "html": "<p>Breel Embolo scored from the penalty spot in the 17th minute to put Switzerland ahead against Qatar. He finished with four shots in the 1-1 draw.</p>"
+        },
+        "zh": {
+          "title": "恩博洛点球破门",
+          "html": "<p>恩博洛第17分钟点球破门，瑞士一度1-0领先卡塔尔。全场4脚射门、1次射正，开局这一脚很关键。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "impact_pick",
+      "award_types": [
+        "impact_pick"
+      ],
+      "award_label": {
+        "en": "Impact Pick",
+        "zh": "影响力精选"
+      },
+      "player_id": "FIFA-2026-M06-AUS-TUR|Australia|17",
+      "player_name": "Nestory IRANKUNDA",
+      "team": "Australia",
+      "opponent": "Türkiye",
+      "match_key": "FIFA-2026-M06-AUS-TUR",
+      "match_no": 6,
+      "player_no": 17,
+      "position": "FW",
+      "score": 40.51,
+      "metrics": {
+        "shots": 2,
+        "on_target": 2,
+        "goals": 1,
+        "goal_involvements": 1,
+        "opening_goal": 1,
+        "go_ahead_goal": 1
+      },
+      "evidence_chips": {
+        "en": [
+          "opening goal",
+          "goal scorer"
+        ],
+        "zh": [
+          "首开纪录",
+          "取得进球"
+        ]
+      },
+      "selection_reason": "Selected because he scored Australia's opening goal in the 2-0 win over Türkiye, giving the winning team the clearest public card from that match.",
+      "content": {
+        "en": {
+          "title": "Irankunda opened for Australia",
+          "html": "<p>Nestory Irankunda scored Australia's 27th-minute opener in the 2-0 win over Türkiye. Both of his shots hit the target.</p>"
+        },
+        "zh": {
+          "title": "伊兰昆达首开纪录",
+          "html": "<p>伊兰昆达第27分钟为澳大利亚首开纪录，球队后来2-0赢下土耳其。2脚射门全部射正，开场这一下很利落。</p>"
+        }
+      }
+    }
+  ],
+  "selection_validation": {
+    "schema_version": 1,
+    "status": "pass",
+    "warnings": []
+  },
+  "audit": []
+}

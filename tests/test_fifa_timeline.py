@@ -124,13 +124,30 @@ def test_backfill_fifa_timelines_stores_goal_involvements(tmp_path):
                         ],
                     },
                     {
+                        "EventId": "penalty-goal-1",
+                        "IdTeam": "43960",
+                        "IdPlayer": "424051",
+                        "MatchMinute": "60'",
+                        "Period": 5,
+                        "HomeGoals": 3,
+                        "AwayGoals": 0,
+                        "Type": 41,
+                        "TypeLocalized": [{"Locale": "en-GB", "Description": "Penalty Goal"}],
+                        "EventDescription": [
+                            {
+                                "Locale": "en-GB",
+                                "Description": "Brian BROBBEY (Netherlands) successfully converts the penalty!",
+                            }
+                        ],
+                    },
+                    {
                         "EventId": "assist-3",
                         "IdTeam": "43960",
                         "IdPlayer": "400511",
                         "IdSubPlayer": "430413",
                         "MatchMinute": "90'+3'",
                         "Period": 5,
-                        "HomeGoals": 2,
+                        "HomeGoals": 3,
                         "AwayGoals": 0,
                         "Type": 1,
                         "TypeLocalized": [{"Locale": "en-GB", "Description": "Assist"}],
@@ -144,7 +161,7 @@ def test_backfill_fifa_timelines_stores_goal_involvements(tmp_path):
                         "IdPlayer": "430413",
                         "MatchMinute": "90'+4'",
                         "Period": 5,
-                        "HomeGoals": 3,
+                        "HomeGoals": 4,
                         "AwayGoals": 0,
                         "Type": 0,
                         "TypeLocalized": [{"Locale": "en-GB", "Description": "Goal!"}],
@@ -182,10 +199,11 @@ def test_backfill_fifa_timelines_stores_goal_involvements(tmp_path):
     assert summary["linked_matches"] == 1
     assert summary["assists"] == 3
     assert link == ("400021472", "timeline_loaded")
-    assert events == 6
+    assert events == 7
     assert goals == [
         ("Brian BROBBEY", "Cody GAKPO", "5'", 1, 0),
         ("Cody GAKPO", "Denzel DUMFRIES", "47'", 2, 0),
-        ("Ayase UEDA", "Kou ITAKURA", "90'+4'", 3, 0),
+        ("Brian BROBBEY", None, "60'", 3, 0),
+        ("Ayase UEDA", "Kou ITAKURA", "90'+4'", 4, 0),
     ]
     assert schema_version == "5"
