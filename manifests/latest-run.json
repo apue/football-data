@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-26T02:28:03+00:00",
+  "generated_at": "2026-06-26T04:34:15+00:00",
   "status": "success",
   "failure_code": null,
   "hub_url": "https://www.fifatrainingcentre.com/en/fifa-world-cup-2026/match-report-hub.php",
@@ -13,7 +13,7 @@
   "version_updates": [],
   "supplemental": {
     "fifa_timeline": {
-      "generated_at": "2026-06-26T02:29:01+00:00",
+      "generated_at": "2026-06-26T04:35:19+00:00",
       "source": "fifa_timeline_api",
       "status": "success",
       "matches": 54,
