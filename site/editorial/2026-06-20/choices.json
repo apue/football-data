@@ -1,204 +1,32 @@
 {
-  "schema_version": 2,
-  "generated_at": "2026-06-22T10:19:52+00:00",
-  "compiled_at": "2026-06-22T10:36:03+00:00",
+  "schema_version": 3,
+  "generated_at": "2026-06-26T02:20:49+00:00",
+  "compiled_at": "2026-06-26T02:20:49+00:00",
   "match_date": "2026-06-20",
   "scoring_version": "v0.4",
-  "editorial_input_hash": "56011ad4c335e7880a0f11e9e71d710c67c8d562ce559590ad2876e61414d028",
-  "editorial_input": {
-    "schema_version": "5",
-    "match_date": "2026-06-20",
-    "scoring_version": "v0.4",
-    "scoring_config_sha256": "f8ae7177bd9d5ecb2af9c703b236c2b87a75b29c99a2e529e30ea2209f53786e",
-    "matches": [
-      {
-        "match_key": "FIFA-2026-M33-GER-CIV",
-        "source_id": "fifa-world-cup-2026-pmsr-m33-ger-civ-v1",
-        "match_no": 33,
-        "match_date": "2026-06-20",
-        "home_team": "Germany",
-        "away_team": "Côte d'Ivoire",
-        "home_score": 2,
-        "away_score": 1
-      },
-      {
-        "match_key": "FIFA-2026-M34-ECU-CUW",
-        "source_id": "fifa-world-cup-2026-pmsr-m34-ecu-cuw-v1",
-        "match_no": 34,
-        "match_date": "2026-06-20",
-        "home_team": "Ecuador",
-        "away_team": "Curaçao",
-        "home_score": 0,
-        "away_score": 0
-      },
-      {
-        "match_key": "FIFA-2026-M35-NED-SWE",
-        "source_id": "fifa-world-cup-2026-pmsr-m35-ned-swe-v1",
-        "match_no": 35,
-        "match_date": "2026-06-20",
-        "home_team": "Netherlands",
-        "away_team": "Sweden",
-        "home_score": 5,
-        "away_score": 1
-      },
-      {
-        "match_key": "FIFA-2026-M36-TUN-JPN",
-        "source_id": "fifa-world-cup-2026-pmsr-m36-tun-jpn-v1",
-        "match_no": 36,
-        "match_date": "2026-06-20",
-        "home_team": "Tunisia",
-        "away_team": "Japan",
-        "home_score": 0,
-        "away_score": 4
-      }
-    ],
-    "source_documents": [
-      {
-        "source_id": "fifa-world-cup-2026-pmsr-m33-ger-civ-v1",
-        "match_key": "FIFA-2026-M33-GER-CIV",
-        "match_no": 33,
-        "version": 1,
-        "sha256": "dfc2161b71c4059064e3bbc4b33457f7d6ceb38886c3eee1f3613c66f3f3298e",
-        "file_size": 5785977,
-        "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M33-GER-V-CIV.pdf"
-      },
-      {
-        "source_id": "fifa-world-cup-2026-pmsr-m34-ecu-cuw-v1",
-        "match_key": "FIFA-2026-M34-ECU-CUW",
-        "match_no": 34,
-        "version": 1,
-        "sha256": "d98135ddb7e008238d46584d563072fc80180bc686585371450cb79c335887c4",
-        "file_size": 5877040,
-        "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M34-ECU-V-CUW.pdf"
-      },
-      {
-        "source_id": "fifa-world-cup-2026-pmsr-m35-ned-swe-v1",
-        "match_key": "FIFA-2026-M35-NED-SWE",
-        "match_no": 35,
-        "version": 1,
-        "sha256": "c11fa8f6584718bfb4f0d2059ec27867198ca1583746d385f6aab037a9461ed3",
-        "file_size": 5834372,
-        "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M35-NED-V-SWE.pdf"
-      },
-      {
-        "source_id": "fifa-world-cup-2026-pmsr-m36-tun-jpn-v1",
-        "match_key": "FIFA-2026-M36-TUN-JPN",
-        "match_no": 36,
-        "version": 1,
-        "sha256": "6f9bbf81af14c9b70f4a5b66bd37a7b23bcf9eee93020af8b525b8d8e2fae1c2",
-        "file_size": 5606914,
-        "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M36-TUN-V-JPN.pdf"
-      }
-    ],
-    "goal_involvements": [
-      {
-        "match_key": "FIFA-2026-M33-GER-CIV",
-        "goal_order": 1,
-        "minute_display": "30'",
-        "scorer_name": "Franck KESSIE",
-        "assister_name": null,
-        "source": "fifa_timeline_api"
-      },
-      {
-        "match_key": "FIFA-2026-M33-GER-CIV",
-        "goal_order": 2,
-        "minute_display": "68'",
-        "scorer_name": "Deniz UNDAV",
-        "assister_name": "Nadiem AMIRI",
-        "source": "fifa_timeline_api"
-      },
-      {
-        "match_key": "FIFA-2026-M33-GER-CIV",
-        "goal_order": 3,
-        "minute_display": "90'+4'",
-        "scorer_name": "Deniz UNDAV",
-        "assister_name": "Felix NMECHA",
-        "source": "fifa_timeline_api"
-      },
-      {
-        "match_key": "FIFA-2026-M35-NED-SWE",
-        "goal_order": 1,
-        "minute_display": "5'",
-        "scorer_name": "Brian BROBBEY",
-        "assister_name": "Cody GAKPO",
-        "source": "fifa_timeline_api"
-      },
-      {
-        "match_key": "FIFA-2026-M35-NED-SWE",
-        "goal_order": 2,
-        "minute_display": "17'",
-        "scorer_name": "Brian BROBBEY",
-        "assister_name": "Denzel DUMFRIES",
-        "source": "fifa_timeline_api"
-      },
-      {
-        "match_key": "FIFA-2026-M35-NED-SWE",
-        "goal_order": 3,
-        "minute_display": "47'",
-        "scorer_name": "Cody GAKPO",
-        "assister_name": "Denzel DUMFRIES",
-        "source": "fifa_timeline_api"
-      },
-      {
-        "match_key": "FIFA-2026-M35-NED-SWE",
-        "goal_order": 4,
-        "minute_display": "54'",
-        "scorer_name": "Cody GAKPO",
-        "assister_name": "Crysencio SUMMERVILLE",
-        "source": "fifa_timeline_api"
-      },
-      {
-        "match_key": "FIFA-2026-M35-NED-SWE",
-        "goal_order": 5,
-        "minute_display": "59'",
-        "scorer_name": "Anthony ELANGA",
-        "assister_name": "Alexander ISAK",
-        "source": "fifa_timeline_api"
-      },
-      {
-        "match_key": "FIFA-2026-M35-NED-SWE",
-        "goal_order": 6,
-        "minute_display": "89'",
-        "scorer_name": "Crysencio SUMMERVILLE",
-        "assister_name": "Memphis DEPAY",
-        "source": "fifa_timeline_api"
-      },
-      {
-        "match_key": "FIFA-2026-M36-TUN-JPN",
-        "goal_order": 1,
-        "minute_display": "4'",
-        "scorer_name": "Daichi KAMADA",
-        "assister_name": "Keito NAKAMURA",
-        "source": "fifa_timeline_api"
-      },
-      {
-        "match_key": "FIFA-2026-M36-TUN-JPN",
-        "goal_order": 2,
-        "minute_display": "31'",
-        "scorer_name": "Ayase UEDA",
-        "assister_name": "Kou ITAKURA",
-        "source": "fifa_timeline_api"
-      },
-      {
-        "match_key": "FIFA-2026-M36-TUN-JPN",
-        "goal_order": 3,
-        "minute_display": "69'",
-        "scorer_name": "Junya ITO",
-        "assister_name": "Ayase UEDA",
-        "source": "fifa_timeline_api"
-      },
-      {
-        "match_key": "FIFA-2026-M36-TUN-JPN",
-        "goal_order": 4,
-        "minute_display": "83'",
-        "scorer_name": "Ayase UEDA",
-        "assister_name": "Kaishu SANO",
-        "source": "fifa_timeline_api"
-      }
-    ],
-    "input_hash": "56011ad4c335e7880a0f11e9e71d710c67c8d562ce559590ad2876e61414d028"
+  "editorial_generation": {
+    "workflow_variant": "ai_rerank_selection_v1",
+    "experiment_id": "ai_rerank_reader_loop_v5",
+    "selection_mode": "ai_rerank_only",
+    "review_profile": "reader_intuition_loop_v2",
+    "revision_policy": {
+      "mode": "reader_critic_revise_review_loop",
+      "max_revision_rounds": 2,
+      "blocking_review_requires_revision": true,
+      "revision_targets": [
+        "selection_decision",
+        "copy",
+        "review"
+      ]
+    },
+    "editorial_review_status": "pass",
+    "uses_official_assists": true,
+    "uses_goal_involvements": true,
+    "event_source": "fifa_timeline_api",
+    "event_sources": {
+      "goal_involvements": "fifa_timeline_api"
+    }
   },
-  "source_markdown_path": "reports/editorial/2026-06-20.md",
   "matches": [
     {
       "match_key": "FIFA-2026-M33-GER-CIV",
@@ -262,9 +90,11 @@
       "goals": [
         {
           "goal_order": 1,
-          "minute": 29,
+          "minute": 30,
           "team": "Côte d'Ivoire",
+          "player_team": "Côte d'Ivoire",
           "player_name": "Franck KESSIE",
+          "own_goal": false,
           "score_before": "0-0",
           "score_after": "0-1",
           "team_score_before": 0,
@@ -278,9 +108,11 @@
         },
         {
           "goal_order": 2,
-          "minute": 67,
+          "minute": 68,
           "team": "Germany",
+          "player_team": "Germany",
           "player_name": "Deniz UNDAV",
+          "own_goal": false,
           "score_before": "0-1",
           "score_after": "1-1",
           "team_score_before": 0,
@@ -295,9 +127,11 @@
         },
         {
           "goal_order": 3,
-          "minute": 93,
+          "minute": 94,
           "team": "Germany",
+          "player_team": "Germany",
           "player_name": "Deniz UNDAV",
+          "own_goal": false,
           "score_before": "1-1",
           "score_after": "2-1",
           "team_score_before": 1,
@@ -317,9 +151,11 @@
       ],
       "decisive_goal": {
         "goal_order": 3,
-        "minute": 93,
+        "minute": 94,
         "team": "Germany",
+        "player_team": "Germany",
         "player_name": "Deniz UNDAV",
+        "own_goal": false,
         "score_before": "1-1",
         "score_after": "2-1",
         "team_score_before": 1,
@@ -371,7 +207,9 @@
           "goal_order": 1,
           "minute": 5,
           "team": "Netherlands",
+          "player_team": "Netherlands",
           "player_name": "Brian BROBBEY",
+          "own_goal": false,
           "score_before": "0-0",
           "score_after": "1-0",
           "team_score_before": 0,
@@ -385,24 +223,26 @@
         },
         {
           "goal_order": 2,
-          "minute": 16,
+          "minute": 17,
           "team": "Netherlands",
+          "player_team": "Netherlands",
           "player_name": "Brian BROBBEY",
+          "own_goal": false,
           "score_before": "1-0",
           "score_after": "2-0",
           "team_score_before": 1,
           "opponent_score_before": 0,
           "team_score_after": 2,
           "opponent_score_after": 0,
-          "tags": [
-            "match_winning_goal"
-          ]
+          "tags": []
         },
         {
           "goal_order": 3,
-          "minute": 46,
+          "minute": 47,
           "team": "Netherlands",
+          "player_team": "Netherlands",
           "player_name": "Cody GAKPO",
+          "own_goal": false,
           "score_before": "2-0",
           "score_after": "3-0",
           "team_score_before": 2,
@@ -413,9 +253,11 @@
         },
         {
           "goal_order": 4,
-          "minute": 53,
+          "minute": 54,
           "team": "Netherlands",
+          "player_team": "Netherlands",
           "player_name": "Cody GAKPO",
+          "own_goal": false,
           "score_before": "3-0",
           "score_after": "4-0",
           "team_score_before": 3,
@@ -426,9 +268,11 @@
         },
         {
           "goal_order": 5,
-          "minute": 58,
+          "minute": 59,
           "team": "Sweden",
+          "player_team": "Sweden",
           "player_name": "Anthony ELANGA",
+          "own_goal": false,
           "score_before": "4-0",
           "score_after": "4-1",
           "team_score_before": 0,
@@ -439,9 +283,11 @@
         },
         {
           "goal_order": 6,
-          "minute": 88,
+          "minute": 89,
           "team": "Netherlands",
+          "player_team": "Netherlands",
           "player_name": "Crysencio SUMMERVILLE",
+          "own_goal": false,
           "score_before": "4-1",
           "score_after": "5-1",
           "team_score_before": 4,
@@ -453,21 +299,7 @@
           ]
         }
       ],
-      "decisive_goal": {
-        "goal_order": 2,
-        "minute": 16,
-        "team": "Netherlands",
-        "player_name": "Brian BROBBEY",
-        "score_before": "1-0",
-        "score_after": "2-0",
-        "team_score_before": 1,
-        "opponent_score_before": 0,
-        "team_score_after": 2,
-        "opponent_score_after": 0,
-        "tags": [
-          "match_winning_goal"
-        ]
-      }
+      "decisive_goal": null
     },
     "FIFA-2026-M36-TUN-JPN": {
       "match_key": "FIFA-2026-M36-TUN-JPN",
@@ -485,9 +317,11 @@
       "goals": [
         {
           "goal_order": 1,
-          "minute": 30,
+          "minute": 4,
           "team": "Japan",
-          "player_name": "Ayase UEDA",
+          "player_team": "Japan",
+          "player_name": "Daichi KAMADA",
+          "own_goal": false,
           "score_before": "0-0",
           "score_after": "0-1",
           "team_score_before": 0,
@@ -496,15 +330,16 @@
           "opponent_score_after": 0,
           "tags": [
             "opening_goal",
-            "go_ahead_goal",
-            "match_winning_goal"
+            "go_ahead_goal"
           ]
         },
         {
           "goal_order": 2,
-          "minute": 68,
+          "minute": 31,
           "team": "Japan",
-          "player_name": "Junya ITO",
+          "player_team": "Japan",
+          "player_name": "Ayase UEDA",
+          "own_goal": false,
           "score_before": "0-1",
           "score_after": "0-2",
           "team_score_before": 1,
@@ -515,169 +350,75 @@
         },
         {
           "goal_order": 3,
-          "minute": 82,
+          "minute": 69,
           "team": "Japan",
-          "player_name": "Ayase UEDA",
+          "player_team": "Japan",
+          "player_name": "Junya ITO",
+          "own_goal": false,
           "score_before": "0-2",
           "score_after": "0-3",
           "team_score_before": 2,
           "opponent_score_before": 0,
           "team_score_after": 3,
           "opponent_score_after": 0,
+          "tags": []
+        },
+        {
+          "goal_order": 4,
+          "minute": 83,
+          "team": "Japan",
+          "player_team": "Japan",
+          "player_name": "Ayase UEDA",
+          "own_goal": false,
+          "score_before": "0-3",
+          "score_after": "0-4",
+          "team_score_before": 3,
+          "opponent_score_before": 0,
+          "team_score_after": 4,
+          "opponent_score_after": 0,
           "tags": [
             "late_goal"
           ]
         }
       ],
-      "decisive_goal": {
-        "goal_order": 1,
-        "minute": 30,
-        "team": "Japan",
-        "player_name": "Ayase UEDA",
-        "score_before": "0-0",
-        "score_after": "0-1",
-        "team_score_before": 0,
-        "opponent_score_before": 0,
-        "team_score_after": 1,
-        "opponent_score_after": 0,
-        "tags": [
-          "opening_goal",
-          "go_ahead_goal",
-          "match_winning_goal"
-        ]
-      }
+      "decisive_goal": null
     }
   },
   "choices": [
     {
       "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
       "award_label": {
         "en": "Player of the Day",
         "zh": "每日最佳球员"
       },
-      "rank": 1,
-      "match_key": "FIFA-2026-M33-GER-CIV",
-      "match_no": 33,
-      "player_no": 26,
+      "player_id": "FIFA-2026-M33-GER-CIV|Germany|26",
       "player_name": "Deniz UNDAV",
       "team": "Germany",
       "opponent": "Côte d'Ivoire",
-      "home_score": 2,
-      "away_score": 1,
-      "team_final_goals": 2,
-      "opponent_final_goals": 1,
+      "match_key": "FIFA-2026-M33-GER-CIV",
+      "match_no": 33,
+      "player_no": 26,
       "position": "FW",
-      "progression_benchmark": {
-        "score": 0.0,
-        "quality": "thin",
-        "support_actions": 0.0,
-        "pass_only_line_break_volume": false
-      },
-      "hidden_gem_profile": {
-        "eligible": false,
-        "profile": "insufficient_evidence",
-        "score": 9.0
-      },
-      "flow_context": {
-        "match_key": "FIFA-2026-M33-GER-CIV",
-        "team_came_from_behind_to_win": true,
-        "allowed_claims": {
-          "en": [
-            "comeback win",
-            "equaliser",
-            "comeback equaliser",
-            "67' equaliser",
-            "go-ahead goal",
-            "match-winning goal",
-            "stoppage-time goal",
-            "late winner",
-            "comeback winner",
-            "93' stoppage-time winner"
-          ],
-          "zh": [
-            "逆转取胜",
-            "扳平",
-            "逆转过程中的扳平球",
-            "逆转扳平",
-            "67' 扳平",
-            "取得领先",
-            "制胜球",
-            "补时进球",
-            "补时制胜",
-            "逆转制胜",
-            "93' 补时制胜"
-          ]
-        },
-        "goals": [
-          {
-            "goal_order": 2,
-            "minute": 67,
-            "team": "Germany",
-            "player_name": "Deniz UNDAV",
-            "score_before": "0-1",
-            "score_after": "1-1",
-            "team_score_before": 0,
-            "opponent_score_before": 1,
-            "team_score_after": 1,
-            "opponent_score_after": 1,
-            "tags": [
-              "equalizer",
-              "comeback_equalizer",
-              "team_came_from_behind_goal"
-            ]
-          },
-          {
-            "goal_order": 3,
-            "minute": 93,
-            "team": "Germany",
-            "player_name": "Deniz UNDAV",
-            "score_before": "1-1",
-            "score_after": "2-1",
-            "team_score_before": 1,
-            "opponent_score_before": 1,
-            "team_score_after": 2,
-            "opponent_score_after": 1,
-            "tags": [
-              "go_ahead_goal",
-              "match_winning_goal",
-              "late_goal",
-              "stoppage_time_goal",
-              "late_match_winning_goal",
-              "team_came_from_behind_goal",
-              "comeback_winner"
-            ]
-          }
-        ],
-        "decisive_goal": {
-          "goal_order": 3,
-          "minute": 93,
-          "team": "Germany",
-          "player_name": "Deniz UNDAV",
-          "score_before": "1-1",
-          "score_after": "2-1",
-          "team_score_before": 1,
-          "opponent_score_before": 1,
-          "team_score_after": 2,
-          "opponent_score_after": 1,
-          "tags": [
-            "go_ahead_goal",
-            "match_winning_goal",
-            "late_goal",
-            "stoppage_time_goal",
-            "late_match_winning_goal",
-            "team_came_from_behind_goal",
-            "comeback_winner"
-          ]
-        }
-      },
+      "score": 199.4,
       "metrics": {
         "shots": 3,
         "on_target": 3,
         "goals": 2,
-        "offers_received": 5,
-        "in_behind": 5,
-        "in_between": 1,
-        "total_distance_m": 3791.7
+        "goal_involvements": 2,
+        "brace": 1,
+        "equalizing_goal": 1,
+        "go_ahead_goal": 1,
+        "match_winning_goal": 1,
+        "late_goal": 1,
+        "stoppage_time_goal": 1,
+        "late_match_winning_goal": 1,
+        "comeback_equalizer": 1,
+        "comeback_winner": 1,
+        "substitute_goal": 2,
+        "substitute_brace": 1
       },
       "evidence_chips": {
         "en": [
@@ -693,538 +434,224 @@
           "补时制胜"
         ]
       },
+      "selection_reason": "Selected because he came on and scored both Germany goals in a 2-1 comeback win: the 68th-minute equaliser and the 90+4 stoppage-time winner.",
       "content": {
         "en": {
-          "title": "Level, then winner",
-          "html": "<p>Deniz Undav came off the bench to turn the match. He equalised in the 67th minute and then struck a stoppage-time winner to complete a 2-1 comeback win over Côte d'Ivoire.</p>"
+          "title": "Undav came on and won it",
+          "html": "<p>Deniz Undav came off the bench with Germany trailing, equalised in the 68th minute, then scored again in stoppage time. Three shots, three on target, two goals, and the comeback belonged to him.</p>"
         },
         "zh": {
-          "title": "恩达夫替补双响逆转科特迪瓦",
-          "html": "<p>恩达夫替补登场梅开二度，助德国 2-1 逆转科特迪瓦。</p><p>第 67 分钟，他破门扳平比分。补时第 93 分钟，恩达夫再度得分打入制胜球。</p><p>德国队在 0-1 落后情况下，凭借他的两粒进球实现翻盘。</p>"
+          "title": "翁达夫替补双响制胜",
+          "html": "<p>德国先丢一球，翁达夫替补出场后第68分钟扳平，90+4分钟再进制胜球。3脚射门全射正，这场逆转最后落在他脚下。</p>"
         }
       }
     },
     {
       "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
       "award_label": {
         "en": "Player of the Day",
         "zh": "每日最佳球员"
       },
-      "rank": 2,
-      "match_key": "FIFA-2026-M36-TUN-JPN",
-      "match_no": 36,
-      "player_no": 18,
+      "player_id": "FIFA-2026-M35-NED-SWE|Netherlands|11",
+      "player_name": "Cody GAKPO",
+      "team": "Netherlands",
+      "opponent": "Sweden",
+      "match_key": "FIFA-2026-M35-NED-SWE",
+      "match_no": 35,
+      "player_no": 11,
+      "position": "FW",
+      "score": 98.6,
+      "metrics": {
+        "shots": 5,
+        "on_target": 4,
+        "goals": 2,
+        "assists": 1,
+        "goal_involvements": 3,
+        "brace": 1
+      },
+      "evidence_chips": {
+        "en": [
+          "brace",
+          "assist",
+          "high shot quality"
+        ],
+        "zh": [
+          "梅开二度",
+          "送出助攻",
+          "射门质量突出"
+        ]
+      },
+      "selection_reason": "Selected because he directly contributed to three Netherlands goals in the 5-1 win over Sweden: an assist for the opener and two second-half goals.",
+      "content": {
+        "en": {
+          "title": "Gakpo had two goals and an assist",
+          "html": "<p>Cody Gakpo set up the 5th-minute opener, then scored twice after half-time. In the Netherlands' 5-1 win over Sweden, he was directly involved in three goals.</p>"
+        },
+        "zh": {
+          "title": "加克波梅开二度并助攻",
+          "html": "<p>加克波第5分钟先助攻布罗贝，47分钟和54分钟自己连进两球。荷兰5-1赢瑞典，他直接参与3球，5脚射门4次射正。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
+      "award_label": {
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
+      },
+      "player_id": "FIFA-2026-M36-TUN-JPN|Japan|18",
       "player_name": "Ayase UEDA",
       "team": "Japan",
       "opponent": "Tunisia",
-      "home_score": 0,
-      "away_score": 4,
-      "team_final_goals": 4,
-      "opponent_final_goals": 0,
+      "match_key": "FIFA-2026-M36-TUN-JPN",
+      "match_no": 36,
+      "player_no": 18,
       "position": "FW",
-      "progression_benchmark": {
-        "score": 3.0,
-        "quality": "thin",
-        "support_actions": 2.0,
-        "pass_only_line_break_volume": false
-      },
-      "hidden_gem_profile": {
-        "eligible": false,
-        "profile": "insufficient_evidence",
-        "score": 39.4
-      },
-      "flow_context": {
-        "match_key": "FIFA-2026-M36-TUN-JPN",
-        "team_came_from_behind_to_win": false,
-        "allowed_claims": {
-          "en": [
-            "go-ahead goal",
-            "match-winning goal",
-            "30' winner"
-          ],
-          "zh": [
-            "取得领先",
-            "制胜球",
-            "30' 制胜"
-          ]
-        },
-        "goals": [
-          {
-            "goal_order": 1,
-            "minute": 30,
-            "team": "Japan",
-            "player_name": "Ayase UEDA",
-            "score_before": "0-0",
-            "score_after": "0-1",
-            "team_score_before": 0,
-            "opponent_score_before": 0,
-            "team_score_after": 1,
-            "opponent_score_after": 0,
-            "tags": [
-              "opening_goal",
-              "go_ahead_goal",
-              "match_winning_goal"
-            ]
-          },
-          {
-            "goal_order": 3,
-            "minute": 82,
-            "team": "Japan",
-            "player_name": "Ayase UEDA",
-            "score_before": "0-2",
-            "score_after": "0-3",
-            "team_score_before": 2,
-            "opponent_score_before": 0,
-            "team_score_after": 3,
-            "opponent_score_after": 0,
-            "tags": [
-              "late_goal"
-            ]
-          }
-        ],
-        "decisive_goal": {
-          "goal_order": 1,
-          "minute": 30,
-          "team": "Japan",
-          "player_name": "Ayase UEDA",
-          "score_before": "0-0",
-          "score_after": "0-1",
-          "team_score_before": 0,
-          "opponent_score_before": 0,
-          "team_score_after": 1,
-          "opponent_score_after": 0,
-          "tags": [
-            "opening_goal",
-            "go_ahead_goal",
-            "match_winning_goal"
-          ]
-        }
-      },
+      "score": 92.63,
       "metrics": {
         "shots": 5,
         "on_target": 3,
         "goals": 2,
-        "offers_received": 8,
-        "in_behind": 28,
-        "in_between": 22,
-        "line_breaks_completed": 1,
-        "ball_progressions": 1,
-        "possession_regains": 1,
-        "total_distance_m": 9059.2
+        "assists": 1,
+        "goal_involvements": 3,
+        "brace": 1,
+        "late_goal": 1
       },
       "evidence_chips": {
         "en": [
           "brace",
-          "match-winning goal",
-          "high shot quality",
-          "between-line presence"
+          "assist",
+          "high shot quality"
         ],
         "zh": [
           "梅开二度",
-          "打入制胜球",
-          "射门质量突出",
-          "在防线之间活跃"
+          "送出助攻",
+          "射门质量突出"
         ]
       },
+      "selection_reason": "Selected because he had two goals and one assist in Japan's 4-0 win over Tunisia, directly contributing to three of Japan's four goals.",
       "content": {
         "en": {
-          "title": "The runner Japan kept finding",
-          "html": "<p>Ayase Ueda gave Japan a constant threat with his movement. He repeatedly ran in behind—28 such runs—and appeared between the lines, and that presence led to two goals, including the match-winning strike.</p>"
+          "title": "Ueda finished with two and one",
+          "html": "<p>Ayase Ueda scored in the 31st minute, assisted Junya Ito in the 69th, then scored again in the 83rd. Japan won 4-0, and he had a direct hand in the last three goals.</p>"
         },
         "zh": {
-          "title": "上田绮世梅开二度，日本 4-0 突尼斯",
-          "html": "<p>上田绮世第 30 分钟打入制胜球，全场梅开二度，日本 4-0 完胜突尼斯。</p><p>他在防线之间活跃，全场 22 次在两线间接应，28 次冲击身后空间。这些跑动拉扯了对手防线，为队友创造出传球线路。</p><p>全场比赛他跑动 9.06 公里，活动范围覆盖前场。</p>"
+          "title": "上田绮世两球一助",
+          "html": "<p>上田绮世第31分钟进球，第69分钟助攻伊东纯也，83分钟再进一球。日本4-0赢突尼斯，他参与了后面3球，中锋这份活干得很满。</p>"
         }
       }
     },
     {
       "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
       "award_label": {
         "en": "Player of the Day",
         "zh": "每日最佳球员"
       },
-      "rank": 3,
-      "match_key": "FIFA-2026-M35-NED-SWE",
-      "match_no": 35,
-      "player_no": 19,
+      "player_id": "FIFA-2026-M35-NED-SWE|Netherlands|19",
       "player_name": "Brian BROBBEY",
       "team": "Netherlands",
       "opponent": "Sweden",
-      "home_score": 5,
-      "away_score": 1,
-      "team_final_goals": 5,
-      "opponent_final_goals": 1,
+      "match_key": "FIFA-2026-M35-NED-SWE",
+      "match_no": 35,
+      "player_no": 19,
       "position": "FW",
-      "progression_benchmark": {
-        "score": 0.0,
-        "quality": "thin",
-        "support_actions": 0.0,
-        "pass_only_line_break_volume": false
-      },
-      "hidden_gem_profile": {
-        "eligible": false,
-        "profile": "insufficient_evidence",
-        "score": 21.8
-      },
-      "flow_context": {
-        "match_key": "FIFA-2026-M35-NED-SWE",
-        "team_came_from_behind_to_win": false,
-        "allowed_claims": {
-          "en": [
-            "go-ahead goal",
-            "match-winning goal",
-            "16' winner"
-          ],
-          "zh": [
-            "取得领先",
-            "制胜球",
-            "16' 制胜"
-          ]
-        },
-        "goals": [
-          {
-            "goal_order": 1,
-            "minute": 5,
-            "team": "Netherlands",
-            "player_name": "Brian BROBBEY",
-            "score_before": "0-0",
-            "score_after": "1-0",
-            "team_score_before": 0,
-            "opponent_score_before": 0,
-            "team_score_after": 1,
-            "opponent_score_after": 0,
-            "tags": [
-              "opening_goal",
-              "go_ahead_goal"
-            ]
-          },
-          {
-            "goal_order": 2,
-            "minute": 16,
-            "team": "Netherlands",
-            "player_name": "Brian BROBBEY",
-            "score_before": "1-0",
-            "score_after": "2-0",
-            "team_score_before": 1,
-            "opponent_score_before": 0,
-            "team_score_after": 2,
-            "opponent_score_after": 0,
-            "tags": [
-              "match_winning_goal"
-            ]
-          }
-        ],
-        "decisive_goal": {
-          "goal_order": 2,
-          "minute": 16,
-          "team": "Netherlands",
-          "player_name": "Brian BROBBEY",
-          "score_before": "1-0",
-          "score_after": "2-0",
-          "team_score_before": 1,
-          "opponent_score_before": 0,
-          "team_score_after": 2,
-          "opponent_score_after": 0,
-          "tags": [
-            "match_winning_goal"
-          ]
-        }
-      },
+      "score": 72.78,
       "metrics": {
         "shots": 2,
         "on_target": 2,
         "goals": 2,
-        "offers_received": 4,
-        "in_behind": 21,
-        "in_between": 6,
-        "possession_interrupted": 1,
-        "blocks": 2,
-        "total_distance_m": 7193.4
+        "goal_involvements": 2,
+        "brace": 1,
+        "opening_goal": 1,
+        "go_ahead_goal": 1
       },
       "evidence_chips": {
         "en": [
           "brace",
-          "match-winning goal"
+          "opening goal"
         ],
         "zh": [
           "梅开二度",
-          "打入制胜球"
+          "首开纪录"
         ]
       },
+      "selection_reason": "Selected because he scored the first two Netherlands goals in the 5-1 win, including the 5th-minute opener.",
       "content": {
         "en": {
-          "title": "Two goals behind the line",
-          "html": "<p>Brian Brobbey's constant movement behind Sweden's back line gave the Netherlands a persistent attacking route. He scored twice, including the 16th-minute winner, and made 21 runs in behind, a threat that stretched Sweden throughout.</p>"
+          "title": "Brobbey scored the first two",
+          "html": "<p>Brian Brobbey opened the scoring in the 5th minute and made it 2-0 in the 17th. Two shots on target, two goals, and the Netherlands were quickly in control.</p>"
         },
         "zh": {
-          "title": "布罗比梅开二度，身后跑动冲击瑞典防线",
-          "html": "<p>布罗比在荷兰 5-1 大胜瑞典的比赛中梅开二度。第 5 分钟他首开纪录，第 16 分钟打入制胜球。</p><p>他全场 21 次接应身后球，持续冲击瑞典防线身后空间。全场比赛他跑动约 7.2 公里，在锋线持续施压。</p>"
+          "title": "布罗贝梅开二度",
+          "html": "<p>布罗贝第5分钟打开局面，第17分钟又把比分推到2-0。两次射正都进了，荷兰这场开局被他带起来。</p>"
         }
       }
     },
     {
-      "award_type": "progression_pick",
+      "award_type": "goalkeeper_watch",
+      "award_types": [
+        "goalkeeper_watch"
+      ],
       "award_label": {
-        "en": "Progression Pick",
-        "zh": "推进精选"
+        "en": "Goalkeeper Watch",
+        "zh": "门将关注"
       },
-      "rank": 1,
-      "match_key": "FIFA-2026-M33-GER-CIV",
-      "match_no": 33,
-      "player_no": 6,
-      "player_name": "Joshua KIMMICH",
-      "team": "Germany",
-      "opponent": "Côte d'Ivoire",
-      "home_score": 2,
-      "away_score": 1,
-      "team_final_goals": 2,
-      "opponent_final_goals": 1,
-      "position": "DF",
-      "progression_benchmark": {
-        "score": 12.49,
-        "quality": "thin",
-        "support_actions": 0.0,
-        "pass_only_line_break_volume": true
-      },
-      "hidden_gem_profile": {
-        "eligible": false,
-        "profile": "insufficient_evidence",
-        "score": 25.1
-      },
-      "flow_context": {
-        "match_key": "FIFA-2026-M33-GER-CIV",
-        "team_came_from_behind_to_win": true,
-        "allowed_claims": {
-          "en": [
-            "comeback win"
-          ],
-          "zh": [
-            "逆转取胜"
-          ]
-        },
-        "goals": [],
-        "decisive_goal": null
-      },
-      "metrics": {
-        "offers_received": 11,
-        "line_breaks_completed": 26,
-        "possession_regains": 9,
-        "possession_interrupted": 2,
-        "blocks": 1,
-        "total_distance_m": 12194.2
-      },
-      "evidence_chips": {
-        "en": [
-          "repeated line breaks",
-          "ball-winning profile"
-        ],
-        "zh": [
-          "持续打穿防线",
-          "夺回球权能力突出"
-        ]
-      },
-      "content": {
-        "en": {
-          "title": "The route back into it",
-          "html": "<p>Kimmich’s forward passing gave Germany a route back into the match. He completed 26 line breaks, repeatedly breaking lines as his team rallied from a 1-0 deficit to win 2-1.</p>"
-        },
-        "zh": {
-          "title": "基米希：逆转战中的推进保证",
-          "html": "<p>德国 0-1 落后科特迪瓦，最终 2-1 逆转取胜。基米希司职后卫，全场 26 次打穿防线。落后阶段他坚持向前路线，多次夺回球权。凭借持续的推进表现，他帮助球队实现逆转。</p>"
-        }
-      }
-    },
-    {
-      "award_type": "hidden_gem",
-      "award_label": {
-        "en": "Hidden Gem",
-        "zh": "隐藏亮点"
-      },
-      "rank": 1,
+      "player_id": "FIFA-2026-M34-ECU-CUW|Curaçao|1",
+      "player_name": "Eloy ROOM",
+      "team": "Curaçao",
+      "opponent": "Ecuador",
       "match_key": "FIFA-2026-M34-ECU-CUW",
       "match_no": 34,
-      "player_no": 15,
-      "player_name": "Pedro VITE",
-      "team": "Ecuador",
-      "opponent": "Curaçao",
-      "home_score": 0,
-      "away_score": 0,
-      "team_final_goals": 0,
-      "opponent_final_goals": 0,
-      "position": "MF",
-      "progression_benchmark": {
-        "score": 16.5,
-        "quality": "thin",
-        "support_actions": 4.0,
-        "pass_only_line_break_volume": false
-      },
-      "hidden_gem_profile": {
-        "eligible": true,
-        "profile": "off_ball_threat",
-        "score": 80.1
-      },
-      "flow_context": {
-        "match_key": "FIFA-2026-M34-ECU-CUW",
-        "team_came_from_behind_to_win": false,
-        "allowed_claims": {
-          "en": [],
-          "zh": []
-        },
-        "goals": [],
-        "decisive_goal": null
-      },
+      "player_no": 1,
+      "position": "GK",
+      "score": 16.47,
       "metrics": {
-        "shots": 2,
-        "on_target": 1,
-        "offers_received": 51,
-        "in_behind": 7,
-        "in_between": 33,
-        "line_breaks_completed": 21,
-        "ball_progressions": 2,
-        "possession_regains": 3,
-        "possession_interrupted": 1,
-        "total_distance_m": 10197.1
+        "clean_sheet": 1,
+        "opponent_xg": 2.76,
+        "opponent_attempts_on_target": 15,
+        "opponent_attempts_total": 27,
+        "keeper_saved_shots": 15
       },
       "evidence_chips": {
         "en": [
-          "repeated line breaks",
-          "found again and again",
-          "between-line presence"
+          "clean sheet",
+          "faced heavy on-target pressure",
+          "xG pressure resisted",
+          "Saved outcomes in shot log"
         ],
         "zh": [
-          "持续打穿防线",
-          "持续接应",
-          "在防线之间活跃"
+          "零封",
+          "对手射正压力高",
+          "承受较高xG",
+          "射门记录Saved结果较多"
         ]
       },
+      "selection_reason": "Selected as the goalkeeper exception because Curaçao drew 0-0 while Ecuador produced 27 attempts, 15 shots on target and 2.76 xG; Room is credited with 15 saved shots.",
       "content": {
         "en": {
-          "title": "The quiet connector",
-          "html": "<p>Pedro Vite kept Ecuador's possession ticking by offering himself as a passing option between Curacao's lines. He received 51 offers in total, with 33 coming between the lines, which helped his team maintain structure in a game that stayed scoreless through 90 minutes.</p>"
+          "title": "Room kept Ecuador out",
+          "html": "<p>Ecuador produced 27 attempts, 15 shots on target and 2.76 xG, but Eloy Room kept Curaçao at 0-0. Fifteen saved shots made the draw possible.</p>"
         },
         "zh": {
-          "title": "维特：两线之间的接应支点",
-          "html": "<p>厄瓜多尔 0-0 平库拉索，维特在防线之间反复活跃，全场 51 次接应成功。 其中 33 次在两线之间，7 次找到防线身后。比分虽未改写，但他维持了前场的接应连线。</p>"
-        }
-      }
-    },
-    {
-      "award_type": "defensive_pick",
-      "award_label": {
-        "en": "Defensive Pick",
-        "zh": "防守精选"
-      },
-      "rank": 1,
-      "match_key": "FIFA-2026-M33-GER-CIV",
-      "match_no": 33,
-      "player_no": 23,
-      "player_name": "Felix NMECHA",
-      "team": "Germany",
-      "opponent": "Côte d'Ivoire",
-      "home_score": 2,
-      "away_score": 1,
-      "team_final_goals": 2,
-      "opponent_final_goals": 1,
-      "position": "MF",
-      "progression_benchmark": {
-        "score": 22.1,
-        "quality": "useful",
-        "support_actions": 8.0,
-        "pass_only_line_break_volume": false
-      },
-      "hidden_gem_profile": {
-        "eligible": true,
-        "profile": "defensive_resistance",
-        "score": 67.25
-      },
-      "flow_context": {
-        "match_key": "FIFA-2026-M33-GER-CIV",
-        "team_came_from_behind_to_win": true,
-        "allowed_claims": {
-          "en": [
-            "comeback win"
-          ],
-          "zh": [
-            "逆转取胜"
-          ]
-        },
-        "goals": [],
-        "decisive_goal": null
-      },
-      "metrics": {
-        "shots": 2,
-        "offers_received": 12,
-        "in_behind": 9,
-        "in_between": 3,
-        "line_breaks_completed": 12,
-        "ball_progressions": 4,
-        "possession_regains": 14,
-        "possession_interrupted": 4,
-        "blocks": 3,
-        "total_distance_m": 11884.9
-      },
-      "evidence_chips": {
-        "en": [
-          "ball-winning profile"
-        ],
-        "zh": [
-          "夺回球权能力突出"
-        ]
-      },
-      "content": {
-        "en": {
-          "title": "The stubborn stopper",
-          "html": "<p>Germany's comeback drew heavily on Felix Nmecha's ball-winning. He regained possession 14 times, interrupted four attacks, and blocked three attempts, helping to stifle Côte d'Ivoire's rhythm.</p>"
-        },
-        "zh": {
-          "title": "恩梅查中路抢截助德国逆转",
-          "html": "<p>德国 0-1 落后科特迪瓦，最终 2-1 逆转取胜。恩梅查在中路反复抢回球权，全场完成 14 次夺回球权。</p><p>他 4 次破坏对手进攻推进，另有 3 次封堵。科特迪瓦的攻势多次因此中断。恩梅查的拦截帮助德国队稳住防线，赢回比赛节奏。</p>"
+          "title": "鲁姆15次扑救零封",
+          "html": "<p>厄瓜多尔27脚射门、15次射正，预期进球2.76，鲁姆没有让比分动起来。库拉索0-0拿分，这个零封很硬。</p>"
         }
       }
     }
   ],
-  "selection_review": {
-    "status": "publishable",
-    "alerts": [
-      {
-        "level": "info",
-        "code": "same_team_multiple_picks",
-        "message": "Multiple picks can still come from one team when roles are clearly distinct.",
-        "teams": [
-          {
-            "team": "Germany",
-            "count": 3
-          }
-        ]
-      }
-    ],
-    "iterations": [
-      {
-        "iteration": 1,
-        "status": "publishable",
-        "alerts": [
-          {
-            "level": "info",
-            "code": "same_team_multiple_picks",
-            "message": "Multiple picks can still come from one team when roles are clearly distinct.",
-            "teams": [
-              {
-                "team": "Germany",
-                "count": 3
-              }
-            ]
-          }
-        ],
-        "choice_names": [
-          "Deniz UNDAV",
-          "Ayase UEDA",
-          "Brian BROBBEY",
-          "Joshua KIMMICH",
-          "Pedro VITE",
-          "Felix NMECHA"
-        ]
-      }
-    ]
+  "selection_validation": {
+    "schema_version": 1,
+    "status": "pass",
+    "warnings": []
   },
   "audit": []
 }

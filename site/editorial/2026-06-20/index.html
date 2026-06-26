@@ -20,9 +20,19 @@
     .choice-card aside strong { display: block; font-size: 34px; }
     .choice-card aside > span { color: #59677c; font-size: 12px; text-transform: uppercase; }
     .meta { margin: 0; color: #59677c; }
+    .award-badges { display: flex; flex-wrap: wrap; gap: 6px; margin: -6px 0 10px; }
+    .award-badge { border: 1px solid #dce5f2; background: #f7f9fc; color: #35465d; border-radius: 999px; padding: 4px 8px; font-size: 12px; font-weight: 700; }
     .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
     .chips span { background: #edf2fa; border: 1px solid #dce5f2; border-radius: 999px; padding: 5px 9px; font-size: 12px; }
+    .archive-list { display: grid; gap: 10px; margin-top: 22px; }
+    .archive-row { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; align-items: center; gap: 12px; padding: 14px 16px; color: inherit; text-decoration: none; background: #fff; border: 1px solid #dde3ee; border-radius: 8px; }
+    .archive-row:hover { border-color: #b7c4d4; }
+    .archive-row span { color: #59677c; font-size: 13px; }
+    .badge { justify-self: end; border-radius: 999px; padding: 4px 9px; border: 1px solid #dce5f2; background: #edf2fa; color: #35465d; font-size: 12px; }
+    .badge.official { border-color: #b7dfd4; background: #e7f7f1; color: #0f766e; }
+    .badge.legacy { border-color: #e7d8ad; background: #fff7df; color: #806215; }
     @media (max-width: 720px) { .choice-card { grid-template-columns: 1fr; } .choice-card aside { border-left: 0; border-top: 1px solid #e8edf5; padding-left: 0; padding-top: 14px; } }
+    @media (max-width: 720px) { .archive-row { grid-template-columns: 1fr; align-items: start; } .badge { justify-self: start; } }
     </style>
 </head>
 <body>
@@ -30,102 +40,86 @@
     <p class="eyebrow">FIFA PMSR Data</p>
     <h1>Editor's Choices · 2026-06-20</h1>
     <p class="lede">Data-informed selections from the latest structured PMSR dataset. These are not official awards.</p>
-    
-    <article class="choice-card">
+        <article class="choice-card">
       <div>
         <p class="award">Player of the Day</p>
+        <div class="award-badges"></div>
         <h2>🇩🇪 Deniz UNDAV</h2>
         <p class="meta">🇩🇪 Germany vs 🇨🇮 Côte d'Ivoire · Match 33</p>
-        <h3>Level, then winner</h3>
-        <p>Deniz Undav came off the bench to turn the match. He equalised in the 67th minute and then struck a stoppage-time winner to complete a 2-1 comeback win over Côte d'Ivoire.</p>
-        <h3>恩达夫替补双响逆转科特迪瓦</h3>
-        <p>恩达夫替补登场梅开二度，助德国 2-1 逆转科特迪瓦。</p><p>第 67 分钟，他破门扳平比分。补时第 93 分钟，恩达夫再度得分打入制胜球。</p><p>德国队在 0-1 落后情况下，凭借他的两粒进球实现翻盘。</p>
+        <h3>Undav came on and won it</h3>
+        <p>Deniz Undav came off the bench with Germany trailing, equalised in the 68th minute, then scored again in stoppage time. Three shots, three on target, two goals, and the comeback belonged to him.</p>
+        <h3>翁达夫替补双响制胜</h3>
+        <p>德国先丢一球，翁达夫替补出场后第68分钟扳平，90+4分钟再进制胜球。3脚射门全射正，这场逆转最后落在他脚下。</p>
       </div>
       <aside>
         <div class="chips"><span>brace</span><span>substitute brace</span><span>comeback winner</span><span>late winner</span></div>
       </aside>
     </article>
-            
 
     <article class="choice-card">
       <div>
         <p class="award">Player of the Day</p>
+        <div class="award-badges"></div>
+        <h2>🇳🇱 Cody GAKPO</h2>
+        <p class="meta">🇳🇱 Netherlands vs 🇸🇪 Sweden · Match 35</p>
+        <h3>Gakpo had two goals and an assist</h3>
+        <p>Cody Gakpo set up the 5th-minute opener, then scored twice after half-time. In the Netherlands' 5-1 win over Sweden, he was directly involved in three goals.</p>
+        <h3>加克波梅开二度并助攻</h3>
+        <p>加克波第5分钟先助攻布罗贝，47分钟和54分钟自己连进两球。荷兰5-1赢瑞典，他直接参与3球，5脚射门4次射正。</p>
+      </div>
+      <aside>
+        <div class="chips"><span>brace</span><span>assist</span><span>high shot quality</span></div>
+      </aside>
+    </article>
+
+    <article class="choice-card">
+      <div>
+        <p class="award">Player of the Day</p>
+        <div class="award-badges"></div>
         <h2>🇯🇵 Ayase UEDA</h2>
         <p class="meta">🇯🇵 Japan vs 🇹🇳 Tunisia · Match 36</p>
-        <h3>The runner Japan kept finding</h3>
-        <p>Ayase Ueda gave Japan a constant threat with his movement. He repeatedly ran in behind—28 such runs—and appeared between the lines, and that presence led to two goals, including the match-winning strike.</p>
-        <h3>上田绮世梅开二度，日本 4-0 突尼斯</h3>
-        <p>上田绮世第 30 分钟打入制胜球，全场梅开二度，日本 4-0 完胜突尼斯。</p><p>他在防线之间活跃，全场 22 次在两线间接应，28 次冲击身后空间。这些跑动拉扯了对手防线，为队友创造出传球线路。</p><p>全场比赛他跑动 9.06 公里，活动范围覆盖前场。</p>
+        <h3>Ueda finished with two and one</h3>
+        <p>Ayase Ueda scored in the 31st minute, assisted Junya Ito in the 69th, then scored again in the 83rd. Japan won 4-0, and he had a direct hand in the last three goals.</p>
+        <h3>上田绮世两球一助</h3>
+        <p>上田绮世第31分钟进球，第69分钟助攻伊东纯也，83分钟再进一球。日本4-0赢突尼斯，他参与了后面3球，中锋这份活干得很满。</p>
       </div>
       <aside>
-        <div class="chips"><span>brace</span><span>match-winning goal</span><span>high shot quality</span><span>between-line presence</span></div>
+        <div class="chips"><span>brace</span><span>assist</span><span>high shot quality</span></div>
       </aside>
     </article>
-            
 
     <article class="choice-card">
       <div>
         <p class="award">Player of the Day</p>
+        <div class="award-badges"></div>
         <h2>🇳🇱 Brian BROBBEY</h2>
         <p class="meta">🇳🇱 Netherlands vs 🇸🇪 Sweden · Match 35</p>
-        <h3>Two goals behind the line</h3>
-        <p>Brian Brobbey's constant movement behind Sweden's back line gave the Netherlands a persistent attacking route. He scored twice, including the 16th-minute winner, and made 21 runs in behind, a threat that stretched Sweden throughout.</p>
-        <h3>布罗比梅开二度，身后跑动冲击瑞典防线</h3>
-        <p>布罗比在荷兰 5-1 大胜瑞典的比赛中梅开二度。第 5 分钟他首开纪录，第 16 分钟打入制胜球。</p><p>他全场 21 次接应身后球，持续冲击瑞典防线身后空间。全场比赛他跑动约 7.2 公里，在锋线持续施压。</p>
+        <h3>Brobbey scored the first two</h3>
+        <p>Brian Brobbey opened the scoring in the 5th minute and made it 2-0 in the 17th. Two shots on target, two goals, and the Netherlands were quickly in control.</p>
+        <h3>布罗贝梅开二度</h3>
+        <p>布罗贝第5分钟打开局面，第17分钟又把比分推到2-0。两次射正都进了，荷兰这场开局被他带起来。</p>
       </div>
       <aside>
-        <div class="chips"><span>brace</span><span>match-winning goal</span></div>
+        <div class="chips"><span>brace</span><span>opening goal</span></div>
       </aside>
     </article>
-            
 
     <article class="choice-card">
       <div>
-        <p class="award">Progression Pick</p>
-        <h2>🇩🇪 Joshua KIMMICH</h2>
-        <p class="meta">🇩🇪 Germany vs 🇨🇮 Côte d'Ivoire · Match 33</p>
-        <h3>The route back into it</h3>
-        <p>Kimmich’s forward passing gave Germany a route back into the match. He completed 26 line breaks, repeatedly breaking lines as his team rallied from a 1-0 deficit to win 2-1.</p>
-        <h3>基米希：逆转战中的推进保证</h3>
-        <p>德国 0-1 落后科特迪瓦，最终 2-1 逆转取胜。基米希司职后卫，全场 26 次打穿防线。落后阶段他坚持向前路线，多次夺回球权。凭借持续的推进表现，他帮助球队实现逆转。</p>
+        <p class="award">Goalkeeper Watch</p>
+        <div class="award-badges"></div>
+        <h2>🇨🇼 Eloy ROOM</h2>
+        <p class="meta">🇨🇼 Curaçao vs 🇪🇨 Ecuador · Match 34</p>
+        <h3>Room kept Ecuador out</h3>
+        <p>Ecuador produced 27 attempts, 15 shots on target and 2.76 xG, but Eloy Room kept Curaçao at 0-0. Fifteen saved shots made the draw possible.</p>
+        <h3>鲁姆15次扑救零封</h3>
+        <p>厄瓜多尔27脚射门、15次射正，预期进球2.76，鲁姆没有让比分动起来。库拉索0-0拿分，这个零封很硬。</p>
       </div>
       <aside>
-        <div class="chips"><span>repeated line breaks</span><span>ball-winning profile</span></div>
+        <div class="chips"><span>clean sheet</span><span>faced heavy on-target pressure</span><span>xG pressure resisted</span><span>Saved outcomes in shot log</span></div>
       </aside>
     </article>
-            
 
-    <article class="choice-card">
-      <div>
-        <p class="award">Hidden Gem</p>
-        <h2>🇪🇨 Pedro VITE</h2>
-        <p class="meta">🇪🇨 Ecuador vs 🇨🇼 Curaçao · Match 34</p>
-        <h3>The quiet connector</h3>
-        <p>Pedro Vite kept Ecuador's possession ticking by offering himself as a passing option between Curacao's lines. He received 51 offers in total, with 33 coming between the lines, which helped his team maintain structure in a game that stayed scoreless through 90 minutes.</p>
-        <h3>维特：两线之间的接应支点</h3>
-        <p>厄瓜多尔 0-0 平库拉索，维特在防线之间反复活跃，全场 51 次接应成功。 其中 33 次在两线之间，7 次找到防线身后。比分虽未改写，但他维持了前场的接应连线。</p>
-      </div>
-      <aside>
-        <div class="chips"><span>repeated line breaks</span><span>found again and again</span><span>between-line presence</span></div>
-      </aside>
-    </article>
-            
-
-    <article class="choice-card">
-      <div>
-        <p class="award">Defensive Pick</p>
-        <h2>🇩🇪 Felix NMECHA</h2>
-        <p class="meta">🇩🇪 Germany vs 🇨🇮 Côte d'Ivoire · Match 33</p>
-        <h3>The stubborn stopper</h3>
-        <p>Germany's comeback drew heavily on Felix Nmecha's ball-winning. He regained possession 14 times, interrupted four attacks, and blocked three attempts, helping to stifle Côte d'Ivoire's rhythm.</p>
-        <h3>恩梅查中路抢截助德国逆转</h3>
-        <p>德国 0-1 落后科特迪瓦，最终 2-1 逆转取胜。恩梅查在中路反复抢回球权，全场完成 14 次夺回球权。</p><p>他 4 次破坏对手进攻推进，另有 3 次封堵。科特迪瓦的攻势多次因此中断。恩梅查的拦截帮助德国队稳住防线，赢回比赛节奏。</p>
-      </div>
-      <aside>
-        <div class="chips"><span>ball-winning profile</span></div>
-      </aside>
-    </article>
-            
   </main>
 </body>
 </html>
