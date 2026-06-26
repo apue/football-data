@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-06-26T04:25:58+00:00",
+  "generated_at": "2026-06-26T05:59:20+00:00",
   "status": "success",
-  "match_date": "2026-06-20",
+  "match_date": "2026-06-21",
   "workflow_variant": "ai_rerank_selection_v1",
   "experiment_id": "ai_rerank_reader_loop_v5",
   "editor_runtime": "local_codex",
@@ -25,28 +25,28 @@
   "choices": [
     {
       "award_type": "player_of_the_day",
-      "player_name": "Deniz UNDAV",
-      "team": "Germany"
+      "player_name": "MOHAMED SALAH",
+      "team": "Egypt"
     },
     {
       "award_type": "player_of_the_day",
-      "player_name": "Cody GAKPO",
-      "team": "Netherlands"
+      "player_name": "Mikel OYARZABAL",
+      "team": "Spain"
     },
     {
       "award_type": "player_of_the_day",
-      "player_name": "Ayase UEDA",
-      "team": "Japan"
+      "player_name": "Maxi ARAUJO",
+      "team": "Uruguay"
     },
     {
       "award_type": "player_of_the_day",
-      "player_name": "Brian BROBBEY",
-      "team": "Netherlands"
+      "player_name": "MOSTAFA ZICO",
+      "team": "Egypt"
     },
     {
       "award_type": "goalkeeper_watch",
-      "player_name": "Eloy ROOM",
-      "team": "Curaçao"
+      "player_name": "Alireza BEIRANVAND",
+      "team": "IR Iran"
     }
   ]
 }
