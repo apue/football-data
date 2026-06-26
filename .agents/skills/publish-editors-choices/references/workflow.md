@@ -113,7 +113,8 @@ The GitHub `Update Dataset` workflow should fetch and rebuild data and deploy th
 - `selection_validation.json`: deterministic checks for pool membership, the 3-6 public-card count range, award limits, slate balance, and skipped-higher-ranked explanations.
 - `copy_validation.json`: deterministic checks for banned public Chinese abstract terms and other copy-profile gates.
 - `editorial_review_payload.json`: compact review packet covering selected players, required top-ranked unselected candidates, slate counts, validation status, and copy.
-- `editorial_review.json`: local Codex reader-intuition review for obvious omissions, slate balance, metric misuse, copy style, and display-name register.
+- `editorial_review_payload.json` also includes `style_calibration` examples loaded from `config/editorial/style_calibration/` when the active review profile requests them.
+- `editorial_review.json`: local Codex reader-intuition review for obvious omissions, slate balance, metric misuse, copy style, style calibration, and display-name register.
 - `editorial_review_validation.json`: deterministic check that the review covered required dimensions, selected players, required unselected candidates, and has no blocking findings.
 - `reports/editorial/YYYY-MM-DD.md`: human-readable generated report.
 
@@ -132,6 +133,7 @@ If output is poor, repair the source of the problem: scoring config, candidate-p
 - Does `copy_validation.json` pass?
 - Does `editorial_review_validation.json` pass?
 - Did review cover obvious omissions, slate balance, metric misuse, copy style, and display names?
+- Did review use the active style calibration examples, especially for generic Chinese closing evaluations and AI-ish abstraction?
 - Does the copy avoid implying video review, media ratings, or unsupported tactical observation?
 - Does the homepage show the latest generated cards?
 

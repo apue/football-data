@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-06-26T02:20:49+00:00",
-  "compiled_at": "2026-06-26T02:20:49+00:00",
+  "generated_at": "2026-06-26T04:25:58+00:00",
+  "compiled_at": "2026-06-26T04:25:58+00:00",
   "match_date": "2026-06-20",
   "scoring_version": "v0.4",
   "editorial_generation": {
@@ -438,11 +438,11 @@
       "content": {
         "en": {
           "title": "Undav came on and won it",
-          "html": "<p>Deniz Undav came off the bench with Germany trailing, equalised in the 68th minute, then scored again in stoppage time. Three shots, three on target, two goals, and the comeback belonged to him.</p>"
+          "html": "<p>Deniz Undav came off the bench with Germany trailing, equalised in the 68th minute, then scored again in stoppage time. Three shots, three on target, two goals, and Germany turned it into a 2-1 win.</p>"
         },
         "zh": {
           "title": "翁达夫替补双响制胜",
-          "html": "<p>德国先丢一球，翁达夫替补出场后第68分钟扳平，90+4分钟再进制胜球。3脚射门全射正，这场逆转最后落在他脚下。</p>"
+          "html": "<p>德国先丢一球，翁达夫替补出场后第68分钟扳平，90+4分钟再进制胜球。3脚射门全射正，德国2-1把比赛翻回来。</p>"
         }
       }
     },
@@ -539,11 +539,11 @@
       "content": {
         "en": {
           "title": "Ueda finished with two and one",
-          "html": "<p>Ayase Ueda scored in the 31st minute, assisted Junya Ito in the 69th, then scored again in the 83rd. Japan won 4-0, and he had a direct hand in the last three goals.</p>"
+          "html": "<p>Ayase Ueda scored in the 31st minute, assisted Junya Ito in the 69th, then scored again in the 83rd. Japan won 4-0, and he was involved in the final three goals.</p>"
         },
         "zh": {
           "title": "上田绮世两球一助",
-          "html": "<p>上田绮世第31分钟进球，第69分钟助攻伊东纯也，83分钟再进一球。日本4-0赢突尼斯，他参与了后面3球，中锋这份活干得很满。</p>"
+          "html": "<p>上田绮世第31分钟进球，第69分钟助攻伊东纯也，83分钟再进一球。日本4-0赢突尼斯，后面三粒进球都跟他有关。</p>"
         }
       }
     },
@@ -588,11 +588,11 @@
       "content": {
         "en": {
           "title": "Brobbey scored the first two",
-          "html": "<p>Brian Brobbey opened the scoring in the 5th minute and made it 2-0 in the 17th. Two shots on target, two goals, and the Netherlands were quickly in control.</p>"
+          "html": "<p>Brian Brobbey opened the scoring in the 5th minute and made it 2-0 in the 17th. Two shots on target, two goals, and the Netherlands were two up early.</p>"
         },
         "zh": {
           "title": "布罗贝梅开二度",
-          "html": "<p>布罗贝第5分钟打开局面，第17分钟又把比分推到2-0。两次射正都进了，荷兰这场开局被他带起来。</p>"
+          "html": "<p>布罗贝第5分钟打开局面，第17分钟又把比分推到2-0。两次射正都进了，荷兰17分钟就拉开比分。</p>"
         }
       }
     },
@@ -639,11 +639,11 @@
       "content": {
         "en": {
           "title": "Room kept Ecuador out",
-          "html": "<p>Ecuador produced 27 attempts, 15 shots on target and 2.76 xG, but Eloy Room kept Curaçao at 0-0. Fifteen saved shots made the draw possible.</p>"
+          "html": "<p>Ecuador produced 27 attempts, 15 shots on target and 2.76 xG, but Eloy Room kept Curaçao at 0-0. Ecuador shot all match and still could not move the score.</p>"
         },
         "zh": {
           "title": "鲁姆15次扑救零封",
-          "html": "<p>厄瓜多尔27脚射门、15次射正，预期进球2.76，鲁姆没有让比分动起来。库拉索0-0拿分，这个零封很硬。</p>"
+          "html": "<p>厄瓜多尔27脚射门、15次射正，预期进球2.76，鲁姆没有让比分动起来。厄瓜多尔射了整场，比分还是0-0。</p>"
         }
       }
     }

@@ -68,6 +68,7 @@ def test_editorial_v2_registry_resolves_default_experiment():
         "alternative_slate_comparison",
         "metric_misuse",
         "copy_style",
+        "zh_style_calibration",
         "display_names",
     ]
     assert review_profile["required_slate_assessment_fields"] == [
@@ -99,6 +100,71 @@ def test_editorial_v2_registry_resolves_default_experiment():
         "config/editorial/copy_profiles/zh_natural_v1.json",
     ]
     assert not [path for path in retired_paths if Path(path).exists()]
+
+
+def test_editorial_style_calibration_loads_curated_zh_examples():
+    from football_data.editorial_style_calibration import load_style_calibration
+
+    examples = load_style_calibration("zh")
+
+    assert examples
+    assert any(example["bad"] == "这个零封很硬" for example in examples)
+    assert any(example["category"] == "generic_closure" for example in examples)
+    assert all(
+        {
+            "id",
+            "category",
+            "bad",
+            "why_bad",
+            "better",
+            "principle",
+            "confidence",
+        }
+        <= set(example)
+        for example in examples
+    )
+
+
+def test_editorial_review_payload_includes_zh_style_calibration_examples():
+    from football_data.editorial_candidates import build_candidate_pool
+    from football_data.editorial_copy import build_copy_payloads, generate_copy
+    from football_data.editorial_rankings import build_editorial_rankings
+    from football_data.editorial_registry import (
+        load_candidate_pool_config,
+        load_editorial_experiment,
+        load_review_profile,
+    )
+    from football_data.editorial_review import build_editorial_review_payload
+    from football_data.editorial_selection import fake_selection_decision
+    from football_data.editorial_validation import validate_selection_decision
+
+    experiment = load_editorial_experiment()
+    rankings = build_editorial_rankings(
+        "data/latest.sqlite",
+        "2026-06-20",
+        experiment["scoring_config"],
+    )
+    pool = build_candidate_pool(
+        rankings,
+        load_candidate_pool_config(experiment["candidate_pool"]),
+    )
+    decision = fake_selection_decision(pool, experiment)
+    copy = generate_copy(build_copy_payloads(decision, pool), fake=True)
+    review_payload = build_editorial_review_payload(
+        selection_decision=decision,
+        candidate_pool=pool,
+        copy=copy,
+        selection_validation=validate_selection_decision(decision, pool, experiment),
+        review_profile=load_review_profile(experiment["review_profile"]),
+        selection_config=experiment["selection"],
+    )
+
+    zh_examples = review_payload["style_calibration"]["zh"]
+    assert any(example["bad"] == "中锋这份活干得很满" for example in zh_examples)
+    assert any(example["category"] == "generic_closure" for example in zh_examples)
+    assert review_payload["style_calibration"]["review_instruction"] == (
+        "Use these examples to detect repeatable taste failures; prefer concrete match consequences over generic evaluative closers."
+    )
 
 
 def test_editorial_review_validation_requires_reader_intuition_coverage():

@@ -10,6 +10,7 @@
     "alternative_slate_comparison",
     "metric_misuse",
     "copy_style",
+    "zh_style_calibration",
     "display_names"
   ],
   "required_slate_assessment_fields": [
@@ -21,6 +22,20 @@
     "revision_decision"
   ],
   "required_unselected_headline_top_n": 8,
+  "style_calibration": {
+    "languages": [
+      "zh"
+    ],
+    "categories": [
+      "generic_closure",
+      "ai_abstract",
+      "unsupported_contrast",
+      "title_taste",
+      "translationese"
+    ],
+    "max_examples_per_language": 12,
+    "review_instruction": "Use these examples to detect repeatable taste failures; prefer concrete match consequences over generic evaluative closers."
+  },
   "blocking_categories": [
     "obvious_omission",
     "forced_angle",
@@ -42,6 +57,7 @@
     "Check whether one match is overrepresented relative to the day unless each card has an independently strong public case.",
     "Reject weak Progression Engine, Goalkeeper Watch, Hidden Gem, or defensive stories when the public case depends on thin or misused metrics.",
     "Check Chinese and English copy for unsupported observations, AI-ish abstraction, display-name register, and negated contrast claims such as 'not only...' or '不是只在...' that the data cannot directly prove.",
+    "Use the zh style calibration examples in the review payload. Flag generic Chinese closing evaluations such as '这个零封很硬' or '这份活干得很满' and prefer concrete match consequences.",
     "If a blocking issue remains, set status to failed and explain the concrete revision needed. If revised artifacts resolve the issue, set status to pass and summarize the revision."
   ]
 }

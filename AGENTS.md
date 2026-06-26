@@ -58,6 +58,8 @@ The active production experiment is `ai_rerank_reader_loop_v5`, using the `ai_re
 
 Default Editor's Choices scoring uses `config/scoring/v0.4.json`. The impact layer is derived from PMSR goals, lineup status, final scoreline, deterministic match-flow reconstruction, and supplemental FIFA timeline goal-involvement evidence for official assists. It can reward opening, equalizing, go-ahead, contextual match-winning, late, stoppage-time, late match-winning goals, comeback equalisers, comeback winners, only-goal winners, assists, goal involvements, braces, hat-tricks, and substitute scoring bursts. Hidden-gem and progression review should use detailed line-break splits when available so pass-only line-break volume is not treated the same as pressure-breaking carries or deeper attacking-third breaks. Chinese player display names should come from `config/editorial/display_names/zh.json` when present; do not rely on ad hoc translation in public copy. Do not use media ratings or social reactions as direct scoring inputs.
 
+Use `config/editorial/style_calibration/zh.jsonl` for recurring Chinese editorial taste feedback. Treat it as a curated bad/better example corpus for local Codex and future API editor agents, not as a broad banned-word list. Add high-confidence repeated issues there, keep one-off wording fixes in local copy, and only promote patterns to deterministic validation when the rule is stable.
+
 The editorial workflow generates opinionated content, so prefer a PR branch over direct pushes to `main` unless the user explicitly asks for direct publication.
 
 ## Source Policy

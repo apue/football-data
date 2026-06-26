@@ -26,6 +26,7 @@ Read these before acting:
 - Keep scoring, candidate-pool construction, selection validation, artifact writing, and publishing deterministic in Python. The retired cloud editorial queue must not be used for daily publication.
 - Let Codex repair code, scoring, registry config, prompts, copy profiles, or local selection/copy files when output fails review; do not hand-edit compiled frontend JSON.
 - Generate both English and Chinese copy from the same selected candidate evidence packet. They should express the same judgment but do not need to be literal translations.
+- Treat `config/editorial/style_calibration/zh.jsonl` as the durable store for recurring Chinese copy taste feedback. Add curated bad/better examples there instead of relying on chat memory or turning every dislike into a banned term.
 - Run the workflow validation gates before accepting output: `selection_validation.json`, `copy_validation.json`, `editorial_review_validation.json`, copy warnings, and homepage/site artifacts.
 - Use local match dates from `matches.match_date`, not Beijing date or workflow run time.
 - Do not start with ad hoc SQL for editorial review. If the fact pack is missing a recurring fact, improve `scripts/inspect_editorial_day.py` instead.

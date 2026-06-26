@@ -42,6 +42,10 @@ Before writing each Chinese card, generate 3-5 Chinese title candidates from fac
 
 The active Chinese profile is `zh_matchnote_light_emotion_v1`: titles are core-fact labels, while body copy can be a match-report note plus half a sentence of light football emotion. Do not use public abstract terms such as `答案`, `理由`, `说服力`, `分量`, `走势`, `分界线`, `写下`, `证明`, `含金量`, `最稳`, `最直接`, `这张卡`, `卡片`, `模型`, or `指标压`.
 
+Use `config/editorial/style_calibration/zh.jsonl` as the durable calibration corpus for recurring Chinese taste feedback. Treat it as examples, not a banned-word list. When copy resembles a bad example, preserve the underlying fact but rewrite toward the listed principle.
+
+Avoid generic evaluative closers. A sentence like `这个零封很硬` or `中锋这份活干得很满` often sounds like model-added emotion because it does not add a new match fact. Prefer a concrete match consequence or fact contrast, such as `厄瓜多尔射了整场，比分还是0-0` or `日本4-0赢突尼斯，后面三粒进球都跟他有关`.
+
 After drafting Chinese, run a strict `qu-ai-wei` style review:
 
 - Does it sound like a Chinese football editor wrote it directly?
@@ -49,6 +53,7 @@ After drafting Chinese, run a strict `qu-ai-wei` style review:
 - Does the title avoid light-emotion phrasing that belongs in the body?
 - Is there at least one concrete football action before the numbers?
 - Are abstract phrases and polished-but-empty claims removed?
+- Does the body avoid generic evaluative closing phrases when a concrete match consequence would say more?
 - Does it avoid the active copy profile's banned public terms?
 - Is every claim supported by the candidate evidence packet or SQLite?
 
