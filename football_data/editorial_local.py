@@ -136,6 +136,7 @@ def compile_local_editorial(
             copy_validation=copy_validation,
             review_profile=review_profile,
             selection_config=experiment.get("selection"),
+            config_dir=config_dir,
         )
         _write_json(audit_dir / "editorial_review_payload.json", editorial_review_payload)
         try:

@@ -1,7 +1,10 @@
 from __future__ import annotations
 
 from collections import Counter
+from pathlib import Path
 from typing import Any
+
+from football_data.editorial_style_calibration import load_style_calibration
 
 
 def build_editorial_review_payload(
@@ -13,6 +16,7 @@ def build_editorial_review_payload(
     copy_validation: dict[str, Any] | None = None,
     review_profile: dict[str, Any] | None = None,
     selection_config: dict[str, Any] | None = None,
+    config_dir: str | Path = "config/editorial",
 ) -> dict[str, Any]:
     selected_ids = {
         str(item.get("player_id") or "")
@@ -79,6 +83,9 @@ def build_editorial_review_payload(
     )
     if match_coverage:
         payload["match_coverage"] = match_coverage
+    style_calibration = _style_calibration_context(review_profile, config_dir)
+    if style_calibration:
+        payload["style_calibration"] = style_calibration
     return payload
 
 
@@ -365,6 +372,41 @@ def _public_card_count_context(
         "max": max_count,
         "match_count": match_count,
     }
+
+
+def _style_calibration_context(
+    review_profile: dict[str, Any] | None,
+    config_dir: str | Path,
+) -> dict[str, Any] | None:
+    raw = (review_profile or {}).get("style_calibration")
+    if not isinstance(raw, dict):
+        return None
+    languages = [str(language) for language in raw.get("languages", []) if str(language).strip()]
+    if not languages:
+        return None
+    max_examples = raw.get("max_examples_per_language")
+    max_count = int(max_examples) if max_examples is not None else None
+    categories = [
+        str(category)
+        for category in raw.get("categories", [])
+        if str(category).strip()
+    ] or None
+    context: dict[str, Any] = {
+        "review_instruction": str(
+            raw.get("review_instruction")
+            or "Use these examples to detect repeatable taste failures."
+        )
+    }
+    for language in languages:
+        examples = load_style_calibration(
+            language,
+            config_dir,
+            categories=categories,
+            max_examples=max_count,
+        )
+        if examples:
+            context[language] = examples
+    return context if len(context) > 1 else None
 
 
 def _review_candidate(candidate: dict[str, Any], award_type: str) -> dict[str, Any]:
