@@ -73,6 +73,7 @@ sqlite3 data/latest.sqlite < examples/top_fastest_players.sql
 sqlite3 data/latest.sqlite < examples/top_attacking_threats.sql
 sqlite3 data/latest.sqlite < examples/top_goal_involvements.sql
 python scripts/prepare_editorial_packet.py --date YYYY-MM-DD --json
+python scripts/inspect_editorial_day.py --date YYYY-MM-DD --json
 python scripts/check_status.py
 ```
 
@@ -90,6 +91,14 @@ Prepare the deterministic local handoff packet:
 python scripts/prepare_editorial_packet.py --date YYYY-MM-DD --json
 ```
 
+Build the deterministic editorial fact pack before local review:
+
+```bash
+python scripts/inspect_editorial_day.py --date YYYY-MM-DD --json
+```
+
+The fact pack is written under `agent-runs/YYYY-MM-DD/` as `editorial_fact_pack.json` and `editorial_fact_pack.md`. It captures match scores, goal timelines, own goals, official assists, team pressure, goalkeeper checks, direct-impact candidates, high-ranked metric-led candidates, and common reader traps. Use it before writing selection/copy/review; if a needed fact is missing, improve this script rather than relying on one-off SQL.
+
 Then write these local editor artifacts under `agent-runs/YYYY-MM-DD/`:
 
 - `selection_decision.json`
@@ -102,7 +111,7 @@ Compile the approved local result:
 python scripts/compile_local_editorial.py --date YYYY-MM-DD --json
 ```
 
-The compiled frontend artifacts are written to `site/editorial/`, and the homepage is rebuilt with the latest cards. Audit files are written under `agent-runs/YYYY-MM-DD/`, including `rankings.json`, `candidate_pool.json`, `selector_input.json`, `selection_decision.json`, `selection_validation.json`, `copy_validation.json`, `editorial_review_payload.json`, `editorial_review.json`, `editorial_review_validation.json`, and `run.json`.
+The compiled frontend artifacts are written to `site/editorial/`, and the homepage is rebuilt with the latest cards. Audit files are written under `agent-runs/YYYY-MM-DD/`, including `rankings.json`, `candidate_pool.json`, `selector_input.json`, `editorial_fact_pack.json`, `editorial_fact_pack.md`, `selection_decision.json`, `selection_validation.json`, `copy_validation.json`, `editorial_review_payload.json`, `editorial_review.json`, `editorial_review_validation.json`, and `run.json`.
 
 ## Editorial Automation
 
