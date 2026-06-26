@@ -20,9 +20,19 @@
     .choice-card aside strong { display: block; font-size: 34px; }
     .choice-card aside > span { color: #59677c; font-size: 12px; text-transform: uppercase; }
     .meta { margin: 0; color: #59677c; }
+    .award-badges { display: flex; flex-wrap: wrap; gap: 6px; margin: -6px 0 10px; }
+    .award-badge { border: 1px solid #dce5f2; background: #f7f9fc; color: #35465d; border-radius: 999px; padding: 4px 8px; font-size: 12px; font-weight: 700; }
     .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
     .chips span { background: #edf2fa; border: 1px solid #dce5f2; border-radius: 999px; padding: 5px 9px; font-size: 12px; }
+    .archive-list { display: grid; gap: 10px; margin-top: 22px; }
+    .archive-row { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; align-items: center; gap: 12px; padding: 14px 16px; color: inherit; text-decoration: none; background: #fff; border: 1px solid #dde3ee; border-radius: 8px; }
+    .archive-row:hover { border-color: #b7c4d4; }
+    .archive-row span { color: #59677c; font-size: 13px; }
+    .badge { justify-self: end; border-radius: 999px; padding: 4px 9px; border: 1px solid #dce5f2; background: #edf2fa; color: #35465d; font-size: 12px; }
+    .badge.official { border-color: #b7dfd4; background: #e7f7f1; color: #0f766e; }
+    .badge.legacy { border-color: #e7d8ad; background: #fff7df; color: #806215; }
     @media (max-width: 720px) { .choice-card { grid-template-columns: 1fr; } .choice-card aside { border-left: 0; border-top: 1px solid #e8edf5; padding-left: 0; padding-top: 14px; } }
+    @media (max-width: 720px) { .archive-row { grid-template-columns: 1fr; align-items: start; } .badge { justify-self: start; } }
     </style>
 </head>
 <body>
@@ -30,118 +40,102 @@
     <p class="eyebrow">FIFA PMSR Data</p>
     <h1>Editor's Choices · 2026-06-19</h1>
     <p class="lede">Data-informed selections from the latest structured PMSR dataset. These are not official awards.</p>
-    
-    <article class="choice-card">
+        <article class="choice-card">
       <div>
         <p class="award">Player of the Day</p>
-        <h2>🇲🇦 Ismael SAIBARI</h2>
-        <p class="meta">🇲🇦 Morocco vs 🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scotland · Match 30</p>
-        <h3>The goal that tilted it</h3>
-        <p>Saibari’s goal decided a tight contest and gave Morocco a 1-0 win. He made 28 runs in behind Scotland’s defence, with 13 of those turned into passes received — a reliable outlet for his side. The midfielder’s movement kept pressure on Scotland’s back line and helped Morocco secure the points.</p>
-        <h3>萨伊巴里一锤定音，摩洛哥 1-0 胜苏格兰</h3>
-        <p>萨伊巴里打入全场唯一进球，助摩洛哥 1-0 战胜苏格兰。</p><p>中场推进时，他 28 次尝试身后接应，成功 13 次，梳理了向前出球路线。</p><p>全场跑动超过 10 公里，兼顾了中场接应与进攻终结。</p>
-      </div>
-      <aside>
-        <div class="chips"><span>only goal</span><span>match-winning goal</span><span>goal scorer</span></div>
-      </aside>
-    </article>
-            
-
-    <article class="choice-card">
-      <div>
-        <p class="award">Player of the Day</p>
-        <h2>🇺🇸 Alex FREEMAN</h2>
-        <p class="meta">🇺🇸 USA vs 🇦🇺 Australia · Match 32</p>
-        <h3>The decisive touch</h3>
-        <p>Freeman scored the match-winning goal and repeatedly broke lines to give the USA attack a reliable route forward. His 17 completed line breaks helped tilt a tight contest.</p>
-        <h3>弗里曼制胜球加 17 次打穿，美国 2-0 拿下澳大利亚</h3>
-        <p>弗里曼打入制胜球，帮助美国 2-0 拿下澳大利亚。</p><p>他全场 17 次打穿防线，把球从后场推上去，防守端也反复破坏对方的进攻推进。</p><p>全场跑动 11.06 公里，弗里曼在攻防两端都顶住了。</p>
-      </div>
-      <aside>
-        <div class="chips"><span>match-winning goal</span><span>goal scorer</span><span>repeated line breaks</span><span>disrupted attacks</span></div>
-      </aside>
-    </article>
-            
-
-    <article class="choice-card">
-      <div>
-        <p class="award">Player of the Day</p>
-        <h2>🇵🇾 Matias GALARZA</h2>
-        <p class="meta">🇵🇾 Paraguay vs 🇹🇷 Türkiye · Match 31</p>
-        <h3>The only goal mattered</h3>
-        <p>The only goal settled a tight contest. Matias Galarza’s finish earned Paraguay a 1-0 win over Türkiye. He ran more than 12 km, constantly presenting himself as a passing option and helping his team protect the lead.</p>
-        <h3>加拉萨一锤定音，巴拉圭 1 比 0 力克土耳其</h3>
-        <p>加拉萨打入全场唯一进球，帮助巴拉圭 1 比 0 击败土耳其。</p><p>除了制胜球，他在中场的跑动覆盖同样关键。全场跑动 12.1 公里，完成 9 次接应，加拉萨在中场提供了充足的支援。</p>
-      </div>
-      <aside>
-        <div class="chips"><span>only goal</span><span>match-winning goal</span><span>goal scorer</span></div>
-      </aside>
-    </article>
-            
-
-    <article class="choice-card">
-      <div>
-        <p class="award">Impact Pick</p>
+        <div class="award-badges"></div>
         <h2>🇧🇷 MATHEUS CUNHA</h2>
         <p class="meta">🇧🇷 Brazil vs 🇭🇹 Haiti · Match 29</p>
-        <h3>The decisive touch</h3>
-        <p>Matheus Cunha provided the decisive touch, scoring the opening goal in Brazil's 3-0 win over Haiti. His goal broke the deadlock and his movement between the lines gave Brazil a consistent route to goal throughout the match.</p>
-        <h3>库尼亚首开纪录，巴西 3-0 胜海地</h3>
-        <p>库尼亚打入全场首球，这也是制胜一球。</p><p>他在海地防线之间活跃接应，串联起巴西的中路推进。</p><p>巴西确立领先后再入两球，最终 3-0 取胜。</p>
+        <h3>Matheus Cunha scored twice</h3>
+        <p>Matheus Cunha put Brazil ahead in the 23rd minute and scored again 13 minutes later. In a 3-0 win over Haiti, that first-half brace stands out first.</p>
+        <h3>库尼亚梅开二度</h3>
+        <p>库尼亚第23分钟为巴西首开纪录，13分钟后又进一球。巴西3-0赢海地，上半场这两脚来得很干脆。</p>
       </div>
       <aside>
-        <div class="chips"><span>match-winning goal</span><span>goal scorer</span><span>between-line presence</span></div>
+        <div class="chips"><span>brace</span><span>opening goal</span></div>
       </aside>
     </article>
-            
 
     <article class="choice-card">
       <div>
-        <p class="award">Progression Pick</p>
-        <h2>🇹🇷 Arda GULER</h2>
-        <p class="meta">🇹🇷 Türkiye vs 🇵🇾 Paraguay · Match 31</p>
-        <h3>The best route forward</h3>
-        <p>Arda Güler kept Türkiye moving forward against Paraguay by slipping through pressure and breaking lines time and again. He pierced the opposition’s shape with 29 completed line breaks and added three ball progressions, helping his side stay alive in the contest despite a narrow loss.</p>
-        <h3>居莱尔 29 次打穿巴拉圭防线</h3>
-        <p>土耳其 0 比 1 输给巴拉圭，居莱尔频繁回撤接应。</p><p>他全场 29 次打穿对方防线，完成 3 次推进。球队虽然落败，但居莱尔保证球能送过巴拉圭的防守线。</p>
-      </div>
-      <aside>
-        <div class="chips"><span>repeated line breaks</span><span>found again and again</span></div>
-      </aside>
-    </article>
-            
-
-    <article class="choice-card">
-      <div>
-        <p class="award">Hidden Gem</p>
-        <h2>🇲🇦 Azzedine OUNAHI</h2>
+        <p class="award">Player of the Day</p>
+        <div class="award-badges"></div>
+        <h2>🇲🇦 Ismael SAIBARI</h2>
         <p class="meta">🇲🇦 Morocco vs 🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scotland · Match 30</p>
-        <h3>The quiet connector</h3>
-        <p>Morocco needed a link, and Ounahi provided it. He kept showing between the lines, offering a constant passing option. He received 43 offers in space, with 21 coming between the lines, giving Morocco a dependable route through midfield.</p>
-        <h3>欧纳希活跃在两线之间，摩洛哥进攻始终不断线</h3>
-        <p>欧纳希全场都在苏格兰中场与后卫之间找空当接应。</p><p>他完成 43 次接应，其中 21 次落在两线之间，12 次直接插到防线身后。</p><p>这些跑动持续打穿苏格兰防线。他不抢镜，却让摩洛哥前场出球始终不断线。</p>
+        <h3>Saibari scored the only goal</h3>
+        <p>Ismael Saibari scored in the 2nd minute, and Morocco carried that goal through a 1-0 win over Scotland. In a tight match, one early finish was enough.</p>
+        <h3>萨伊巴里开场制胜</h3>
+        <p>萨伊巴里第2分钟破门，摩洛哥1-0赢苏格兰。全场只有这一球，开局这一脚一直撑到终场。</p>
       </div>
       <aside>
-        <div class="chips"><span>repeated line breaks</span><span>found again and again</span><span>between-line presence</span></div>
+        <div class="chips"><span>only goal</span><span>match-winning goal</span><span>goal scorer</span></div>
       </aside>
     </article>
-            
 
     <article class="choice-card">
       <div>
-        <p class="award">Defensive Pick</p>
-        <h2>🇧🇷 CASEMIRO</h2>
-        <p class="meta">🇧🇷 Brazil vs 🇭🇹 Haiti · Match 29</p>
-        <h3>The stubborn stopper</h3>
-        <p>Casemiro’s stubborn disruption helped disrupt Haiti’s rhythm. He broke up six attacking moves and won possession back 13 times, forcing reset after reset. That ball-winning profile helped Brazil secure a clean sheet in their 3-0 win.</p>
-        <h3>卡塞米罗 13 次夺回球权，巴西中场守住节奏</h3>
-        <p>巴西 3-0 海地，卡塞米罗守住中场防守。</p><p>他全场 13 次夺回球权，6 次破坏海地的进攻推进。对手试图带球冲过中场时，多次被他半路拦下。</p><p>靠这些抢截，巴西稳住节奏，支撑起前场进攻。</p>
+        <p class="award">Player of the Day</p>
+        <div class="award-badges"></div>
+        <h2>🇵🇾 Matias GALARZA</h2>
+        <p class="meta">🇵🇾 Paraguay vs 🇹🇷 Türkiye · Match 31</p>
+        <h3>Galarza settled it early</h3>
+        <p>Matias Galarza scored in the 2nd minute and Paraguay never gave the lead back. The goal was the whole margin in a 1-0 win over Türkiye.</p>
+        <h3>加拉萨开场制胜</h3>
+        <p>加拉萨第2分钟进球，巴拉圭1-0赢土耳其。后面被压了很久，但比分一直停在这一球上。</p>
       </div>
       <aside>
-        <div class="chips"><span>ball-winning profile</span></div>
+        <div class="chips"><span>only goal</span><span>match-winning goal</span><span>goal scorer</span></div>
       </aside>
     </article>
-            
+
+    <article class="choice-card">
+      <div>
+        <p class="award">Player of the Day</p>
+        <div class="award-badges"></div>
+        <h2>🇧🇷 VINICIUS JUNIOR</h2>
+        <p class="meta">🇧🇷 Brazil vs 🇭🇹 Haiti · Match 29</p>
+        <h3>Vinicius Junior had a goal and an assist</h3>
+        <p>Vinicius Junior set up Cunha's second goal, then scored Brazil's third in first-half stoppage time. That put him directly on two of Brazil's three goals.</p>
+        <h3>维尼修斯传射</h3>
+        <p>维尼修斯先助攻库尼亚打进第二球，半场补时又自己破门。巴西3-0赢海地，他一传一射，前场处理很顺。</p>
+      </div>
+      <aside>
+        <div class="chips"><span>goal scorer</span><span>assist</span></div>
+      </aside>
+    </article>
+
+    <article class="choice-card">
+      <div>
+        <p class="award">Player of the Day</p>
+        <div class="award-badges"></div>
+        <h2>🇺🇸 Alex FREEMAN</h2>
+        <p class="meta">🇺🇸 USA vs 🇦🇺 Australia · Match 32</p>
+        <h3>Freeman gave the USA room</h3>
+        <p>After an Australia own goal had made it 1-0, Alex Freeman scored in the 43rd minute to give the USA a two-goal cushion. He also had 17 completed line breaks and eight possession interruptions in the 2-0 win.</p>
+        <h3>弗里曼补上第二球</h3>
+        <p>澳大利亚乌龙后，美国已经1-0领先，弗里曼第43分钟把比分改成2-0。他向前处理球很多，防守端也有8次破坏进攻，这场踢得很满。</p>
+      </div>
+      <aside>
+        <div class="chips"><span>goal scorer</span></div>
+      </aside>
+    </article>
+
+    <article class="choice-card">
+      <div>
+        <p class="award">Goalkeeper Watch</p>
+        <div class="award-badges"></div>
+        <h2>🇵🇾 Orlando GILL</h2>
+        <p class="meta">🇵🇾 Paraguay vs 🇹🇷 Türkiye · Match 31</p>
+        <h3>Gill protected Paraguay's 1-0</h3>
+        <p>Türkiye finished with 32 attempts, 5 on target and 2.13 xG, but Orlando Gill kept Paraguay's clean sheet. Five saves kept Galarza's early goal alive.</p>
+        <h3>吉尔5次扑救零封</h3>
+        <p>土耳其全场32脚射门、5次射正，预期进球到2.13，吉尔没有丢球。巴拉圭1-0赢下来，这个零封很硬。</p>
+      </div>
+      <aside>
+        <div class="chips"><span>clean sheet</span><span>faced heavy on-target pressure</span><span>xG pressure resisted</span><span>Saved outcomes in shot log</span></div>
+      </aside>
+    </article>
+
   </main>
 </body>
 </html>

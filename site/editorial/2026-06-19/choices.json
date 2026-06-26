@@ -1,98 +1,32 @@
 {
-  "schema_version": 2,
-  "generated_at": "2026-06-20T12:49:14+00:00",
-  "compiled_at": "2026-06-20T13:05:11+00:00",
+  "schema_version": 3,
+  "generated_at": "2026-06-26T01:53:28+00:00",
+  "compiled_at": "2026-06-26T01:53:28+00:00",
   "match_date": "2026-06-19",
-  "scoring_version": "v0.3",
-  "editorial_input_hash": "a22023eadcb41bc608985a84a2bcdf43ad345ab99ec65e9c67892497af7ddea8",
-  "editorial_input": {
-    "schema_version": "4",
-    "match_date": "2026-06-19",
-    "scoring_version": "v0.3",
-    "scoring_config_sha256": "450c692cebd49691c3517eb7dbc750beddbd91a01a7487b6598de50ac808b92c",
-    "matches": [
-      {
-        "match_key": "FIFA-2026-M29-BRA-HAI",
-        "source_id": "fifa-world-cup-2026-pmsr-m29-bra-hai-v1",
-        "match_no": 29,
-        "match_date": "2026-06-19",
-        "home_team": "Brazil",
-        "away_team": "Haiti",
-        "home_score": 3,
-        "away_score": 0
-      },
-      {
-        "match_key": "FIFA-2026-M30-SCO-MAR",
-        "source_id": "fifa-world-cup-2026-pmsr-m30-sco-mar-v1",
-        "match_no": 30,
-        "match_date": "2026-06-19",
-        "home_team": "Scotland",
-        "away_team": "Morocco",
-        "home_score": 0,
-        "away_score": 1
-      },
-      {
-        "match_key": "FIFA-2026-M31-TUR-PAR",
-        "source_id": "fifa-world-cup-2026-pmsr-m31-tur-par-v1",
-        "match_no": 31,
-        "match_date": "2026-06-19",
-        "home_team": "Türkiye",
-        "away_team": "Paraguay",
-        "home_score": 0,
-        "away_score": 1
-      },
-      {
-        "match_key": "FIFA-2026-M32-USA-AUS",
-        "source_id": "fifa-world-cup-2026-pmsr-m32-usa-aus-v1",
-        "match_no": 32,
-        "match_date": "2026-06-19",
-        "home_team": "USA",
-        "away_team": "Australia",
-        "home_score": 2,
-        "away_score": 0
-      }
-    ],
-    "source_documents": [
-      {
-        "source_id": "fifa-world-cup-2026-pmsr-m29-bra-hai-v1",
-        "match_key": "FIFA-2026-M29-BRA-HAI",
-        "match_no": 29,
-        "version": 1,
-        "sha256": "ac5989ef2df2cc020961e981f259e92865bcd266250d292f70380ff461494b8d",
-        "file_size": 5736595,
-        "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M29-BRA-V-HAI.pdf"
-      },
-      {
-        "source_id": "fifa-world-cup-2026-pmsr-m30-sco-mar-v1",
-        "match_key": "FIFA-2026-M30-SCO-MAR",
-        "match_no": 30,
-        "version": 1,
-        "sha256": "240846401cf3095ecd2baf0e0d1134aa1f56b8603f4951762d6be0085211cba1",
-        "file_size": 5648597,
-        "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M30-SCO-V-MAR.pdf"
-      },
-      {
-        "source_id": "fifa-world-cup-2026-pmsr-m31-tur-par-v1",
-        "match_key": "FIFA-2026-M31-TUR-PAR",
-        "match_no": 31,
-        "version": 1,
-        "sha256": "2a5040a8ac24fe4f7dad6098c20a648fb7d6325820163b190ffe20e630766416",
-        "file_size": 5913484,
-        "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M31-TUR-V-PAR.pdf"
-      },
-      {
-        "source_id": "fifa-world-cup-2026-pmsr-m32-usa-aus-v1",
-        "match_key": "FIFA-2026-M32-USA-AUS",
-        "match_no": 32,
-        "version": 1,
-        "sha256": "974552242de3f1fd7b6d0b7de9d0c1841c418104305bd4dc548d965d85dd374b",
-        "file_size": 5748729,
-        "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M32-USA-V-AUS.pdf"
-      }
-    ],
-    "input_hash": "a22023eadcb41bc608985a84a2bcdf43ad345ab99ec65e9c67892497af7ddea8"
+  "scoring_version": "v0.4",
+  "editorial_generation": {
+    "workflow_variant": "ai_rerank_selection_v1",
+    "experiment_id": "ai_rerank_reader_loop_v5",
+    "selection_mode": "ai_rerank_only",
+    "review_profile": "reader_intuition_loop_v2",
+    "revision_policy": {
+      "mode": "reader_critic_revise_review_loop",
+      "max_revision_rounds": 2,
+      "blocking_review_requires_revision": true,
+      "revision_targets": [
+        "selection_decision",
+        "copy",
+        "review"
+      ]
+    },
+    "editorial_review_status": "pass",
+    "uses_official_assists": true,
+    "uses_goal_involvements": true,
+    "event_source": "fifa_timeline_api",
+    "event_sources": {
+      "goal_involvements": "fifa_timeline_api"
+    }
   },
-  "source_markdown_path": "reports/editorial/2026-06-19.md",
   "matches": [
     {
       "match_key": "FIFA-2026-M29-BRA-HAI",
@@ -139,419 +73,532 @@
       "away_score": 0
     }
   ],
+  "match_flows": {
+    "FIFA-2026-M29-BRA-HAI": {
+      "match_key": "FIFA-2026-M29-BRA-HAI",
+      "match_no": 29,
+      "match_date": "2026-06-19",
+      "home_team": "Brazil",
+      "away_team": "Haiti",
+      "home_score": 3,
+      "away_score": 0,
+      "winner_team": "Brazil",
+      "home_trailing_at_any_point": false,
+      "away_trailing_at_any_point": true,
+      "home_came_from_behind_to_win": false,
+      "away_came_from_behind_to_win": false,
+      "goals": [
+        {
+          "goal_order": 1,
+          "minute": 23,
+          "team": "Brazil",
+          "player_team": "Brazil",
+          "player_name": "MATHEUS CUNHA",
+          "own_goal": false,
+          "score_before": "0-0",
+          "score_after": "1-0",
+          "team_score_before": 0,
+          "opponent_score_before": 0,
+          "team_score_after": 1,
+          "opponent_score_after": 0,
+          "tags": [
+            "opening_goal",
+            "go_ahead_goal"
+          ]
+        },
+        {
+          "goal_order": 2,
+          "minute": 36,
+          "team": "Brazil",
+          "player_team": "Brazil",
+          "player_name": "MATHEUS CUNHA",
+          "own_goal": false,
+          "score_before": "1-0",
+          "score_after": "2-0",
+          "team_score_before": 1,
+          "opponent_score_before": 0,
+          "team_score_after": 2,
+          "opponent_score_after": 0,
+          "tags": []
+        },
+        {
+          "goal_order": 3,
+          "minute": 48,
+          "team": "Brazil",
+          "player_team": "Brazil",
+          "player_name": "VINICIUS JUNIOR",
+          "own_goal": false,
+          "score_before": "2-0",
+          "score_after": "3-0",
+          "team_score_before": 2,
+          "opponent_score_before": 0,
+          "team_score_after": 3,
+          "opponent_score_after": 0,
+          "tags": []
+        }
+      ],
+      "decisive_goal": null
+    },
+    "FIFA-2026-M30-SCO-MAR": {
+      "match_key": "FIFA-2026-M30-SCO-MAR",
+      "match_no": 30,
+      "match_date": "2026-06-19",
+      "home_team": "Scotland",
+      "away_team": "Morocco",
+      "home_score": 0,
+      "away_score": 1,
+      "winner_team": "Morocco",
+      "home_trailing_at_any_point": true,
+      "away_trailing_at_any_point": false,
+      "home_came_from_behind_to_win": false,
+      "away_came_from_behind_to_win": false,
+      "goals": [
+        {
+          "goal_order": 1,
+          "minute": 2,
+          "team": "Morocco",
+          "player_team": "Morocco",
+          "player_name": "Ismael SAIBARI",
+          "own_goal": false,
+          "score_before": "0-0",
+          "score_after": "0-1",
+          "team_score_before": 0,
+          "opponent_score_before": 0,
+          "team_score_after": 1,
+          "opponent_score_after": 0,
+          "tags": [
+            "opening_goal",
+            "go_ahead_goal",
+            "match_winning_goal"
+          ]
+        }
+      ],
+      "decisive_goal": {
+        "goal_order": 1,
+        "minute": 2,
+        "team": "Morocco",
+        "player_team": "Morocco",
+        "player_name": "Ismael SAIBARI",
+        "own_goal": false,
+        "score_before": "0-0",
+        "score_after": "0-1",
+        "team_score_before": 0,
+        "opponent_score_before": 0,
+        "team_score_after": 1,
+        "opponent_score_after": 0,
+        "tags": [
+          "opening_goal",
+          "go_ahead_goal",
+          "match_winning_goal"
+        ]
+      }
+    },
+    "FIFA-2026-M31-TUR-PAR": {
+      "match_key": "FIFA-2026-M31-TUR-PAR",
+      "match_no": 31,
+      "match_date": "2026-06-19",
+      "home_team": "Türkiye",
+      "away_team": "Paraguay",
+      "home_score": 0,
+      "away_score": 1,
+      "winner_team": "Paraguay",
+      "home_trailing_at_any_point": true,
+      "away_trailing_at_any_point": false,
+      "home_came_from_behind_to_win": false,
+      "away_came_from_behind_to_win": false,
+      "goals": [
+        {
+          "goal_order": 1,
+          "minute": 2,
+          "team": "Paraguay",
+          "player_team": "Paraguay",
+          "player_name": "Matias GALARZA",
+          "own_goal": false,
+          "score_before": "0-0",
+          "score_after": "0-1",
+          "team_score_before": 0,
+          "opponent_score_before": 0,
+          "team_score_after": 1,
+          "opponent_score_after": 0,
+          "tags": [
+            "opening_goal",
+            "go_ahead_goal",
+            "match_winning_goal"
+          ]
+        }
+      ],
+      "decisive_goal": {
+        "goal_order": 1,
+        "minute": 2,
+        "team": "Paraguay",
+        "player_team": "Paraguay",
+        "player_name": "Matias GALARZA",
+        "own_goal": false,
+        "score_before": "0-0",
+        "score_after": "0-1",
+        "team_score_before": 0,
+        "opponent_score_before": 0,
+        "team_score_after": 1,
+        "opponent_score_after": 0,
+        "tags": [
+          "opening_goal",
+          "go_ahead_goal",
+          "match_winning_goal"
+        ]
+      }
+    },
+    "FIFA-2026-M32-USA-AUS": {
+      "match_key": "FIFA-2026-M32-USA-AUS",
+      "match_no": 32,
+      "match_date": "2026-06-19",
+      "home_team": "USA",
+      "away_team": "Australia",
+      "home_score": 2,
+      "away_score": 0,
+      "winner_team": "USA",
+      "home_trailing_at_any_point": false,
+      "away_trailing_at_any_point": true,
+      "home_came_from_behind_to_win": false,
+      "away_came_from_behind_to_win": false,
+      "goals": [
+        {
+          "goal_order": 1,
+          "minute": 11,
+          "team": "USA",
+          "player_team": "Australia",
+          "player_name": "Cameron BURGESS",
+          "own_goal": true,
+          "score_before": "0-0",
+          "score_after": "1-0",
+          "team_score_before": 0,
+          "opponent_score_before": 0,
+          "team_score_after": 1,
+          "opponent_score_after": 0,
+          "tags": [
+            "opening_goal",
+            "go_ahead_goal"
+          ]
+        },
+        {
+          "goal_order": 2,
+          "minute": 43,
+          "team": "USA",
+          "player_team": "USA",
+          "player_name": "Alex FREEMAN",
+          "own_goal": false,
+          "score_before": "1-0",
+          "score_after": "2-0",
+          "team_score_before": 1,
+          "opponent_score_before": 0,
+          "team_score_after": 2,
+          "opponent_score_after": 0,
+          "tags": []
+        }
+      ],
+      "decisive_goal": null
+    }
+  },
   "choices": [
     {
       "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
       "award_label": {
         "en": "Player of the Day",
         "zh": "每日最佳球员"
       },
-      "rank": 1,
-      "match_key": "FIFA-2026-M30-SCO-MAR",
-      "match_no": 30,
-      "player_no": 11,
-      "player_name": "Ismael SAIBARI",
-      "team": "Morocco",
-      "opponent": "Scotland",
-      "home_score": 0,
-      "away_score": 1,
-      "team_final_goals": 1,
-      "opponent_final_goals": 0,
-      "position": "MF",
-      "progression_benchmark": {
-        "score": 6.65,
-        "quality": "thin",
-        "support_actions": 3.0,
-        "pass_only_line_break_volume": false
-      },
-      "hidden_gem_profile": {
-        "eligible": false,
-        "profile": "insufficient_evidence",
-        "score": 38.5
-      },
-      "evidence_chips": {
-        "en": [
-          "only goal",
-          "match-winning goal",
-          "goal scorer"
-        ],
-        "zh": [
-          "全场唯一进球",
-          "打入制胜球",
-          "取得进球"
-        ]
-      },
-      "content": {
-        "en": {
-          "title": "The goal that tilted it",
-          "html": "<p>Saibari’s goal decided a tight contest and gave Morocco a 1-0 win. He made 28 runs in behind Scotland’s defence, with 13 of those turned into passes received — a reliable outlet for his side. The midfielder’s movement kept pressure on Scotland’s back line and helped Morocco secure the points.</p>"
-        },
-        "zh": {
-          "title": "萨伊巴里一锤定音，摩洛哥 1-0 胜苏格兰",
-          "html": "<p>萨伊巴里打入全场唯一进球，助摩洛哥 1-0 战胜苏格兰。</p><p>中场推进时，他 28 次尝试身后接应，成功 13 次，梳理了向前出球路线。</p><p>全场跑动超过 10 公里，兼顾了中场接应与进攻终结。</p>"
-        }
-      }
-    },
-    {
-      "award_type": "player_of_the_day",
-      "award_label": {
-        "en": "Player of the Day",
-        "zh": "每日最佳球员"
-      },
-      "rank": 2,
-      "match_key": "FIFA-2026-M32-USA-AUS",
-      "match_no": 32,
-      "player_no": 16,
-      "player_name": "Alex FREEMAN",
-      "team": "USA",
-      "opponent": "Australia",
-      "home_score": 2,
-      "away_score": 0,
-      "team_final_goals": 2,
-      "opponent_final_goals": 0,
-      "position": "DF",
-      "progression_benchmark": {
-        "score": 29.8,
-        "quality": "strong",
-        "support_actions": 10.0,
-        "pass_only_line_break_volume": false
-      },
-      "hidden_gem_profile": {
-        "eligible": true,
-        "profile": "progression_engine",
-        "score": 29.8
-      },
-      "evidence_chips": {
-        "en": [
-          "match-winning goal",
-          "goal scorer",
-          "repeated line breaks",
-          "disrupted attacks"
-        ],
-        "zh": [
-          "打入制胜球",
-          "取得进球",
-          "持续打穿防线",
-          "持续破坏进攻"
-        ]
-      },
-      "content": {
-        "en": {
-          "title": "The decisive touch",
-          "html": "<p>Freeman scored the match-winning goal and repeatedly broke lines to give the USA attack a reliable route forward. His 17 completed line breaks helped tilt a tight contest.</p>"
-        },
-        "zh": {
-          "title": "弗里曼制胜球加 17 次打穿，美国 2-0 拿下澳大利亚",
-          "html": "<p>弗里曼打入制胜球，帮助美国 2-0 拿下澳大利亚。</p><p>他全场 17 次打穿防线，把球从后场推上去，防守端也反复破坏对方的进攻推进。</p><p>全场跑动 11.06 公里，弗里曼在攻防两端都顶住了。</p>"
-        }
-      }
-    },
-    {
-      "award_type": "player_of_the_day",
-      "award_label": {
-        "en": "Player of the Day",
-        "zh": "每日最佳球员"
-      },
-      "rank": 3,
-      "match_key": "FIFA-2026-M31-TUR-PAR",
-      "match_no": 31,
-      "player_no": 23,
-      "player_name": "Matias GALARZA",
-      "team": "Paraguay",
-      "opponent": "Türkiye",
-      "home_score": 0,
-      "away_score": 1,
-      "team_final_goals": 1,
-      "opponent_final_goals": 0,
-      "position": "MF",
-      "progression_benchmark": {
-        "score": 10.35,
-        "quality": "thin",
-        "support_actions": 5.0,
-        "pass_only_line_break_volume": false
-      },
-      "hidden_gem_profile": {
-        "eligible": false,
-        "profile": "insufficient_evidence",
-        "score": 22.75
-      },
-      "evidence_chips": {
-        "en": [
-          "only goal",
-          "match-winning goal",
-          "goal scorer"
-        ],
-        "zh": [
-          "全场唯一进球",
-          "打入制胜球",
-          "取得进球"
-        ]
-      },
-      "content": {
-        "en": {
-          "title": "The only goal mattered",
-          "html": "<p>The only goal settled a tight contest. Matias Galarza’s finish earned Paraguay a 1-0 win over Türkiye. He ran more than 12 km, constantly presenting himself as a passing option and helping his team protect the lead.</p>"
-        },
-        "zh": {
-          "title": "加拉萨一锤定音，巴拉圭 1 比 0 力克土耳其",
-          "html": "<p>加拉萨打入全场唯一进球，帮助巴拉圭 1 比 0 击败土耳其。</p><p>除了制胜球，他在中场的跑动覆盖同样关键。全场跑动 12.1 公里，完成 9 次接应，加拉萨在中场提供了充足的支援。</p>"
-        }
-      }
-    },
-    {
-      "award_type": "impact_pick",
-      "award_label": {
-        "en": "Impact Pick",
-        "zh": "影响力精选"
-      },
-      "rank": 1,
-      "match_key": "FIFA-2026-M29-BRA-HAI",
-      "match_no": 29,
-      "player_no": 9,
+      "player_id": "FIFA-2026-M29-BRA-HAI|Brazil|9",
       "player_name": "MATHEUS CUNHA",
       "team": "Brazil",
       "opponent": "Haiti",
-      "home_score": 3,
-      "away_score": 0,
-      "team_final_goals": 3,
-      "opponent_final_goals": 0,
-      "position": "FW",
-      "progression_benchmark": {
-        "score": 3.05,
-        "quality": "thin",
-        "support_actions": 0.0,
-        "pass_only_line_break_volume": false
-      },
-      "hidden_gem_profile": {
-        "eligible": false,
-        "profile": "insufficient_evidence",
-        "score": 39.5
-      },
-      "evidence_chips": {
-        "en": [
-          "match-winning goal",
-          "goal scorer",
-          "between-line presence"
-        ],
-        "zh": [
-          "打入制胜球",
-          "取得进球",
-          "在防线之间活跃"
-        ]
-      },
-      "content": {
-        "en": {
-          "title": "The decisive touch",
-          "html": "<p>Matheus Cunha provided the decisive touch, scoring the opening goal in Brazil's 3-0 win over Haiti. His goal broke the deadlock and his movement between the lines gave Brazil a consistent route to goal throughout the match.</p>"
-        },
-        "zh": {
-          "title": "库尼亚首开纪录，巴西 3-0 胜海地",
-          "html": "<p>库尼亚打入全场首球，这也是制胜一球。</p><p>他在海地防线之间活跃接应，串联起巴西的中路推进。</p><p>巴西确立领先后再入两球，最终 3-0 取胜。</p>"
-        }
-      }
-    },
-    {
-      "award_type": "progression_pick",
-      "award_label": {
-        "en": "Progression Pick",
-        "zh": "推进精选"
-      },
-      "rank": 1,
-      "match_key": "FIFA-2026-M31-TUR-PAR",
-      "match_no": 31,
-      "player_no": 8,
-      "player_name": "Arda GULER",
-      "team": "Türkiye",
-      "opponent": "Paraguay",
-      "home_score": 0,
-      "away_score": 1,
-      "team_final_goals": 0,
-      "opponent_final_goals": 1,
-      "position": "FW",
-      "progression_benchmark": {
-        "score": 23.45,
-        "quality": "useful",
-        "support_actions": 7.0,
-        "pass_only_line_break_volume": false
-      },
-      "hidden_gem_profile": {
-        "eligible": false,
-        "profile": "insufficient_evidence",
-        "score": 44.7
-      },
-      "evidence_chips": {
-        "en": [
-          "repeated line breaks",
-          "found again and again"
-        ],
-        "zh": [
-          "持续打穿防线",
-          "持续接应"
-        ]
-      },
-      "content": {
-        "en": {
-          "title": "The best route forward",
-          "html": "<p>Arda Güler kept Türkiye moving forward against Paraguay by slipping through pressure and breaking lines time and again. He pierced the opposition’s shape with 29 completed line breaks and added three ball progressions, helping his side stay alive in the contest despite a narrow loss.</p>"
-        },
-        "zh": {
-          "title": "居莱尔 29 次打穿巴拉圭防线",
-          "html": "<p>土耳其 0 比 1 输给巴拉圭，居莱尔频繁回撤接应。</p><p>他全场 29 次打穿对方防线，完成 3 次推进。球队虽然落败，但居莱尔保证球能送过巴拉圭的防守线。</p>"
-        }
-      }
-    },
-    {
-      "award_type": "hidden_gem",
-      "award_label": {
-        "en": "Hidden Gem",
-        "zh": "隐藏亮点"
-      },
-      "rank": 1,
-      "match_key": "FIFA-2026-M30-SCO-MAR",
-      "match_no": 30,
-      "player_no": 8,
-      "player_name": "Azzedine OUNAHI",
-      "team": "Morocco",
-      "opponent": "Scotland",
-      "home_score": 0,
-      "away_score": 1,
-      "team_final_goals": 1,
-      "opponent_final_goals": 0,
-      "position": "MF",
-      "progression_benchmark": {
-        "score": 27.25,
-        "quality": "strong",
-        "support_actions": 8.0,
-        "pass_only_line_break_volume": false
-      },
-      "hidden_gem_profile": {
-        "eligible": true,
-        "profile": "off_ball_threat",
-        "score": 67.7
-      },
-      "evidence_chips": {
-        "en": [
-          "repeated line breaks",
-          "found again and again",
-          "between-line presence"
-        ],
-        "zh": [
-          "持续打穿防线",
-          "持续接应",
-          "在防线之间活跃"
-        ]
-      },
-      "content": {
-        "en": {
-          "title": "The quiet connector",
-          "html": "<p>Morocco needed a link, and Ounahi provided it. He kept showing between the lines, offering a constant passing option. He received 43 offers in space, with 21 coming between the lines, giving Morocco a dependable route through midfield.</p>"
-        },
-        "zh": {
-          "title": "欧纳希活跃在两线之间，摩洛哥进攻始终不断线",
-          "html": "<p>欧纳希全场都在苏格兰中场与后卫之间找空当接应。</p><p>他完成 43 次接应，其中 21 次落在两线之间，12 次直接插到防线身后。</p><p>这些跑动持续打穿苏格兰防线。他不抢镜，却让摩洛哥前场出球始终不断线。</p>"
-        }
-      }
-    },
-    {
-      "award_type": "defensive_pick",
-      "award_label": {
-        "en": "Defensive Pick",
-        "zh": "防守精选"
-      },
-      "rank": 1,
       "match_key": "FIFA-2026-M29-BRA-HAI",
       "match_no": 29,
-      "player_no": 5,
-      "player_name": "CASEMIRO",
-      "team": "Brazil",
-      "opponent": "Haiti",
-      "home_score": 3,
-      "away_score": 0,
-      "team_final_goals": 3,
-      "opponent_final_goals": 0,
-      "position": "MF",
-      "progression_benchmark": {
-        "score": 4.85,
-        "quality": "thin",
-        "support_actions": 0.0,
-        "pass_only_line_break_volume": false
-      },
-      "hidden_gem_profile": {
-        "eligible": false,
-        "profile": "insufficient_evidence",
-        "score": 40.75
+      "player_no": 9,
+      "position": "FW",
+      "score": 82.38,
+      "metrics": {
+        "shots": 1,
+        "on_target": 1,
+        "goals": 2,
+        "goal_involvements": 2,
+        "brace": 1,
+        "opening_goal": 1,
+        "go_ahead_goal": 1
       },
       "evidence_chips": {
         "en": [
-          "ball-winning profile"
+          "brace",
+          "opening goal"
         ],
         "zh": [
-          "夺回球权能力突出"
+          "梅开二度",
+          "首开纪录"
         ]
       },
+      "selection_reason": "Selected because he scored Brazil's first two goals in the 3-0 win over Haiti, including the opening goal in the 23rd minute.",
       "content": {
         "en": {
-          "title": "The stubborn stopper",
-          "html": "<p>Casemiro’s stubborn disruption helped disrupt Haiti’s rhythm. He broke up six attacking moves and won possession back 13 times, forcing reset after reset. That ball-winning profile helped Brazil secure a clean sheet in their 3-0 win.</p>"
+          "title": "Matheus Cunha scored twice",
+          "html": "<p>Matheus Cunha put Brazil ahead in the 23rd minute and scored again 13 minutes later. In a 3-0 win over Haiti, that first-half brace stands out first.</p>"
         },
         "zh": {
-          "title": "卡塞米罗 13 次夺回球权，巴西中场守住节奏",
-          "html": "<p>巴西 3-0 海地，卡塞米罗守住中场防守。</p><p>他全场 13 次夺回球权，6 次破坏海地的进攻推进。对手试图带球冲过中场时，多次被他半路拦下。</p><p>靠这些抢截，巴西稳住节奏，支撑起前场进攻。</p>"
+          "title": "库尼亚梅开二度",
+          "html": "<p>库尼亚第23分钟为巴西首开纪录，13分钟后又进一球。巴西3-0赢海地，上半场这两脚来得很干脆。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
+      "award_label": {
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
+      },
+      "player_id": "FIFA-2026-M30-SCO-MAR|Morocco|11",
+      "player_name": "Ismael SAIBARI",
+      "team": "Morocco",
+      "opponent": "Scotland",
+      "match_key": "FIFA-2026-M30-SCO-MAR",
+      "match_no": 30,
+      "player_no": 11,
+      "position": "MF",
+      "score": 91.03,
+      "metrics": {
+        "shots": 2,
+        "on_target": 1,
+        "goals": 1,
+        "goal_involvements": 1,
+        "opening_goal": 1,
+        "go_ahead_goal": 1,
+        "match_winning_goal": 1,
+        "only_goal_winner": 1
+      },
+      "evidence_chips": {
+        "en": [
+          "only goal",
+          "match-winning goal",
+          "goal scorer"
+        ],
+        "zh": [
+          "全场唯一进球",
+          "打入制胜球",
+          "取得进球"
+        ]
+      },
+      "selection_reason": "Selected because his 2nd-minute goal was the only goal in Morocco's 1-0 win over Scotland.",
+      "content": {
+        "en": {
+          "title": "Saibari scored the only goal",
+          "html": "<p>Ismael Saibari scored in the 2nd minute, and Morocco carried that goal through a 1-0 win over Scotland. In a tight match, one early finish was enough.</p>"
+        },
+        "zh": {
+          "title": "萨伊巴里开场制胜",
+          "html": "<p>萨伊巴里第2分钟破门，摩洛哥1-0赢苏格兰。全场只有这一球，开局这一脚一直撑到终场。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
+      "award_label": {
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
+      },
+      "player_id": "FIFA-2026-M31-TUR-PAR|Paraguay|23",
+      "player_name": "Matias GALARZA",
+      "team": "Paraguay",
+      "opponent": "Türkiye",
+      "match_key": "FIFA-2026-M31-TUR-PAR",
+      "match_no": 31,
+      "player_no": 23,
+      "position": "MF",
+      "score": 84.36,
+      "metrics": {
+        "shots": 2,
+        "on_target": 1,
+        "goals": 1,
+        "goal_involvements": 1,
+        "opening_goal": 1,
+        "go_ahead_goal": 1,
+        "match_winning_goal": 1,
+        "only_goal_winner": 1
+      },
+      "evidence_chips": {
+        "en": [
+          "only goal",
+          "match-winning goal",
+          "goal scorer"
+        ],
+        "zh": [
+          "全场唯一进球",
+          "打入制胜球",
+          "取得进球"
+        ]
+      },
+      "selection_reason": "Selected because his 2nd-minute goal was the only goal in Paraguay's 1-0 win over Türkiye.",
+      "content": {
+        "en": {
+          "title": "Galarza settled it early",
+          "html": "<p>Matias Galarza scored in the 2nd minute and Paraguay never gave the lead back. The goal was the whole margin in a 1-0 win over Türkiye.</p>"
+        },
+        "zh": {
+          "title": "加拉萨开场制胜",
+          "html": "<p>加拉萨第2分钟进球，巴拉圭1-0赢土耳其。后面被压了很久，但比分一直停在这一球上。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
+      "award_label": {
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
+      },
+      "player_id": "FIFA-2026-M29-BRA-HAI|Brazil|7",
+      "player_name": "VINICIUS JUNIOR",
+      "team": "Brazil",
+      "opponent": "Haiti",
+      "match_key": "FIFA-2026-M29-BRA-HAI",
+      "match_no": 29,
+      "player_no": 7,
+      "position": "FW",
+      "score": 69.5,
+      "metrics": {
+        "shots": 3,
+        "on_target": 2,
+        "goals": 1,
+        "assists": 1,
+        "goal_involvements": 2
+      },
+      "evidence_chips": {
+        "en": [
+          "goal scorer",
+          "assist"
+        ],
+        "zh": [
+          "取得进球",
+          "送出助攻"
+        ]
+      },
+      "selection_reason": "Selected as a second Brazil card because he assisted Matheus Cunha's second goal and scored Brazil's third in first-half stoppage time.",
+      "content": {
+        "en": {
+          "title": "Vinicius Junior had a goal and an assist",
+          "html": "<p>Vinicius Junior set up Cunha's second goal, then scored Brazil's third in first-half stoppage time. That put him directly on two of Brazil's three goals.</p>"
+        },
+        "zh": {
+          "title": "维尼修斯传射",
+          "html": "<p>维尼修斯先助攻库尼亚打进第二球，半场补时又自己破门。巴西3-0赢海地，他一传一射，前场处理很顺。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
+      "award_label": {
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
+      },
+      "player_id": "FIFA-2026-M32-USA-AUS|USA|16",
+      "player_name": "Alex FREEMAN",
+      "team": "USA",
+      "opponent": "Australia",
+      "match_key": "FIFA-2026-M32-USA-AUS",
+      "match_no": 32,
+      "player_no": 16,
+      "position": "DF",
+      "score": 57.37,
+      "metrics": {
+        "shots": 1,
+        "on_target": 1,
+        "goals": 1,
+        "goal_involvements": 1
+      },
+      "evidence_chips": {
+        "en": [
+          "goal scorer"
+        ],
+        "zh": [
+          "取得进球"
+        ]
+      },
+      "selection_reason": "Selected because he scored the USA's only non-own goal in the 2-0 win over Australia, adding a two-way packet with 17 line breaks, 6 possession regains and 8 interruptions.",
+      "content": {
+        "en": {
+          "title": "Freeman gave the USA room",
+          "html": "<p>After an Australia own goal had made it 1-0, Alex Freeman scored in the 43rd minute to give the USA a two-goal cushion. He also had 17 completed line breaks and eight possession interruptions in the 2-0 win.</p>"
+        },
+        "zh": {
+          "title": "弗里曼补上第二球",
+          "html": "<p>澳大利亚乌龙后，美国已经1-0领先，弗里曼第43分钟把比分改成2-0。他向前处理球很多，防守端也有8次破坏进攻，这场踢得很满。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "goalkeeper_watch",
+      "award_types": [
+        "goalkeeper_watch"
+      ],
+      "award_label": {
+        "en": "Goalkeeper Watch",
+        "zh": "门将关注"
+      },
+      "player_id": "FIFA-2026-M31-TUR-PAR|Paraguay|12",
+      "player_name": "Orlando GILL",
+      "team": "Paraguay",
+      "opponent": "Türkiye",
+      "match_key": "FIFA-2026-M31-TUR-PAR",
+      "match_no": 31,
+      "player_no": 12,
+      "position": "GK",
+      "score": 20.19,
+      "metrics": {
+        "clean_sheet": 1,
+        "opponent_xg": 2.13,
+        "opponent_attempts_on_target": 5,
+        "opponent_attempts_total": 32,
+        "keeper_saved_shots": 5
+      },
+      "evidence_chips": {
+        "en": [
+          "clean sheet",
+          "faced heavy on-target pressure",
+          "xG pressure resisted",
+          "Saved outcomes in shot log"
+        ],
+        "zh": [
+          "零封",
+          "对手射正压力高",
+          "承受较高xG",
+          "射门记录Saved结果较多"
+        ]
+      },
+      "selection_reason": "Selected as the goalkeeper angle because Paraguay kept a clean sheet while Türkiye produced 32 attempts, 5 shots on target and 2.13 xG; Gill is credited with 5 saves.",
+      "content": {
+        "en": {
+          "title": "Gill protected Paraguay's 1-0",
+          "html": "<p>Türkiye finished with 32 attempts, 5 on target and 2.13 xG, but Orlando Gill kept Paraguay's clean sheet. Five saves kept Galarza's early goal alive.</p>"
+        },
+        "zh": {
+          "title": "吉尔5次扑救零封",
+          "html": "<p>土耳其全场32脚射门、5次射正，预期进球到2.13，吉尔没有丢球。巴拉圭1-0赢下来，这个零封很硬。</p>"
         }
       }
     }
   ],
-  "selection_review": {
-    "status": "publishable",
-    "alerts": [
-      {
-        "level": "info",
-        "code": "same_team_multiple_picks",
-        "message": "Multiple picks can still come from one team when roles are clearly distinct.",
-        "teams": [
-          {
-            "team": "Brazil",
-            "count": 2
-          },
-          {
-            "team": "Morocco",
-            "count": 2
-          }
-        ]
-      }
-    ],
-    "iterations": [
-      {
-        "iteration": 1,
-        "status": "publishable",
-        "alerts": [
-          {
-            "level": "info",
-            "code": "same_team_multiple_picks",
-            "message": "Multiple picks can still come from one team when roles are clearly distinct.",
-            "teams": [
-              {
-                "team": "Brazil",
-                "count": 2
-              },
-              {
-                "team": "Morocco",
-                "count": 2
-              }
-            ]
-          }
-        ],
-        "choice_names": [
-          "Ismael SAIBARI",
-          "Alex FREEMAN",
-          "Matias GALARZA",
-          "MATHEUS CUNHA",
-          "Arda GULER",
-          "Azzedine OUNAHI",
-          "CASEMIRO"
-        ]
-      }
-    ]
+  "selection_validation": {
+    "schema_version": 1,
+    "status": "pass",
+    "warnings": []
   },
   "audit": []
 }
