@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-06-25T10:59:24+00:00",
+  "generated_at": "2026-06-26T02:20:49+00:00",
   "status": "success",
-  "match_date": "2026-06-24",
+  "match_date": "2026-06-20",
   "workflow_variant": "ai_rerank_selection_v1",
   "experiment_id": "ai_rerank_reader_loop_v5",
   "editor_runtime": "local_codex",
@@ -25,33 +25,28 @@
   "choices": [
     {
       "award_type": "player_of_the_day",
-      "player_name": "Soufiane RAHIMI",
-      "team": "Morocco"
+      "player_name": "Deniz UNDAV",
+      "team": "Germany"
     },
     {
       "award_type": "player_of_the_day",
-      "player_name": "VINICIUS JUNIOR",
-      "team": "Brazil"
+      "player_name": "Cody GAKPO",
+      "team": "Netherlands"
     },
     {
       "award_type": "player_of_the_day",
-      "player_name": "Thapelo MASEKO",
-      "team": "South Africa"
+      "player_name": "Ayase UEDA",
+      "team": "Japan"
     },
     {
       "award_type": "player_of_the_day",
-      "player_name": "Johan MANZAMBI",
-      "team": "Switzerland"
+      "player_name": "Brian BROBBEY",
+      "team": "Netherlands"
     },
     {
-      "award_type": "player_of_the_day",
-      "player_name": "Kerim ALAJBEGOVIC",
-      "team": "Bosnia and Herzegovina"
-    },
-    {
-      "award_type": "defensive_pick",
-      "player_name": "Cesar MONTES",
-      "team": "Mexico"
+      "award_type": "goalkeeper_watch",
+      "player_name": "Eloy ROOM",
+      "team": "Curaçao"
     }
   ]
 }
