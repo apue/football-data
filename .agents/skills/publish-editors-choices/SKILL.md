@@ -18,6 +18,7 @@ Read these before acting:
 ## Core Rules
 
 - Treat `scripts/prepare_editorial_packet.py --date YYYY-MM-DD` as the default local handoff entrypoint.
+- Immediately run `scripts/inspect_editorial_day.py --date YYYY-MM-DD` after preparing the packet. Use `editorial_fact_pack.json` / `.md` for goal timelines, own goals, assists, team pressure, goalkeeper checks, and metric-led candidate traps before writing selection/copy/review.
 - Let local Codex write `agent-runs/YYYY-MM-DD/selection_decision.json`, `agent-runs/YYYY-MM-DD/copy.json`, and `agent-runs/YYYY-MM-DD/editorial_review.json`, then publish with `scripts/compile_local_editorial.py --date YYYY-MM-DD`.
 - Treat `reports/editorial/YYYY-MM-DD.md` as the human-readable generated report.
 - Treat `agent-runs/YYYY-MM-DD/` as the primary run audit directory.
@@ -27,5 +28,6 @@ Read these before acting:
 - Generate both English and Chinese copy from the same selected candidate evidence packet. They should express the same judgment but do not need to be literal translations.
 - Run the workflow validation gates before accepting output: `selection_validation.json`, `copy_validation.json`, `editorial_review_validation.json`, copy warnings, and homepage/site artifacts.
 - Use local match dates from `matches.match_date`, not Beijing date or workflow run time.
+- Do not start with ad hoc SQL for editorial review. If the fact pack is missing a recurring fact, improve `scripts/inspect_editorial_day.py` instead.
 - Prefer a short, human editorial note over metric dumping.
 - Do not push directly to `main` for editorial content unless the user explicitly asks.

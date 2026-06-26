@@ -27,6 +27,35 @@ def test_prepare_editorial_packet_writes_handoff_audit_without_public_artifacts(
     assert not (tmp_path / "site").exists()
 
 
+def test_inspect_editorial_day_writes_fact_pack_with_reader_traps(tmp_path):
+    from football_data.editorial_fact_pack import write_editorial_fact_pack
+    from football_data.editorial_local import prepare_editorial_packet
+
+    prepare_editorial_packet(
+        match_date="2026-06-19",
+        db_path="data/latest.sqlite",
+        agent_runs_dir=tmp_path / "agent-runs",
+        run_out_path=tmp_path / "editorial-v2-run.json",
+    )
+
+    fact_pack = write_editorial_fact_pack(
+        match_date="2026-06-19",
+        db_path="data/latest.sqlite",
+        agent_runs_dir=tmp_path / "agent-runs",
+    )
+    audit_dir = tmp_path / "agent-runs" / "2026-06-19"
+
+    assert (audit_dir / "editorial_fact_pack.json").exists()
+    assert (audit_dir / "editorial_fact_pack.md").exists()
+    assert any(goal.get("own_goal_by") == "Australia" for goal in fact_pack["goal_timeline"])
+    trap_messages = "\n".join(trap["message"] for trap in fact_pack["candidate_traps"])
+    assert "Alex FREEMAN scored" in trap_messages
+    assert "Arda GULER ranks #5 without G/A" in trap_messages
+    assert [keeper["player_name"] for keeper in fact_pack["goalkeeper_pressure_candidates"]] == [
+        "Orlando GILL"
+    ]
+
+
 def test_compile_local_editorial_uses_local_decision_and_copy(tmp_path):
     from football_data.editorial_local import compile_local_editorial, prepare_editorial_packet
     from football_data.editorial_selection import fake_selection_decision
