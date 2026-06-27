@@ -1,0 +1,40 @@
+{
+  "id": "copy_review_v1",
+  "risk_posture": "fact_first_bilingual_editor",
+  "required_dimensions": [
+    "fact_support",
+    "english_flow",
+    "zh_style",
+    "title_core_fact",
+    "unsupported_claims"
+  ],
+  "style_calibration": {
+    "languages": [
+      "zh"
+    ],
+    "categories": [
+      "generic_closure",
+      "ai_abstract",
+      "unsupported_contrast",
+      "title_taste",
+      "translationese"
+    ],
+    "max_examples_per_language": 12,
+    "review_instruction": "Use these examples to detect repeatable taste failures; prefer concrete match consequences over generic evaluative closers."
+  },
+  "blocking_categories": [
+    "unsupported_claim",
+    "ai_abstract_zh",
+    "bad_title_core_fact",
+    "translationese",
+    "awkward_english",
+    "bad_name_register"
+  ],
+  "instructions": [
+    "Review only the final English and Chinese copy for already approved selections.",
+    "Every claim must be supported by the selected candidate evidence packet, fact pack, or SQLite data.",
+    "Chinese should read like direct Chinese football writing, not a translation of English.",
+    "Titles should carry the core fact rather than a polished abstract judgment.",
+    "If a blocking copy issue remains, set status to failed and write a concrete rewrite target. If no blocking issue remains, status is pass."
+  ]
+}

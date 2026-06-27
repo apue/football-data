@@ -1,0 +1,38 @@
+{
+  "id": "selection_review_v1",
+  "risk_posture": "fact_first_reader_objection",
+  "required_dimensions": [
+    "selected_card_convincingness",
+    "obvious_omission",
+    "alternative_slate_comparison",
+    "weakest_selected_card",
+    "strongest_omitted_card"
+  ],
+  "required_slate_assessment_fields": [
+    "reader_questions",
+    "alternative_slate_comparison",
+    "weakest_selected_card",
+    "strongest_omitted_card",
+    "drop_weakest_verdict",
+    "replace_weakest_verdict",
+    "preferred_card_count",
+    "revision_decision"
+  ],
+  "required_unselected_headline_top_n": 8,
+  "blocking_categories": [
+    "obvious_omission",
+    "forced_card_count",
+    "forced_match_coverage",
+    "weak_public_case",
+    "overrepresented_match",
+    "unsupported_selection_reason"
+  ],
+  "instructions": [
+    "Review only the selection slate, not the final prose.",
+    "Ask whether every selected card has a public case strong enough for a reader who checks the omitted candidates.",
+    "Identify the weakest selected card and the strongest omitted candidate with player_id values.",
+    "Compare the current slate with dropping the weakest selected card or replacing it with the strongest omitted candidate.",
+    "Treat public-card count as a range, not a quota. Do not add a weaker card for match coverage or role coverage.",
+    "If a blocking issue remains, set status to failed and write a concrete recommended_action. If no blocking issue remains, set revision_decision to keep."
+  ]
+}

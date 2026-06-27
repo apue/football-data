@@ -1,33 +1,20 @@
 {
-  "id": "ai_rerank_reader_loop_v5",
-  "workflow_variant": "ai_rerank_selection_v1",
+  "id": "bounded_editorial_loop_v1",
+  "workflow_variant": "bounded_selection_copy_loop_v1",
   "scoring_config": "config/scoring/v0.4.json",
   "candidate_pool": "guarded_packet_v2",
   "selector_profile": "slate_balanced_editor_v3",
-  "review_profile": "reader_intuition_loop_v2",
-  "revision_policy": {
-    "mode": "reader_critic_revise_review_loop",
-    "max_revision_rounds": 2,
-    "blocking_review_requires_revision": true,
-    "revision_targets": [
-      "selection_decision",
-      "copy",
-      "review"
-    ]
-  },
-  "reader_intuition_loop": {
-    "mode": "slate_critic_then_revision",
-    "critic_outputs": [
-      "match_coverage_pressure",
-      "reader_questions",
-      "alternative_slate_comparison",
-      "weakest_selected_card",
-      "strongest_omitted_card",
-      "revision_decision"
-    ],
-    "human_review_trigger": [
-      "top_three_direct_impact_omitted",
-      "fact_mismatch_between_timeline_and_candidate_pool"
+  "selection_review_profile": "selection_review_v1",
+  "copy_review_profile": "copy_review_v1",
+  "loop_policy": {
+    "selection_max_rounds": 3,
+    "copy_max_rounds": 3,
+    "max_rounds_exceeded_status": "needs_human_review",
+    "promotion_requires": [
+      "selection_loop_pass",
+      "copy_loop_pass",
+      "deterministic_selection_validation_pass",
+      "deterministic_copy_validation_pass"
     ]
   },
   "copy_profiles": {
@@ -35,7 +22,7 @@
     "en": "en_plain_v1"
   },
   "selection": {
-    "mode": "ai_rerank_only",
+    "mode": "bounded_loop_local_editor",
     "strategy": "overall_slate_v1",
     "public_card_count": {
       "min": 3,

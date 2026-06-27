@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-06-27T11:12:12+00:00",
+  "generated_at": "2026-06-27T15:51:22+00:00",
   "status": "success",
-  "match_date": "2026-06-25",
-  "workflow_variant": "ai_rerank_selection_v1",
-  "experiment_id": "ai_rerank_reader_loop_v5",
+  "match_date": "2026-06-26",
+  "workflow_variant": "bounded_selection_copy_loop_v1",
+  "experiment_id": "bounded_editorial_loop_v1",
   "editor_runtime": "local_codex",
   "scoring_version": "v0.4",
   "selection_validation": {
@@ -17,7 +17,7 @@
     "status": "pass",
     "warnings": []
   },
-  "editorial_review_validation": {
+  "editorial_loop_validation": {
     "schema_version": 1,
     "status": "pass",
     "warnings": []
@@ -25,28 +25,28 @@
   "choices": [
     {
       "award_type": "player_of_the_day",
-      "player_name": "Kaan AYHAN",
-      "team": "Türkiye"
+      "player_name": "Pape GUEYE",
+      "team": "Senegal"
     },
     {
       "award_type": "player_of_the_day",
-      "player_name": "Gonzalo PLATA",
-      "team": "Ecuador"
+      "player_name": "Ousmane DEMBELE",
+      "team": "France"
     },
     {
       "award_type": "player_of_the_day",
-      "player_name": "Nicolas PEPE",
-      "team": "Côte d'Ivoire"
+      "player_name": "Leandro TROSSARD",
+      "team": "Belgium"
     },
     {
-      "award_type": "player_of_the_day",
-      "player_name": "Jan Paul VAN HECKE",
-      "team": "Netherlands"
+      "award_type": "impact_pick",
+      "player_name": "Alex BAENA",
+      "team": "Spain"
     },
     {
-      "award_type": "player_of_the_day",
-      "player_name": "Anthony ELANGA",
-      "team": "Sweden"
+      "award_type": "impact_pick",
+      "player_name": "Kylian MBAPPE",
+      "team": "France"
     }
   ]
 }
