@@ -41,3 +41,25 @@ def test_hidden_gem_profile_allows_close_loss_defensive_resistance():
 
     assert profile["eligible"] is True
     assert profile["profile"] == "defensive_resistance"
+
+
+def test_hidden_gem_profile_uses_audit_name_for_progression_case():
+    profile = hidden_gem_profile(
+        {
+            "team_final_goals": 0,
+            "opponent_final_goals": 0,
+            "position": "MF",
+            "role_scores": {"defensive": 5.0, "progressor": 45.0, "off_ball": 10.0},
+            "line_breaks_completed": 12,
+            "distribution_ball_progression": 4,
+            "ball_progressions": 8,
+            "take_ons": 3,
+            "step_ins": 2,
+            "units_4_attacking_line": 2,
+            "units_4_attacking_midfield_line": 2,
+            "units_3_attacking_line": 2,
+        }
+    )
+
+    assert profile["eligible"] is True
+    assert profile["profile"] == "progression_audit"

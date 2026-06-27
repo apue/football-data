@@ -11,7 +11,7 @@ Editorial content is opinionated output. Prefer PR review over direct main pushe
    - covered match date
    - number of matches covered
    - Player of the Day names
-   - hidden gem status
+   - audit-only role status
    - scoring version
    - audit warnings
 
@@ -28,7 +28,8 @@ Only push directly to `main` if the user explicitly asks for direct publication 
 - Matches covered:
 - Scoring version:
 - Player(s) of the Day:
-- Hidden Gem:
+- Standalone role labels: none
+- Audit-only role candidates:
 
 ## Audit
 

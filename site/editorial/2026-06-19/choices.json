@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-06-26T01:53:28+00:00",
-  "compiled_at": "2026-06-26T01:53:28+00:00",
+  "generated_at": "2026-06-27T10:51:08+00:00",
+  "compiled_at": "2026-06-27T10:51:08+00:00",
   "match_date": "2026-06-19",
   "scoring_version": "v0.4",
   "editorial_generation": {
@@ -540,57 +540,6 @@
         "zh": {
           "title": "弗里曼补上第二球",
           "html": "<p>澳大利亚乌龙后，美国已经1-0领先，弗里曼第43分钟把比分改成2-0。他向前处理球很多，防守端也有8次破坏进攻，这场踢得很满。</p>"
-        }
-      }
-    },
-    {
-      "award_type": "goalkeeper_watch",
-      "award_types": [
-        "goalkeeper_watch"
-      ],
-      "award_label": {
-        "en": "Goalkeeper Watch",
-        "zh": "门将关注"
-      },
-      "player_id": "FIFA-2026-M31-TUR-PAR|Paraguay|12",
-      "player_name": "Orlando GILL",
-      "team": "Paraguay",
-      "opponent": "Türkiye",
-      "match_key": "FIFA-2026-M31-TUR-PAR",
-      "match_no": 31,
-      "player_no": 12,
-      "position": "GK",
-      "score": 20.19,
-      "metrics": {
-        "clean_sheet": 1,
-        "opponent_xg": 2.13,
-        "opponent_attempts_on_target": 5,
-        "opponent_attempts_total": 32,
-        "keeper_saved_shots": 5
-      },
-      "evidence_chips": {
-        "en": [
-          "clean sheet",
-          "faced heavy on-target pressure",
-          "xG pressure resisted",
-          "Saved outcomes in shot log"
-        ],
-        "zh": [
-          "零封",
-          "对手射正压力高",
-          "承受较高xG",
-          "射门记录Saved结果较多"
-        ]
-      },
-      "selection_reason": "Selected as the goalkeeper angle because Paraguay kept a clean sheet while Türkiye produced 32 attempts, 5 shots on target and 2.13 xG; Gill is credited with 5 saves.",
-      "content": {
-        "en": {
-          "title": "Gill protected Paraguay's 1-0",
-          "html": "<p>Türkiye finished with 32 attempts, 5 on target and 2.13 xG, but Orlando Gill kept Paraguay's clean sheet. Five saves kept Galarza's early goal alive.</p>"
-        },
-        "zh": {
-          "title": "吉尔5次扑救零封",
-          "html": "<p>土耳其全场32脚射门、5次射正，预期进球到2.13，吉尔没有丢球。巴拉圭1-0赢下来，这个零封很硬。</p>"
         }
       }
     }

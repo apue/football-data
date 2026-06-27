@@ -12,6 +12,11 @@ def build_selector_input(
 ) -> dict[str, Any]:
     del shuffle_seed
     candidates = [_compact_candidate(candidate) for candidate in candidate_pool.get("selectable_candidates", [])]
+    audit_candidates = [
+        _compact_audit_candidate(candidate)
+        for candidate in candidate_pool.get("audit_candidates", [])
+        if isinstance(candidate, dict)
+    ]
     strategy = str(experiment.get("shuffle_strategy") or "name_sorted")
     if strategy == "name_sorted":
         candidates.sort(key=lambda item: (str(item.get("player_name") or ""), str(item.get("team") or "")))
@@ -25,6 +30,7 @@ def build_selector_input(
         "scoring_version": candidate_pool["scoring_version"],
         "candidate_pool": {
             "selectable_candidates": candidates,
+            "audit_candidates": audit_candidates,
             "near_misses": [
                 _compact_near_miss(candidate)
                 for candidate in candidate_pool.get("near_misses", [])
@@ -243,10 +249,6 @@ def _fake_overall_slate_decision(
             [
                 "player_of_the_day",
                 "impact_pick",
-                "progression_pick",
-                "defensive_pick",
-                "goalkeeper_watch",
-                "hidden_gem",
             ],
         )
     ]
@@ -373,22 +375,8 @@ def _target_public_card_count(
         return sum(int(value or 0) for value in award_limits.values())
     if min_count > max_count:
         min_count, max_count = max_count, min_count
-    match_count = len(
-        {
-            str(candidate.get("match_key") or "")
-            for candidate in candidate_pool.get("selectable_candidates", [])
-            if candidate.get("match_key")
-        }
-    )
-    for item in public_card_count.get("recommended_by_match_count", []):
-        if not isinstance(item, dict):
-            continue
-        lower = int(item.get("match_count_min") or 0)
-        upper = int(item.get("match_count_max") or 0)
-        recommended = int(item.get("recommended") or 0)
-        if lower <= match_count <= upper and recommended > 0:
-            return max(min_count, min(max_count, recommended))
-    return max_count
+    candidate_count = len(candidate_pool.get("selectable_candidates", []))
+    return max(min_count, min(max_count, candidate_count))
 
 
 def _overall_slate_score(candidate: dict[str, Any]) -> tuple[float, float, float, float, float]:
@@ -574,6 +562,57 @@ def _compact_candidate(candidate: dict[str, Any]) -> dict[str, Any]:
             "allowed_claims": flow_context.get("allowed_claims", {}),
             "goal_tags": flow_context.get("goal_tags", []),
             "team_came_from_behind_to_win": flow_context.get("team_came_from_behind_to_win"),
+        }
+    hidden_gem = candidate.get("hidden_gem_profile") or {}
+    if hidden_gem:
+        compact["hidden_gem_profile"] = {
+            key: hidden_gem.get(key)
+            for key in ("eligible", "score", "reasons")
+            if key in hidden_gem
+        }
+    progression = candidate.get("progression_benchmark") or {}
+    if progression:
+        compact["progression_benchmark"] = {
+            key: progression.get(key)
+            for key in (
+                "score",
+                "quality",
+                "support_actions",
+                "pass_only_line_break_volume",
+                "percentile",
+                "label",
+            )
+            if key in progression
+        }
+    return compact
+
+
+def _compact_audit_candidate(candidate: dict[str, Any]) -> dict[str, Any]:
+    keys = [
+        "player_id",
+        "player_name",
+        "team",
+        "opponent",
+        "match_key",
+        "match_no",
+        "player_no",
+        "position",
+        "started",
+        "headline_rank",
+        "headline_score",
+        "rank_score",
+        "audit_type",
+        "audit_reasons",
+        "role_scores",
+        "display_names",
+    ]
+    compact = {key: candidate.get(key) for key in keys if key in candidate}
+    active_context = (candidate.get("audit_contexts") or {}).get(str(candidate.get("audit_type") or "")) or {}
+    if active_context:
+        compact["audit_context"] = {
+            "award_label": active_context.get("award_label"),
+            "metrics": active_context.get("metrics", {}),
+            "evidence_chips": active_context.get("evidence_chips", {"en": [], "zh": []}),
         }
     hidden_gem = candidate.get("hidden_gem_profile") or {}
     if hidden_gem:

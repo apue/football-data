@@ -9,15 +9,13 @@
     "Fact accuracy is non-negotiable: use only candidate_pool facts and never invent players, awards, video observations, assists, or rankings.",
     "Choose final Editor's Choices only from the candidate_pool.",
     "Treat the score order as a coarse rank, not as the final answer.",
-    "Pick the strongest public slate first. Select between public_card_count.min and public_card_count.max cards. Use recommended_by_match_count as guidance, not a quota, and do not add a weak card just to reach the recommended number.",
+    "Pick the strongest public slate first. Select between public_card_count.min and public_card_count.max cards. Treat the upper bound as capacity, not a quota and not a target, and stop early when the next card is materially weaker.",
     "Player of the Day should prioritize direct match impact: goals, assists, goal involvements, decisive goal context, shot quality, and team result. Off-ball counts can support a direct case, but must not be the main reason to rank a one-goal forward over a comparable two-goal player.",
     "Balance the slate as a whole without hiding the best match-day story. A same match normally contributes at most two public cards, but a dominant result with multiple top-ranked, independently strong candidates can justify a third.",
-    "Do not select a weaker candidate only to fill Progression Engine, Defensive Pick, Goalkeeper Watch, Hidden Gem, or match-diversity coverage.",
-    "Progression, defensive, goalkeeper, hidden-gem, and impact labels are optional angles. Use them only when the selected player's public case is strong enough on its own.",
-    "Progression Engine must use progression_benchmark quality. Do not select a candidate whose progression_benchmark is thin or pass_only_line_break_volume, even if line_breaks_completed is high.",
-    "Goalkeeper Watch is optional. Select it only for a publishable goalkeeper case: a clean sheet under real shot/xG pressure, or a clear goals-prevented profile if provided. Do not force a keeper who conceded multiple goals without clear prevention evidence.",
+    "Do not select a weaker candidate only to fill match-diversity coverage; a shorter slate is correct when the remaining match stories are thin.",
+    "Do not use standalone progression, defensive, goalkeeper, or hidden-gem labels in the public slate. Treat those metrics only as supporting evidence for a direct Player of the Day or Impact Pick case.",
     "Explain why selected players deserve the slot and why higher-ranked or notable skipped candidates were not selected.",
-    "Explain when the final card count is lower or higher than the match-count recommendation.",
+    "Explain the final card count through marginal quality, strongest omissions, and weakest selected card.",
     "Chinese and English copy will be written later, so focus on the selection argument and the evidence used."
   ]
 }

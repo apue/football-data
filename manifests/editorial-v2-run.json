@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-06-26T05:59:20+00:00",
+  "generated_at": "2026-06-27T11:12:12+00:00",
   "status": "success",
-  "match_date": "2026-06-21",
+  "match_date": "2026-06-25",
   "workflow_variant": "ai_rerank_selection_v1",
   "experiment_id": "ai_rerank_reader_loop_v5",
   "editor_runtime": "local_codex",
@@ -25,28 +25,28 @@
   "choices": [
     {
       "award_type": "player_of_the_day",
-      "player_name": "MOHAMED SALAH",
-      "team": "Egypt"
+      "player_name": "Kaan AYHAN",
+      "team": "Türkiye"
     },
     {
       "award_type": "player_of_the_day",
-      "player_name": "Mikel OYARZABAL",
-      "team": "Spain"
+      "player_name": "Gonzalo PLATA",
+      "team": "Ecuador"
     },
     {
       "award_type": "player_of_the_day",
-      "player_name": "Maxi ARAUJO",
-      "team": "Uruguay"
+      "player_name": "Nicolas PEPE",
+      "team": "Côte d'Ivoire"
     },
     {
       "award_type": "player_of_the_day",
-      "player_name": "MOSTAFA ZICO",
-      "team": "Egypt"
+      "player_name": "Jan Paul VAN HECKE",
+      "team": "Netherlands"
     },
     {
-      "award_type": "goalkeeper_watch",
-      "player_name": "Alireza BEIRANVAND",
-      "team": "IR Iran"
+      "award_type": "player_of_the_day",
+      "player_name": "Anthony ELANGA",
+      "team": "Sweden"
     }
   ]
 }

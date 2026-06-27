@@ -14,6 +14,13 @@ def validate_selection_decision(
         str(candidate["player_id"]): candidate
         for candidate in candidate_pool.get("selectable_candidates", [])
     }
+    selection_config = experiment.get("selection", {})
+    award_limits = _selection_award_limits(selection_config)
+    allowed_awards = {
+        award_type
+        for award_type, limit in award_limits.items()
+        if int(limit) > 0
+    }
     selected = decision.get("selected") if isinstance(decision.get("selected"), list) else []
     if not selected:
         warnings.append("selection_decision.selected is empty")
@@ -30,12 +37,10 @@ def validate_selection_decision(
             warnings.append(f"{player_id or 'missing player'} not in candidate pool")
             continue
         candidate = selectable[player_id]
-        if award_type not in candidate.get("eligible_awards", []):
+        if award_type not in allowed_awards:
+            warnings.append(f"{award_type or 'missing award_type'} is not an allowed public award type")
+        elif award_type not in candidate.get("eligible_awards", []):
             warnings.append(f"{player_id} is not eligible for {award_type}")
-        if award_type == "progression_pick" and not _progression_pick_publishable(candidate):
-            warnings.append(f"{player_id} has thin or pass-only progression evidence")
-        if award_type == "goalkeeper_watch" and not _goalkeeper_watch_publishable(candidate):
-            warnings.append(f"{player_id} is not a publishable goalkeeper-watch profile")
         key = (award_type, player_id)
         if key in seen_keys:
             warnings.append(f"duplicate selection {award_type}:{player_id}")
@@ -47,8 +52,6 @@ def validate_selection_decision(
         team_counts[str(candidate.get("team") or "")] += 1
         match_counts[str(candidate.get("match_key") or "")] += 1
 
-    selection_config = experiment.get("selection", {})
-    award_limits = _selection_award_limits(selection_config)
     required_slots = _selection_required_slots(selection_config)
     for award_type, expected_count in award_limits.items():
         if award_counts[award_type] > int(expected_count):
@@ -130,15 +133,6 @@ def validate_selection_decision(
     }
 
 
-def _progression_pick_publishable(candidate: dict[str, Any]) -> bool:
-    benchmark = candidate.get("progression_benchmark") or {}
-    return (
-        benchmark.get("quality") in {"strong", "useful"}
-        and not bool(benchmark.get("pass_only_line_break_volume"))
-        and float(benchmark.get("score") or 0) >= 18.0
-    )
-
-
 def _selection_award_limits(selection_config: dict[str, Any]) -> dict[str, int]:
     raw_limits = selection_config.get("award_limits")
     if not isinstance(raw_limits, dict):
@@ -183,17 +177,3 @@ def _selection_public_card_count(selection_config: dict[str, Any]) -> tuple[int,
     if min_count > max_count:
         min_count, max_count = max_count, min_count
     return min_count, max_count
-
-
-def _goalkeeper_watch_publishable(candidate: dict[str, Any]) -> bool:
-    if str(candidate.get("position") or "").upper() != "GK" or int(candidate.get("started") or 0) != 1:
-        return False
-    if int(candidate.get("clean_sheet") or 0) == 1:
-        return (
-            float(candidate.get("opponent_xg") or 0) >= 1.0
-            and float(candidate.get("opponent_attempts_on_target") or 0) >= 5
-        )
-    return (
-        float(candidate.get("opponent_xg") or 0) - float(candidate.get("opponent_final_goals") or 0) >= 0.75
-        and float(candidate.get("keeper_saved_shots") or 0) >= 4
-    )

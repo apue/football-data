@@ -90,7 +90,7 @@
     "hidden_gem_profile_thresholds": {
       "off_ball_threat": 62.0,
       "defensive_resistance": 55.0,
-      "progression_engine": 30.0
+      "progression_audit": 30.0
     }
   }
 }

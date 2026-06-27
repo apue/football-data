@@ -1,18 +1,23 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-06-25T07:03:36+00:00",
-  "compiled_at": "2026-06-25T07:03:36+00:00",
+  "generated_at": "2026-06-27T10:51:08+00:00",
+  "compiled_at": "2026-06-27T10:51:08+00:00",
   "match_date": "2026-06-15",
   "scoring_version": "v0.4",
   "editorial_generation": {
     "workflow_variant": "ai_rerank_selection_v1",
-    "experiment_id": "ai_rerank_slate_self_review_v4",
+    "experiment_id": "ai_rerank_reader_loop_v5",
     "selection_mode": "ai_rerank_only",
-    "review_profile": "reader_intuition_v1",
+    "review_profile": "reader_intuition_loop_v2",
     "revision_policy": {
-      "mode": "local_editor_revise_until_review_passes",
+      "mode": "reader_critic_revise_review_loop",
       "max_revision_rounds": 2,
-      "blocking_review_requires_revision": true
+      "blocking_review_requires_revision": true,
+      "revision_targets": [
+        "selection_decision",
+        "copy",
+        "review"
+      ]
     },
     "editorial_review_status": "pass",
     "uses_official_assists": true,
@@ -432,54 +437,6 @@
         "zh": {
           "title": "阿劳霍第80分钟扳平",
           "html": "<p>乌拉圭一直落后到第80分钟，马克西·阿劳霍把比分扳成1-1。两脚射正里有这一脚，至少把比赛从输球拉回平局。</p>"
-        }
-      }
-    },
-    {
-      "award_type": "hidden_gem",
-      "award_types": [
-        "hidden_gem"
-      ],
-      "award_label": {
-        "en": "Hidden Gem",
-        "zh": "隐藏亮点"
-      },
-      "player_id": "FIFA-2026-M14-ESP-CPV|Cabo Verde|4",
-      "player_name": "PICO LOPES",
-      "team": "Cabo Verde",
-      "opponent": "Spain",
-      "match_key": "FIFA-2026-M14-ESP-CPV",
-      "match_no": 14,
-      "player_no": 4,
-      "position": "DF",
-      "score": 33.94,
-      "metrics": {
-        "offers_received": 6,
-        "line_breaks_completed": 10,
-        "ball_progressions": 1,
-        "possession_regains": 9,
-        "possession_interrupted": 9,
-        "blocks": 8
-      },
-      "evidence_chips": {
-        "en": [
-          "ball-winning profile",
-          "disrupted attacks"
-        ],
-        "zh": [
-          "夺回球权能力突出",
-          "持续破坏进攻"
-        ]
-      },
-      "selection_reason": "Selected as the hidden-gem defensive card because Cabo Verde held Spain to 0-0 despite Spain producing 27 attempts and 2.26 xG, and his packet shows 8 blocks, 9 regains, 9 interruptions, and 10 clearances.",
-      "content": {
-        "en": {
-          "title": "Pico Lopes held the line",
-          "html": "<p>Spain had 27 attempts and 2.26 xG, but Cabo Verde still left with a 0-0 draw. Pico Lopes finished with 8 blocks, 9 regains, 9 interruptions, and 10 clearances.</p>"
-        },
-        "zh": {
-          "title": "皮科守住这一分",
-          "html": "<p>西班牙27脚射门、2.26 xG，佛得角最后还是0-0。皮科·洛佩斯有8次封堵、9次夺回球权和10次解围，是防线里最硬的一段。</p>"
         }
       }
     }

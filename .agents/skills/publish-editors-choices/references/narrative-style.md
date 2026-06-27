@@ -20,7 +20,7 @@ Markdown is the human-readable agent output. Review copy in `reports/editorial/Y
 - Do not pretend to have watched video. Avoid repeatedly naming the dataset in body copy; cite the evidence through chips and audit files.
 - Do not list every metric. Keep detailed components in `agent-runs/YYYY-MM-DD/candidate_pool.json` for audit.
 - Avoid negated contrast claims such as "not only..." or `不是只在...`; if the data only shows additional actions, state those actions directly.
-- Hidden Gem is optional. If the evidence is not strong, do not force one.
+- Progression, defensive, goalkeeper, and hidden-gem evidence can support a direct public pick, but should not become standalone public labels.
 
 ## English Tone
 

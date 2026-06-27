@@ -26,8 +26,6 @@
       "revision_decision"
     ],
     "human_review_trigger": [
-      "selected_count_below_recommended_for_match_count",
-      "unrepresented_match_has_publishable_candidate",
       "top_three_direct_impact_omitted",
       "fact_mismatch_between_timeline_and_candidate_pool"
     ]
@@ -41,40 +39,19 @@
     "strategy": "overall_slate_v1",
     "public_card_count": {
       "min": 3,
-      "max": 6,
-      "recommended_by_match_count": [
-        {
-          "match_count_min": 1,
-          "match_count_max": 2,
-          "recommended": 4
-        },
-        {
-          "match_count_min": 3,
-          "match_count_max": 4,
-          "recommended": 5
-        },
-        {
-          "match_count_min": 5,
-          "match_count_max": 8,
-          "recommended": 6
-        }
-      ]
+      "max": 6
     },
     "award_limits": {
       "player_of_the_day": 6,
-      "impact_pick": 2,
-      "progression_pick": 1,
-      "defensive_pick": 1,
-      "goalkeeper_watch": 1,
-      "hidden_gem": 1
+      "impact_pick": 2
     },
     "optional_awards": [
       "player_of_the_day",
-      "impact_pick",
-      "progression_pick",
-      "defensive_pick",
-      "goalkeeper_watch",
-      "hidden_gem"
+      "impact_pick"
+    ],
+    "overall_slate_award_preference": [
+      "player_of_the_day",
+      "impact_pick"
     ],
     "slate_constraints": {
       "max_per_match": 3,
@@ -84,20 +61,15 @@
       "default_max_public_cards_per_match": 2,
       "award_types_are_angles_not_quotas": true,
       "angle_awards_can_be_omitted": [
-        "impact_pick",
-        "progression_pick",
-        "defensive_pick",
-        "goalkeeper_watch",
-        "hidden_gem"
+        "impact_pick"
       ],
       "third_card_requires": [
         "top_five_rank_cluster",
         "dominant_team_result",
         "independent_direct_contribution",
-        "strong_two_way_or_progression_profile",
+        "strong_supporting_metric_profile",
         "hat_trick",
-        "late_match_winning_goal",
-        "goalkeeper_exception"
+        "late_match_winning_goal"
       ]
     },
     "must_explain_skipped_higher_ranked_candidates": true

@@ -33,6 +33,12 @@ def build_editorial_fact_pack(
         for candidate in candidate_pool.get("selectable_candidates", [])
         if isinstance(candidate, dict)
     ]
+    audit_candidates = [
+        _candidate_summary(candidate)
+        for candidate in candidate_pool.get("audit_candidates", [])
+        if isinstance(candidate, dict)
+    ]
+    review_candidates = _dedupe_candidates(selectable + audit_candidates)
     fact_pack = {
         "schema_version": 1,
         "generated_at": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
@@ -47,10 +53,11 @@ def build_editorial_fact_pack(
         "team_stats": team_stats,
         "shot_summary": shot_summary,
         "top_selectable_candidates": selectable[:12],
+        "audit_candidates": audit_candidates[:12],
         "direct_impact_candidates": _direct_impact_candidates(selectable),
-        "goalkeeper_pressure_candidates": _goalkeeper_pressure_candidates(selectable),
-        "metric_led_high_rank_candidates": _metric_led_high_rank_candidates(selectable),
-        "candidate_traps": _candidate_traps(selectable, goal_events, team_stats),
+        "goalkeeper_pressure_candidates": _goalkeeper_pressure_candidates(review_candidates),
+        "metric_led_high_rank_candidates": _metric_led_high_rank_candidates(review_candidates),
+        "candidate_traps": _candidate_traps(review_candidates, goal_events, team_stats),
         "rank_lookup_sample": _rank_lookup_sample(candidate_pool),
         "rankings_source": {
             "scoring_version": rankings.get("scoring_version"),
@@ -123,6 +130,13 @@ def render_editorial_fact_pack_markdown(fact_pack: dict[str, Any]) -> str:
         lines.append(
             "- #{headline_rank} {player_name} ({team}): no G/A, line_breaks={line_breaks_completed}, "
             "progressions={ball_progressions}, note={trap_note}".format(**candidate)
+        )
+    lines.extend(["", "## Audit-Only Candidates", ""])
+    for candidate in fact_pack.get("audit_candidates", []):
+        lines.append(
+            "- {audit_type}: #{headline_rank} {player_name} ({team}), "
+            "line_breaks={line_breaks_completed}, progressions={ball_progressions}, "
+            "regains={possession_regains}".format(**candidate)
         )
     lines.extend(["", "## Candidate Traps", ""])
     for trap in fact_pack.get("candidate_traps", []):
@@ -264,6 +278,9 @@ def _shot_summary(conn: sqlite3.Connection, match_keys: list[str]) -> list[dict[
 
 def _candidate_summary(candidate: dict[str, Any]) -> dict[str, Any]:
     metrics = candidate.get("metrics") if isinstance(candidate.get("metrics"), dict) else {}
+    audit_type = str(candidate.get("audit_type") or "")
+    if not metrics and audit_type:
+        metrics = ((candidate.get("audit_contexts") or {}).get(audit_type) or {}).get("metrics") or {}
     return {
         "player_id": candidate.get("player_id"),
         "player_name": candidate.get("player_name"),
@@ -274,6 +291,7 @@ def _candidate_summary(candidate: dict[str, Any]) -> dict[str, Any]:
         "headline_rank": candidate.get("headline_rank"),
         "rank_score": candidate.get("rank_score"),
         "eligible_awards": candidate.get("eligible_awards", []),
+        "audit_type": candidate.get("audit_type"),
         "goals": int(candidate.get("goals") or metrics.get("goals") or 0),
         "assists": int(candidate.get("assists") or metrics.get("assists") or 0),
         "goal_involvements": int(
@@ -306,6 +324,18 @@ def _candidate_summary(candidate: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def _dedupe_candidates(candidates: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    seen: set[tuple[str, str]] = set()
+    deduped: list[dict[str, Any]] = []
+    for candidate in candidates:
+        key = (str(candidate.get("player_id") or ""), str(candidate.get("audit_type") or "public"))
+        if key in seen:
+            continue
+        seen.add(key)
+        deduped.append(candidate)
+    return deduped
+
+
 def _direct_impact_candidates(candidates: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return [
         candidate
@@ -323,7 +353,8 @@ def _goalkeeper_pressure_candidates(candidates: list[dict[str, Any]]) -> list[di
         for candidate in candidates
         if _is_goalkeeper_candidate(candidate)
         and (
-            "goalkeeper_watch" in candidate.get("eligible_awards", [])
+            candidate.get("audit_type") == "goalkeeper_watch"
+            or "goalkeeper_watch" in candidate.get("eligible_awards", [])
             or int(candidate.get("keeper_saved_shots") or 0) >= 4
             or (
                 int(candidate.get("clean_sheet") or 0) == 1

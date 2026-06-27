@@ -72,7 +72,7 @@ def hidden_gem_profile(player: dict[str, Any]) -> dict[str, Any]:
     if progression["quality"] == "strong":
         return {
             "eligible": True,
-            "profile": "progression_engine",
+            "profile": "progression_audit",
             "score": progression["score"],
         }
 

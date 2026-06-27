@@ -9,6 +9,7 @@ def test_editorial_v2_registry_resolves_default_experiment():
         load_review_profile,
         load_selector_profile,
     )
+    from football_data.editorial_constants import AWARD_DISPLAY_ORDER, AWARD_LABELS
     from football_data.editorial_display_names import player_display_entry, player_display_name
 
     experiment = load_editorial_experiment()
@@ -25,24 +26,26 @@ def test_editorial_v2_registry_resolves_default_experiment():
     assert experiment["selection"]["strategy"] == "overall_slate_v1"
     assert experiment["selection"]["public_card_count"]["min"] == 3
     assert experiment["selection"]["public_card_count"]["max"] == 6
-    assert experiment["selection"]["public_card_count"]["recommended_by_match_count"][0] == {
-        "match_count_min": 1,
-        "match_count_max": 2,
-        "recommended": 4,
+    assert "recommended_by_match_count" not in experiment["selection"]["public_card_count"]
+    assert experiment["selection"]["award_limits"] == {
+        "player_of_the_day": 6,
+        "impact_pick": 2,
     }
-    assert experiment["selection"]["award_limits"]["progression_pick"] == 1
     assert experiment["selection"]["optional_awards"] == [
         "player_of_the_day",
         "impact_pick",
-        "progression_pick",
-        "defensive_pick",
-        "goalkeeper_watch",
-        "hidden_gem",
+    ]
+    assert experiment["selection"]["slate_balance"]["angle_awards_can_be_omitted"] == [
+        "impact_pick",
     ]
     assert experiment["selection"]["slate_constraints"] == {
         "max_per_match": 3,
         "max_per_team": 3,
     }
+    assert set(AWARD_LABELS) == {"player_of_the_day", "impact_pick"}
+    assert AWARD_DISPLAY_ORDER == ["player_of_the_day", "impact_pick"]
+    assert "selected_count_below_recommended_for_match_count" not in experiment["reader_intuition_loop"]["human_review_trigger"]
+    assert "unrepresented_match_has_publishable_candidate" not in experiment["reader_intuition_loop"]["human_review_trigger"]
     assert player_display_name("CRISTIANO RONALDO", "zh") == "C罗"
     assert player_display_entry("BRUNO FERNANDES", "zh") == {
         "display_name": "布鲁诺-费尔南德斯",
@@ -77,8 +80,12 @@ def test_editorial_v2_registry_resolves_default_experiment():
         "alternative_slate_comparison",
         "weakest_selected_card",
         "strongest_omitted_card",
+        "drop_weakest_verdict",
+        "replace_weakest_verdict",
+        "preferred_card_count",
         "revision_decision",
     ]
+    assert "undercovered_match_day" not in review_profile["blocking_categories"]
     assert zh_profile["language"] == "zh"
     assert zh_profile["instructions"]
     assert isinstance(zh_profile.get("banned_public_terms"), list)
@@ -237,9 +244,25 @@ def test_editorial_review_validation_requires_reader_intuition_coverage():
                 {"card_count": len(decision["selected"]), "tradeoff": "current slate"},
                 {"card_count": len(decision["selected"]) + 1, "tradeoff": "broader coverage"},
             ],
-            "weakest_selected_card": "No selected card raised a blocking concern.",
-            "strongest_omitted_card": "No omitted card required revision.",
-            "revision_decision": "No blocking reader-intuition issue remains.",
+            "weakest_selected_card": {
+                "player_id": review_payload["selected"][-1]["player_id"],
+                "reason": "Weakest selected card was checked against the omission list.",
+            },
+            "strongest_omitted_card": {
+                "player_id": review_payload["required_unselected_candidate_reviews"][0]["player_id"],
+                "reason": "Strongest omitted card does not beat the final public slate.",
+            },
+            "drop_weakest_verdict": {
+                "decision": "keep",
+                "reason": "The weakest selected card remains above the publishable line.",
+            },
+            "replace_weakest_verdict": {
+                "decision": "keep",
+                "replacement_player_id": review_payload["required_unselected_candidate_reviews"][0]["player_id"],
+                "reason": "Replacement would not improve the slate.",
+            },
+            "preferred_card_count": len(decision["selected"]),
+            "revision_decision": "keep",
         },
         "selected_player_reviews": selected_reviews,
         "unselected_candidate_reviews": unselected_reviews,
@@ -268,6 +291,12 @@ def test_editorial_review_validation_requires_reader_intuition_coverage():
     blocking_validation = validate_editorial_review(blocking, review_profile, review_payload)
     assert blocking_validation["status"] == "failed"
     assert any("blocking finding" in warning for warning in blocking_validation["warnings"])
+
+    unstructured = json.loads(json.dumps(good_review, ensure_ascii=False))
+    unstructured["slate_assessment"]["weakest_selected_card"] = "No selected card raised a blocking concern."
+    unstructured_validation = validate_editorial_review(unstructured, review_profile, review_payload)
+    assert unstructured_validation["status"] == "failed"
+    assert any("weakest_selected_card must identify a selected player_id" in warning for warning in unstructured_validation["warnings"])
 
 
 def test_editorial_review_payload_includes_slate_coverage_context():
@@ -306,7 +335,7 @@ def test_editorial_review_payload_includes_slate_coverage_context():
 
     coverage = review_payload["match_coverage"]
     assert coverage["match_count"] == 4
-    assert coverage["recommended_public_cards"] == 5
+    assert "recommended_public_cards" not in coverage
     assert coverage["selected_count"] == len(decision["selected"])
     assert coverage["top_candidates_by_match"]
     assert all("top_candidates" in item for item in coverage["top_candidates_by_match"])
@@ -359,6 +388,16 @@ def test_editorial_review_validation_requires_slate_assessment_fields():
                 {"card_count": 3, "tradeoff": "elite only"},
                 {"card_count": 4, "tradeoff": "better match coverage"},
             ],
+            "weakest_selected_card": {"player_id": "p1", "reason": "checked"},
+            "strongest_omitted_card": {"player_id": "p2", "reason": "checked"},
+            "drop_weakest_verdict": {"decision": "keep", "reason": "checked"},
+            "replace_weakest_verdict": {
+                "decision": "keep",
+                "replacement_player_id": "p2",
+                "reason": "checked",
+            },
+            "preferred_card_count": 3,
+            "revision_decision": "keep",
         },
     }
     passing_validation = validate_editorial_review(passing, review_profile, review_payload)
@@ -388,7 +427,7 @@ def test_editorial_v2_goalkeeper_score_is_keeper_only_for_latest_day():
     assert abulaila["role_scores"]["goalkeeper"] > 0
 
 
-def test_editorial_v2_candidate_pool_guards_progression_and_goalkeeper_watch_latest_day():
+def test_editorial_v2_candidate_pool_keeps_role_candidates_audit_only_latest_day():
     from football_data.editorial_candidates import build_candidate_pool
     from football_data.editorial_rankings import build_editorial_rankings
     from football_data.editorial_registry import (
@@ -407,10 +446,22 @@ def test_editorial_v2_candidate_pool_guards_progression_and_goalkeeper_watch_lat
         load_candidate_pool_config(experiment["candidate_pool"]),
     )
 
-    progression_candidates = [
+    public_awards = {"player_of_the_day", "impact_pick"}
+    assert all(
+        set(candidate.get("eligible_awards", [])) <= public_awards
+        for candidate in pool["selectable_candidates"]
+    )
+    assert not [
         candidate
         for candidate in pool["selectable_candidates"]
-        if "progression_pick" in candidate.get("eligible_awards", [])
+        if {"progression_pick", "defensive_pick", "goalkeeper_watch", "hidden_gem"}
+        & set(candidate.get("eligible_awards", []))
+    ]
+
+    progression_candidates = [
+        candidate
+        for candidate in pool["audit_candidates"]
+        if candidate.get("audit_type") == "progression_pick"
     ]
     progression_names = {candidate["player_name"] for candidate in progression_candidates}
 
@@ -423,8 +474,8 @@ def test_editorial_v2_candidate_pool_guards_progression_and_goalkeeper_watch_lat
     )
     assert not [
         candidate
-        for candidate in pool["selectable_candidates"]
-        if "goalkeeper_watch" in candidate.get("eligible_awards", [])
+        for candidate in pool["audit_candidates"]
+        if candidate.get("audit_type") == "goalkeeper_watch"
     ]
 
 
@@ -457,7 +508,7 @@ def test_editorial_v2_candidate_pool_includes_configured_zh_display_names():
     }
 
 
-def test_editorial_v2_selector_input_keeps_progression_guard_fields():
+def test_editorial_v2_selector_input_keeps_audit_progression_guard_fields_out_of_public_selection():
     from football_data.editorial_candidates import build_candidate_pool
     from football_data.editorial_rankings import build_editorial_rankings
     from football_data.editorial_registry import (
@@ -477,7 +528,11 @@ def test_editorial_v2_selector_input_keeps_progression_guard_fields():
         load_candidate_pool_config(experiment["candidate_pool"]),
     )
     selector_input = build_selector_input(pool, experiment)
-    zidane = _selector_candidate(selector_input, "ZIDANE IQBAL")
+    assert all(
+        "progression_pick" not in candidate.get("eligible_awards", [])
+        for candidate in selector_input["candidate_pool"]["selectable_candidates"]
+    )
+    zidane = _selector_audit_candidate(selector_input, "ZIDANE IQBAL", "progression_pick")
 
     assert zidane["progression_benchmark"]["quality"] == "strong"
     assert zidane["progression_benchmark"]["support_actions"] > 0
@@ -513,7 +568,7 @@ def test_editorial_v2_potd_context_keeps_off_ball_as_supporting_evidence():
     assert "found again and again" not in potd_context["evidence_chips"]["en"]
 
 
-def test_editorial_v2_hidden_gem_excludes_headline_and_goal_involvement_cases():
+def test_editorial_v2_hidden_gem_audit_excludes_headline_and_goal_involvement_cases():
     from football_data.editorial_candidates import build_candidate_pool
     from football_data.editorial_rankings import build_editorial_rankings
     from football_data.editorial_registry import (
@@ -531,8 +586,8 @@ def test_editorial_v2_hidden_gem_excludes_headline_and_goal_involvement_cases():
     pool = build_candidate_pool(rankings, pool_config)
     hidden_candidates = [
         candidate
-        for candidate in pool["selectable_candidates"]
-        if "hidden_gem" in candidate.get("eligible_awards", [])
+        for candidate in pool["audit_candidates"]
+        if candidate.get("audit_type") == "hidden_gem"
     ]
 
     assert "Sadio MANE" not in {candidate["player_name"] for candidate in hidden_candidates}
@@ -591,11 +646,11 @@ def test_editorial_v2_fake_selector_prefers_direct_potd_case_and_slate_constrain
 
     overconcentrated = {
         "selected": [
-            _selected(_candidate(pool, "Amine GOUIRI"), "player_of_the_day"),
-            _selected(_candidate(pool, "Nadhir BENBOUALI"), "impact_pick"),
-            _selected(_candidate(pool, "Rayan AIT-NOURI"), "progression_pick"),
-            _selected(_candidate(pool, "MOHANNAD ABUTAHA"), "defensive_pick"),
             _selected(_candidate(pool, "Kylian MBAPPE"), "player_of_the_day"),
+            _selected(_candidate(pool, "Ousmane DEMBELE"), "player_of_the_day"),
+            _selected(_candidate(pool, "Michael OLISE"), "player_of_the_day"),
+            _selected(_candidate(pool, "Kylian MBAPPE"), "impact_pick"),
+            _selected(_candidate(pool, "Lionel MESSI"), "player_of_the_day"),
         ],
         "skipped_higher_ranked": [],
         "skipped_notable_candidates": [],
@@ -604,12 +659,12 @@ def test_editorial_v2_fake_selector_prefers_direct_potd_case_and_slate_constrain
     bad_validation = validate_selection_decision(overconcentrated, pool, experiment)
 
     assert bad_validation["status"] == "failed"
-    assert any("FIFA-2026-M44-JOR-ALG exceeds max_per_match 3" in warning for warning in bad_validation["warnings"])
+    assert any("FIFA-2026-M42-FRA-IRQ exceeds max_per_match 3" in warning for warning in bad_validation["warnings"])
 
     duplicate_player = {
         "selected": [
-            _selected(_candidate(pool, "Ibrahim MAZA"), "progression_pick"),
-            _selected(_candidate(pool, "Ibrahim MAZA"), "hidden_gem"),
+            _selected(_candidate(pool, "Kylian MBAPPE"), "player_of_the_day"),
+            _selected(_candidate(pool, "Kylian MBAPPE"), "impact_pick"),
         ],
         "skipped_higher_ranked": [],
         "skipped_notable_candidates": [],
@@ -646,7 +701,7 @@ def test_editorial_v2_slate_balance_allows_angle_omissions_and_blocks_fourth_mat
             _selected(_candidate(pool, "Lionel MESSI"), "player_of_the_day"),
             _selected(_candidate(pool, "Erling HAALAND"), "player_of_the_day"),
             _selected(_candidate(pool, "Amine GOUIRI"), "impact_pick"),
-            _selected(_candidate(pool, "Ibrahim MAZA"), "progression_pick"),
+            _selected(_candidate(pool, "Ismaila SARR"), "player_of_the_day"),
         ],
         "skipped_higher_ranked": [
             {
@@ -663,10 +718,10 @@ def test_editorial_v2_slate_balance_allows_angle_omissions_and_blocks_fourth_mat
     overconcentrated = json.loads(json.dumps(balanced, ensure_ascii=False))
     overconcentrated["selected"] = [
         _selected(_candidate(pool, "Kylian MBAPPE"), "player_of_the_day"),
-        _selected(_candidate(pool, "Amine GOUIRI"), "player_of_the_day"),
-        _selected(_candidate(pool, "Nadhir BENBOUALI"), "impact_pick"),
-        _selected(_candidate(pool, "Rayan AIT-NOURI"), "progression_pick"),
-        _selected(_candidate(pool, "MOHANNAD ABUTAHA"), "defensive_pick"),
+        _selected(_candidate(pool, "Ousmane DEMBELE"), "player_of_the_day"),
+        _selected(_candidate(pool, "Michael OLISE"), "player_of_the_day"),
+        _selected(_candidate(pool, "Kylian MBAPPE"), "impact_pick"),
+        _selected(_candidate(pool, "Lionel MESSI"), "player_of_the_day"),
     ]
 
     balanced_validation = validate_selection_decision(balanced, pool, experiment)
@@ -674,7 +729,7 @@ def test_editorial_v2_slate_balance_allows_angle_omissions_and_blocks_fourth_mat
 
     assert balanced_validation["status"] == "pass"
     assert overconcentrated_validation["status"] == "failed"
-    assert any("FIFA-2026-M44-JOR-ALG exceeds max_per_match 3" in warning for warning in overconcentrated_validation["warnings"])
+    assert any("FIFA-2026-M42-FRA-IRQ exceeds max_per_match 3" in warning for warning in overconcentrated_validation["warnings"])
 
 
 def test_editorial_v2_copy_validation_rejects_abstract_chinese_public_terms():
@@ -913,18 +968,21 @@ def test_editorial_v2_rankings_and_candidate_pool_include_audit_context():
     assert isinstance(first["score_components"], list)
 
     assert pool["selectable_candidates"]
+    assert pool["audit_candidates"]
     assert pool["near_misses"]
     assert all(candidate["pool_reasons"] for candidate in pool["selectable_candidates"])
     assert {candidate["player_id"] for candidate in pool["selectable_candidates"]}
     assert all(candidate.get("award_contexts") for candidate in pool["selectable_candidates"])
-    assert any(
-        "defensive_pick" in candidate.get("award_contexts", {})
+    assert all(
+        set(candidate.get("award_contexts", {})) <= {"player_of_the_day", "impact_pick"}
         for candidate in pool["selectable_candidates"]
     )
+    assert any(candidate.get("audit_type") == "defensive_pick" for candidate in pool["audit_candidates"])
     selector_input = build_selector_input(pool, experiment)
     assert len(json.dumps(selector_input, ensure_ascii=False)) < 80_000
     selector_candidate = selector_input["candidate_pool"]["selectable_candidates"][0]
     assert "award_contexts" in selector_candidate
+    assert "audit_candidates" in selector_input["candidate_pool"]
     assert "score_components" not in selector_candidate["award_contexts"]["player_of_the_day"]
 
 
@@ -980,9 +1038,15 @@ def test_editorial_v2_selection_validation_requires_pool_membership_and_skip_rea
 
     from football_data.editorial_selection import normalize_selection_decision, repair_selection_decision
 
+    role_public_card = json.loads(json.dumps(decision))
+    role_public_card["selected"][-1]["award_type"] = "progression_pick"
+    role_validation = validate_selection_decision(role_public_card, pool, experiment)
+    assert role_validation["status"] == "failed"
+    assert any("progression_pick is not an allowed public award type" in warning for warning in role_validation["warnings"])
+
     aliased = json.loads(json.dumps(decision))
-    aliased["selected"][-2] = _selected(_candidate(pool, "Pau CUBARSI"), "progression")
-    aliased["selected"][-1] = _selected(_candidate(pool, "Brandon MECHELE"), "defensive")
+    aliased["selected"][-2]["award_type"] = "progression"
+    aliased["selected"][-1]["award_type"] = "defensive"
     maxi = _candidate(pool, "Maxi ARAUJO")
     aliased["skipped_higher_ranked"] = [
         {
@@ -995,8 +1059,9 @@ def test_editorial_v2_selection_validation_requires_pool_membership_and_skip_rea
     ]
     normalized = normalize_selection_decision(aliased)
     normalized_validation = validate_selection_decision(normalized, pool, experiment)
-    assert normalized_validation["status"] == "pass"
+    assert normalized_validation["status"] == "failed"
     assert any("normalized award_type progression to progression_pick" in warning for warning in normalized["warnings"])
+    assert any("progression_pick is not an allowed public award type" in warning for warning in normalized_validation["warnings"])
 
     weak_reason = json.loads(json.dumps(decision))
     weak_reason["selected"][0]["editorial_reason"] = "en"
@@ -1033,6 +1098,14 @@ def _selector_candidate(selector_input: dict, player_name: str) -> dict:
         candidate
         for candidate in selector_input["candidate_pool"]["selectable_candidates"]
         if candidate["player_name"] == player_name
+    )
+
+
+def _selector_audit_candidate(selector_input: dict, player_name: str, audit_type: str) -> dict:
+    return next(
+        candidate
+        for candidate in selector_input["candidate_pool"]["audit_candidates"]
+        if candidate["player_name"] == player_name and candidate["audit_type"] == audit_type
     )
 
 

@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-06-25T10:59:24+00:00",
-  "compiled_at": "2026-06-25T10:59:24+00:00",
+  "generated_at": "2026-06-27T10:51:09+00:00",
+  "compiled_at": "2026-06-27T10:51:09+00:00",
   "match_date": "2026-06-24",
   "scoring_version": "v0.4",
   "editorial_generation": {
@@ -855,54 +855,6 @@
         "zh": {
           "title": "阿拉伊贝戈维奇首开纪录",
           "html": "<p>阿拉伊贝戈维奇第29分钟先进球，波黑3-1赢卡塔尔。进球之外，他还有14次推进、11次持球突破，前场一直在往前顶。</p>"
-        }
-      }
-    },
-    {
-      "award_type": "defensive_pick",
-      "award_types": [
-        "defensive_pick"
-      ],
-      "award_label": {
-        "en": "Defensive Pick",
-        "zh": "防守精选"
-      },
-      "player_id": "FIFA-2026-M53-CZE-MEX|Mexico|3",
-      "player_name": "Cesar MONTES",
-      "team": "Mexico",
-      "opponent": "Czechia",
-      "match_key": "FIFA-2026-M53-CZE-MEX",
-      "match_no": 53,
-      "player_no": 3,
-      "position": "DF",
-      "score": 22.68,
-      "metrics": {
-        "possession_regains": 8,
-        "possession_interrupted": 8,
-        "tackles_won": 1,
-        "interceptions": 1,
-        "blocks": 2,
-        "clearances": 16
-      },
-      "evidence_chips": {
-        "en": [
-          "ball-winning profile",
-          "disrupted attacks"
-        ],
-        "zh": [
-          "夺回球权能力突出",
-          "持续破坏进攻"
-        ]
-      },
-      "selection_reason": "Selected as the defensive angle from Mexico's 3-0 win because his 16 clearances, 8 possession regains and 8 interruptions support the clean-sheet story.",
-      "content": {
-        "en": {
-          "title": "Montes held up Mexico's clean sheet",
-          "html": "<p>Mexico's 3-0 win over Czechia had the goals at one end, but Cesar Montes made the clean sheet feel just as solid. He finished with 16 clearances, 8 possession regains and 8 interruptions.</p>"
-        },
-        "zh": {
-          "title": "蒙特斯防守撑住零封",
-          "html": "<p>墨西哥3-0赢捷克，塞萨尔-蒙特斯把后场活干得很满：16次解围、8次夺回球权、8次破坏进攻。零封没有太多花活，但很扎实。</p>"
         }
       }
     }

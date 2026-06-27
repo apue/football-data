@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-06-26T04:25:58+00:00",
-  "compiled_at": "2026-06-26T04:25:58+00:00",
+  "generated_at": "2026-06-27T10:51:09+00:00",
+  "compiled_at": "2026-06-27T10:51:09+00:00",
   "match_date": "2026-06-20",
   "scoring_version": "v0.4",
   "editorial_generation": {
@@ -593,57 +593,6 @@
         "zh": {
           "title": "布罗贝梅开二度",
           "html": "<p>布罗贝第5分钟打开局面，第17分钟又把比分推到2-0。两次射正都进了，荷兰17分钟就拉开比分。</p>"
-        }
-      }
-    },
-    {
-      "award_type": "goalkeeper_watch",
-      "award_types": [
-        "goalkeeper_watch"
-      ],
-      "award_label": {
-        "en": "Goalkeeper Watch",
-        "zh": "门将关注"
-      },
-      "player_id": "FIFA-2026-M34-ECU-CUW|Curaçao|1",
-      "player_name": "Eloy ROOM",
-      "team": "Curaçao",
-      "opponent": "Ecuador",
-      "match_key": "FIFA-2026-M34-ECU-CUW",
-      "match_no": 34,
-      "player_no": 1,
-      "position": "GK",
-      "score": 16.47,
-      "metrics": {
-        "clean_sheet": 1,
-        "opponent_xg": 2.76,
-        "opponent_attempts_on_target": 15,
-        "opponent_attempts_total": 27,
-        "keeper_saved_shots": 15
-      },
-      "evidence_chips": {
-        "en": [
-          "clean sheet",
-          "faced heavy on-target pressure",
-          "xG pressure resisted",
-          "Saved outcomes in shot log"
-        ],
-        "zh": [
-          "零封",
-          "对手射正压力高",
-          "承受较高xG",
-          "射门记录Saved结果较多"
-        ]
-      },
-      "selection_reason": "Selected as the goalkeeper exception because Curaçao drew 0-0 while Ecuador produced 27 attempts, 15 shots on target and 2.76 xG; Room is credited with 15 saved shots.",
-      "content": {
-        "en": {
-          "title": "Room kept Ecuador out",
-          "html": "<p>Ecuador produced 27 attempts, 15 shots on target and 2.76 xG, but Eloy Room kept Curaçao at 0-0. Ecuador shot all match and still could not move the score.</p>"
-        },
-        "zh": {
-          "title": "鲁姆15次扑救零封",
-          "html": "<p>厄瓜多尔27脚射门、15次射正，预期进球2.76，鲁姆没有让比分动起来。厄瓜多尔射了整场，比分还是0-0。</p>"
         }
       }
     }

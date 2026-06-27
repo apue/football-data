@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-06-26T05:59:20+00:00",
-  "compiled_at": "2026-06-26T05:59:20+00:00",
+  "generated_at": "2026-06-27T10:51:09+00:00",
+  "compiled_at": "2026-06-27T10:51:09+00:00",
   "match_date": "2026-06-21",
   "scoring_version": "v0.4",
   "editorial_generation": {
@@ -578,57 +578,6 @@
         "zh": {
           "title": "穆斯塔法-齐科扳平又助攻",
           "html": "<p>穆斯塔法-齐科第58分钟把比分扳成1-1，9分钟后又助攻萨拉赫反超。埃及3-1逆转新西兰，前两粒进球都跟他有关。</p>"
-        }
-      }
-    },
-    {
-      "award_type": "goalkeeper_watch",
-      "award_types": [
-        "goalkeeper_watch"
-      ],
-      "award_label": {
-        "en": "Goalkeeper Watch",
-        "zh": "门将关注"
-      },
-      "player_id": "FIFA-2026-M39-BEL-IRN|IR Iran|1",
-      "player_name": "Alireza BEIRANVAND",
-      "team": "IR Iran",
-      "opponent": "Belgium",
-      "match_key": "FIFA-2026-M39-BEL-IRN",
-      "match_no": 39,
-      "player_no": 1,
-      "position": "GK",
-      "score": 22.53,
-      "metrics": {
-        "clean_sheet": 1,
-        "opponent_xg": 1.48,
-        "opponent_attempts_on_target": 7,
-        "opponent_attempts_total": 23,
-        "keeper_saved_shots": 8
-      },
-      "evidence_chips": {
-        "en": [
-          "clean sheet",
-          "faced heavy on-target pressure",
-          "xG pressure resisted",
-          "Saved outcomes in shot log"
-        ],
-        "zh": [
-          "零封",
-          "对手射正压力高",
-          "承受较高xG",
-          "射门记录Saved结果较多"
-        ]
-      },
-      "selection_reason": "Selected as the goalkeeper card because IR Iran kept Belgium to 0-0 while facing 23 attempts, 7 on target and 1.48 opponent xG.",
-      "content": {
-        "en": {
-          "title": "Beiranvand held Belgium to 0-0",
-          "html": "<p>Belgium finished with 23 attempts and seven on target, but Alireza Beiranvand kept IR Iran level. The shot log also lists eight saved outcomes in the 0-0 draw.</p>"
-        },
-        "zh": {
-          "title": "贝兰万德守住零封",
-          "html": "<p>贝兰万德面对比利时23脚射门、7次射正，比利时射了整场，比分还是0-0。</p>"
         }
       }
     }

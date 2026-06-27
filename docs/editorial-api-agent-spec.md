@@ -195,10 +195,13 @@ Selector output is `selection_decision.json` with:
 - skipped higher-ranked candidates
 - skipped notable candidates
 - slate-balance rationale
-- card-count rationale when the count differs from match-count guidance
+- card-count rationale based on marginal quality inside the 3-6 public-card range
 - warnings for uncertainty or weak evidence
 
-The selector must not write final public copy.
+The selector must choose only from public `selectable_candidates`. Progression,
+defensive, goalkeeper, hidden-gem, and match-coverage profiles live in
+`audit_candidates` and may explain a decision, but they are not selectable public
+slots.
 
 ### Copy Output
 
@@ -226,6 +229,9 @@ Review output is `editorial_review.json` with:
 - alternative slate comparison
 - weakest selected card
 - strongest omitted card
+- drop-weakest verdict
+- replace-weakest verdict
+- preferred card count
 - metric-misuse findings
 - copy-style findings
 - display-name findings
@@ -293,6 +299,7 @@ The following checks remain outside the model:
 - copy avoids unsupported facts
 - review covers required dimensions
 - review names required selected and unselected candidates
+- review weakest/strongest/drop/replace fields reference valid candidate ids
 - comparison report references valid candidate ids
 - human decision references valid line outputs or explicit mixed-card choices
 - homepage and editorial artifacts compile from canonical files only
@@ -310,7 +317,7 @@ Required dimensions:
 - strongest omitted candidates by each line
 - award-type differences
 - card-count differences
-- match-coverage differences
+- match-coverage questions
 - direct-impact omission risk
 - dominant-team underselection risk
 - weak-candidate selection risk
@@ -324,7 +331,8 @@ Required dimensions:
 
 The report should separate objective differences from editorial disagreements.
 For example, an unsupported claim is a blocking risk; choosing four cards
-instead of five may be a judgment call if the rationale is clear.
+instead of five may be a judgment call if the rationale is clear. Match coverage
+is a reader question, not a quota or a blocking issue by itself.
 
 ## Human Decision Artifact
 
