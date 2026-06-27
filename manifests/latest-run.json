@@ -1,68 +1,19 @@
 {
-  "generated_at": "2026-06-27T09:35:15+00:00",
+  "generated_at": "2026-06-27T11:09:47+00:00",
   "status": "success",
   "failure_code": null,
   "hub_url": "https://www.fifatrainingcentre.com/en/fifa-world-cup-2026/match-report-hub.php",
   "discovered": 66,
   "active_sources": 66,
-  "downloaded": 12,
+  "downloaded": 0,
   "parsed": 66,
   "matches": 66,
   "source_documents": 66,
-  "new_matches": [
-    {
-      "match_no": 55,
-      "source_id": "fifa-world-cup-2026-pmsr-m55-cuw-civ-v1"
-    },
-    {
-      "match_no": 56,
-      "source_id": "fifa-world-cup-2026-pmsr-m56-ecu-ger-v1"
-    },
-    {
-      "match_no": 57,
-      "source_id": "fifa-world-cup-2026-pmsr-m57-jpn-swe-v1"
-    },
-    {
-      "match_no": 58,
-      "source_id": "fifa-world-cup-2026-pmsr-m58-tun-ned-v1"
-    },
-    {
-      "match_no": 59,
-      "source_id": "fifa-world-cup-2026-pmsr-m59-tur-usa-v1"
-    },
-    {
-      "match_no": 60,
-      "source_id": "fifa-world-cup-2026-pmsr-m60-par-aus-v1"
-    },
-    {
-      "match_no": 61,
-      "source_id": "fifa-world-cup-2026-pmsr-m61-nor-fra-v1"
-    },
-    {
-      "match_no": 62,
-      "source_id": "fifa-world-cup-2026-pmsr-m62-sen-irq-v1"
-    },
-    {
-      "match_no": 63,
-      "source_id": "fifa-world-cup-2026-pmsr-m63-egy-irn-v1"
-    },
-    {
-      "match_no": 64,
-      "source_id": "fifa-world-cup-2026-pmsr-m64-nzl-bel-v1"
-    },
-    {
-      "match_no": 65,
-      "source_id": "fifa-world-cup-2026-pmsr-m65-cpv-ksa-v1"
-    },
-    {
-      "match_no": 66,
-      "source_id": "fifa-world-cup-2026-pmsr-m66-uru-esp-v1"
-    }
-  ],
+  "new_matches": [],
   "version_updates": [],
   "supplemental": {
     "fifa_timeline": {
-      "generated_at": "2026-06-27T09:36:52+00:00",
+      "generated_at": "2026-06-27T11:10:32+00:00",
       "source": "fifa_timeline_api",
       "status": "success",
       "matches": 66,
