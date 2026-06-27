@@ -74,23 +74,5 @@
   "headline_weights": {
     "impact": 0.25,
     "attacking_threat": 0.1
-  },
-  "selection": {
-    "players_of_the_day": 3,
-    "impact_picks": 1,
-    "minimum_impact_pick_score": 18.0,
-    "goalkeeper_watch": 1,
-    "minimum_goalkeeper_score": 35.0,
-    "minimum_goalkeeper_opponent_xg": 1.0,
-    "minimum_goalkeeper_opponent_on_target": 5,
-    "require_goalkeeper_clean_sheet": true,
-    "hidden_gems": 1,
-    "minimum_hidden_gem_role_score": 34.0,
-    "require_hidden_gem_distinct_team": true,
-    "hidden_gem_profile_thresholds": {
-      "off_ball_threat": 62.0,
-      "defensive_resistance": 55.0,
-      "progression_audit": 30.0
-    }
   }
 }

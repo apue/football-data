@@ -46,17 +46,6 @@ AWARD_TYPE_ALIASES = {
     "player_of_the_day": "player_of_the_day",
     "impact": "impact_pick",
     "impact_pick": "impact_pick",
-    "progression": "progression_pick",
-    "progressor": "progression_pick",
-    "progression_pick": "progression_pick",
-    "defensive": "defensive_pick",
-    "defender": "defensive_pick",
-    "defensive_pick": "defensive_pick",
-    "goalkeeper": "goalkeeper_watch",
-    "keeper": "goalkeeper_watch",
-    "goalkeeper_watch": "goalkeeper_watch",
-    "hidden": "hidden_gem",
-    "hidden_gem": "hidden_gem",
 }
 
 
@@ -137,7 +126,7 @@ def _fallback_editorial_reason(
     award_label = award_type.replace("_", " ")
     return (
         f"Selected for {award_label} because {candidate.get('player_name')} "
-        f"has the clearest evidence packet for this slot: {evidence}."
+        f"has the clearest evidence packet for this public card: {evidence}."
     )
 
 
@@ -165,70 +154,7 @@ def fake_selection_decision(
     selection_config = experiment["selection"]
     if selection_config.get("strategy") == "overall_slate_v1":
         return _fake_overall_slate_decision(candidate_pool, experiment)
-    return _fake_slot_selection_decision(candidate_pool, experiment)
-
-
-def _fake_slot_selection_decision(
-    candidate_pool: dict[str, Any],
-    experiment: dict[str, Any],
-) -> dict[str, Any]:
-    candidates = list(candidate_pool.get("selectable_candidates", []))
-    award_limits = _selection_award_limits(experiment["selection"])
-    by_award = {
-        award: [
-            candidate
-            for candidate in candidates
-            if award in candidate.get("eligible_awards", [])
-        ]
-        for award in award_limits
-    }
-    selection_config = experiment["selection"]
-    required_slots = _selection_required_slots(selection_config)
-    slate_constraints = selection_config.get("slate_constraints", {})
-    if not isinstance(slate_constraints, dict):
-        slate_constraints = {}
-    selected: list[dict[str, Any]] = []
-    used: set[str] = set()
-    team_counts: dict[str, int] = {}
-    match_counts: dict[str, int] = {}
-    for award_type, slot_count in award_limits.items():
-        ordered = sorted(
-            by_award.get(award_type, []),
-            key=lambda candidate: _candidate_award_score(candidate, award_type),
-            reverse=True,
-        )
-        picked = 0
-        for candidate in ordered:
-            player_id = str(candidate["player_id"])
-            if player_id in used:
-                continue
-            if not _slate_allows(candidate, team_counts, match_counts, slate_constraints):
-                continue
-            selected.append(_selected_item(award_type, candidate))
-            used.add(player_id)
-            _count_slate(candidate, team_counts, match_counts)
-            picked += 1
-            if picked >= int(slot_count):
-                break
-        required_count = int(required_slots.get(award_type) or 0)
-        if picked < required_count:
-            for candidate in ordered:
-                player_id = str(candidate["player_id"])
-                if player_id in used:
-                    continue
-                selected.append(_selected_item(award_type, candidate))
-                used.add(player_id)
-                _count_slate(candidate, team_counts, match_counts)
-                picked += 1
-                if picked >= required_count:
-                    break
-    skipped = _skipped_higher_ranked_potd(candidates, selected)
-    return {
-        "selected": selected,
-        "skipped_higher_ranked": skipped,
-        "skipped_notable_candidates": [],
-        "warnings": [],
-    }
+    raise ValueError("fake_selection_decision only supports selection.strategy overall_slate_v1")
 
 
 def _fake_overall_slate_decision(
@@ -328,34 +254,8 @@ def _skipped_higher_ranked_potd(
 def _selection_award_limits(selection_config: dict[str, Any]) -> dict[str, int]:
     raw_limits = selection_config.get("award_limits")
     if not isinstance(raw_limits, dict):
-        raw_limits = selection_config.get("slots", {})
-    if not isinstance(raw_limits, dict):
         return {}
     return {str(key): int(value) for key, value in raw_limits.items()}
-
-
-def _selection_required_slots(selection_config: dict[str, Any]) -> dict[str, int]:
-    raw_required = selection_config.get("required_slots")
-    if isinstance(raw_required, dict):
-        return {str(key): int(value) for key, value in raw_required.items()}
-    if isinstance(raw_required, list):
-        return {str(item): 1 for item in raw_required}
-    raw_slots = selection_config.get("slots", {})
-    if not isinstance(raw_slots, dict):
-        return {}
-    optional_slots = {
-        str(item)
-        for item in (
-            selection_config.get("optional_slots")
-            or selection_config.get("optional_awards")
-            or []
-        )
-    }
-    return {
-        str(award_type): int(expected_count)
-        for award_type, expected_count in raw_slots.items()
-        if str(award_type) not in optional_slots
-    }
 
 
 def _target_public_card_count(
@@ -363,9 +263,8 @@ def _target_public_card_count(
     selection_config: dict[str, Any],
     award_limits: dict[str, int],
 ) -> int:
-    target_count = int(selection_config.get("target_public_cards") or 0)
-    if target_count > 0:
-        return target_count
+    if "target_public_cards" in selection_config:
+        raise ValueError("target_public_cards is retired; use public_card_count min/max")
     public_card_count = selection_config.get("public_card_count")
     if not isinstance(public_card_count, dict):
         return sum(int(value or 0) for value in award_limits.values())
@@ -456,36 +355,6 @@ def _candidate_award_score(candidate: dict[str, Any], award_type: str) -> tuple[
     if award_type == "impact_pick":
         return (
             float(role_scores.get("impact") or 0),
-            float(candidate.get("headline_score") or 0),
-            -headline_rank,
-            0,
-        )
-    if award_type == "progression_pick":
-        benchmark = candidate.get("progression_benchmark") or {}
-        return (
-            float(benchmark.get("score") or 0),
-            float(role_scores.get("progressor") or 0),
-            -headline_rank,
-            0,
-        )
-    if award_type == "defensive_pick":
-        return (
-            float(role_scores.get("defensive") or 0),
-            float(candidate.get("headline_score") or 0),
-            -headline_rank,
-            0,
-        )
-    if award_type == "goalkeeper_watch":
-        return (
-            float(role_scores.get("goalkeeper") or 0),
-            float(candidate.get("opponent_xg") or 0),
-            float(candidate.get("opponent_attempts_on_target") or 0),
-            -headline_rank,
-        )
-    if award_type == "hidden_gem":
-        profile = candidate.get("hidden_gem_profile") or {}
-        return (
-            float(profile.get("score") or 0),
             float(candidate.get("headline_score") or 0),
             -headline_rank,
             0,
