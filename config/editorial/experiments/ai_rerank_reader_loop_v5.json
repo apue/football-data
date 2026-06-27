@@ -45,10 +45,6 @@
       "player_of_the_day": 6,
       "impact_pick": 2
     },
-    "optional_awards": [
-      "player_of_the_day",
-      "impact_pick"
-    ],
     "overall_slate_award_preference": [
       "player_of_the_day",
       "impact_pick"

@@ -3,6 +3,8 @@ from __future__ import annotations
 from collections import Counter
 from typing import Any
 
+from football_data.editorial_constants import PUBLIC_AWARD_TYPES
+
 
 def validate_selection_decision(
     decision: dict[str, Any],
@@ -16,10 +18,16 @@ def validate_selection_decision(
     }
     selection_config = experiment.get("selection", {})
     award_limits = _selection_award_limits(selection_config)
+    public_awards = set(PUBLIC_AWARD_TYPES)
+    legacy_keys = {"slots", "required_slots", "optional_slots", "optional_awards", "target_public_cards"}
+    for key in sorted(legacy_keys & set(selection_config)):
+        warnings.append(f"selection.{key} is retired; use public_card_count and public award_limits")
+    for award_type in sorted(set(award_limits) - public_awards):
+        warnings.append(f"{award_type} is not an allowed public award type")
     allowed_awards = {
         award_type
         for award_type, limit in award_limits.items()
-        if int(limit) > 0
+        if int(limit) > 0 and award_type in public_awards
     }
     selected = decision.get("selected") if isinstance(decision.get("selected"), list) else []
     if not selected:
@@ -52,20 +60,11 @@ def validate_selection_decision(
         team_counts[str(candidate.get("team") or "")] += 1
         match_counts[str(candidate.get("match_key") or "")] += 1
 
-    required_slots = _selection_required_slots(selection_config)
     for award_type, expected_count in award_limits.items():
         if award_counts[award_type] > int(expected_count):
             warnings.append(f"{award_type} exceeds configured award limit")
-    for award_type, expected_count in required_slots.items():
-        if award_counts[award_type] < int(expected_count):
-            warnings.append(f"missing required slot {award_type}")
-    target_public_cards = int(selection_config.get("target_public_cards") or 0)
     public_card_count = _selection_public_card_count(selection_config)
-    if target_public_cards and len(selected) != target_public_cards:
-        warnings.append(
-            f"selected public card count {len(selected)} does not match target_public_cards {target_public_cards}"
-        )
-    elif public_card_count:
+    if public_card_count:
         min_count, max_count = public_card_count
         if len(selected) < min_count or len(selected) > max_count:
             warnings.append(
@@ -136,34 +135,8 @@ def validate_selection_decision(
 def _selection_award_limits(selection_config: dict[str, Any]) -> dict[str, int]:
     raw_limits = selection_config.get("award_limits")
     if not isinstance(raw_limits, dict):
-        raw_limits = selection_config.get("slots", {})
-    if not isinstance(raw_limits, dict):
         return {}
     return {str(key): int(value) for key, value in raw_limits.items()}
-
-
-def _selection_required_slots(selection_config: dict[str, Any]) -> dict[str, int]:
-    raw_required = selection_config.get("required_slots")
-    if isinstance(raw_required, dict):
-        return {str(key): int(value) for key, value in raw_required.items()}
-    if isinstance(raw_required, list):
-        return {str(item): 1 for item in raw_required}
-    raw_slots = selection_config.get("slots", {})
-    if not isinstance(raw_slots, dict):
-        return {}
-    optional_slots = {
-        str(item)
-        for item in (
-            selection_config.get("optional_slots")
-            or selection_config.get("optional_awards")
-            or []
-        )
-    }
-    return {
-        str(award_type): int(expected_count)
-        for award_type, expected_count in raw_slots.items()
-        if str(award_type) not in optional_slots
-    }
 
 
 def _selection_public_card_count(selection_config: dict[str, Any]) -> tuple[int, int] | None:

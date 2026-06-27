@@ -103,7 +103,7 @@ def _static_en_copy(
             body = f"{player_name}'s goal gives this pick its starting point."
         else:
             title = f"{player_name} led the day"
-            body = f"{player_name} had the strongest evidence packet for this slot."
+            body = f"{player_name} had the strongest evidence packet for this public card."
         if int(metrics.get("comeback_winner") or 0):
             body += " It was also the comeback winner."
         elif int(metrics.get("match_winning_goal") or 0):
@@ -115,11 +115,11 @@ def _static_en_copy(
         return title, body
     if award_type == "impact_pick":
         title = "The moment that mattered"
-        body = f"{player_name} gets the impact slot because the decisive evidence is clear: {_join_chips(chips)}."
+        body = f"{player_name} gets the impact angle because the decisive evidence is clear: {_join_chips(chips)}."
         return title, body
     if award_type in {"progression_pick", "defensive_pick", "goalkeeper_watch", "hidden_gem"}:
         raise ValueError(f"{award_type} is audit-only and cannot be rendered as public copy")
-    return f"{player_name} made the edit", f"{player_name} had the clearest evidence for this slot."
+    return f"{player_name} made the edit", f"{player_name} had the clearest evidence for this public card."
 
 
 def _static_zh_copy(

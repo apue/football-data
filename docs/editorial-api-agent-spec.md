@@ -201,7 +201,7 @@ Selector output is `selection_decision.json` with:
 The selector must choose only from public `selectable_candidates`. Progression,
 defensive, goalkeeper, hidden-gem, and match-coverage profiles live in
 `audit_candidates` and may explain a decision, but they are not selectable public
-slots.
+cards.
 
 ### Copy Output
 

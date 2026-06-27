@@ -1,6 +1,9 @@
 import json
 from pathlib import Path
 
+import pytest
+
+
 def test_editorial_v2_registry_resolves_default_experiment():
     from football_data.editorial_registry import (
         load_candidate_pool_config,
@@ -27,14 +30,14 @@ def test_editorial_v2_registry_resolves_default_experiment():
     assert experiment["selection"]["public_card_count"]["min"] == 3
     assert experiment["selection"]["public_card_count"]["max"] == 6
     assert "recommended_by_match_count" not in experiment["selection"]["public_card_count"]
+    assert "slots" not in experiment["selection"]
+    assert "required_slots" not in experiment["selection"]
+    assert "optional_awards" not in experiment["selection"]
+    assert "target_public_cards" not in experiment["selection"]
     assert experiment["selection"]["award_limits"] == {
         "player_of_the_day": 6,
         "impact_pick": 2,
     }
-    assert experiment["selection"]["optional_awards"] == [
-        "player_of_the_day",
-        "impact_pick",
-    ]
     assert experiment["selection"]["slate_balance"]["angle_awards_can_be_omitted"] == [
         "impact_pick",
     ]
@@ -63,6 +66,7 @@ def test_editorial_v2_registry_resolves_default_experiment():
     assert any("Fact accuracy" in item for item in selector["instructions"])
     assert any("same match" in item for item in selector["instructions"])
     assert any("not a quota" in item for item in selector["instructions"])
+    assert not any("slot" in item.lower() for item in selector["instructions"])
     assert review_profile["required_dimensions"] == [
         "obvious_omission",
         "slate_balance",
@@ -95,6 +99,9 @@ def test_editorial_v2_registry_resolves_default_experiment():
     assert en_profile["language"] == "en"
     assert en_profile["instructions"]
 
+    scoring = json.loads(Path(experiment["scoring_config"]).read_text(encoding="utf-8"))
+    assert "selection" not in scoring
+
     retired_paths = [
         "config/editorial/experiments/ai_rerank_baseline_v1.json",
         "config/editorial/experiments/ai_rerank_guardrails_v2.json",
@@ -107,6 +114,16 @@ def test_editorial_v2_registry_resolves_default_experiment():
         "config/editorial/copy_profiles/zh_natural_v1.json",
     ]
     assert not [path for path in retired_paths if Path(path).exists()]
+
+
+def test_editorial_selection_rejects_legacy_slot_strategy():
+    from football_data.editorial_selection import fake_selection_decision
+
+    with pytest.raises(ValueError, match="overall_slate_v1"):
+        fake_selection_decision(
+            {"selectable_candidates": []},
+            {"selection": {"strategy": "slot_quota_v0"}},
+        )
 
 
 def test_editorial_style_calibration_loads_curated_zh_examples():
@@ -1044,6 +1061,15 @@ def test_editorial_v2_selection_validation_requires_pool_membership_and_skip_rea
     assert role_validation["status"] == "failed"
     assert any("progression_pick is not an allowed public award type" in warning for warning in role_validation["warnings"])
 
+    polluted_experiment = json.loads(json.dumps(experiment))
+    polluted_experiment["selection"]["award_limits"]["progression_pick"] = 1
+    polluted_validation = validate_selection_decision(role_public_card, pool, polluted_experiment)
+    assert polluted_validation["status"] == "failed"
+    assert any(
+        "progression_pick is not an allowed public award type" in warning
+        for warning in polluted_validation["warnings"]
+    )
+
     aliased = json.loads(json.dumps(decision))
     aliased["selected"][-2]["award_type"] = "progression"
     aliased["selected"][-1]["award_type"] = "defensive"
@@ -1060,8 +1086,9 @@ def test_editorial_v2_selection_validation_requires_pool_membership_and_skip_rea
     normalized = normalize_selection_decision(aliased)
     normalized_validation = validate_selection_decision(normalized, pool, experiment)
     assert normalized_validation["status"] == "failed"
-    assert any("normalized award_type progression to progression_pick" in warning for warning in normalized["warnings"])
-    assert any("progression_pick is not an allowed public award type" in warning for warning in normalized_validation["warnings"])
+    assert not normalized["warnings"]
+    assert any("progression is not an allowed public award type" in warning for warning in normalized_validation["warnings"])
+    assert any("defensive is not an allowed public award type" in warning for warning in normalized_validation["warnings"])
 
     weak_reason = json.loads(json.dumps(decision))
     weak_reason["selected"][0]["editorial_reason"] = "en"
