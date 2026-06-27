@@ -1,13 +1,25 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-06-24T00:17:49+00:00",
-  "compiled_at": "2026-06-24T00:17:49+00:00",
+  "generated_at": "2026-06-27T10:49:45+00:00",
+  "compiled_at": "2026-06-27T10:49:45+00:00",
   "match_date": "2026-06-22",
   "scoring_version": "v0.4",
   "editorial_generation": {
     "workflow_variant": "ai_rerank_selection_v1",
-    "experiment_id": "ai_rerank_slate_copy_v3",
+    "experiment_id": "ai_rerank_reader_loop_v5",
     "selection_mode": "ai_rerank_only",
+    "review_profile": "reader_intuition_loop_v2",
+    "revision_policy": {
+      "mode": "reader_critic_revise_review_loop",
+      "max_revision_rounds": 2,
+      "blocking_review_requires_revision": true,
+      "revision_targets": [
+        "selection_decision",
+        "copy",
+        "review"
+      ]
+    },
+    "editorial_review_status": "pass",
     "uses_official_assists": true,
     "uses_goal_involvements": true,
     "event_source": "fifa_timeline_api",
@@ -78,9 +90,11 @@
       "goals": [
         {
           "goal_order": 1,
-          "minute": 42,
+          "minute": 43,
           "team": "Norway",
+          "player_team": "Norway",
           "player_name": "Marcus HOLMGREN PEDERSEN",
+          "own_goal": false,
           "score_before": "0-0",
           "score_after": "1-0",
           "team_score_before": 0,
@@ -94,9 +108,11 @@
         },
         {
           "goal_order": 2,
-          "minute": 47,
+          "minute": 48,
           "team": "Norway",
+          "player_team": "Norway",
           "player_name": "Erling HAALAND",
+          "own_goal": false,
           "score_before": "1-0",
           "score_after": "2-0",
           "team_score_before": 1,
@@ -107,9 +123,11 @@
         },
         {
           "goal_order": 3,
-          "minute": 52,
+          "minute": 53,
           "team": "Senegal",
+          "player_team": "Senegal",
           "player_name": "Ismaila SARR",
+          "own_goal": false,
           "score_before": "2-0",
           "score_after": "2-1",
           "team_score_before": 0,
@@ -120,9 +138,11 @@
         },
         {
           "goal_order": 4,
-          "minute": 57,
+          "minute": 58,
           "team": "Norway",
+          "player_team": "Norway",
           "player_name": "Erling HAALAND",
+          "own_goal": false,
           "score_before": "2-1",
           "score_after": "3-1",
           "team_score_before": 2,
@@ -135,9 +155,11 @@
         },
         {
           "goal_order": 5,
-          "minute": 92,
+          "minute": 93,
           "team": "Senegal",
+          "player_team": "Senegal",
           "player_name": "Ismaila SARR",
+          "own_goal": false,
           "score_before": "3-1",
           "score_after": "3-2",
           "team_score_before": 1,
@@ -152,9 +174,11 @@
       ],
       "decisive_goal": {
         "goal_order": 4,
-        "minute": 57,
+        "minute": 58,
         "team": "Norway",
+        "player_team": "Norway",
         "player_name": "Erling HAALAND",
+        "own_goal": false,
         "score_before": "2-1",
         "score_after": "3-1",
         "team_score_before": 2,
@@ -182,9 +206,11 @@
       "goals": [
         {
           "goal_order": 1,
-          "minute": 13,
+          "minute": 14,
           "team": "France",
+          "player_team": "France",
           "player_name": "Kylian MBAPPE",
+          "own_goal": false,
           "score_before": "0-0",
           "score_after": "1-0",
           "team_score_before": 0,
@@ -198,9 +224,11 @@
         },
         {
           "goal_order": 2,
-          "minute": 53,
+          "minute": 54,
           "team": "France",
+          "player_team": "France",
           "player_name": "Kylian MBAPPE",
+          "own_goal": false,
           "score_before": "1-0",
           "score_after": "2-0",
           "team_score_before": 1,
@@ -211,9 +239,11 @@
         },
         {
           "goal_order": 3,
-          "minute": 65,
+          "minute": 66,
           "team": "France",
+          "player_team": "France",
           "player_name": "Ousmane DEMBELE",
+          "own_goal": false,
           "score_before": "2-0",
           "score_after": "3-0",
           "team_score_before": 2,
@@ -241,9 +271,11 @@
       "goals": [
         {
           "goal_order": 1,
-          "minute": 37,
+          "minute": 38,
           "team": "Argentina",
+          "player_team": "Argentina",
           "player_name": "Lionel MESSI",
+          "own_goal": false,
           "score_before": "0-0",
           "score_after": "1-0",
           "team_score_before": 0,
@@ -257,9 +289,11 @@
         },
         {
           "goal_order": 2,
-          "minute": 94,
+          "minute": 95,
           "team": "Argentina",
+          "player_team": "Argentina",
           "player_name": "Lionel MESSI",
+          "own_goal": false,
           "score_before": "1-0",
           "score_after": "2-0",
           "team_score_before": 1,
@@ -290,9 +324,11 @@
       "goals": [
         {
           "goal_order": 1,
-          "minute": 35,
+          "minute": 36,
           "team": "Jordan",
+          "player_team": "Jordan",
           "player_name": "NIZAR ALRASHDAN",
+          "own_goal": false,
           "score_before": "0-0",
           "score_after": "1-0",
           "team_score_before": 0,
@@ -306,9 +342,11 @@
         },
         {
           "goal_order": 2,
-          "minute": 68,
+          "minute": 69,
           "team": "Algeria",
+          "player_team": "Algeria",
           "player_name": "Nadhir BENBOUALI",
+          "own_goal": false,
           "score_before": "1-0",
           "score_after": "1-1",
           "team_score_before": 0,
@@ -323,9 +361,11 @@
         },
         {
           "goal_order": 3,
-          "minute": 81,
+          "minute": 82,
           "team": "Algeria",
+          "player_team": "Algeria",
           "player_name": "Amine GOUIRI",
+          "own_goal": false,
           "score_before": "1-1",
           "score_after": "1-2",
           "team_score_before": 1,
@@ -343,9 +383,11 @@
       ],
       "decisive_goal": {
         "goal_order": 3,
-        "minute": 81,
+        "minute": 82,
         "team": "Algeria",
+        "player_team": "Algeria",
         "player_name": "Amine GOUIRI",
+        "own_goal": false,
         "score_before": "1-1",
         "score_after": "1-2",
         "team_score_before": 1,
@@ -402,15 +444,15 @@
           "射门质量突出"
         ]
       },
-      "selection_reason": "Two goals for France, including the opener, with three shots on target in a 3-0 win.",
+      "selection_reason": "Selected for two goals for France, including the opener, with three shots on target in a 3-0 win.",
       "content": {
         "en": {
-          "title": "Mbappe Took the Early Grip",
+          "title": "Mbappe took the early grip",
           "html": "<p>Mbappe put France ahead in the 13th minute and scored again after half-time. Two goals and three shots on target gave France the cleanest attacking lead in a 3-0 win.</p>"
         },
         "zh": {
           "title": "姆巴佩梅开二度",
-          "html": "<p>姆巴佩第13分钟先进一球，第53分钟又进一个。法国3-0赢伊拉克，他这两脚处理得很干脆。</p>"
+          "html": "<p>姆巴佩第13分钟先进一球，第53分钟又进一个。法国3-0赢伊拉克，他两次射门都在关键阶段改写比分。</p>"
         }
       }
     },
@@ -455,15 +497,15 @@
           "射门质量突出"
         ]
       },
-      "selection_reason": "A brace in Argentina's 2-0 win, with the first goal opening the scoring and the second coming in stoppage time.",
+      "selection_reason": "Selected for a brace in Argentina's 2-0 win, with the first goal opening the scoring and the second coming in stoppage time.",
       "content": {
         "en": {
-          "title": "Messi Finished Both Ends",
-          "html": "<p>Messi scored in the 37th minute and again in stoppage time. Argentina beat Austria 2-0, and he did not leave those chances hanging.</p>"
+          "title": "Messi finished both ends",
+          "html": "<p>Messi scored in the 37th minute and again in stoppage time. Argentina beat Austria 2-0, and both goals came from him.</p>"
         },
         "zh": {
           "title": "梅西梅开二度",
-          "html": "<p>梅西第37分钟先破门，补时阶段又进一个。阿根廷2-0赢奥地利，他这场没有浪费机会。</p>"
+          "html": "<p>梅西第37分钟先破门，补时阶段又进一个。阿根廷2-0赢奥地利，两个进球都来自他。</p>"
         }
       }
     },
@@ -505,15 +547,15 @@
           "射门质量突出"
         ]
       },
-      "selection_reason": "Two goals in Norway's 3-2 win over Senegal, including the eventual match-winning goal.",
+      "selection_reason": "Selected for two goals in Norway's 3-2 win over Senegal, including the eventual match-winning goal.",
       "content": {
         "en": {
-          "title": "Haaland Gave Norway Enough",
-          "html": "<p>Haaland scored in the 47th and 57th minutes, and the second one later counted as the winner. Norway still had to hold on for 3-2, but those two finishes were enough.</p>"
+          "title": "Haaland gave Norway enough",
+          "html": "<p>Haaland scored in the 47th and 57th minutes, and the second one later counted as the winner. Norway still had to hold on for 3-2, but his two finishes made the difference.</p>"
         },
         "zh": {
           "title": "哈兰德双响制胜",
-          "html": "<p>哈兰德第47分钟、第57分钟各进一球，第二球后来成了制胜球。挪威最后3-2赢下来，这两脚够硬。</p>"
+          "html": "<p>哈兰德第47分钟、第57分钟各进一球，第二球后来成了制胜球。挪威最后3-2赢下来。</p>"
         }
       }
     },
@@ -557,63 +599,15 @@
           "取得进球"
         ]
       },
-      "selection_reason": "His 81st-minute goal completed Algeria's comeback and turned 1-1 into a 2-1 win.",
+      "selection_reason": "Selected because his 81st-minute goal completed Algeria's comeback and turned 1-1 into a 2-1 win.",
       "content": {
         "en": {
-          "title": "Gouiri Hit It on Time",
+          "title": "Gouiri hit it on time",
           "html": "<p>Gouiri changed the score in the 81st minute. Algeria had come from behind to reach 1-1; his finish made it 2-1.</p>"
         },
         "zh": {
           "title": "古伊里第81分钟制胜",
-          "html": "<p>第81分钟，古伊里把比分改成2-1。阿尔及利亚从落后到反超，这一脚来得正好。</p>"
-        }
-      }
-    },
-    {
-      "award_type": "progression_pick",
-      "award_types": [
-        "progression_pick"
-      ],
-      "award_label": {
-        "en": "Progression Engine",
-        "zh": "进攻发动机"
-      },
-      "player_id": "FIFA-2026-M44-JOR-ALG|Algeria|22",
-      "player_name": "Ibrahim MAZA",
-      "team": "Algeria",
-      "opponent": "Jordan",
-      "match_key": "FIFA-2026-M44-JOR-ALG",
-      "match_no": 44,
-      "player_no": 22,
-      "position": "MF",
-      "score": 57.02,
-      "metrics": {
-        "passes_completed": 26,
-        "line_breaks_completed": 7,
-        "ball_progressions": 10,
-        "take_ons": 7,
-        "step_ins": 3,
-        "offers_received": 24
-      },
-      "evidence_chips": {
-        "en": [
-          "constant carries",
-          "between-line presence"
-        ],
-        "zh": [
-          "推进很活跃",
-          "在防线之间活跃"
-        ]
-      },
-      "selection_reason": "A publishable progression case because he paired carrying volume with between-line receiving and attacking involvement.",
-      "content": {
-        "en": {
-          "title": "Maza Kept Finding the Next Pass",
-          "html": "<p>Maza kept showing for the ball around the front half and carried Algeria forward 10 times. It was not the loudest game on the slate, but his touches helped keep Algeria connected.</p>"
-        },
-        "zh": {
-          "title": "马扎不断接球向前",
-          "html": "<p>马扎这场一直在前场附近接球、带球往前走。10次带球推进，加上多次在防线之间接应，阿尔及利亚需要这种连接。</p>"
+          "html": "<p>第81分钟，古伊里把比分改成2-1。阿尔及利亚从落后追到1-1，再靠这一球反超。</p>"
         }
       }
     }

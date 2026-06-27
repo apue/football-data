@@ -6,24 +6,26 @@ from pathlib import Path
 DEFAULT_SCORING_CONFIG = Path("config/scoring/v0.4.json")
 
 
+PUBLIC_AWARD_TYPES = ("player_of_the_day", "impact_pick")
+
 AWARD_LABELS = {
     "player_of_the_day": {"en": "Player of the Day", "zh": "每日最佳球员"},
     "impact_pick": {"en": "Impact Pick", "zh": "影响力精选"},
-    "progression_pick": {"en": "Progression Engine", "zh": "进攻发动机"},
-    "defensive_pick": {"en": "Defensive Pick", "zh": "防守精选"},
-    "goalkeeper_watch": {"en": "Goalkeeper Watch", "zh": "门将关注"},
-    "hidden_gem": {"en": "Hidden Gem", "zh": "隐藏亮点"},
 }
 
+AUDIT_LABELS = {
+    "progression_pick": {"en": "Progression Audit", "zh": "推进审计"},
+    "defensive_pick": {"en": "Defensive Audit", "zh": "防守审计"},
+    "goalkeeper_watch": {"en": "Goalkeeper Audit", "zh": "门将审计"},
+    "hidden_gem": {"en": "Hidden-Gem Audit", "zh": "隐藏亮点审计"},
+}
 
-AWARD_DISPLAY_ORDER = [
-    "player_of_the_day",
-    "impact_pick",
-    "progression_pick",
-    "defensive_pick",
-    "goalkeeper_watch",
-    "hidden_gem",
-]
+ALL_AWARD_LABELS = {
+    **AWARD_LABELS,
+    **AUDIT_LABELS,
+}
+
+AWARD_DISPLAY_ORDER = list(PUBLIC_AWARD_TYPES)
 
 
 AWARD_DISPLAY_PRIORITY = {

@@ -2,13 +2,12 @@ from __future__ import annotations
 
 from typing import Any
 
-from football_data.editorial_constants import AWARD_LABELS
+from football_data.editorial_constants import ALL_AWARD_LABELS, AWARD_LABELS
 from football_data.editorial_evidence import choice_metrics, evidence_chips
 from football_data.editorial_display_names import player_display_entry
 
 
-AWARD_ROLE_MAP = {
-    "impact_pick": "impact",
+AUDIT_ROLE_MAP = {
     "progression_pick": "progressor",
     "defensive_pick": "defensive",
     "goalkeeper_watch": "goalkeeper",
@@ -24,6 +23,7 @@ def build_candidate_pool(
         for player in rankings.get("players", [])
     }
     candidates: dict[str, dict[str, Any]] = {}
+    audit_candidates: dict[tuple[str, str], dict[str, Any]] = {}
     headline = rankings.get("rankings", {}).get("headline", [])
     potd_top_n = int(pool_config.get("potd_top_n", 8))
     for item in headline[:potd_top_n]:
@@ -31,7 +31,7 @@ def build_candidate_pool(
 
     roles = rankings.get("rankings", {}).get("roles", {})
     role_top_n = int(pool_config.get("role_top_n", 5))
-    for award_type, role in AWARD_ROLE_MAP.items():
+    for award_type, role in AUDIT_ROLE_MAP.items():
         if award_type == "goalkeeper_watch" and not pool_config.get("include_goalkeepers", True):
             continue
         if award_type == "progression_pick":
@@ -41,7 +41,7 @@ def build_candidate_pool(
         else:
             role_items = roles.get(role, [])[:role_top_n]
         for item in role_items:
-            _add_candidate(candidates, players_by_id, item, award_type, f"{role}_top_n")
+            _add_audit_candidate(audit_candidates, players_by_id, item, award_type, f"{role}_top_n")
 
     for item in roles.get("impact", [])[: int(pool_config.get("impact_top_n", 5))]:
         if float(item.get("rank_score") or 0) > 0:
@@ -62,8 +62,8 @@ def build_candidate_pool(
             reverse=True,
         )
         for player in hidden_players[:role_top_n]:
-            _add_candidate(
-                candidates,
+            _add_audit_candidate(
+                audit_candidates,
                 players_by_id,
                 player,
                 "hidden_gem",
@@ -74,6 +74,15 @@ def build_candidate_pool(
         candidates.values(),
         key=lambda item: (
             int(item.get("headline_rank") or 9999),
+            str(item.get("team") or ""),
+            str(item.get("player_name") or ""),
+        ),
+    )
+    audit_selectable = sorted(
+        audit_candidates.values(),
+        key=lambda item: (
+            int(item.get("headline_rank") or 9999),
+            str(item.get("audit_type") or ""),
             str(item.get("team") or ""),
             str(item.get("player_name") or ""),
         ),
@@ -94,6 +103,7 @@ def build_candidate_pool(
         "scoring_version": rankings["scoring_version"],
         "pool_config_id": pool_config["id"],
         "selectable_candidates": selectable,
+        "audit_candidates": audit_selectable,
         "near_misses": near_misses,
         "rank_lookup": {
             str(item["player_id"]): {
@@ -227,6 +237,37 @@ def _add_candidate(
         "award_label": AWARD_LABELS.get(award_type, {"en": award_type, "zh": award_type}),
         "metrics": choice_metrics(candidate, award_type),
         "evidence_chips": evidence_chips(candidate, award_type),
+        "role_scores": candidate.get("role_scores", {}),
+        "score_components": candidate.get("score_components", []),
+    }
+
+
+def _add_audit_candidate(
+    audit_candidates: dict[tuple[str, str], dict[str, Any]],
+    players_by_id: dict[str, dict[str, Any]],
+    source: dict[str, Any],
+    audit_type: str,
+    reason: str,
+) -> None:
+    player_id = str(source["player_id"])
+    player = dict(players_by_id.get(player_id, source))
+    if "rank_score" in source:
+        player["rank_score"] = source["rank_score"]
+    key = (player_id, audit_type)
+    candidate = audit_candidates.setdefault(key, player)
+    candidate["audit_type"] = audit_type
+    candidate.setdefault("audit_reasons", [])
+    candidate.setdefault("audit_contexts", {})
+    display_entry = player_display_entry(str(candidate.get("player_name") or ""), "zh")
+    if display_entry:
+        candidate.setdefault("display_names", {})
+        candidate["display_names"]["zh"] = display_entry
+    if reason not in candidate["audit_reasons"]:
+        candidate["audit_reasons"].append(reason)
+    candidate["audit_contexts"][audit_type] = {
+        "award_label": ALL_AWARD_LABELS.get(audit_type, {"en": audit_type, "zh": audit_type}),
+        "metrics": choice_metrics(candidate, audit_type),
+        "evidence_chips": evidence_chips(candidate, audit_type),
         "role_scores": candidate.get("role_scores", {}),
         "score_components": candidate.get("score_components", []),
     }

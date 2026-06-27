@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-06-25T07:38:06+00:00",
-  "compiled_at": "2026-06-25T07:38:06+00:00",
+  "generated_at": "2026-06-27T10:51:08+00:00",
+  "compiled_at": "2026-06-27T10:51:08+00:00",
   "match_date": "2026-06-16",
   "scoring_version": "v0.4",
   "editorial_generation": {
@@ -579,54 +579,6 @@
         "zh": {
           "title": "哈兰德梅开二度",
           "html": "<p>挪威4-1伊拉克，哈兰德第29分钟首开纪录，第43分钟又把比分改成2-1。4脚射门3次射正，两个进球都在关键节点上。</p>"
-        }
-      }
-    },
-    {
-      "award_type": "defensive_pick",
-      "award_types": [
-        "defensive_pick"
-      ],
-      "award_label": {
-        "en": "Defensive Pick",
-        "zh": "防守精选"
-      },
-      "player_id": "FIFA-2026-M20-AUT-JOR|Austria|4",
-      "player_name": "Xaver SCHLAGER",
-      "team": "Austria",
-      "opponent": "Jordan",
-      "match_key": "FIFA-2026-M20-AUT-JOR",
-      "match_no": 20,
-      "player_no": 4,
-      "position": "MF",
-      "score": 66.09,
-      "metrics": {
-        "possession_regains": 11,
-        "possession_interrupted": 5,
-        "tackles_won": 3,
-        "interceptions": 3,
-        "blocks": 4,
-        "clearances": 2
-      },
-      "evidence_chips": {
-        "en": [
-          "assist",
-          "ball-winning profile"
-        ],
-        "zh": [
-          "送出助攻",
-          "夺回球权能力突出"
-        ]
-      },
-      "selection_reason": "Selected as the fourth card because Austria-Jordan would otherwise be unrepresented on a four-match day, and Schlager combines a first-goal assist with the match's strongest Austria defensive packet.",
-      "content": {
-        "en": {
-          "title": "Schlager gave Austria both sides",
-          "html": "<p>Xaver Schlager assisted Austria's first goal against Jordan, then kept working through midfield. His 11 regains and 4 blocks give the fourth card a different shape.</p>"
-        },
-        "zh": {
-          "title": "施拉格中场抢回球权",
-          "html": "<p>奥地利3-1约旦，施拉格送出首球助攻。中场还有11次夺回球权和4次封堵，攻防两头都有痕迹。</p>"
         }
       }
     }

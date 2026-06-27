@@ -45,8 +45,8 @@ def test_demo_uses_player_first_bilingual_dashboard(tmp_path):
               }
             },
             {
-              "award_type": "progression_pick",
-              "award_label": {"en": "Progression Engine", "zh": "进攻发动机"},
+              "award_type": "impact_pick",
+              "award_label": {"en": "Impact Pick", "zh": "影响力精选"},
               "player_name": "Granit XHAKA",
               "team": "Switzerland",
               "opponent": "Bosnia and Herzegovina",
@@ -61,8 +61,8 @@ def test_demo_uses_player_first_bilingual_dashboard(tmp_path):
               }
             },
             {
-              "award_type": "hidden_gem",
-              "award_label": {"en": "Hidden Gem", "zh": "隐藏亮点"},
+              "award_type": "impact_pick",
+              "award_label": {"en": "Impact Pick", "zh": "影响力精选"},
               "player_name": "LEE Gihyuk",
               "team": "Korea Republic",
               "opponent": "Mexico",
@@ -95,7 +95,7 @@ def test_demo_uses_player_first_bilingual_dashboard(tmp_path):
     assert "最清楚的进攻答案" in html
     assert "🇰🇷 LEE Gihyuk" in html
     assert "The hidden defensive note" in html
-    assert "隐藏亮点" in html
+    assert "影响力精选" in html
     assert "<span>score</span>" not in html
     assert "<strong>37.5</strong>" not in html
     assert "<th>Score</th>" not in html

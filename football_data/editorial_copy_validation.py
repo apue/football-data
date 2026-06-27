@@ -91,10 +91,6 @@ def _zh_title_core_fact_warnings(
             warnings.append(f"missing zh title core fact winner in {player_id}")
     if goals == 0 and assists >= 2 and not _has_any(title, ["两次助攻", "双助攻", "助攻双响"]):
         warnings.append(f"missing zh title core fact assists>=2 in {player_id}")
-    if award_type == "progression_pick" and not _has_any(title, ["推进", "向前", "接球", "串起", "连接"]):
-        warnings.append(f"missing zh title core fact progression in {player_id}")
-    if award_type == "defensive_pick" and not _has_any(title, ["防守", "抢回", "封堵", "拦截"]):
-        warnings.append(f"missing zh title core fact defensive in {player_id}")
     return warnings
 
 

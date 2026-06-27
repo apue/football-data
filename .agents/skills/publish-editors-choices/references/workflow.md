@@ -55,7 +55,7 @@ Read the fact pack before writing local editor outputs. It is the default source
 - `agent-runs/YYYY-MM-DD/copy.json`: final English and Chinese card copy generated from the selected candidate evidence packets.
 - `agent-runs/YYYY-MM-DD/editorial_review.json`: local reader-intuition review of the final slate and copy.
 
-Do not edit compiled frontend JSON directly. If the output is wrong, change selection/copy/review, scoring config, candidate-pool config, prompts/profiles, or deterministic validation, then prepare/compile again. The active slate is overall-first: pick the strongest 3-6 public cards when evidence supports them, then use award types as editorial angles rather than fixed quotas. Use the match-count recommendation as guidance, not a quota; a shorter slate is correct when the remaining cases are thin. Progression, defensive, goalkeeper, impact, and hidden-gem labels are optional; do not fill them with weaker candidates just for variety. The slate normally allows at most two public cards from the same match, but a dominant result with multiple top-ranked, independently strong candidates can justify a third.
+Do not edit compiled frontend JSON directly. If the output is wrong, change selection/copy/review, scoring config, candidate-pool config, prompts/profiles, or deterministic validation, then prepare/compile again. The active slate is overall-first: pick the strongest 3-6 public cards when evidence supports them. Public award types are Player of the Day and Impact Pick only. The upper bound is capacity, not a target; a shorter slate is correct when the next card is materially weaker. Progression, defensive, goalkeeper, and hidden-gem metrics may appear in audit packets or as supporting evidence, but must not be standalone public labels. The slate normally allows at most two public cards from the same match, but a dominant result with multiple top-ranked, independently strong candidates can justify a third.
 
 7. Compile and publish the local result:
 
@@ -91,13 +91,13 @@ The active production experiment is `ai_rerank_reader_loop_v5`, using the `ai_re
 
 ```text
 load active experiment registry
-  -> deterministic ranking and rich candidate-pool build
+  -> deterministic ranking and public/audit candidate-pool build
   -> deterministic editorial fact-pack build
   -> local Codex reranks only candidate_pool.selectable_candidates
   -> deterministic selection validation
   -> English and Chinese copy from selected evidence packets
   -> deterministic copy validation
-  -> local reader-intuition loop review with slate coverage, reader questions, alternative slate comparison, weakest selected, strongest omitted, and deterministic review validation
+  -> local reader-intuition loop review with slate coverage, reader questions, alternative slate comparison, weakest selected, strongest omitted, drop/replace verdicts, preferred card count, and deterministic review validation
   -> compile public editorial artifacts
   -> rebuild homepage
 ```
@@ -106,13 +106,13 @@ The GitHub `Update Dataset` workflow should fetch and rebuild data and deploy th
 
 8. Review local audit files:
 
-- `candidate_pool.json`: Top 8 selectable candidates, near misses, rank lookup, and candidate-pool reasons.
+- `candidate_pool.json`: public `selectable_candidates`, audit-only role/coverage `audit_candidates`, near misses, rank lookup, and candidate-pool reasons.
 - `selector_input.json`: what local Codex should consider, usually name-sorted so it is not anchored to score order.
 - `editorial_fact_pack.json` / `.md`: fixed fact review for matches, goals, assists, own goals, team pressure, goalkeeper checks, direct-impact candidates, metric-led candidates, and reader traps.
 - `selection_decision.json`: selected players, editorial reasons, and reasons for skipping higher-ranked or notable candidates.
 - `selection_validation.json`: deterministic checks for pool membership, the 3-6 public-card count range, award limits, slate balance, and skipped-higher-ranked explanations.
 - `copy_validation.json`: deterministic checks for banned public Chinese abstract terms and other copy-profile gates.
-- `editorial_review_payload.json`: compact review packet covering selected players, required top-ranked unselected candidates, slate counts, validation status, and copy.
+- `editorial_review_payload.json`: compact review packet covering selected players, required top-ranked unselected candidates, audit candidates, slate counts, validation status, and copy.
 - `editorial_review_payload.json` also includes `style_calibration` examples loaded from `config/editorial/style_calibration/` when the active review profile requests them.
 - `editorial_review.json`: local Codex reader-intuition review for obvious omissions, slate balance, metric misuse, copy style, style calibration, and display-name register.
 - `editorial_review_validation.json`: deterministic check that the review covered required dimensions, selected players, required unselected candidates, and has no blocking findings.
@@ -127,7 +127,7 @@ If output is poor, repair the source of the problem: scoring config, candidate-p
 - Did local Codex inspect `editorial_fact_pack` before making selection/copy claims?
 - Is every selected player present in the candidate pool?
 - Does the whole slate avoid overconcentrating one match unless the extra card has an extraordinary independent reason?
-- Does the slate avoid picking a weaker Progression Engine, Defensive Pick, Goalkeeper Watch, Hidden Gem, or Impact Pick just to fill an angle?
+- Does the slate avoid picking a weaker card just to fill match coverage, and does it reject standalone progression, defensive, goalkeeper, or hidden-gem public labels?
 - Does each card have a distinct football angle?
 - Are there at most two or three key facts per body?
 - Does `copy_validation.json` pass?

@@ -117,27 +117,8 @@ def _static_en_copy(
         title = "The moment that mattered"
         body = f"{player_name} gets the impact slot because the decisive evidence is clear: {_join_chips(chips)}."
         return title, body
-    if award_type == "progression_pick":
-        title = "The route forward"
-        line_breaks = int(metrics.get("line_breaks_completed") or 0)
-        progressions = int(metrics.get("ball_progressions") or 0)
-        body = (
-            f"{player_name} earns the progression slot with {line_breaks} line breaks"
-            f" and {progressions} ball progressions."
-        )
-        return title, body
-    if award_type == "defensive_pick":
-        title = "The defensive answer"
-        body = f"{player_name} stood out through defensive actions: {_join_chips(chips)}."
-        return title, body
-    if award_type == "goalkeeper_watch":
-        title = "The clean sheet under pressure"
-        body = f"{player_name} gets the goalkeeper note because the clean sheet came with measurable pressure."
-        return title, body
-    if award_type == "hidden_gem":
-        title = "The quieter useful game"
-        body = f"{player_name} is the hidden-gem pick for the less obvious work behind the headline choices."
-        return title, body
+    if award_type in {"progression_pick", "defensive_pick", "goalkeeper_watch", "hidden_gem"}:
+        raise ValueError(f"{award_type} is audit-only and cannot be rendered as public copy")
     return f"{player_name} made the edit", f"{player_name} had the clearest evidence for this slot."
 
 
@@ -180,24 +161,8 @@ def _static_zh_copy(
         title = "制胜球" if int(metrics.get("match_winning_goal") or 0) else "关键进球"
         body = f"{player_name}这次影响力精选来自：{_join_chips(chips, language='zh')}。"
         return title, body
-    if award_type == "progression_pick":
-        title = "持续接球向前"
-        line_breaks = int(metrics.get("line_breaks_completed") or 0)
-        progressions = int(metrics.get("ball_progressions") or 0)
-        body = f"{player_name}这场有 {line_breaks} 次打穿防线和 {progressions} 次带球推进。"
-        return title, body
-    if award_type == "defensive_pick":
-        title = "防守端最抢眼"
-        body = f"{player_name}这场防守端很突出：{_join_chips(chips, language='zh')}。"
-        return title, body
-    if award_type == "goalkeeper_watch":
-        title = "有压力的零封"
-        body = f"{player_name}的门将关注来自零封，以及对手制造出的可量化压力。"
-        return title, body
-    if award_type == "hidden_gem":
-        title = "不抢镜，但有用"
-        body = f"{player_name}是这期隐藏亮点，价值在于那些不一定进入头条的持续贡献。"
-        return title, body
+    if award_type in {"progression_pick", "defensive_pick", "goalkeeper_watch", "hidden_gem"}:
+        raise ValueError(f"{award_type} is audit-only and cannot be rendered as public copy")
     return f"{player_name} 入选", f"{player_name} 的证据最能支撑这个席位。"
 
 

@@ -1,0 +1,789 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-06-27T10:53:47+00:00",
+  "compiled_at": "2026-06-27T10:53:47+00:00",
+  "match_date": "2026-06-25",
+  "scoring_version": "v0.4",
+  "editorial_generation": {
+    "workflow_variant": "ai_rerank_selection_v1",
+    "experiment_id": "ai_rerank_reader_loop_v5",
+    "selection_mode": "ai_rerank_only",
+    "review_profile": "reader_intuition_loop_v2",
+    "revision_policy": {
+      "mode": "reader_critic_revise_review_loop",
+      "max_revision_rounds": 2,
+      "blocking_review_requires_revision": true,
+      "revision_targets": [
+        "selection_decision",
+        "copy",
+        "review"
+      ]
+    },
+    "editorial_review_status": "pass",
+    "uses_official_assists": true,
+    "uses_goal_involvements": true,
+    "event_source": "fifa_timeline_api",
+    "event_sources": {
+      "goal_involvements": "fifa_timeline_api"
+    }
+  },
+  "matches": [
+    {
+      "match_key": "FIFA-2026-M55-CUW-CIV",
+      "match_no": 55,
+      "match_date": "2026-06-25",
+      "kickoff_time": "16:00",
+      "stadium": "Philadelphia Stadium",
+      "home_team": "Curaçao",
+      "away_team": "Côte d'Ivoire",
+      "home_score": 0,
+      "away_score": 2
+    },
+    {
+      "match_key": "FIFA-2026-M56-ECU-GER",
+      "match_no": 56,
+      "match_date": "2026-06-25",
+      "kickoff_time": "16:00",
+      "stadium": "New York/New Jersey Stadium",
+      "home_team": "Ecuador",
+      "away_team": "Germany",
+      "home_score": 2,
+      "away_score": 1
+    },
+    {
+      "match_key": "FIFA-2026-M57-JPN-SWE",
+      "match_no": 57,
+      "match_date": "2026-06-25",
+      "kickoff_time": "18:00",
+      "stadium": "Dallas Stadium",
+      "home_team": "Japan",
+      "away_team": "Sweden",
+      "home_score": 1,
+      "away_score": 1
+    },
+    {
+      "match_key": "FIFA-2026-M58-TUN-NED",
+      "match_no": 58,
+      "match_date": "2026-06-25",
+      "kickoff_time": "18:00",
+      "stadium": "Kansas City Stadium",
+      "home_team": "Tunisia",
+      "away_team": "Netherlands",
+      "home_score": 1,
+      "away_score": 3
+    },
+    {
+      "match_key": "FIFA-2026-M59-TUR-USA",
+      "match_no": 59,
+      "match_date": "2026-06-25",
+      "kickoff_time": "19:00",
+      "stadium": "Los Angeles Stadium",
+      "home_team": "Türkiye",
+      "away_team": "USA",
+      "home_score": 3,
+      "away_score": 2
+    },
+    {
+      "match_key": "FIFA-2026-M60-PAR-AUS",
+      "match_no": 60,
+      "match_date": "2026-06-25",
+      "kickoff_time": "19:00",
+      "stadium": "San Francisco Bay Area Stadium",
+      "home_team": "Paraguay",
+      "away_team": "Australia",
+      "home_score": 0,
+      "away_score": 0
+    }
+  ],
+  "match_flows": {
+    "FIFA-2026-M55-CUW-CIV": {
+      "match_key": "FIFA-2026-M55-CUW-CIV",
+      "match_no": 55,
+      "match_date": "2026-06-25",
+      "home_team": "Curaçao",
+      "away_team": "Côte d'Ivoire",
+      "home_score": 0,
+      "away_score": 2,
+      "winner_team": "Côte d'Ivoire",
+      "home_trailing_at_any_point": true,
+      "away_trailing_at_any_point": false,
+      "home_came_from_behind_to_win": false,
+      "away_came_from_behind_to_win": false,
+      "goals": [
+        {
+          "goal_order": 1,
+          "minute": 7,
+          "team": "Côte d'Ivoire",
+          "player_team": "Côte d'Ivoire",
+          "player_name": "Nicolas PEPE",
+          "own_goal": false,
+          "score_before": "0-0",
+          "score_after": "0-1",
+          "team_score_before": 0,
+          "opponent_score_before": 0,
+          "team_score_after": 1,
+          "opponent_score_after": 0,
+          "tags": [
+            "opening_goal",
+            "go_ahead_goal"
+          ]
+        },
+        {
+          "goal_order": 2,
+          "minute": 64,
+          "team": "Côte d'Ivoire",
+          "player_team": "Côte d'Ivoire",
+          "player_name": "Nicolas PEPE",
+          "own_goal": false,
+          "score_before": "0-1",
+          "score_after": "0-2",
+          "team_score_before": 1,
+          "opponent_score_before": 0,
+          "team_score_after": 2,
+          "opponent_score_after": 0,
+          "tags": []
+        }
+      ],
+      "decisive_goal": null
+    },
+    "FIFA-2026-M56-ECU-GER": {
+      "match_key": "FIFA-2026-M56-ECU-GER",
+      "match_no": 56,
+      "match_date": "2026-06-25",
+      "home_team": "Ecuador",
+      "away_team": "Germany",
+      "home_score": 2,
+      "away_score": 1,
+      "winner_team": "Ecuador",
+      "home_trailing_at_any_point": true,
+      "away_trailing_at_any_point": true,
+      "home_came_from_behind_to_win": true,
+      "away_came_from_behind_to_win": false,
+      "goals": [
+        {
+          "goal_order": 1,
+          "minute": 2,
+          "team": "Germany",
+          "player_team": "Germany",
+          "player_name": "Leroy SANE",
+          "own_goal": false,
+          "score_before": "0-0",
+          "score_after": "0-1",
+          "team_score_before": 0,
+          "opponent_score_before": 0,
+          "team_score_after": 1,
+          "opponent_score_after": 0,
+          "tags": [
+            "opening_goal",
+            "go_ahead_goal"
+          ]
+        },
+        {
+          "goal_order": 2,
+          "minute": 9,
+          "team": "Ecuador",
+          "player_team": "Ecuador",
+          "player_name": "Nilson ANGULO",
+          "own_goal": false,
+          "score_before": "0-1",
+          "score_after": "1-1",
+          "team_score_before": 0,
+          "opponent_score_before": 1,
+          "team_score_after": 1,
+          "opponent_score_after": 1,
+          "tags": [
+            "equalizer",
+            "comeback_equalizer",
+            "team_came_from_behind_goal"
+          ]
+        },
+        {
+          "goal_order": 3,
+          "minute": 77,
+          "team": "Ecuador",
+          "player_team": "Ecuador",
+          "player_name": "Gonzalo PLATA",
+          "own_goal": false,
+          "score_before": "1-1",
+          "score_after": "2-1",
+          "team_score_before": 1,
+          "opponent_score_before": 1,
+          "team_score_after": 2,
+          "opponent_score_after": 1,
+          "tags": [
+            "go_ahead_goal",
+            "match_winning_goal",
+            "late_goal",
+            "team_came_from_behind_goal",
+            "comeback_winner"
+          ]
+        }
+      ],
+      "decisive_goal": {
+        "goal_order": 3,
+        "minute": 77,
+        "team": "Ecuador",
+        "player_team": "Ecuador",
+        "player_name": "Gonzalo PLATA",
+        "own_goal": false,
+        "score_before": "1-1",
+        "score_after": "2-1",
+        "team_score_before": 1,
+        "opponent_score_before": 1,
+        "team_score_after": 2,
+        "opponent_score_after": 1,
+        "tags": [
+          "go_ahead_goal",
+          "match_winning_goal",
+          "late_goal",
+          "team_came_from_behind_goal",
+          "comeback_winner"
+        ]
+      }
+    },
+    "FIFA-2026-M57-JPN-SWE": {
+      "match_key": "FIFA-2026-M57-JPN-SWE",
+      "match_no": 57,
+      "match_date": "2026-06-25",
+      "home_team": "Japan",
+      "away_team": "Sweden",
+      "home_score": 1,
+      "away_score": 1,
+      "winner_team": null,
+      "home_trailing_at_any_point": false,
+      "away_trailing_at_any_point": true,
+      "home_came_from_behind_to_win": false,
+      "away_came_from_behind_to_win": false,
+      "goals": [
+        {
+          "goal_order": 1,
+          "minute": 56,
+          "team": "Japan",
+          "player_team": "Japan",
+          "player_name": "Daizen MAEDA",
+          "own_goal": false,
+          "score_before": "0-0",
+          "score_after": "1-0",
+          "team_score_before": 0,
+          "opponent_score_before": 0,
+          "team_score_after": 1,
+          "opponent_score_after": 0,
+          "tags": [
+            "opening_goal",
+            "go_ahead_goal"
+          ]
+        },
+        {
+          "goal_order": 2,
+          "minute": 62,
+          "team": "Sweden",
+          "player_team": "Sweden",
+          "player_name": "Anthony ELANGA",
+          "own_goal": false,
+          "score_before": "1-0",
+          "score_after": "1-1",
+          "team_score_before": 0,
+          "opponent_score_before": 1,
+          "team_score_after": 1,
+          "opponent_score_after": 1,
+          "tags": [
+            "equalizer",
+            "comeback_equalizer"
+          ]
+        }
+      ],
+      "decisive_goal": null
+    },
+    "FIFA-2026-M58-TUN-NED": {
+      "match_key": "FIFA-2026-M58-TUN-NED",
+      "match_no": 58,
+      "match_date": "2026-06-25",
+      "home_team": "Tunisia",
+      "away_team": "Netherlands",
+      "home_score": 1,
+      "away_score": 3,
+      "winner_team": "Netherlands",
+      "home_trailing_at_any_point": true,
+      "away_trailing_at_any_point": false,
+      "home_came_from_behind_to_win": false,
+      "away_came_from_behind_to_win": false,
+      "goals": [
+        {
+          "goal_order": 1,
+          "minute": 3,
+          "team": "Netherlands",
+          "player_team": "Tunisia",
+          "player_name": "Ellyes SKHIRI",
+          "own_goal": true,
+          "score_before": "0-0",
+          "score_after": "0-1",
+          "team_score_before": 0,
+          "opponent_score_before": 0,
+          "team_score_after": 1,
+          "opponent_score_after": 0,
+          "tags": [
+            "opening_goal",
+            "go_ahead_goal"
+          ]
+        },
+        {
+          "goal_order": 2,
+          "minute": 7,
+          "team": "Netherlands",
+          "player_team": "Netherlands",
+          "player_name": "Brian BROBBEY",
+          "own_goal": false,
+          "score_before": "0-1",
+          "score_after": "0-2",
+          "team_score_before": 1,
+          "opponent_score_before": 0,
+          "team_score_after": 2,
+          "opponent_score_after": 0,
+          "tags": []
+        },
+        {
+          "goal_order": 3,
+          "minute": 54,
+          "team": "Tunisia",
+          "player_team": "Tunisia",
+          "player_name": "Hazem MASTOURI",
+          "own_goal": false,
+          "score_before": "0-2",
+          "score_after": "1-2",
+          "team_score_before": 0,
+          "opponent_score_before": 2,
+          "team_score_after": 1,
+          "opponent_score_after": 2,
+          "tags": []
+        },
+        {
+          "goal_order": 4,
+          "minute": 62,
+          "team": "Netherlands",
+          "player_team": "Netherlands",
+          "player_name": "Jan Paul VAN HECKE",
+          "own_goal": false,
+          "score_before": "1-2",
+          "score_after": "1-3",
+          "team_score_before": 2,
+          "opponent_score_before": 1,
+          "team_score_after": 3,
+          "opponent_score_after": 1,
+          "tags": []
+        }
+      ],
+      "decisive_goal": null
+    },
+    "FIFA-2026-M59-TUR-USA": {
+      "match_key": "FIFA-2026-M59-TUR-USA",
+      "match_no": 59,
+      "match_date": "2026-06-25",
+      "home_team": "Türkiye",
+      "away_team": "USA",
+      "home_score": 3,
+      "away_score": 2,
+      "winner_team": "Türkiye",
+      "home_trailing_at_any_point": true,
+      "away_trailing_at_any_point": true,
+      "home_came_from_behind_to_win": true,
+      "away_came_from_behind_to_win": false,
+      "goals": [
+        {
+          "goal_order": 1,
+          "minute": 3,
+          "team": "USA",
+          "player_team": "USA",
+          "player_name": "Auston TRUSTY",
+          "own_goal": false,
+          "score_before": "0-0",
+          "score_after": "0-1",
+          "team_score_before": 0,
+          "opponent_score_before": 0,
+          "team_score_after": 1,
+          "opponent_score_after": 0,
+          "tags": [
+            "opening_goal",
+            "go_ahead_goal"
+          ]
+        },
+        {
+          "goal_order": 2,
+          "minute": 10,
+          "team": "Türkiye",
+          "player_team": "Türkiye",
+          "player_name": "Arda GULER",
+          "own_goal": false,
+          "score_before": "0-1",
+          "score_after": "1-1",
+          "team_score_before": 0,
+          "opponent_score_before": 1,
+          "team_score_after": 1,
+          "opponent_score_after": 1,
+          "tags": [
+            "equalizer",
+            "comeback_equalizer",
+            "team_came_from_behind_goal"
+          ]
+        },
+        {
+          "goal_order": 3,
+          "minute": 31,
+          "team": "Türkiye",
+          "player_team": "Türkiye",
+          "player_name": "Baris Alper YILMAZ",
+          "own_goal": false,
+          "score_before": "1-1",
+          "score_after": "2-1",
+          "team_score_before": 1,
+          "opponent_score_before": 1,
+          "team_score_after": 2,
+          "opponent_score_after": 1,
+          "tags": [
+            "go_ahead_goal",
+            "team_came_from_behind_goal"
+          ]
+        },
+        {
+          "goal_order": 4,
+          "minute": 49,
+          "team": "USA",
+          "player_team": "USA",
+          "player_name": "Sebastian BERHALTER",
+          "own_goal": false,
+          "score_before": "2-1",
+          "score_after": "2-2",
+          "team_score_before": 1,
+          "opponent_score_before": 2,
+          "team_score_after": 2,
+          "opponent_score_after": 2,
+          "tags": [
+            "equalizer",
+            "comeback_equalizer"
+          ]
+        },
+        {
+          "goal_order": 5,
+          "minute": 98,
+          "team": "Türkiye",
+          "player_team": "Türkiye",
+          "player_name": "Kaan AYHAN",
+          "own_goal": false,
+          "score_before": "2-2",
+          "score_after": "3-2",
+          "team_score_before": 2,
+          "opponent_score_before": 2,
+          "team_score_after": 3,
+          "opponent_score_after": 2,
+          "tags": [
+            "go_ahead_goal",
+            "match_winning_goal",
+            "late_goal",
+            "stoppage_time_goal",
+            "late_match_winning_goal",
+            "team_came_from_behind_goal",
+            "comeback_winner"
+          ]
+        }
+      ],
+      "decisive_goal": {
+        "goal_order": 5,
+        "minute": 98,
+        "team": "Türkiye",
+        "player_team": "Türkiye",
+        "player_name": "Kaan AYHAN",
+        "own_goal": false,
+        "score_before": "2-2",
+        "score_after": "3-2",
+        "team_score_before": 2,
+        "opponent_score_before": 2,
+        "team_score_after": 3,
+        "opponent_score_after": 2,
+        "tags": [
+          "go_ahead_goal",
+          "match_winning_goal",
+          "late_goal",
+          "stoppage_time_goal",
+          "late_match_winning_goal",
+          "team_came_from_behind_goal",
+          "comeback_winner"
+        ]
+      }
+    },
+    "FIFA-2026-M60-PAR-AUS": {
+      "match_key": "FIFA-2026-M60-PAR-AUS",
+      "match_no": 60,
+      "match_date": "2026-06-25",
+      "home_team": "Paraguay",
+      "away_team": "Australia",
+      "home_score": 0,
+      "away_score": 0,
+      "winner_team": null,
+      "home_trailing_at_any_point": false,
+      "away_trailing_at_any_point": false,
+      "home_came_from_behind_to_win": false,
+      "away_came_from_behind_to_win": false,
+      "goals": [],
+      "decisive_goal": null
+    }
+  },
+  "choices": [
+    {
+      "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
+      "award_label": {
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
+      },
+      "player_id": "FIFA-2026-M59-TUR-USA|Türkiye|22",
+      "player_name": "Kaan AYHAN",
+      "team": "Türkiye",
+      "opponent": "USA",
+      "match_key": "FIFA-2026-M59-TUR-USA",
+      "match_no": 59,
+      "player_no": 22,
+      "position": "MF",
+      "score": 120.21,
+      "metrics": {
+        "shots": 1,
+        "on_target": 1,
+        "goals": 1,
+        "goal_involvements": 1,
+        "go_ahead_goal": 1,
+        "match_winning_goal": 1,
+        "late_goal": 1,
+        "stoppage_time_goal": 1,
+        "late_match_winning_goal": 1,
+        "comeback_winner": 1,
+        "substitute_goal": 1
+      },
+      "evidence_chips": {
+        "en": [
+          "substitute goal",
+          "comeback winner",
+          "late winner",
+          "goal scorer"
+        ],
+        "zh": [
+          "替补进球",
+          "逆转制胜",
+          "补时制胜",
+          "取得进球"
+        ]
+      },
+      "selection_reason": "Selected because he came off the bench and scored Türkiye's 90'+8 comeback winner in the 3-2 win over the USA.",
+      "content": {
+        "en": {
+          "title": "Ayhan won it in stoppage time",
+          "html": "<p>Kaan Ayhan came off the bench and scored in the eighth minute of stoppage time, turning 2-2 into Türkiye's 3-2 win over the USA. It was the comeback winner, and his only shot was on target.</p>"
+        },
+        "zh": {
+          "title": "卡安-艾汗补时制胜",
+          "html": "<p>卡安-艾汗替补出场，第90+8分钟把2-2改成3-2。土耳其3-2逆转美国，这一脚就是制胜球。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
+      "award_label": {
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
+      },
+      "player_id": "FIFA-2026-M56-ECU-GER|Ecuador|19",
+      "player_name": "Gonzalo PLATA",
+      "team": "Ecuador",
+      "opponent": "Germany",
+      "match_key": "FIFA-2026-M56-ECU-GER",
+      "match_no": 56,
+      "player_no": 19,
+      "position": "FW",
+      "score": 88.96,
+      "metrics": {
+        "shots": 2,
+        "on_target": 1,
+        "goals": 1,
+        "goal_involvements": 1,
+        "go_ahead_goal": 1,
+        "match_winning_goal": 1,
+        "late_goal": 1,
+        "comeback_winner": 1
+      },
+      "evidence_chips": {
+        "en": [
+          "comeback winner",
+          "match-winning goal",
+          "goal scorer"
+        ],
+        "zh": [
+          "逆转制胜",
+          "打入制胜球",
+          "取得进球"
+        ]
+      },
+      "selection_reason": "Selected because he scored Ecuador's 77th-minute comeback winner in the 2-1 win over Germany.",
+      "content": {
+        "en": {
+          "title": "Plata completed Ecuador's comeback",
+          "html": "<p>Germany scored after two minutes, but Ecuador were level by the ninth and ahead in the 77th through Gonzalo Plata. His goal made it 2-1, the winner in Ecuador's comeback over Germany.</p>"
+        },
+        "zh": {
+          "title": "冈萨洛-普拉塔77分钟制胜",
+          "html": "<p>德国第2分钟先进球，厄瓜多尔第9分钟扳平。冈萨洛-普拉塔第77分钟破门，厄瓜多尔2-1赢德国。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
+      "award_label": {
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
+      },
+      "player_id": "FIFA-2026-M55-CUW-CIV|Côte d'Ivoire|19",
+      "player_name": "Nicolas PEPE",
+      "team": "Côte d'Ivoire",
+      "opponent": "Curaçao",
+      "match_key": "FIFA-2026-M55-CUW-CIV",
+      "match_no": 55,
+      "player_no": 19,
+      "position": "FW",
+      "score": 81.24,
+      "metrics": {
+        "shots": 2,
+        "on_target": 2,
+        "goals": 2,
+        "goal_involvements": 2,
+        "brace": 1,
+        "opening_goal": 1,
+        "go_ahead_goal": 1
+      },
+      "evidence_chips": {
+        "en": [
+          "brace",
+          "opening goal"
+        ],
+        "zh": [
+          "梅开二度",
+          "首开纪录"
+        ]
+      },
+      "selection_reason": "Selected because he scored both Côte d'Ivoire goals, including the opener, in the 2-0 win over Curaçao.",
+      "content": {
+        "en": {
+          "title": "Pepe scored twice",
+          "html": "<p>Nicolas Pepe opened Côte d'Ivoire's win over Curaçao in the 7th minute and scored again in the 64th. Two shots, two on target, two goals made the 2-0 result simple to read.</p>"
+        },
+        "zh": {
+          "title": "尼古拉斯-佩佩梅开二度",
+          "html": "<p>尼古拉斯-佩佩第7分钟首开纪录，第64分钟再进一球。科特迪瓦2-0赢库拉索，他两脚射门都射正也都进了。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
+      "award_label": {
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
+      },
+      "player_id": "FIFA-2026-M58-TUN-NED|Netherlands|6",
+      "player_name": "Jan Paul VAN HECKE",
+      "team": "Netherlands",
+      "opponent": "Tunisia",
+      "match_key": "FIFA-2026-M58-TUN-NED",
+      "match_no": 58,
+      "player_no": 6,
+      "position": "DF",
+      "score": 72.71,
+      "metrics": {
+        "shots": 2,
+        "on_target": 1,
+        "goals": 1,
+        "goal_involvements": 1
+      },
+      "evidence_chips": {
+        "en": [
+          "goal scorer"
+        ],
+        "zh": [
+          "取得进球"
+        ]
+      },
+      "selection_reason": "Selected because he scored the final goal of the Netherlands' 3-1 win after Tunisia had cut the score to 2-1.",
+      "content": {
+        "en": {
+          "title": "Van Hecke restored the margin",
+          "html": "<p>After Tunisia cut the gap to 2-1, Jan Paul van Hecke scored in the 62nd minute to put the Netherlands 3-1 up. That was the last goal of the Dutch win.</p>"
+        },
+        "zh": {
+          "title": "扬-保罗-范赫克打进第三球",
+          "html": "<p>突尼斯第54分钟追到1-2，扬-保罗-范赫克第62分钟把荷兰领先改成3-1。这个比分保持到终场。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
+      "award_label": {
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
+      },
+      "player_id": "FIFA-2026-M57-JPN-SWE|Sweden|11",
+      "player_name": "Anthony ELANGA",
+      "team": "Sweden",
+      "opponent": "Japan",
+      "match_key": "FIFA-2026-M57-JPN-SWE",
+      "match_no": 57,
+      "player_no": 11,
+      "position": "FW",
+      "score": 64.63,
+      "metrics": {
+        "shots": 2,
+        "on_target": 2,
+        "goals": 1,
+        "goal_involvements": 1,
+        "equalizing_goal": 1,
+        "comeback_equalizer": 1
+      },
+      "evidence_chips": {
+        "en": [
+          "comeback equaliser",
+          "equaliser",
+          "goal scorer"
+        ],
+        "zh": [
+          "逆转扳平",
+          "扳平进球",
+          "取得进球"
+        ]
+      },
+      "selection_reason": "Selected because he scored Sweden's 62nd-minute equaliser in the 1-1 draw with Japan and put both shots on target.",
+      "content": {
+        "en": {
+          "title": "Elanga levelled for Sweden",
+          "html": "<p>Japan led through Daizen Maeda, then Anthony Elanga equalised in the 62nd minute. Sweden left with a 1-1 draw, and Elanga put both of his shots on target.</p>"
+        },
+        "zh": {
+          "title": "安东尼-埃兰加62分钟扳平",
+          "html": "<p>日本第56分钟先进球，安东尼-埃兰加第62分钟扳成1-1。瑞典最后带走平局，他两脚射门都在门框范围内。</p>"
+        }
+      }
+    }
+  ],
+  "selection_validation": {
+    "schema_version": 1,
+    "status": "pass",
+    "warnings": []
+  },
+  "audit": []
+}
