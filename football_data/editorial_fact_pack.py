@@ -298,6 +298,8 @@ def _candidate_summary(candidate: dict[str, Any]) -> dict[str, Any]:
             candidate.get("goal_involvements") or metrics.get("goal_involvements") or 0
         ),
         "opening_goal": int(candidate.get("opening_goal") or metrics.get("opening_goal") or 0),
+        "go_ahead_goal": int(candidate.get("go_ahead_goal") or metrics.get("go_ahead_goal") or 0),
+        "equalizing_goal": int(candidate.get("equalizing_goal") or metrics.get("equalizing_goal") or 0),
         "match_winning_goal": int(
             candidate.get("match_winning_goal") or metrics.get("match_winning_goal") or 0
         ),
@@ -305,6 +307,14 @@ def _candidate_summary(candidate: dict[str, Any]) -> dict[str, Any]:
             candidate.get("only_goal_winner") or metrics.get("only_goal_winner") or 0
         ),
         "brace": int(candidate.get("brace") or metrics.get("brace") or 0),
+        "hat_trick": int(candidate.get("hat_trick") or metrics.get("hat_trick") or 0),
+        "late_goal": int(candidate.get("late_goal") or metrics.get("late_goal") or 0),
+        "stoppage_time_goal": int(
+            candidate.get("stoppage_time_goal") or metrics.get("stoppage_time_goal") or 0
+        ),
+        "comeback_equalizer": int(
+            candidate.get("comeback_equalizer") or metrics.get("comeback_equalizer") or 0
+        ),
         "clean_sheet": int(candidate.get("clean_sheet") or metrics.get("clean_sheet") or 0),
         "keeper_saved_shots": int(candidate.get("keeper_saved_shots") or 0),
         "opponent_xg": candidate.get("opponent_xg"),
@@ -321,6 +331,7 @@ def _candidate_summary(candidate: dict[str, Any]) -> dict[str, Any]:
         "flow_context": candidate.get("flow_context", {}),
         "progression_benchmark": candidate.get("progression_benchmark", {}),
         "hidden_gem_profile": candidate.get("hidden_gem_profile", {}),
+        "data_sources": candidate.get("data_sources", {}),
     }
 
 

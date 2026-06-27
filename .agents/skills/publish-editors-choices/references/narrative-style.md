@@ -71,12 +71,12 @@ Bad:
 
 Before publishing, check:
 
-- Every claim is supported by `candidate_pool.json`, `selection_decision.json`, or SQLite.
+- Every claim is supported by `candidate_pool.json`, the promoted `final_selection_decision.json`, the selected candidate evidence packet, the editorial fact pack, or SQLite.
 - The English and Chinese versions make the same selection argument.
 - The copy does not sound like a metric table.
-- Check the workflow gates: selection decision, skipped-candidate explanations, and deterministic selection validation.
+- Check the workflow gates: promoted selection round, skipped-candidate explanations, deterministic selection validation, promoted copy round, copy validation, and `editorial_loop_validation.json`.
 - Chinese final copy should read like a from-scratch Chinese sports editor wrote it after seeing the evidence packet.
 - Use `display_names.zh.display_name` when it appears in the candidate packet. Use `display_names.zh.short_name` only when that shorter, more fan-facing register is intentionally desired.
 - No external match observation is implied unless an external source was actually checked.
 - Avoid claims that negate an unstated alternative, such as `不是只在边路补一个进球`; the data can support the visible goal and metrics, not that contrast.
-- If a card fails review, repair the local `selection_decision.json` or `copy.json`, or adjust registry config, selector/copy profile prompts, scoring, or validation, then rerun `scripts/compile_local_editorial.py --date YYYY-MM-DD`.
+- If a card fails review, write the next `selection_rounds/round_N/` or `copy_rounds/round_N/` artifact, or adjust registry config, selector/copy review profiles, scoring, or validation. Then rerun `scripts/promote_editorial_loop.py --date YYYY-MM-DD` and `scripts/compile_local_editorial.py --date YYYY-MM-DD`.

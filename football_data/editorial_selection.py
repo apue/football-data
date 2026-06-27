@@ -166,6 +166,7 @@ def _compact_candidate(candidate: dict[str, Any]) -> dict[str, Any]:
         "role_scores",
         "evidence_chips",
         "display_names",
+        "data_sources",
     ]
     compact = {key: candidate.get(key) for key in keys if key in candidate}
     compact["score_components"] = list(candidate.get("score_components", []))[:6]
@@ -227,6 +228,7 @@ def _compact_audit_candidate(candidate: dict[str, Any]) -> dict[str, Any]:
         "audit_reasons",
         "role_scores",
         "display_names",
+        "data_sources",
     ]
     compact = {key: candidate.get(key) for key in keys if key in candidate}
     active_context = (candidate.get("audit_contexts") or {}).get(str(candidate.get("audit_type") or "")) or {}
@@ -271,6 +273,7 @@ def _compact_near_miss(candidate: dict[str, Any]) -> dict[str, Any]:
         "headline_score",
         "rank_score",
         "evidence_chips",
+        "data_sources",
         "reason_not_in_pool",
     ]
     compact = {key: candidate.get(key) for key in keys if key in candidate}

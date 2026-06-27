@@ -71,6 +71,116 @@ def build_test_copy(payload: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def write_passing_test_editorial_loop(
+    audit_dir,
+    selection: dict[str, Any],
+    copy: dict[str, Any],
+) -> None:
+    _write_test_json(
+        audit_dir / "selection_rounds" / "round_1" / "selection_decision.json",
+        selection,
+    )
+    _write_test_json(
+        audit_dir / "selection_rounds" / "round_1" / "selection_review.json",
+        build_passing_test_selection_review(selection),
+    )
+    _write_test_json(audit_dir / "copy_rounds" / "round_1" / "copy.json", copy)
+    _write_test_json(
+        audit_dir / "copy_rounds" / "round_1" / "copy_review.json",
+        build_passing_test_copy_review(copy),
+    )
+
+
+def build_passing_test_selection_review(selection: dict[str, Any]) -> dict[str, Any]:
+    selected = list(selection["selected"])
+    return {
+        "schema_version": 1,
+        "status": "pass",
+        "reviewed_dimensions": [
+            "selected_card_convincingness",
+            "obvious_omission",
+            "alternative_slate_comparison",
+            "weakest_selected_card",
+            "strongest_omitted_card",
+        ],
+        "selected_player_reviews": [
+            {
+                "player_id": item["player_id"],
+                "verdict": "pass",
+                "note": "The public case is supported by direct match evidence.",
+            }
+            for item in selected
+        ],
+        "unselected_candidate_reviews": [],
+        "slate_assessment": {
+            "reader_questions": ["Is there a stronger direct-impact omission?"],
+            "alternative_slate_comparison": [
+                {"card_count": len(selected), "tradeoff": "current slate"},
+                {"card_count": max(0, len(selected) - 1), "tradeoff": "drop weakest selected"},
+            ],
+            "weakest_selected_card": {
+                "player_id": selected[-1]["player_id"],
+                "reason": "Checked against available omissions.",
+            },
+            "strongest_omitted_card": {
+                "player_id": None,
+                "reason": "No omitted candidate forced a replacement.",
+            },
+            "drop_weakest_verdict": {
+                "decision": "keep",
+                "reason": "The weakest selected card remains above the publishable line.",
+            },
+            "replace_weakest_verdict": {
+                "decision": "keep",
+                "replacement_player_id": None,
+                "reason": "No replacement improves the slate.",
+            },
+            "preferred_card_count": len(selected),
+            "revision_decision": "keep",
+        },
+        "blocking_findings": [],
+        "resolved_objections": [],
+        "unresolved_objections": [],
+        "revision_summary": "No blocking selection issue remains.",
+    }
+
+
+def build_passing_test_copy_review(copy: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "schema_version": 1,
+        "status": "pass",
+        "reviewed_dimensions": [
+            "fact_support",
+            "english_flow",
+            "zh_style",
+            "title_core_fact",
+            "unsupported_claims",
+        ],
+        "item_reviews": [
+            {
+                "player_id": item["player_id"],
+                "language": language,
+                "verdict": "pass",
+                "note": "The copy is supported by the selected evidence packet.",
+            }
+            for language in ("en", "zh")
+            for item in copy.get(language, {}).get("items", [])
+            if isinstance(item, dict)
+        ],
+        "blocking_findings": [],
+        "resolved_comments": [],
+        "unresolved_comments": [],
+        "revision_summary": "No blocking copy issue remains.",
+    }
+
+
+def _write_test_json(path, payload: dict[str, Any]) -> None:
+    import json
+
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+
 def _test_language_copy(payload: dict[str, Any], language: str) -> dict[str, Any]:
     return {
         "items": [_static_copy_item(choice, language) for choice in payload.get("choices", [])],

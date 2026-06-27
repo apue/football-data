@@ -49,13 +49,23 @@ def load_copy_profile(
     return profile
 
 
-def load_review_profile(
+def load_selection_review_profile(
     profile_id: str,
     config_dir: str | Path = DEFAULT_CONFIG_DIR,
 ) -> dict[str, Any]:
     root = Path(config_dir)
-    profile = _load_registry_json(root / "review_profiles" / f"{profile_id}.json")
-    _require_id(profile, profile_id, "review profile")
+    profile = _load_registry_json(root / "selection_review_profiles" / f"{profile_id}.json")
+    _require_id(profile, profile_id, "selection review profile")
+    return profile
+
+
+def load_copy_review_profile(
+    profile_id: str,
+    config_dir: str | Path = DEFAULT_CONFIG_DIR,
+) -> dict[str, Any]:
+    root = Path(config_dir)
+    profile = _load_registry_json(root / "copy_review_profiles" / f"{profile_id}.json")
+    _require_id(profile, profile_id, "copy review profile")
     return profile
 
 

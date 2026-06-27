@@ -7,9 +7,10 @@ from editorial_test_helpers import build_test_copy, build_test_selection_decisio
 def test_editorial_v2_registry_resolves_default_experiment():
     from football_data.editorial_registry import (
         load_candidate_pool_config,
+        load_copy_review_profile,
         load_copy_profile,
         load_editorial_experiment,
-        load_review_profile,
+        load_selection_review_profile,
         load_selector_profile,
     )
     from football_data.editorial_constants import AWARD_DISPLAY_ORDER, AWARD_LABELS
@@ -17,14 +18,15 @@ def test_editorial_v2_registry_resolves_default_experiment():
 
     experiment = load_editorial_experiment()
 
-    assert experiment["id"] == "ai_rerank_reader_loop_v5"
-    assert experiment["workflow_variant"] == "ai_rerank_selection_v1"
-    assert experiment["selection"]["mode"] == "ai_rerank_only"
+    assert experiment["id"] == "bounded_editorial_loop_v1"
+    assert experiment["workflow_variant"] == "bounded_selection_copy_loop_v1"
+    assert experiment["selection"]["mode"] == "bounded_loop_local_editor"
     assert experiment["candidate_pool"] == "guarded_packet_v2"
     assert experiment["selector_profile"] == "slate_balanced_editor_v3"
-    assert experiment["review_profile"] == "reader_intuition_loop_v2"
-    assert experiment["revision_policy"]["mode"] == "reader_critic_revise_review_loop"
-    assert experiment["reader_intuition_loop"]["mode"] == "slate_critic_then_revision"
+    assert experiment["selection_review_profile"] == "selection_review_v1"
+    assert experiment["copy_review_profile"] == "copy_review_v1"
+    assert experiment["loop_policy"]["selection_max_rounds"] == 3
+    assert experiment["loop_policy"]["copy_max_rounds"] == 3
     assert experiment["copy_profiles"]["zh"] == "zh_matchnote_light_emotion_v1"
     assert experiment["selection"]["strategy"] == "overall_slate_v1"
     assert experiment["selection"]["public_card_count"]["min"] == 3
@@ -47,8 +49,6 @@ def test_editorial_v2_registry_resolves_default_experiment():
     }
     assert set(AWARD_LABELS) == {"player_of_the_day", "impact_pick"}
     assert AWARD_DISPLAY_ORDER == ["player_of_the_day", "impact_pick"]
-    assert "selected_count_below_recommended_for_match_count" not in experiment["reader_intuition_loop"]["human_review_trigger"]
-    assert "unrepresented_match_has_publishable_candidate" not in experiment["reader_intuition_loop"]["human_review_trigger"]
     assert player_display_name("CRISTIANO RONALDO", "zh") == "C罗"
     assert player_display_entry("BRUNO FERNANDES", "zh") == {
         "display_name": "布鲁诺-费尔南德斯",
@@ -57,7 +57,8 @@ def test_editorial_v2_registry_resolves_default_experiment():
 
     pool = load_candidate_pool_config(experiment["candidate_pool"])
     selector = load_selector_profile(experiment["selector_profile"])
-    review_profile = load_review_profile(experiment["review_profile"])
+    selection_review = load_selection_review_profile(experiment["selection_review_profile"])
+    copy_review = load_copy_review_profile(experiment["copy_review_profile"])
     zh_profile = load_copy_profile(experiment["copy_profiles"]["zh"])
     en_profile = load_copy_profile(experiment["copy_profiles"]["en"])
 
@@ -67,19 +68,14 @@ def test_editorial_v2_registry_resolves_default_experiment():
     assert any("same match" in item for item in selector["instructions"])
     assert any("not a quota" in item for item in selector["instructions"])
     assert not any("slot" in item.lower() for item in selector["instructions"])
-    assert review_profile["required_dimensions"] == [
+    assert selection_review["required_dimensions"] == [
+        "selected_card_convincingness",
         "obvious_omission",
-        "slate_balance",
-        "match_coverage_pressure",
-        "reader_question_prediction",
         "alternative_slate_comparison",
-        "metric_misuse",
-        "copy_style",
-        "zh_style_calibration",
-        "display_names",
+        "weakest_selected_card",
+        "strongest_omitted_card",
     ]
-    assert review_profile["required_slate_assessment_fields"] == [
-        "match_coverage_pressure",
+    assert selection_review["required_slate_assessment_fields"] == [
         "reader_questions",
         "alternative_slate_comparison",
         "weakest_selected_card",
@@ -89,7 +85,14 @@ def test_editorial_v2_registry_resolves_default_experiment():
         "preferred_card_count",
         "revision_decision",
     ]
-    assert "undercovered_match_day" not in review_profile["blocking_categories"]
+    assert "forced_match_coverage" in selection_review["blocking_categories"]
+    assert copy_review["required_dimensions"] == [
+        "fact_support",
+        "english_flow",
+        "zh_style",
+        "title_core_fact",
+        "unsupported_claims",
+    ]
     assert zh_profile["language"] == "zh"
     assert zh_profile["instructions"]
     assert isinstance(zh_profile.get("banned_public_terms"), list)
@@ -107,7 +110,9 @@ def test_editorial_v2_registry_resolves_default_experiment():
         "config/editorial/experiments/ai_rerank_guardrails_v2.json",
         "config/editorial/experiments/ai_rerank_slate_copy_v3.json",
         "config/editorial/experiments/ai_rerank_slate_self_review_v4.json",
+        "config/editorial/experiments/ai_rerank_reader_loop_v5.json",
         "config/editorial/review_profiles/reader_intuition_v1.json",
+        "config/editorial/review_profiles/reader_intuition_loop_v2.json",
         "config/editorial/candidate_pools/rich_packet_v1.json",
         "config/editorial/selector_profiles/strict_editor_v1.json",
         "config/editorial/selector_profiles/guarded_editor_v2.json",
@@ -147,17 +152,59 @@ def test_editorial_style_calibration_loads_curated_zh_examples():
     )
 
 
-def test_editorial_review_payload_includes_zh_style_calibration_examples():
+def test_editorial_rankings_include_timeline_only_hat_trick_scorer():
+    from football_data.editorial_candidates import build_candidate_pool
+    from football_data.editorial_rankings import build_editorial_rankings
+    from football_data.editorial_registry import load_candidate_pool_config, load_editorial_experiment
+
+    experiment = load_editorial_experiment()
+    rankings = build_editorial_rankings(
+        "data/latest.sqlite",
+        "2026-06-26",
+        experiment["scoring_config"],
+    )
+
+    dembele = next(
+        player
+        for player in rankings["players"]
+        if player["match_key"] == "FIFA-2026-M61-NOR-FRA"
+        and player["team"] == "France"
+        and player["player_name"] == "Ousmane DEMBELE"
+    )
+    assert dembele["player_id"] == "FIFA-2026-M61-NOR-FRA|France|timeline:398680"
+    assert dembele["player_no"] is None
+    assert dembele["data_sources"]["player_identity"] == "fifa_timeline_api"
+    assert dembele["goals"] == 3
+    assert dembele["hat_trick"] == 1
+    assert dembele["opening_goal"] == 1
+    assert "hat-trick" in dembele["evidence_chips"]["en"]
+
+    pool = build_candidate_pool(
+        rankings,
+        load_candidate_pool_config(experiment["candidate_pool"]),
+    )
+    candidate = next(
+        item
+        for item in pool["selectable_candidates"]
+        if item["player_id"] == dembele["player_id"]
+    )
+    assert "player_of_the_day" in candidate["eligible_awards"]
+    assert candidate["award_contexts"]["player_of_the_day"]["metrics"]["goals"] == 3
+    assert candidate["award_contexts"]["player_of_the_day"]["metrics"]["hat_trick"] == 1
+
+
+def test_copy_review_payload_includes_zh_style_calibration_examples():
     from football_data.editorial_candidates import build_candidate_pool
     from football_data.editorial_copy import build_copy_payloads
+    from football_data.editorial_copy_validation import validate_copy
+    from football_data.editorial_loop import build_copy_review_payload
     from football_data.editorial_rankings import build_editorial_rankings
     from football_data.editorial_registry import (
         load_candidate_pool_config,
+        load_copy_profile,
+        load_copy_review_profile,
         load_editorial_experiment,
-        load_review_profile,
     )
-    from football_data.editorial_review import build_editorial_review_payload
-    from football_data.editorial_validation import validate_selection_decision
 
     experiment = load_editorial_experiment()
     rankings = build_editorial_rankings(
@@ -170,14 +217,17 @@ def test_editorial_review_payload_includes_zh_style_calibration_examples():
         load_candidate_pool_config(experiment["candidate_pool"]),
     )
     decision = build_test_selection_decision(pool, experiment)
+    copy_payload = build_copy_payloads(decision, pool)
     copy = build_test_copy(build_copy_payloads(decision, pool))
-    review_payload = build_editorial_review_payload(
-        selection_decision=decision,
-        candidate_pool=pool,
+    copy_profiles = {
+        language: load_copy_profile(str(profile_id))
+        for language, profile_id in experiment["copy_profiles"].items()
+    }
+    review_payload = build_copy_review_payload(
         copy=copy,
-        selection_validation=validate_selection_decision(decision, pool, experiment),
-        review_profile=load_review_profile(experiment["review_profile"]),
-        selection_config=experiment["selection"],
+        copy_payload=copy_payload,
+        copy_validation=validate_copy(copy, copy_profiles, copy_payload=copy_payload),
+        review_profile=load_copy_review_profile(experiment["copy_review_profile"]),
     )
 
     zh_examples = review_payload["style_calibration"]["zh"]
@@ -188,16 +238,15 @@ def test_editorial_review_payload_includes_zh_style_calibration_examples():
     )
 
 
-def test_editorial_review_validation_requires_reader_intuition_coverage():
+def test_selection_review_validation_requires_objection_coverage():
     from football_data.editorial_candidates import build_candidate_pool
-    from football_data.editorial_copy import build_copy_payloads
+    from football_data.editorial_loop import build_selection_review_payload, validate_selection_review
     from football_data.editorial_rankings import build_editorial_rankings
     from football_data.editorial_registry import (
         load_candidate_pool_config,
         load_editorial_experiment,
-        load_review_profile,
+        load_selection_review_profile,
     )
-    from football_data.editorial_review import build_editorial_review_payload, validate_editorial_review
     from football_data.editorial_validation import validate_selection_decision
 
     experiment = load_editorial_experiment()
@@ -211,17 +260,14 @@ def test_editorial_review_validation_requires_reader_intuition_coverage():
         load_candidate_pool_config(experiment["candidate_pool"]),
     )
     decision = build_test_selection_decision(pool, experiment)
-    copy_payload = build_copy_payloads(decision, pool)
-    copy = build_test_copy(copy_payload)
-    review_payload = build_editorial_review_payload(
+    review_profile = load_selection_review_profile(experiment["selection_review_profile"])
+    review_payload = build_selection_review_payload(
         selection_decision=decision,
         candidate_pool=pool,
-        copy=copy,
         selection_validation=validate_selection_decision(decision, pool, experiment),
-        review_profile=load_review_profile(experiment["review_profile"]),
+        review_profile=review_profile,
         selection_config=experiment["selection"],
     )
-    review_profile = load_review_profile(experiment["review_profile"])
     assert review_payload["public_card_count"] == {
         "selected": len(decision["selected"]),
         "min": 3,
@@ -247,15 +293,13 @@ def test_editorial_review_validation_requires_reader_intuition_coverage():
     ]
     good_review = {
         "schema_version": 1,
-        "review_profile": review_profile["id"],
         "status": "pass",
         "reviewed_dimensions": review_profile["required_dimensions"],
         "slate_assessment": {
-            "match_coverage_pressure": "Selected count was reviewed against the day's match count.",
             "reader_questions": ["Does the slate omit an obvious direct-impact player?"],
             "alternative_slate_comparison": [
                 {"card_count": len(decision["selected"]), "tradeoff": "current slate"},
-                {"card_count": len(decision["selected"]) + 1, "tradeoff": "broader coverage"},
+                {"card_count": max(0, len(decision["selected"]) - 1), "tradeoff": "drop weakest selected"},
             ],
             "weakest_selected_card": {
                 "player_id": review_payload["selected"][-1]["player_id"],
@@ -280,17 +324,19 @@ def test_editorial_review_validation_requires_reader_intuition_coverage():
         "selected_player_reviews": selected_reviews,
         "unselected_candidate_reviews": unselected_reviews,
         "blocking_findings": [],
-        "revision_summary": "No blocking reader-intuition issue remains.",
+        "resolved_objections": [],
+        "unresolved_objections": [],
+        "revision_summary": "No blocking selection issue remains.",
     }
 
-    good_validation = validate_editorial_review(good_review, review_profile, review_payload)
+    good_validation = validate_selection_review(good_review, review_profile, review_payload)
     assert good_validation["status"] == "pass"
 
-    missing_unselected = json.loads(json.dumps(good_review, ensure_ascii=False))
-    missing_unselected["unselected_candidate_reviews"] = missing_unselected["unselected_candidate_reviews"][:-1]
-    missing_validation = validate_editorial_review(missing_unselected, review_profile, review_payload)
+    missing_selected = json.loads(json.dumps(good_review, ensure_ascii=False))
+    missing_selected["selected_player_reviews"] = missing_selected["selected_player_reviews"][:-1]
+    missing_validation = validate_selection_review(missing_selected, review_profile, review_payload)
     assert missing_validation["status"] == "failed"
-    assert any("missing unselected candidate review" in warning for warning in missing_validation["warnings"])
+    assert any("missing selected player review" in warning for warning in missing_validation["warnings"])
 
     blocking = json.loads(json.dumps(good_review, ensure_ascii=False))
     blocking["blocking_findings"] = [
@@ -301,27 +347,26 @@ def test_editorial_review_validation_requires_reader_intuition_coverage():
             "recommended_action": "Revise selection before publishing.",
         }
     ]
-    blocking_validation = validate_editorial_review(blocking, review_profile, review_payload)
+    blocking_validation = validate_selection_review(blocking, review_profile, review_payload)
     assert blocking_validation["status"] == "failed"
     assert any("blocking finding" in warning for warning in blocking_validation["warnings"])
 
     unstructured = json.loads(json.dumps(good_review, ensure_ascii=False))
     unstructured["slate_assessment"]["weakest_selected_card"] = "No selected card raised a blocking concern."
-    unstructured_validation = validate_editorial_review(unstructured, review_profile, review_payload)
+    unstructured_validation = validate_selection_review(unstructured, review_profile, review_payload)
     assert unstructured_validation["status"] == "failed"
     assert any("weakest_selected_card must identify a selected player_id" in warning for warning in unstructured_validation["warnings"])
 
 
-def test_editorial_review_payload_includes_slate_coverage_context():
+def test_selection_review_payload_includes_omission_context():
     from football_data.editorial_candidates import build_candidate_pool
-    from football_data.editorial_copy import build_copy_payloads
+    from football_data.editorial_loop import build_selection_review_payload
     from football_data.editorial_rankings import build_editorial_rankings
     from football_data.editorial_registry import (
         load_candidate_pool_config,
         load_editorial_experiment,
-        load_review_profile,
+        load_selection_review_profile,
     )
-    from football_data.editorial_review import build_editorial_review_payload
     from football_data.editorial_validation import validate_selection_decision
 
     experiment = load_editorial_experiment()
@@ -335,66 +380,62 @@ def test_editorial_review_payload_includes_slate_coverage_context():
         load_candidate_pool_config(experiment["candidate_pool"]),
     )
     decision = build_test_selection_decision(pool, experiment)
-    copy = build_test_copy(build_copy_payloads(decision, pool))
-    review_payload = build_editorial_review_payload(
+    review_payload = build_selection_review_payload(
         selection_decision=decision,
         candidate_pool=pool,
-        copy=copy,
         selection_validation=validate_selection_decision(decision, pool, experiment),
-        review_profile=load_review_profile(experiment["review_profile"]),
+        review_profile=load_selection_review_profile(experiment["selection_review_profile"]),
         selection_config=experiment["selection"],
     )
 
-    coverage = review_payload["match_coverage"]
-    assert coverage["match_count"] == 4
-    assert "recommended_public_cards" not in coverage
-    assert coverage["selected_count"] == len(decision["selected"])
-    assert coverage["top_candidates_by_match"]
-    assert all("top_candidates" in item for item in coverage["top_candidates_by_match"])
+    assert review_payload["selected"]
+    assert review_payload["required_unselected_candidate_reviews"]
+    assert review_payload["audit_candidates"]
+    assert review_payload["public_card_count"]["selected"] == len(decision["selected"])
 
 
-def test_editorial_review_validation_requires_slate_assessment_fields():
-    from football_data.editorial_review import validate_editorial_review
+def test_selection_review_validation_requires_slate_assessment_fields():
+    from football_data.editorial_loop import validate_selection_review
 
     review_profile = {
-        "id": "reader_intuition_loop_v2",
-        "required_dimensions": ["match_coverage_pressure"],
+        "id": "selection_review_v1",
+        "required_dimensions": ["selected_card_convincingness"],
         "required_slate_assessment_fields": [
-            "match_coverage_pressure",
             "reader_questions",
             "alternative_slate_comparison",
+            "weakest_selected_card",
+            "revision_decision",
         ],
     }
     review_payload = {
-        "selected": [],
+        "selected": [{"player_id": "p1"}],
         "required_unselected_candidate_reviews": [],
     }
     missing_assessment = {
         "schema_version": 1,
-        "review_profile": "reader_intuition_loop_v2",
         "status": "pass",
-        "reviewed_dimensions": ["match_coverage_pressure"],
-        "selected_player_reviews": [],
+        "reviewed_dimensions": ["selected_card_convincingness"],
+        "selected_player_reviews": [{"player_id": "p1", "verdict": "pass", "note": "checked"}],
         "unselected_candidate_reviews": [],
         "blocking_findings": [],
+        "unresolved_objections": [],
         "revision_summary": "No issue remains.",
     }
 
-    missing_validation = validate_editorial_review(
+    missing_validation = validate_selection_review(
         missing_assessment,
         review_profile,
         review_payload,
     )
     assert missing_validation["status"] == "failed"
     assert any(
-        "missing slate_assessment.match_coverage_pressure" in warning
+        "missing slate_assessment.reader_questions" in warning
         for warning in missing_validation["warnings"]
     )
 
     passing = {
         **missing_assessment,
         "slate_assessment": {
-            "match_coverage_pressure": "Four matches need a conscious slate-size decision.",
             "reader_questions": ["Why only three cards from four matches?"],
             "alternative_slate_comparison": [
                 {"card_count": 3, "tradeoff": "elite only"},
@@ -412,7 +453,7 @@ def test_editorial_review_validation_requires_slate_assessment_fields():
             "revision_decision": "keep",
         },
     }
-    passing_validation = validate_editorial_review(passing, review_profile, review_payload)
+    passing_validation = validate_selection_review(passing, review_profile, review_payload)
     assert passing_validation["status"] == "pass"
 
 
