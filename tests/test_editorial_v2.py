@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-import pytest
+from editorial_test_helpers import build_test_copy, build_test_selection_decision
 
 
 def test_editorial_v2_registry_resolves_default_experiment():
@@ -116,14 +116,12 @@ def test_editorial_v2_registry_resolves_default_experiment():
     assert not [path for path in retired_paths if Path(path).exists()]
 
 
-def test_editorial_selection_rejects_legacy_slot_strategy():
-    from football_data.editorial_selection import fake_selection_decision
+def test_editorial_production_modules_do_not_export_test_scaffolding():
+    import football_data.editorial_copy as editorial_copy
+    import football_data.editorial_selection as editorial_selection
 
-    with pytest.raises(ValueError, match="overall_slate_v1"):
-        fake_selection_decision(
-            {"selectable_candidates": []},
-            {"selection": {"strategy": "slot_quota_v0"}},
-        )
+    assert not hasattr(editorial_selection, "fake_selection_decision")
+    assert not hasattr(editorial_copy, "generate_copy")
 
 
 def test_editorial_style_calibration_loads_curated_zh_examples():
@@ -151,7 +149,7 @@ def test_editorial_style_calibration_loads_curated_zh_examples():
 
 def test_editorial_review_payload_includes_zh_style_calibration_examples():
     from football_data.editorial_candidates import build_candidate_pool
-    from football_data.editorial_copy import build_copy_payloads, generate_copy
+    from football_data.editorial_copy import build_copy_payloads
     from football_data.editorial_rankings import build_editorial_rankings
     from football_data.editorial_registry import (
         load_candidate_pool_config,
@@ -159,7 +157,6 @@ def test_editorial_review_payload_includes_zh_style_calibration_examples():
         load_review_profile,
     )
     from football_data.editorial_review import build_editorial_review_payload
-    from football_data.editorial_selection import fake_selection_decision
     from football_data.editorial_validation import validate_selection_decision
 
     experiment = load_editorial_experiment()
@@ -172,8 +169,8 @@ def test_editorial_review_payload_includes_zh_style_calibration_examples():
         rankings,
         load_candidate_pool_config(experiment["candidate_pool"]),
     )
-    decision = fake_selection_decision(pool, experiment)
-    copy = generate_copy(build_copy_payloads(decision, pool), fake=True)
+    decision = build_test_selection_decision(pool, experiment)
+    copy = build_test_copy(build_copy_payloads(decision, pool))
     review_payload = build_editorial_review_payload(
         selection_decision=decision,
         candidate_pool=pool,
@@ -193,7 +190,7 @@ def test_editorial_review_payload_includes_zh_style_calibration_examples():
 
 def test_editorial_review_validation_requires_reader_intuition_coverage():
     from football_data.editorial_candidates import build_candidate_pool
-    from football_data.editorial_copy import build_copy_payloads, generate_copy
+    from football_data.editorial_copy import build_copy_payloads
     from football_data.editorial_rankings import build_editorial_rankings
     from football_data.editorial_registry import (
         load_candidate_pool_config,
@@ -201,7 +198,6 @@ def test_editorial_review_validation_requires_reader_intuition_coverage():
         load_review_profile,
     )
     from football_data.editorial_review import build_editorial_review_payload, validate_editorial_review
-    from football_data.editorial_selection import fake_selection_decision
     from football_data.editorial_validation import validate_selection_decision
 
     experiment = load_editorial_experiment()
@@ -214,9 +210,9 @@ def test_editorial_review_validation_requires_reader_intuition_coverage():
         rankings,
         load_candidate_pool_config(experiment["candidate_pool"]),
     )
-    decision = fake_selection_decision(pool, experiment)
+    decision = build_test_selection_decision(pool, experiment)
     copy_payload = build_copy_payloads(decision, pool)
-    copy = generate_copy(copy_payload, fake=True)
+    copy = build_test_copy(copy_payload)
     review_payload = build_editorial_review_payload(
         selection_decision=decision,
         candidate_pool=pool,
@@ -318,7 +314,7 @@ def test_editorial_review_validation_requires_reader_intuition_coverage():
 
 def test_editorial_review_payload_includes_slate_coverage_context():
     from football_data.editorial_candidates import build_candidate_pool
-    from football_data.editorial_copy import build_copy_payloads, generate_copy
+    from football_data.editorial_copy import build_copy_payloads
     from football_data.editorial_rankings import build_editorial_rankings
     from football_data.editorial_registry import (
         load_candidate_pool_config,
@@ -326,7 +322,6 @@ def test_editorial_review_payload_includes_slate_coverage_context():
         load_review_profile,
     )
     from football_data.editorial_review import build_editorial_review_payload
-    from football_data.editorial_selection import fake_selection_decision
     from football_data.editorial_validation import validate_selection_decision
 
     experiment = load_editorial_experiment()
@@ -339,8 +334,8 @@ def test_editorial_review_payload_includes_slate_coverage_context():
         rankings,
         load_candidate_pool_config(experiment["candidate_pool"]),
     )
-    decision = fake_selection_decision(pool, experiment)
-    copy = generate_copy(build_copy_payloads(decision, pool), fake=True)
+    decision = build_test_selection_decision(pool, experiment)
+    copy = build_test_copy(build_copy_payloads(decision, pool))
     review_payload = build_editorial_review_payload(
         selection_decision=decision,
         candidate_pool=pool,
@@ -624,14 +619,13 @@ def test_editorial_v2_hidden_gem_audit_excludes_headline_and_goal_involvement_ca
     )
 
 
-def test_editorial_v2_fake_selector_prefers_direct_potd_case_and_slate_constraints():
+def test_editorial_v2_test_selector_prefers_direct_potd_case_and_slate_constraints():
     from football_data.editorial_candidates import build_candidate_pool
     from football_data.editorial_rankings import build_editorial_rankings
     from football_data.editorial_registry import (
         load_candidate_pool_config,
         load_editorial_experiment,
     )
-    from football_data.editorial_selection import fake_selection_decision
     from football_data.editorial_validation import validate_selection_decision
 
     experiment = load_editorial_experiment()
@@ -644,7 +638,7 @@ def test_editorial_v2_fake_selector_prefers_direct_potd_case_and_slate_constrain
         rankings,
         load_candidate_pool_config(experiment["candidate_pool"]),
     )
-    decision = fake_selection_decision(pool, experiment)
+    decision = build_test_selection_decision(pool, experiment)
     potd_names = [
         item["player_name"]
         for item in decision["selected"]
@@ -910,9 +904,9 @@ def test_editorial_v2_copy_validation_accepts_hat_trick_title_as_core_fact():
     assert validation["status"] == "pass"
 
 
-def test_editorial_v2_fake_copy_is_publishable_static_copy():
+def test_editorial_v2_test_copy_is_publishable_static_copy():
     from football_data.editorial_candidates import build_candidate_pool
-    from football_data.editorial_copy import build_copy_payloads, generate_copy
+    from football_data.editorial_copy import build_copy_payloads
     from football_data.editorial_rankings import build_editorial_rankings
     from football_data.editorial_registry import (
         load_candidate_pool_config,
@@ -939,7 +933,7 @@ def test_editorial_v2_fake_copy_is_publishable_static_copy():
         pool,
     )
 
-    copy = generate_copy(payload, fake=True)
+    copy = build_test_copy(payload)
     en_item = copy["en"]["items"][0]
     zh_item = copy["zh"]["items"][0]
 
@@ -1010,14 +1004,13 @@ def test_editorial_v2_selection_validation_requires_pool_membership_and_skip_rea
         load_candidate_pool_config,
         load_editorial_experiment,
     )
-    from football_data.editorial_selection import fake_selection_decision
     from football_data.editorial_validation import validate_selection_decision
 
     experiment = load_editorial_experiment()
     rankings = build_editorial_rankings("data/latest.sqlite", "2026-06-21", experiment["scoring_config"])
     pool = build_candidate_pool(rankings, load_candidate_pool_config(experiment["candidate_pool"]))
 
-    decision = fake_selection_decision(pool, experiment)
+    decision = build_test_selection_decision(pool, experiment)
     validation = validate_selection_decision(decision, pool, experiment)
     assert validation["status"] == "pass"
     assert validation["warnings"] == []

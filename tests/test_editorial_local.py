@@ -1,6 +1,8 @@
 import json
 from pathlib import Path
 
+from editorial_test_helpers import build_test_copy, build_test_selection_decision
+
 
 def test_cloud_editorial_workflow_is_retired():
     assert not Path(".github/workflows/editorial.yml").exists()
@@ -58,8 +60,7 @@ def test_inspect_editorial_day_writes_fact_pack_with_reader_traps(tmp_path):
 
 def test_compile_local_editorial_uses_local_decision_and_copy(tmp_path):
     from football_data.editorial_local import compile_local_editorial, prepare_editorial_packet
-    from football_data.editorial_selection import fake_selection_decision
-    from football_data.editorial_copy import build_copy_payloads, generate_copy
+    from football_data.editorial_copy import build_copy_payloads
     from football_data.editorial_registry import load_editorial_experiment
 
     prepare_editorial_packet(
@@ -71,8 +72,8 @@ def test_compile_local_editorial_uses_local_decision_and_copy(tmp_path):
     audit_dir = tmp_path / "agent-runs" / "2026-06-22"
     candidate_pool = _load_json(audit_dir / "candidate_pool.json")
     experiment = load_editorial_experiment()
-    decision = fake_selection_decision(candidate_pool, experiment)
-    copy = generate_copy(build_copy_payloads(decision, candidate_pool), fake=True)
+    decision = build_test_selection_decision(candidate_pool, experiment)
+    copy = build_test_copy(build_copy_payloads(decision, candidate_pool))
     (audit_dir / "selection_decision.json").write_text(
         json.dumps(decision, ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
@@ -116,8 +117,7 @@ def test_compile_local_editorial_requires_passing_reader_review(tmp_path):
     import pytest
 
     from football_data.editorial_local import compile_local_editorial, prepare_editorial_packet
-    from football_data.editorial_selection import fake_selection_decision
-    from football_data.editorial_copy import build_copy_payloads, generate_copy
+    from football_data.editorial_copy import build_copy_payloads
     from football_data.editorial_registry import load_editorial_experiment
 
     prepare_editorial_packet(
@@ -128,8 +128,8 @@ def test_compile_local_editorial_requires_passing_reader_review(tmp_path):
     )
     audit_dir = tmp_path / "agent-runs" / "2026-06-22"
     candidate_pool = _load_json(audit_dir / "candidate_pool.json")
-    decision = fake_selection_decision(candidate_pool, load_editorial_experiment())
-    copy = generate_copy(build_copy_payloads(decision, candidate_pool), fake=True)
+    decision = build_test_selection_decision(candidate_pool, load_editorial_experiment())
+    copy = build_test_copy(build_copy_payloads(decision, candidate_pool))
     (audit_dir / "selection_decision.json").write_text(
         json.dumps(decision, ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
@@ -160,8 +160,7 @@ def test_compile_local_editorial_rejects_ai_sounding_zh_copy(tmp_path):
     import pytest
 
     from football_data.editorial_local import compile_local_editorial, prepare_editorial_packet
-    from football_data.editorial_selection import fake_selection_decision
-    from football_data.editorial_copy import build_copy_payloads, generate_copy
+    from football_data.editorial_copy import build_copy_payloads
     from football_data.editorial_registry import load_copy_profile, load_editorial_experiment
 
     prepare_editorial_packet(
@@ -173,8 +172,8 @@ def test_compile_local_editorial_rejects_ai_sounding_zh_copy(tmp_path):
     audit_dir = tmp_path / "agent-runs" / "2026-06-22"
     candidate_pool = _load_json(audit_dir / "candidate_pool.json")
     experiment = load_editorial_experiment()
-    decision = fake_selection_decision(candidate_pool, experiment)
-    copy = generate_copy(build_copy_payloads(decision, candidate_pool), fake=True)
+    decision = build_test_selection_decision(candidate_pool, experiment)
+    copy = build_test_copy(build_copy_payloads(decision, candidate_pool))
     zh_profile = load_copy_profile(experiment["copy_profiles"]["zh"])
     term = zh_profile["banned_public_terms"][0]
     copy["zh"]["items"][0]["body"] = f"这句包含{term}，应该被拦住。"
@@ -207,8 +206,7 @@ def test_compile_local_editorial_rejects_zh_title_missing_core_fact(tmp_path):
     import pytest
 
     from football_data.editorial_local import compile_local_editorial, prepare_editorial_packet
-    from football_data.editorial_selection import fake_selection_decision
-    from football_data.editorial_copy import build_copy_payloads, generate_copy
+    from football_data.editorial_copy import build_copy_payloads
     from football_data.editorial_registry import load_editorial_experiment
 
     prepare_editorial_packet(
@@ -219,8 +217,8 @@ def test_compile_local_editorial_rejects_zh_title_missing_core_fact(tmp_path):
     )
     audit_dir = tmp_path / "agent-runs" / "2026-06-22"
     candidate_pool = _load_json(audit_dir / "candidate_pool.json")
-    decision = fake_selection_decision(candidate_pool, load_editorial_experiment())
-    copy = generate_copy(build_copy_payloads(decision, candidate_pool), fake=True)
+    decision = build_test_selection_decision(candidate_pool, load_editorial_experiment())
+    copy = build_test_copy(build_copy_payloads(decision, candidate_pool))
     messi = next(item for item in copy["zh"]["items"] if item["player_id"].endswith("|Argentina|10"))
     messi["title"] = "梅西补时再进"
     (audit_dir / "selection_decision.json").write_text(
