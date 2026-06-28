@@ -74,6 +74,8 @@ def test_editorial_v2_registry_resolves_default_experiment():
         "alternative_slate_comparison",
         "weakest_selected_card",
         "strongest_omitted_card",
+        "impact_challenger_comparison",
+        "card_count_verdict",
     ]
     assert selection_review["required_slate_assessment_fields"] == [
         "reader_questions",
@@ -82,9 +84,13 @@ def test_editorial_v2_registry_resolves_default_experiment():
         "strongest_omitted_card",
         "drop_weakest_verdict",
         "replace_weakest_verdict",
+        "impact_challenger_verdict",
+        "add_card_verdict",
         "preferred_card_count",
         "revision_decision",
     ]
+    assert selection_review["required_unselected_impact_top_n"] == 5
+    assert selection_review["required_card_count_challenger_count"] == 3
     assert "forced_match_coverage" in selection_review["blocking_categories"]
     assert copy_review["required_dimensions"] == [
         "fact_support",
@@ -290,8 +296,11 @@ def test_selection_review_validation_requires_objection_coverage():
             "verdict": "pass",
             "note": "Not selected after comparing direct impact, match balance, and stronger public cases.",
         }
-        for item in review_payload["required_unselected_candidate_reviews"]
+        for item in _review_required_unselected_items(review_payload)
     ]
+    strongest_omitted_id = _first_review_player_id(review_payload["required_unselected_candidate_reviews"])
+    impact_challenger_id = _first_review_player_id(review_payload["required_impact_candidate_reviews"])
+    add_challenger_id = _first_review_player_id(review_payload["card_count_challengers"])
     good_review = {
         "schema_version": 1,
         "status": "pass",
@@ -307,7 +316,7 @@ def test_selection_review_validation_requires_objection_coverage():
                 "reason": "Weakest selected card was checked against the omission list.",
             },
             "strongest_omitted_card": {
-                "player_id": review_payload["required_unselected_candidate_reviews"][0]["player_id"],
+                "player_id": strongest_omitted_id,
                 "reason": "Strongest omitted card does not beat the final public slate.",
             },
             "drop_weakest_verdict": {
@@ -316,8 +325,18 @@ def test_selection_review_validation_requires_objection_coverage():
             },
             "replace_weakest_verdict": {
                 "decision": "keep",
-                "replacement_player_id": review_payload["required_unselected_candidate_reviews"][0]["player_id"],
+                "replacement_player_id": strongest_omitted_id,
                 "reason": "Replacement would not improve the slate.",
+            },
+            "impact_challenger_verdict": {
+                "player_id": impact_challenger_id,
+                "decision": "omit",
+                "reason": "The strongest omitted impact challenger was compared with the weakest selected card.",
+            },
+            "add_card_verdict": {
+                "player_id": add_challenger_id,
+                "decision": "keep_count",
+                "reason": "The strongest possible extra card would not improve the current slate.",
             },
             "preferred_card_count": len(decision["selected"]),
             "revision_decision": "keep",
@@ -393,6 +412,163 @@ def test_selection_review_payload_includes_omission_context():
     assert review_payload["required_unselected_candidate_reviews"]
     assert review_payload["audit_candidates"]
     assert review_payload["public_card_count"]["selected"] == len(decision["selected"])
+
+
+def test_selection_review_payload_surfaces_impact_and_card_count_challengers():
+    from football_data.editorial_loop import build_selection_review_payload
+
+    selected = _review_test_candidate(
+        player_id="selected-vlasic",
+        player_name="Nikola VLASIC",
+        headline_rank=8,
+        headline_score=64.72,
+        impact_rank=4,
+        impact_score=19.5,
+        eligible_awards=["impact_pick"],
+        metrics={"goals": 1, "match_winning_goal": 1},
+        chips=["match-winning goal"],
+    )
+    impact_challenger = _review_test_candidate(
+        player_id="omitted-kalajdzic",
+        player_name="Sasa KALAJDZIC",
+        headline_rank=21,
+        headline_score=46.91,
+        impact_rank=5,
+        impact_score=19.5,
+        eligible_awards=["impact_pick"],
+        metrics={"goals": 1, "stoppage_time_goal": 1, "comeback_equalizer": 1},
+        chips=["stoppage-time equaliser"],
+    )
+    metric_trap = _review_test_candidate(
+        player_id="omitted-paredes",
+        player_name="Leandro PAREDES",
+        headline_rank=5,
+        headline_score=87.11,
+        impact_rank=171,
+        impact_score=0.0,
+        eligible_awards=["player_of_the_day"],
+        metrics={"line_breaks_completed": 40},
+        chips=["repeated line breaks"],
+    )
+    candidate_pool = {
+        "match_date": "2026-06-27",
+        "selectable_candidates": [selected, impact_challenger, metric_trap],
+        "audit_candidates": [],
+    }
+    selection_decision = {
+        "selected": [
+            {
+                "award_type": "impact_pick",
+                "player_id": selected["player_id"],
+                "player_name": selected["player_name"],
+            }
+        ]
+    }
+    review_profile = {
+        "id": "selection_review_v1",
+        "required_unselected_headline_top_n": 8,
+        "required_unselected_impact_top_n": 5,
+    }
+
+    review_payload = build_selection_review_payload(
+        selection_decision=selection_decision,
+        candidate_pool=candidate_pool,
+        selection_validation={"status": "pass", "warnings": []},
+        review_profile=review_profile,
+        selection_config={"public_card_count": {"min": 3, "max": 6}},
+    )
+
+    assert [item["player_id"] for item in review_payload["required_impact_candidate_reviews"]] == [
+        "omitted-kalajdzic"
+    ]
+    assert review_payload["card_count_challengers"][0]["player_id"] == "omitted-kalajdzic"
+
+
+def test_selection_review_validation_requires_challenger_verdict_references():
+    from football_data.editorial_loop import validate_selection_review
+
+    review_profile = {
+        "id": "selection_review_v1",
+        "required_dimensions": [
+            "selected_card_convincingness",
+            "obvious_omission",
+            "alternative_slate_comparison",
+            "weakest_selected_card",
+            "strongest_omitted_card",
+            "impact_challenger_comparison",
+            "card_count_verdict",
+        ],
+        "required_slate_assessment_fields": [
+            "reader_questions",
+            "alternative_slate_comparison",
+            "weakest_selected_card",
+            "strongest_omitted_card",
+            "drop_weakest_verdict",
+            "replace_weakest_verdict",
+            "impact_challenger_verdict",
+            "add_card_verdict",
+            "preferred_card_count",
+            "revision_decision",
+        ],
+    }
+    review_payload = {
+        "selected": [{"player_id": "selected-vlasic"}],
+        "required_impact_candidate_reviews": [{"player_id": "omitted-kalajdzic"}],
+        "card_count_challengers": [{"player_id": "omitted-kalajdzic"}],
+        "public_card_count": {"selected": 5, "min": 3, "max": 6},
+    }
+    review = {
+        "schema_version": 1,
+        "status": "pass",
+        "reviewed_dimensions": review_profile["required_dimensions"],
+        "selected_player_reviews": [
+            {"player_id": "selected-vlasic", "status": "pass", "note": "checked"}
+        ],
+        "unselected_candidate_reviews": [
+            {"player_id": "omitted-kalajdzic", "status": "omit", "note": "checked"}
+        ],
+        "slate_assessment": {
+            "reader_questions": ["Should the omitted impact case be added?"],
+            "alternative_slate_comparison": [
+                {"card_count": 5, "tradeoff": "current slate"},
+                {"card_count": 6, "tradeoff": "add omitted impact case"},
+            ],
+            "weakest_selected_card": {"player_id": "selected-vlasic", "reason": "checked"},
+            "strongest_omitted_card": {"player_id": "omitted-kalajdzic", "reason": "checked"},
+            "drop_weakest_verdict": {"decision": "keep", "reason": "checked"},
+            "replace_weakest_verdict": {
+                "decision": "keep",
+                "replacement_player_id": "omitted-kalajdzic",
+                "reason": "checked",
+            },
+            "impact_challenger_verdict": {
+                "player_id": "wrong-omission",
+                "decision": "omit",
+                "reason": "This does not review the required top-impact challenger.",
+            },
+            "add_card_verdict": {
+                "player_id": "wrong-omission",
+                "decision": "keep_count",
+                "reason": "This does not review the strongest sixth-card challenger.",
+            },
+            "preferred_card_count": 5,
+            "revision_decision": "keep",
+        },
+        "blocking_findings": [],
+        "unresolved_objections": [],
+        "revision_summary": "No issue remains.",
+    }
+
+    wrong_reference = validate_selection_review(review, review_profile, review_payload)
+
+    assert wrong_reference["status"] == "failed"
+    assert any("impact_challenger_verdict" in warning for warning in wrong_reference["warnings"])
+    assert any("add_card_verdict" in warning for warning in wrong_reference["warnings"])
+
+    review["slate_assessment"]["impact_challenger_verdict"]["player_id"] = "omitted-kalajdzic"
+    review["slate_assessment"]["add_card_verdict"]["player_id"] = "omitted-kalajdzic"
+    valid_reference = validate_selection_review(review, review_profile, review_payload)
+    assert valid_reference["status"] == "pass"
 
 
 def test_selection_review_validation_requires_slate_assessment_fields():
@@ -1171,6 +1347,35 @@ def _selector_audit_candidate(selector_input: dict, player_name: str, audit_type
     )
 
 
+def _review_required_unselected_items(review_payload: dict) -> list[dict]:
+    seen: set[str] = set()
+    required: list[dict] = []
+    for key in (
+        "required_unselected_candidate_reviews",
+        "required_impact_candidate_reviews",
+        "card_count_challengers",
+    ):
+        for item in review_payload.get(key, []):
+            if not isinstance(item, dict):
+                continue
+            player_id = str(item.get("player_id") or "")
+            if not player_id or player_id in seen:
+                continue
+            seen.add(player_id)
+            required.append(item)
+    return required
+
+
+def _first_review_player_id(items: list[dict]) -> str | None:
+    for item in items:
+        if not isinstance(item, dict):
+            continue
+        player_id = str(item.get("player_id") or "").strip()
+        if player_id:
+            return player_id
+    return None
+
+
 def _selected(candidate: dict, award_type: str) -> dict:
     return {
         "award_type": award_type,
@@ -1180,4 +1385,46 @@ def _selected(candidate: dict, award_type: str) -> dict:
         "editorial_reason": "Selected in a regression scenario.",
         "evidence_used": [],
         "selection_risk": "",
+    }
+
+
+def _review_test_candidate(
+    *,
+    player_id: str,
+    player_name: str,
+    headline_rank: int,
+    headline_score: float,
+    impact_rank: int,
+    impact_score: float,
+    eligible_awards: list[str],
+    metrics: dict,
+    chips: list[str],
+) -> dict:
+    award_contexts = {
+        award_type: {
+            "metrics": metrics,
+            "evidence_chips": {
+                "en": chips,
+                "zh": chips,
+            },
+        }
+        for award_type in eligible_awards
+    }
+    return {
+        "player_id": player_id,
+        "player_name": player_name,
+        "team": player_name.split()[-1],
+        "opponent": "Opponent",
+        "match_key": f"match-{player_id}",
+        "match_no": headline_rank,
+        "player_no": headline_rank,
+        "headline_rank": headline_rank,
+        "impact_rank": impact_rank,
+        "headline_score": headline_score,
+        "rank_score": headline_score,
+        "role_scores": {"impact": impact_score},
+        "eligible_awards": eligible_awards,
+        "award_contexts": award_contexts,
+        "display_names": {},
+        "data_sources": {},
     }

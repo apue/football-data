@@ -75,14 +75,19 @@ def write_passing_test_editorial_loop(
     audit_dir,
     selection: dict[str, Any],
     copy: dict[str, Any],
+    candidate_pool: dict[str, Any] | None = None,
+    experiment: dict[str, Any] | None = None,
 ) -> None:
+    review_payload = None
+    if candidate_pool is not None and experiment is not None:
+        review_payload = _selection_review_payload(selection, candidate_pool, experiment)
     _write_test_json(
         audit_dir / "selection_rounds" / "round_1" / "selection_decision.json",
         selection,
     )
     _write_test_json(
         audit_dir / "selection_rounds" / "round_1" / "selection_review.json",
-        build_passing_test_selection_review(selection),
+        build_passing_test_selection_review(selection, review_payload),
     )
     _write_test_json(audit_dir / "copy_rounds" / "round_1" / "copy.json", copy)
     _write_test_json(
@@ -91,8 +96,17 @@ def write_passing_test_editorial_loop(
     )
 
 
-def build_passing_test_selection_review(selection: dict[str, Any]) -> dict[str, Any]:
+def build_passing_test_selection_review(
+    selection: dict[str, Any],
+    review_payload: dict[str, Any] | None = None,
+) -> dict[str, Any]:
     selected = list(selection["selected"])
+    required_unselected = _required_unselected_reviews(review_payload)
+    strongest_omitted = _first_player_id(
+        (review_payload or {}).get("required_unselected_candidate_reviews")
+    ) or _first_player_id((review_payload or {}).get("required_impact_candidate_reviews"))
+    impact_challenger = _first_player_id((review_payload or {}).get("required_impact_candidate_reviews"))
+    add_challenger = _first_player_id((review_payload or {}).get("card_count_challengers"))
     return {
         "schema_version": 1,
         "status": "pass",
@@ -102,6 +116,8 @@ def build_passing_test_selection_review(selection: dict[str, Any]) -> dict[str, 
             "alternative_slate_comparison",
             "weakest_selected_card",
             "strongest_omitted_card",
+            "impact_challenger_comparison",
+            "card_count_verdict",
         ],
         "selected_player_reviews": [
             {
@@ -111,11 +127,12 @@ def build_passing_test_selection_review(selection: dict[str, Any]) -> dict[str, 
             }
             for item in selected
         ],
-        "unselected_candidate_reviews": [],
+        "unselected_candidate_reviews": required_unselected,
         "slate_assessment": {
             "reader_questions": ["Is there a stronger direct-impact omission?"],
             "alternative_slate_comparison": [
                 {"card_count": len(selected), "tradeoff": "current slate"},
+                {"card_count": len(selected) + 1, "tradeoff": "add strongest omitted card"},
                 {"card_count": max(0, len(selected) - 1), "tradeoff": "drop weakest selected"},
             ],
             "weakest_selected_card": {
@@ -123,7 +140,7 @@ def build_passing_test_selection_review(selection: dict[str, Any]) -> dict[str, 
                 "reason": "Checked against available omissions.",
             },
             "strongest_omitted_card": {
-                "player_id": None,
+                "player_id": strongest_omitted,
                 "reason": "No omitted candidate forced a replacement.",
             },
             "drop_weakest_verdict": {
@@ -132,8 +149,18 @@ def build_passing_test_selection_review(selection: dict[str, Any]) -> dict[str, 
             },
             "replace_weakest_verdict": {
                 "decision": "keep",
-                "replacement_player_id": None,
+                "replacement_player_id": strongest_omitted,
                 "reason": "No replacement improves the slate.",
+            },
+            "impact_challenger_verdict": {
+                "player_id": impact_challenger,
+                "decision": "omit",
+                "reason": "The strongest omitted impact challenger was checked.",
+            },
+            "add_card_verdict": {
+                "player_id": add_challenger,
+                "decision": "keep_count",
+                "reason": "Adding the strongest omitted card would not improve the slate.",
             },
             "preferred_card_count": len(selected),
             "revision_decision": "keep",
@@ -143,6 +170,62 @@ def build_passing_test_selection_review(selection: dict[str, Any]) -> dict[str, 
         "unresolved_objections": [],
         "revision_summary": "No blocking selection issue remains.",
     }
+
+
+def _selection_review_payload(
+    selection: dict[str, Any],
+    candidate_pool: dict[str, Any],
+    experiment: dict[str, Any],
+) -> dict[str, Any]:
+    from football_data.editorial_loop import build_selection_review_payload
+    from football_data.editorial_registry import load_selection_review_profile
+    from football_data.editorial_validation import validate_selection_decision
+
+    review_profile = load_selection_review_profile(experiment["selection_review_profile"])
+    return build_selection_review_payload(
+        selection_decision=selection,
+        candidate_pool=candidate_pool,
+        selection_validation=validate_selection_decision(selection, candidate_pool, experiment),
+        review_profile=review_profile,
+        selection_config=experiment["selection"],
+    )
+
+
+def _required_unselected_reviews(review_payload: dict[str, Any] | None) -> list[dict[str, str]]:
+    seen: set[str] = set()
+    reviews: list[dict[str, str]] = []
+    for key in (
+        "required_unselected_candidate_reviews",
+        "required_impact_candidate_reviews",
+        "card_count_challengers",
+    ):
+        for item in (review_payload or {}).get(key, []):
+            if not isinstance(item, dict):
+                continue
+            player_id = str(item.get("player_id") or "")
+            if not player_id or player_id in seen:
+                continue
+            seen.add(player_id)
+            reviews.append(
+                {
+                    "player_id": player_id,
+                    "status": "omit",
+                    "note": "Checked as a required omitted candidate.",
+                }
+            )
+    return reviews
+
+
+def _first_player_id(items: Any) -> str | None:
+    if not isinstance(items, list):
+        return None
+    for item in items:
+        if not isinstance(item, dict):
+            continue
+        player_id = str(item.get("player_id") or "").strip()
+        if player_id:
+            return player_id
+    return None
 
 
 def build_passing_test_copy_review(copy: dict[str, Any]) -> dict[str, Any]:

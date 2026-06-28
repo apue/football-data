@@ -56,6 +56,8 @@ For each round, write:
 - `agent-runs/YYYY-MM-DD/selection_rounds/round_N/selection_decision.json`: selected players, editorial reasons, and reasons for skipping higher-ranked or notable candidates.
 - `agent-runs/YYYY-MM-DD/selection_rounds/round_N/selection_review.json`: selection-only review covering whether the 3-6 card slate is convincing, the weakest selected card, strongest omitted candidate, reader objections, alternative slate comparison, and the revision decision.
 
+Selection review must explicitly cover omitted top-impact challengers and the strongest add-card challenger when the slate uses fewer than the configured maximum public cards. A candidate with a late winner, stoppage-time equaliser, comeback winner, or near-tie impact score should be treated as a reader-objection challenger, not folded into a generic "broader coverage" omission note.
+
 If selection review blocks, revise by writing the next round. Stop when review passes or after three selection rounds. If selection still does not pass, mark the run `needs_human_review` instead of forcing a slate through.
 
 7. Write the bounded copy loop outputs:
@@ -179,6 +181,8 @@ If output is poor, repair the source of the problem: scoring config, candidate-p
 - Does the promoted copy round's `copy_validation.json` pass?
 - Does `editorial_loop_validation.json` pass?
 - Did selection review cover obvious omissions, weakest selected, strongest omitted, reader objections, and alternative slates?
+- Did selection review explicitly name and compare omitted top-impact challengers, especially near-tie impact scores, late winners, stoppage-time equalisers, and comeback winners?
+- If fewer than six public cards were selected, did selection review name the strongest extra-card challenger and explain why adding that card improves or weakens the slate?
 - Did copy review cover fact support, English flow, Chinese style, title core fact, and unsupported claims?
 - Did copy review use the active style calibration examples, especially for generic Chinese closing evaluations and AI-ish abstraction?
 - Does the copy avoid implying video review, media ratings, or unsupported tactical observation?

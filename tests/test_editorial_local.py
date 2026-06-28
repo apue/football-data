@@ -79,7 +79,7 @@ def test_compile_local_editorial_uses_local_decision_and_copy(tmp_path):
     experiment = load_editorial_experiment()
     decision = build_test_selection_decision(candidate_pool, experiment)
     copy = build_test_copy(build_copy_payloads(decision, candidate_pool))
-    write_passing_test_editorial_loop(audit_dir, decision, copy)
+    write_passing_test_editorial_loop(audit_dir, decision, copy, candidate_pool, experiment)
     promote_editorial_loop(match_date="2026-06-22", agent_runs_dir=tmp_path / "agent-runs")
 
     result = compile_local_editorial(
@@ -175,7 +175,7 @@ def test_compile_local_editorial_rejects_ai_sounding_zh_copy(tmp_path):
     zh_profile = load_copy_profile(experiment["copy_profiles"]["zh"])
     term = zh_profile["banned_public_terms"][0]
     copy["zh"]["items"][0]["body"] = f"这句包含{term}，应该被拦住。"
-    write_passing_test_editorial_loop(audit_dir, decision, copy)
+    write_passing_test_editorial_loop(audit_dir, decision, copy, candidate_pool, experiment)
 
     with pytest.raises(RuntimeError, match="copy loop did not pass"):
         promote_editorial_loop(match_date="2026-06-22", agent_runs_dir=tmp_path / "agent-runs")
@@ -205,7 +205,13 @@ def test_compile_local_editorial_rejects_zh_title_missing_core_fact(tmp_path):
     copy = build_test_copy(build_copy_payloads(decision, candidate_pool))
     messi = next(item for item in copy["zh"]["items"] if item["player_id"].endswith("|Argentina|10"))
     messi["title"] = "梅西补时再进"
-    write_passing_test_editorial_loop(audit_dir, decision, copy)
+    write_passing_test_editorial_loop(
+        audit_dir,
+        decision,
+        copy,
+        candidate_pool,
+        load_editorial_experiment(),
+    )
 
     with pytest.raises(RuntimeError, match="copy loop did not pass"):
         promote_editorial_loop(match_date="2026-06-22", agent_runs_dir=tmp_path / "agent-runs")
