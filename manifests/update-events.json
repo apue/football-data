@@ -1,31 +1,6 @@
 {
-  "generated_at": "2026-06-28T07:59:36+00:00",
-  "new_matches": [
-    {
-      "match_no": 67,
-      "source_id": "fifa-world-cup-2026-pmsr-m67-pan-eng-v1"
-    },
-    {
-      "match_no": 68,
-      "source_id": "fifa-world-cup-2026-pmsr-m68-cro-gha-v1"
-    },
-    {
-      "match_no": 69,
-      "source_id": "fifa-world-cup-2026-pmsr-m69-alg-aut-v1"
-    },
-    {
-      "match_no": 70,
-      "source_id": "fifa-world-cup-2026-pmsr-m70-jor-arg-v1"
-    },
-    {
-      "match_no": 71,
-      "source_id": "fifa-world-cup-2026-pmsr-m71-col-por-v1"
-    },
-    {
-      "match_no": 72,
-      "source_id": "fifa-world-cup-2026-pmsr-m72-cod-uzb-v1"
-    }
-  ],
+  "generated_at": "2026-06-28T11:12:23+00:00",
+  "new_matches": [],
   "version_updates": [],
   "downloaded": [
     "fifa-world-cup-2026-pmsr-m01-mex-rsa-v1",
@@ -103,7 +78,7 @@
   ],
   "supplemental": {
     "fifa_timeline": {
-      "generated_at": "2026-06-28T08:00:56+00:00",
+      "generated_at": "2026-06-28T11:13:49+00:00",
       "source": "fifa_timeline_api",
       "status": "success",
       "matches": 72,
