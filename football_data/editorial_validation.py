@@ -6,6 +6,26 @@ from typing import Any
 from football_data.editorial_constants import PUBLIC_AWARD_TYPES
 
 
+_WEAK_SELECTION_TEXTS = {
+    "",
+    "en",
+    "zh",
+    "english",
+    "chinese",
+    "low",
+    "medium",
+    "high",
+    "n/a",
+    "na",
+    "none",
+    "null",
+    "todo",
+}
+_GENERIC_REPAIR_SELECTION_RISK = (
+    "low: selected player is in the candidate pool and the evidence packet supports the award."
+)
+
+
 def validate_selection_decision(
     decision: dict[str, Any],
     candidate_pool: dict[str, Any],
@@ -39,12 +59,16 @@ def validate_selection_decision(
     match_counts: Counter[str] = Counter()
     player_awards: dict[str, str] = {}
     for item in selected:
+        if not isinstance(item, dict):
+            warnings.append("selection_decision.selected item must be an object")
+            continue
         player_id = str(item.get("player_id") or "")
         award_type = str(item.get("award_type") or "")
-        if player_id not in selectable:
+        candidate = selectable.get(player_id)
+        warnings.extend(_selected_item_content_warnings(item, player_id, candidate))
+        if not candidate:
             warnings.append(f"{player_id or 'missing player'} not in candidate pool")
             continue
-        candidate = selectable[player_id]
         if award_type not in allowed_awards:
             warnings.append(f"{award_type or 'missing award_type'} is not an allowed public award type")
         elif award_type not in candidate.get("eligible_awards", []):
@@ -150,3 +174,65 @@ def _selection_public_card_count(selection_config: dict[str, Any]) -> tuple[int,
     if min_count > max_count:
         min_count, max_count = max_count, min_count
     return min_count, max_count
+
+
+def _selected_item_content_warnings(
+    item: dict[str, Any],
+    player_id: str,
+    candidate: dict[str, Any] | None,
+) -> list[str]:
+    label = player_id or str(item.get("player_name") or "selected item")
+    warnings: list[str] = []
+    if _weak_selection_text(item.get("editorial_reason"), min_chars=20):
+        warnings.append(f"{label} editorial_reason is too weak")
+    if _weak_evidence_used(item.get("evidence_used"), candidate, str(item.get("award_type") or "")):
+        warnings.append(f"{label} evidence_used must include meaningful evidence strings")
+    if _weak_selection_text(item.get("selection_risk"), min_chars=20, reject_generic_risk=True):
+        warnings.append(f"{label} selection_risk is too weak")
+    return warnings
+
+
+def _weak_selection_text(
+    value: Any,
+    *,
+    min_chars: int,
+    reject_generic_risk: bool = False,
+) -> bool:
+    text = str(value or "").strip()
+    lowered = text.lower()
+    if lowered in _WEAK_SELECTION_TEXTS:
+        return True
+    if reject_generic_risk and lowered == _GENERIC_REPAIR_SELECTION_RISK:
+        return True
+    return len(text) < min_chars
+
+
+def _weak_evidence_used(
+    value: Any,
+    candidate: dict[str, Any] | None,
+    award_type: str,
+) -> bool:
+    if not isinstance(value, list):
+        return True
+    evidence = [str(item).strip() for item in value if str(item).strip()]
+    if not evidence:
+        return True
+    chip_set = _candidate_evidence_chip_set(candidate, award_type)
+    return any(_weak_evidence_item(item, chip_set) for item in evidence)
+
+
+def _weak_evidence_item(text: str, chip_set: set[str]) -> bool:
+    lowered = text.lower()
+    if lowered in _WEAK_SELECTION_TEXTS:
+        return True
+    return len(text) < 8 and lowered not in chip_set
+
+
+def _candidate_evidence_chip_set(candidate: dict[str, Any] | None, award_type: str) -> set[str]:
+    if not candidate:
+        return set()
+    award_context = (candidate.get("award_contexts") or {}).get(award_type) or {}
+    chips = (award_context.get("evidence_chips") or {}).get("en")
+    if not chips:
+        chips = (candidate.get("evidence_chips") or {}).get("en", [])
+    return {str(chip).strip().lower() for chip in chips if str(chip).strip()}

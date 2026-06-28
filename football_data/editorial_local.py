@@ -27,7 +27,6 @@ from football_data.editorial_loop import (
 from football_data.editorial_selection import (
     build_selector_input,
     normalize_selection_decision,
-    repair_selection_decision,
 )
 from football_data.editorial_validation import validate_selection_decision
 
@@ -111,7 +110,6 @@ def compile_local_editorial(
     previous_run = _load_json(audit_dir / "run.json")
 
     experiment = load_editorial_experiment(previous_run.get("experiment_id"), config_dir)
-    selection_decision = repair_selection_decision(selection_decision, candidate_pool)
     selection_validation = validate_selection_decision(selection_decision, candidate_pool, experiment)
     if selection_validation["status"] != "pass":
         _write_json(audit_dir / "selection_validation.json", selection_validation)

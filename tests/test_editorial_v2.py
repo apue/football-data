@@ -1240,7 +1240,7 @@ def test_editorial_v2_selection_validation_requires_pool_membership_and_skip_rea
     four_validation = validate_selection_decision(four_public_cards, pool, experiment)
     assert four_validation["status"] == "pass"
 
-    from football_data.editorial_selection import normalize_selection_decision, repair_selection_decision
+    from football_data.editorial_selection import normalize_selection_decision
 
     role_public_card = json.loads(json.dumps(decision))
     role_public_card["selected"][-1]["award_type"] = "progression_pick"
@@ -1277,14 +1277,15 @@ def test_editorial_v2_selection_validation_requires_pool_membership_and_skip_rea
     assert any("progression is not an allowed public award type" in warning for warning in normalized_validation["warnings"])
     assert any("defensive is not an allowed public award type" in warning for warning in normalized_validation["warnings"])
 
-    weak_reason = json.loads(json.dumps(decision))
-    weak_reason["selected"][0]["editorial_reason"] = "en"
-    weak_reason["selected"][0]["evidence_used"] = ["brce", "unsupported but long evidence phrase"]
-    repaired = repair_selection_decision(weak_reason, pool)
-    assert len(repaired["selected"][0]["editorial_reason"]) > 20
-    assert repaired["selected"][0]["evidence_used"] != ["brce", "unsupported but long evidence phrase"]
-    assert any("repaired weak editorial_reason" in warning for warning in repaired["warnings"])
-    assert any("repaired weak evidence_used" in warning for warning in repaired["warnings"])
+    weak_selection = json.loads(json.dumps(decision))
+    weak_selection["selected"][0]["editorial_reason"] = "en"
+    weak_selection["selected"][0]["evidence_used"] = ["brce", "unsupported but long evidence phrase"]
+    weak_selection["selected"][0]["selection_risk"] = "low"
+    weak_validation = validate_selection_decision(weak_selection, pool, experiment)
+    assert weak_validation["status"] == "failed"
+    assert any("editorial_reason is too weak" in warning for warning in weak_validation["warnings"])
+    assert any("evidence_used must include meaningful evidence" in warning for warning in weak_validation["warnings"])
+    assert any("selection_risk is too weak" in warning for warning in weak_validation["warnings"])
 
 
 def test_editorial_copy_sanitizes_common_metric_misread():
@@ -1359,8 +1360,8 @@ def _selected(candidate: dict, award_type: str) -> dict:
         "player_name": candidate["player_name"],
         "team": candidate["team"],
         "editorial_reason": "Selected in a regression scenario.",
-        "evidence_used": [],
-        "selection_risk": "",
+        "evidence_used": ["Direct candidate evidence from regression fixture."],
+        "selection_risk": "Review final copy for precise match context before publishing.",
     }
 
 
