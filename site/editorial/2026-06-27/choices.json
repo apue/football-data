@@ -1,0 +1,908 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-06-28T10:51:12+00:00",
+  "compiled_at": "2026-06-28T10:51:12+00:00",
+  "match_date": "2026-06-27",
+  "scoring_version": "v0.4",
+  "editorial_generation": {
+    "workflow_variant": "bounded_selection_copy_loop_v1",
+    "experiment_id": "bounded_editorial_loop_v1",
+    "selection_mode": "bounded_loop_local_editor",
+    "selection_review_profile": "selection_review_v1",
+    "copy_review_profile": "copy_review_v1",
+    "loop_policy": {
+      "selection_max_rounds": 3,
+      "copy_max_rounds": 3,
+      "max_rounds_exceeded_status": "needs_human_review",
+      "promotion_requires": [
+        "selection_loop_pass",
+        "copy_loop_pass",
+        "deterministic_selection_validation_pass",
+        "deterministic_copy_validation_pass"
+      ]
+    },
+    "editorial_loop_status": "pass",
+    "selection_rounds": 1,
+    "copy_rounds": 1,
+    "uses_official_assists": true,
+    "uses_goal_involvements": true,
+    "event_source": "fifa_timeline_api",
+    "event_sources": {
+      "goal_involvements": "fifa_timeline_api"
+    }
+  },
+  "matches": [
+    {
+      "match_key": "FIFA-2026-M67-PAN-ENG",
+      "match_no": 67,
+      "match_date": "2026-06-27",
+      "kickoff_time": "17:00",
+      "stadium": "New York/New Jersey Stadium",
+      "home_team": "Panama",
+      "away_team": "England",
+      "home_score": 0,
+      "away_score": 2
+    },
+    {
+      "match_key": "FIFA-2026-M68-CRO-GHA",
+      "match_no": 68,
+      "match_date": "2026-06-27",
+      "kickoff_time": "17:00",
+      "stadium": "Philadelphia Stadium",
+      "home_team": "Croatia",
+      "away_team": "Ghana",
+      "home_score": 2,
+      "away_score": 1
+    },
+    {
+      "match_key": "FIFA-2026-M69-ALG-AUT",
+      "match_no": 69,
+      "match_date": "2026-06-27",
+      "kickoff_time": "21:00",
+      "stadium": "Kansas City Stadium",
+      "home_team": "Algeria",
+      "away_team": "Austria",
+      "home_score": 3,
+      "away_score": 3
+    },
+    {
+      "match_key": "FIFA-2026-M70-JOR-ARG",
+      "match_no": 70,
+      "match_date": "2026-06-27",
+      "kickoff_time": "21:00",
+      "stadium": "Dallas Stadium",
+      "home_team": "Jordan",
+      "away_team": "Argentina",
+      "home_score": 1,
+      "away_score": 3
+    },
+    {
+      "match_key": "FIFA-2026-M71-COL-POR",
+      "match_no": 71,
+      "match_date": "2026-06-27",
+      "kickoff_time": "19:30",
+      "stadium": "Miami Stadium",
+      "home_team": "Colombia",
+      "away_team": "Portugal",
+      "home_score": 0,
+      "away_score": 0
+    },
+    {
+      "match_key": "FIFA-2026-M72-COD-UZB",
+      "match_no": 72,
+      "match_date": "2026-06-27",
+      "kickoff_time": "19:30",
+      "stadium": "Atlanta Stadium",
+      "home_team": "Congo DR",
+      "away_team": "Uzbekistan",
+      "home_score": 3,
+      "away_score": 1
+    }
+  ],
+  "match_flows": {
+    "FIFA-2026-M67-PAN-ENG": {
+      "match_key": "FIFA-2026-M67-PAN-ENG",
+      "match_no": 67,
+      "match_date": "2026-06-27",
+      "home_team": "Panama",
+      "away_team": "England",
+      "home_score": 0,
+      "away_score": 2,
+      "winner_team": "England",
+      "home_trailing_at_any_point": true,
+      "away_trailing_at_any_point": false,
+      "home_came_from_behind_to_win": false,
+      "away_came_from_behind_to_win": false,
+      "goals": [
+        {
+          "goal_order": 1,
+          "minute": 62,
+          "team": "England",
+          "player_team": "England",
+          "player_name": "Jude BELLINGHAM",
+          "own_goal": false,
+          "score_before": "0-0",
+          "score_after": "0-1",
+          "team_score_before": 0,
+          "opponent_score_before": 0,
+          "team_score_after": 1,
+          "opponent_score_after": 0,
+          "tags": [
+            "opening_goal",
+            "go_ahead_goal"
+          ]
+        },
+        {
+          "goal_order": 2,
+          "minute": 67,
+          "team": "England",
+          "player_team": "England",
+          "player_name": "Harry KANE",
+          "own_goal": false,
+          "score_before": "0-1",
+          "score_after": "0-2",
+          "team_score_before": 1,
+          "opponent_score_before": 0,
+          "team_score_after": 2,
+          "opponent_score_after": 0,
+          "tags": []
+        }
+      ],
+      "decisive_goal": null
+    },
+    "FIFA-2026-M68-CRO-GHA": {
+      "match_key": "FIFA-2026-M68-CRO-GHA",
+      "match_no": 68,
+      "match_date": "2026-06-27",
+      "home_team": "Croatia",
+      "away_team": "Ghana",
+      "home_score": 2,
+      "away_score": 1,
+      "winner_team": "Croatia",
+      "home_trailing_at_any_point": false,
+      "away_trailing_at_any_point": true,
+      "home_came_from_behind_to_win": false,
+      "away_came_from_behind_to_win": false,
+      "goals": [
+        {
+          "goal_order": 1,
+          "minute": 31,
+          "team": "Croatia",
+          "player_team": "Croatia",
+          "player_name": "Petar SUCIC",
+          "own_goal": false,
+          "score_before": "0-0",
+          "score_after": "1-0",
+          "team_score_before": 0,
+          "opponent_score_before": 0,
+          "team_score_after": 1,
+          "opponent_score_after": 0,
+          "tags": [
+            "opening_goal",
+            "go_ahead_goal"
+          ]
+        },
+        {
+          "goal_order": 2,
+          "minute": 73,
+          "team": "Ghana",
+          "player_team": "Ghana",
+          "player_name": "Derrick LUCKASSEN",
+          "own_goal": false,
+          "score_before": "1-0",
+          "score_after": "1-1",
+          "team_score_before": 0,
+          "opponent_score_before": 1,
+          "team_score_after": 1,
+          "opponent_score_after": 1,
+          "tags": [
+            "equalizer",
+            "comeback_equalizer"
+          ]
+        },
+        {
+          "goal_order": 3,
+          "minute": 83,
+          "team": "Croatia",
+          "player_team": "Croatia",
+          "player_name": "Nikola VLASIC",
+          "own_goal": false,
+          "score_before": "1-1",
+          "score_after": "2-1",
+          "team_score_before": 1,
+          "opponent_score_before": 1,
+          "team_score_after": 2,
+          "opponent_score_after": 1,
+          "tags": [
+            "go_ahead_goal",
+            "match_winning_goal",
+            "late_goal"
+          ]
+        }
+      ],
+      "decisive_goal": {
+        "goal_order": 3,
+        "minute": 83,
+        "team": "Croatia",
+        "player_team": "Croatia",
+        "player_name": "Nikola VLASIC",
+        "own_goal": false,
+        "score_before": "1-1",
+        "score_after": "2-1",
+        "team_score_before": 1,
+        "opponent_score_before": 1,
+        "team_score_after": 2,
+        "opponent_score_after": 1,
+        "tags": [
+          "go_ahead_goal",
+          "match_winning_goal",
+          "late_goal"
+        ]
+      }
+    },
+    "FIFA-2026-M69-ALG-AUT": {
+      "match_key": "FIFA-2026-M69-ALG-AUT",
+      "match_no": 69,
+      "match_date": "2026-06-27",
+      "home_team": "Algeria",
+      "away_team": "Austria",
+      "home_score": 3,
+      "away_score": 3,
+      "winner_team": null,
+      "home_trailing_at_any_point": true,
+      "away_trailing_at_any_point": true,
+      "home_came_from_behind_to_win": false,
+      "away_came_from_behind_to_win": false,
+      "goals": [
+        {
+          "goal_order": 1,
+          "minute": 28,
+          "team": "Austria",
+          "player_team": "Austria",
+          "player_name": "Marko ARNAUTOVIC",
+          "own_goal": false,
+          "score_before": "0-0",
+          "score_after": "0-1",
+          "team_score_before": 0,
+          "opponent_score_before": 0,
+          "team_score_after": 1,
+          "opponent_score_after": 0,
+          "tags": [
+            "opening_goal",
+            "go_ahead_goal"
+          ]
+        },
+        {
+          "goal_order": 2,
+          "minute": 45,
+          "team": "Algeria",
+          "player_team": "Algeria",
+          "player_name": "Rafik BELGHALI",
+          "own_goal": false,
+          "score_before": "0-1",
+          "score_after": "1-1",
+          "team_score_before": 0,
+          "opponent_score_before": 1,
+          "team_score_after": 1,
+          "opponent_score_after": 1,
+          "tags": [
+            "equalizer",
+            "comeback_equalizer"
+          ]
+        },
+        {
+          "goal_order": 3,
+          "minute": 55,
+          "team": "Austria",
+          "player_team": "Austria",
+          "player_name": "Marcel SABITZER",
+          "own_goal": false,
+          "score_before": "1-1",
+          "score_after": "1-2",
+          "team_score_before": 1,
+          "opponent_score_before": 1,
+          "team_score_after": 2,
+          "opponent_score_after": 1,
+          "tags": [
+            "go_ahead_goal"
+          ]
+        },
+        {
+          "goal_order": 4,
+          "minute": 60,
+          "team": "Algeria",
+          "player_team": "Algeria",
+          "player_name": "Riyad MAHREZ",
+          "own_goal": false,
+          "score_before": "1-2",
+          "score_after": "2-2",
+          "team_score_before": 1,
+          "opponent_score_before": 2,
+          "team_score_after": 2,
+          "opponent_score_after": 2,
+          "tags": [
+            "equalizer",
+            "comeback_equalizer"
+          ]
+        },
+        {
+          "goal_order": 5,
+          "minute": 93,
+          "team": "Algeria",
+          "player_team": "Algeria",
+          "player_name": "Riyad MAHREZ",
+          "own_goal": false,
+          "score_before": "2-2",
+          "score_after": "3-2",
+          "team_score_before": 2,
+          "opponent_score_before": 2,
+          "team_score_after": 3,
+          "opponent_score_after": 2,
+          "tags": [
+            "go_ahead_goal",
+            "late_goal",
+            "stoppage_time_goal"
+          ]
+        },
+        {
+          "goal_order": 6,
+          "minute": 96,
+          "team": "Austria",
+          "player_team": "Austria",
+          "player_name": "Sasa KALAJDZIC",
+          "own_goal": false,
+          "score_before": "3-2",
+          "score_after": "3-3",
+          "team_score_before": 2,
+          "opponent_score_before": 3,
+          "team_score_after": 3,
+          "opponent_score_after": 3,
+          "tags": [
+            "equalizer",
+            "comeback_equalizer",
+            "late_goal",
+            "stoppage_time_goal"
+          ]
+        }
+      ],
+      "decisive_goal": null
+    },
+    "FIFA-2026-M70-JOR-ARG": {
+      "match_key": "FIFA-2026-M70-JOR-ARG",
+      "match_no": 70,
+      "match_date": "2026-06-27",
+      "home_team": "Jordan",
+      "away_team": "Argentina",
+      "home_score": 1,
+      "away_score": 3,
+      "winner_team": "Argentina",
+      "home_trailing_at_any_point": true,
+      "away_trailing_at_any_point": false,
+      "home_came_from_behind_to_win": false,
+      "away_came_from_behind_to_win": false,
+      "goals": [
+        {
+          "goal_order": 1,
+          "minute": 19,
+          "team": "Argentina",
+          "player_team": "Argentina",
+          "player_name": "Giovani LO CELSO",
+          "own_goal": false,
+          "score_before": "0-0",
+          "score_after": "0-1",
+          "team_score_before": 0,
+          "opponent_score_before": 0,
+          "team_score_after": 1,
+          "opponent_score_after": 0,
+          "tags": [
+            "opening_goal",
+            "go_ahead_goal"
+          ]
+        },
+        {
+          "goal_order": 2,
+          "minute": 31,
+          "team": "Argentina",
+          "player_team": "Argentina",
+          "player_name": "Lautaro MARTINEZ",
+          "own_goal": false,
+          "score_before": "0-1",
+          "score_after": "0-2",
+          "team_score_before": 1,
+          "opponent_score_before": 0,
+          "team_score_after": 2,
+          "opponent_score_after": 0,
+          "tags": []
+        },
+        {
+          "goal_order": 3,
+          "minute": 55,
+          "team": "Jordan",
+          "player_team": "Jordan",
+          "player_name": "MOUSA ALTAMARI",
+          "own_goal": false,
+          "score_before": "0-2",
+          "score_after": "1-2",
+          "team_score_before": 0,
+          "opponent_score_before": 2,
+          "team_score_after": 1,
+          "opponent_score_after": 2,
+          "tags": []
+        },
+        {
+          "goal_order": 4,
+          "minute": 80,
+          "team": "Argentina",
+          "player_team": "Argentina",
+          "player_name": "Lionel MESSI",
+          "own_goal": false,
+          "score_before": "1-2",
+          "score_after": "1-3",
+          "team_score_before": 2,
+          "opponent_score_before": 1,
+          "team_score_after": 3,
+          "opponent_score_after": 1,
+          "tags": [
+            "late_goal"
+          ]
+        }
+      ],
+      "decisive_goal": null
+    },
+    "FIFA-2026-M71-COL-POR": {
+      "match_key": "FIFA-2026-M71-COL-POR",
+      "match_no": 71,
+      "match_date": "2026-06-27",
+      "home_team": "Colombia",
+      "away_team": "Portugal",
+      "home_score": 0,
+      "away_score": 0,
+      "winner_team": null,
+      "home_trailing_at_any_point": false,
+      "away_trailing_at_any_point": false,
+      "home_came_from_behind_to_win": false,
+      "away_came_from_behind_to_win": false,
+      "goals": [],
+      "decisive_goal": null
+    },
+    "FIFA-2026-M72-COD-UZB": {
+      "match_key": "FIFA-2026-M72-COD-UZB",
+      "match_no": 72,
+      "match_date": "2026-06-27",
+      "home_team": "Congo DR",
+      "away_team": "Uzbekistan",
+      "home_score": 3,
+      "away_score": 1,
+      "winner_team": "Congo DR",
+      "home_trailing_at_any_point": true,
+      "away_trailing_at_any_point": true,
+      "home_came_from_behind_to_win": true,
+      "away_came_from_behind_to_win": false,
+      "goals": [
+        {
+          "goal_order": 1,
+          "minute": 10,
+          "team": "Uzbekistan",
+          "player_team": "Uzbekistan",
+          "player_name": "Eldor SHOMURODOV",
+          "own_goal": false,
+          "score_before": "0-0",
+          "score_after": "0-1",
+          "team_score_before": 0,
+          "opponent_score_before": 0,
+          "team_score_after": 1,
+          "opponent_score_after": 0,
+          "tags": [
+            "opening_goal",
+            "go_ahead_goal"
+          ]
+        },
+        {
+          "goal_order": 2,
+          "minute": 68,
+          "team": "Congo DR",
+          "player_team": "Congo DR",
+          "player_name": "Yoane WISSA",
+          "own_goal": false,
+          "score_before": "0-1",
+          "score_after": "1-1",
+          "team_score_before": 0,
+          "opponent_score_before": 1,
+          "team_score_after": 1,
+          "opponent_score_after": 1,
+          "tags": [
+            "equalizer",
+            "comeback_equalizer",
+            "team_came_from_behind_goal"
+          ]
+        },
+        {
+          "goal_order": 3,
+          "minute": 78,
+          "team": "Congo DR",
+          "player_team": "Congo DR",
+          "player_name": "Fiston MAYELE",
+          "own_goal": false,
+          "score_before": "1-1",
+          "score_after": "2-1",
+          "team_score_before": 1,
+          "opponent_score_before": 1,
+          "team_score_after": 2,
+          "opponent_score_after": 1,
+          "tags": [
+            "go_ahead_goal",
+            "match_winning_goal",
+            "late_goal",
+            "team_came_from_behind_goal",
+            "comeback_winner"
+          ]
+        },
+        {
+          "goal_order": 4,
+          "minute": 91,
+          "team": "Congo DR",
+          "player_team": "Congo DR",
+          "player_name": "Yoane WISSA",
+          "own_goal": false,
+          "score_before": "2-1",
+          "score_after": "3-1",
+          "team_score_before": 2,
+          "opponent_score_before": 1,
+          "team_score_after": 3,
+          "opponent_score_after": 1,
+          "tags": [
+            "late_goal",
+            "stoppage_time_goal",
+            "team_came_from_behind_goal"
+          ]
+        }
+      ],
+      "decisive_goal": {
+        "goal_order": 3,
+        "minute": 78,
+        "team": "Congo DR",
+        "player_team": "Congo DR",
+        "player_name": "Fiston MAYELE",
+        "own_goal": false,
+        "score_before": "1-1",
+        "score_after": "2-1",
+        "team_score_before": 1,
+        "opponent_score_before": 1,
+        "team_score_after": 2,
+        "opponent_score_after": 1,
+        "tags": [
+          "go_ahead_goal",
+          "match_winning_goal",
+          "late_goal",
+          "team_came_from_behind_goal",
+          "comeback_winner"
+        ]
+      }
+    }
+  },
+  "choices": [
+    {
+      "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
+      "award_label": {
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
+      },
+      "player_id": "FIFA-2026-M69-ALG-AUT|Algeria|7",
+      "player_name": "Riyad MAHREZ",
+      "team": "Algeria",
+      "opponent": "Austria",
+      "match_key": "FIFA-2026-M69-ALG-AUT",
+      "match_no": 69,
+      "player_no": 7,
+      "position": "FW",
+      "score": 112.62,
+      "metrics": {
+        "shots": 3,
+        "on_target": 2,
+        "goals": 2,
+        "goal_involvements": 2,
+        "brace": 1,
+        "equalizing_goal": 1,
+        "go_ahead_goal": 1,
+        "late_goal": 1,
+        "stoppage_time_goal": 1,
+        "comeback_equalizer": 1
+      },
+      "evidence_chips": {
+        "en": [
+          "brace",
+          "comeback equaliser",
+          "go-ahead goal"
+        ],
+        "zh": [
+          "梅开二度",
+          "逆转扳平",
+          "取得领先"
+        ]
+      },
+      "selection_reason": "Selected because his two goals were the strongest individual event case of the day: a 60' equaliser and a 90'+3 go-ahead goal in Algeria's 3-3 draw with Austria.",
+      "content": {
+        "en": {
+          "title": "Mahrez's late brace",
+          "html": "<p>Riyad Mahrez scored Algeria's 60th-minute equaliser, then put them 3-2 up in stoppage time. Austria answered at 90'+6, so the match finished 3-3, but Mahrez's two goals drove Algeria from 1-2 to 3-2.</p>"
+        },
+        "zh": {
+          "title": "Mahrez 梅开二度",
+          "html": "<p>Riyad MAHREZ 60' 扳成 2-2，90+3' 又让 Algeria 3-2 领先。最后比分是 3-3；他的两球把 Algeria 从 1-2 追到 3-2。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
+      "award_label": {
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
+      },
+      "player_id": "FIFA-2026-M72-COD-UZB|Congo DR|20",
+      "player_name": "Yoane WISSA",
+      "team": "Congo DR",
+      "opponent": "Uzbekistan",
+      "match_key": "FIFA-2026-M72-COD-UZB",
+      "match_no": 72,
+      "player_no": 20,
+      "position": "FW",
+      "score": 106.46,
+      "metrics": {
+        "shots": 6,
+        "on_target": 2,
+        "goals": 2,
+        "goal_involvements": 2,
+        "brace": 1,
+        "equalizing_goal": 1,
+        "late_goal": 1,
+        "stoppage_time_goal": 1,
+        "comeback_equalizer": 1
+      },
+      "evidence_chips": {
+        "en": [
+          "brace",
+          "comeback equaliser",
+          "equaliser"
+        ],
+        "zh": [
+          "梅开二度",
+          "逆转扳平",
+          "扳平进球"
+        ]
+      },
+      "selection_reason": "Selected because he scored the 68' equaliser and the 90'+1 third goal as Congo DR turned 0-1 into a 3-1 win over Uzbekistan.",
+      "content": {
+        "en": {
+          "title": "Wissa's comeback brace",
+          "html": "<p>Yoane Wissa scored the 68th-minute equaliser and the 90'+1 third goal as Congo DR came back against Uzbekistan. The 3-1 win had his two finishes around Mayele's winner.</p>"
+        },
+        "zh": {
+          "title": "Wissa 梅开二度",
+          "html": "<p>Yoane WISSA 68' 扳成 1-1，90+1' 又进第三球。Congo DR 从 0-1 追回来，最后 3-1 赢 Uzbekistan。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
+      "award_label": {
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
+      },
+      "player_id": "FIFA-2026-M72-COD-UZB|Congo DR|19",
+      "player_name": "Fiston MAYELE",
+      "team": "Congo DR",
+      "opponent": "Uzbekistan",
+      "match_key": "FIFA-2026-M72-COD-UZB",
+      "match_no": 72,
+      "player_no": 19,
+      "position": "FW",
+      "score": 94.36,
+      "metrics": {
+        "shots": 5,
+        "on_target": 1,
+        "goals": 1,
+        "goal_involvements": 1,
+        "go_ahead_goal": 1,
+        "match_winning_goal": 1,
+        "late_goal": 1,
+        "comeback_winner": 1,
+        "substitute_goal": 1
+      },
+      "evidence_chips": {
+        "en": [
+          "substitute goal",
+          "comeback winner",
+          "match-winning goal",
+          "goal scorer"
+        ],
+        "zh": [
+          "替补进球",
+          "逆转制胜",
+          "打入制胜球",
+          "取得进球"
+        ]
+      },
+      "selection_reason": "Selected because his substitute goal at 78' put Congo DR 2-1 up and stood as the match-winner in the same comeback.",
+      "content": {
+        "en": {
+          "title": "Mayele's 78th-minute winner",
+          "html": "<p>Fiston Mayele came off the bench and scored in the 78th minute, taking Congo DR from 1-1 to 2-1. Wissa later added the third, so Mayele's goal remained the winner in a 3-1 comeback.</p>"
+        },
+        "zh": {
+          "title": "Mayele 78' 制胜",
+          "html": "<p>Fiston MAYELE 替补出场后在 78' 进球，Congo DR 从 1-1 反超到 2-1。后面 Wissa 再进一个，Mayele 这一球成了 3-1 逆转里的制胜球。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
+      "award_label": {
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
+      },
+      "player_id": "FIFA-2026-M67-PAN-ENG|England|10",
+      "player_name": "Jude BELLINGHAM",
+      "team": "England",
+      "opponent": "Panama",
+      "match_key": "FIFA-2026-M67-PAN-ENG",
+      "match_no": 67,
+      "player_no": 10,
+      "position": "MF",
+      "score": 93.46,
+      "metrics": {
+        "shots": 2,
+        "on_target": 1,
+        "goals": 1,
+        "assists": 1,
+        "goal_involvements": 2,
+        "opening_goal": 1,
+        "go_ahead_goal": 1
+      },
+      "evidence_chips": {
+        "en": [
+          "opening goal",
+          "goal scorer",
+          "assist"
+        ],
+        "zh": [
+          "首开纪录",
+          "取得进球",
+          "送出助攻"
+        ]
+      },
+      "selection_reason": "Selected because he opened England's scoring at 62' and assisted Harry Kane five minutes later in a 2-0 win over Panama.",
+      "content": {
+        "en": {
+          "title": "Bellingham's goal and assist",
+          "html": "<p>Jude Bellingham opened the scoring in the 62nd minute and assisted Harry Kane five minutes later. England went from 0-0 to 2-0 through those two actions and kept Panama out.</p>"
+        },
+        "zh": {
+          "title": "Bellingham 一球一助",
+          "html": "<p>Jude BELLINGHAM 62' 先破门，67' 又助攻 Harry KANE。England 5 分钟里从 0-0 到 2-0，最后零封 Panama。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "impact_pick",
+      "award_types": [
+        "impact_pick"
+      ],
+      "award_label": {
+        "en": "Impact Pick",
+        "zh": "影响力精选"
+      },
+      "player_id": "FIFA-2026-M68-CRO-GHA|Croatia|13",
+      "player_name": "Nikola VLASIC",
+      "team": "Croatia",
+      "opponent": "Ghana",
+      "match_key": "FIFA-2026-M68-CRO-GHA",
+      "match_no": 68,
+      "player_no": 13,
+      "position": "MF",
+      "score": 64.72,
+      "metrics": {
+        "shots": 2,
+        "on_target": 1,
+        "goals": 1,
+        "goal_involvements": 1,
+        "go_ahead_goal": 1,
+        "match_winning_goal": 1,
+        "late_goal": 1
+      },
+      "evidence_chips": {
+        "en": [
+          "match-winning goal",
+          "goal scorer"
+        ],
+        "zh": [
+          "打入制胜球",
+          "取得进球"
+        ]
+      },
+      "selection_reason": "Selected because his 83' goal broke a 1-1 match and became Croatia's winner against Ghana.",
+      "content": {
+        "en": {
+          "title": "Vlasic's 83rd-minute winner",
+          "html": "<p>Nikola Vlasic scored in the 83rd minute, ten minutes after Ghana had made it 1-1. Croatia won 2-1, making that goal the match-winner.</p>"
+        },
+        "zh": {
+          "title": "Vlasic 83' 制胜",
+          "html": "<p>Nikola VLASIC 83' 把 Croatia 再次带到 2-1 领先。Ghana 73' 刚追成 1-1，最后 Croatia 靠这一球赢下来。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "impact_pick",
+      "award_types": [
+        "impact_pick"
+      ],
+      "award_label": {
+        "en": "Impact Pick",
+        "zh": "影响力精选"
+      },
+      "player_id": "FIFA-2026-M69-ALG-AUT|Austria|14",
+      "player_name": "Sasa KALAJDZIC",
+      "team": "Austria",
+      "opponent": "Algeria",
+      "match_key": "FIFA-2026-M69-ALG-AUT",
+      "match_no": 69,
+      "player_no": 14,
+      "position": "FW",
+      "score": 46.91,
+      "metrics": {
+        "shots": 1,
+        "on_target": 1,
+        "goals": 1,
+        "goal_involvements": 1,
+        "equalizing_goal": 1,
+        "late_goal": 1,
+        "stoppage_time_goal": 1,
+        "comeback_equalizer": 1,
+        "substitute_goal": 1
+      },
+      "evidence_chips": {
+        "en": [
+          "substitute goal",
+          "comeback equaliser",
+          "equaliser",
+          "goal scorer"
+        ],
+        "zh": [
+          "替补进球",
+          "逆转扳平",
+          "扳平进球",
+          "取得进球"
+        ]
+      },
+      "selection_reason": "Selected as the sixth card because his 90'+6 substitute equaliser rescued Austria's 3-3 draw and ties Vlasic's impact score, making him the strongest add-card challenger rather than a coverage filler.",
+      "content": {
+        "en": {
+          "title": "Kalajdzic's 90'+6 equaliser",
+          "html": "<p>Sasa Kalajdzic came off the bench and scored at 90'+6, pulling Austria back from 3-2 to 3-3 after Mahrez had put Algeria ahead. One shot on target was enough to rescue the draw.</p>"
+        },
+        "zh": {
+          "title": "Kalajdzic 90+6' 扳平",
+          "html": "<p>Sasa KALAJDZIC 替补出场后在 90+6' 扳成 3-3。Mahrez 90+3' 刚让 Algeria 领先，Austria 最后靠这一球把平局拿回来。</p>"
+        }
+      }
+    }
+  ],
+  "selection_validation": {
+    "schema_version": 1,
+    "status": "pass",
+    "warnings": []
+  },
+  "audit": []
+}
