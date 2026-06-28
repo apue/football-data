@@ -245,6 +245,42 @@ def test_extract_lineup_name_continuation_rows():
     assert len(record.player_appearances) == 52
 
 
+def test_extract_right_lineup_name_continuation_rows():
+    matches = sorted(RAW_DIR.glob("**/PMSR-M61*.pdf"))
+    if not matches:
+        pytest.skip("M61 PDF is downloaded by the update pipeline")
+    record = extract_pdf(matches[-1])
+
+    dembele = next(
+        row
+        for row in record.player_appearances
+        if row.team == "France" and row.player_no == 7
+    )
+    assert dembele.player_name == "Ousmane DEMBELE"
+    assert dembele.position == "FW"
+    assert dembele.roster_status == "starting"
+    assert dembele.started is True
+    assert len(record.player_appearances) == 52
+
+
+def test_extract_lineup_full_names_across_wide_name_columns():
+    m61 = extract_pdf(_pdf("PMSR-M61*.pdf"))
+    holmgren_pedersen = next(
+        row
+        for row in m61.player_appearances
+        if row.team == "Norway" and row.player_no == 16
+    )
+    assert holmgren_pedersen.player_name == "Marcus HOLMGREN PEDERSEN"
+
+    m64 = extract_pdf(_pdf("PMSR-M64*.pdf"))
+    fernandez_pardo = next(
+        row
+        for row in m64.player_appearances
+        if row.team == "Belgium" and row.player_no == 26
+    )
+    assert fernandez_pardo.player_name == "Matias FERNANDEZ-PARDO"
+
+
 def test_extract_lineup_names_ignore_stoppage_time_markers():
     matches = sorted(RAW_DIR.glob("**/PMSR-M10*.pdf"))
     if not matches:
