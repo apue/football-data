@@ -29,10 +29,6 @@ def pipeline_timestamp() -> str:
     return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
 
 
-def find_local_pdfs(raw_dir: str | Path) -> list[Path]:
-    return sorted(Path(raw_dir).glob("**/*.pdf"))
-
-
 def build_update_events(
     current_sources: list[DiscoveredSource],
     previous_sources: list[DiscoveredSource],
