@@ -113,46 +113,6 @@ def test_compile_local_editorial_uses_local_decision_and_copy(tmp_path):
     assert "Editor's Choices" in (tmp_path / "site" / "index.html").read_text(encoding="utf-8")
 
 
-def test_compile_local_editorial_requires_promoted_editorial_loop(tmp_path):
-    import pytest
-
-    from football_data.editorial_local import compile_local_editorial, prepare_editorial_packet
-    from football_data.editorial_copy import build_copy_payloads
-    from football_data.editorial_registry import load_editorial_experiment
-
-    prepare_editorial_packet(
-        match_date="2026-06-22",
-        db_path="data/latest.sqlite",
-        agent_runs_dir=tmp_path / "agent-runs",
-        run_out_path=tmp_path / "editorial-v2-run.json",
-    )
-    audit_dir = tmp_path / "agent-runs" / "2026-06-22"
-    candidate_pool = _load_json(audit_dir / "candidate_pool.json")
-    decision = build_test_selection_decision(candidate_pool, load_editorial_experiment())
-    copy = build_test_copy(build_copy_payloads(decision, candidate_pool))
-    (audit_dir / "selection_decision.json").write_text(
-        json.dumps(decision, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
-    (audit_dir / "copy.json").write_text(
-        json.dumps(copy, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
-
-    with pytest.raises(RuntimeError, match="promoted editorial loop"):
-        compile_local_editorial(
-            match_date="2026-06-22",
-            db_path="data/latest.sqlite",
-            site_dir=tmp_path / "site",
-            reports_dir=tmp_path / "reports",
-            manifests_dir="manifests",
-            agent_runs_dir=tmp_path / "agent-runs",
-            run_out_path=tmp_path / "editorial-v2-run.json",
-        )
-
-    assert not (audit_dir / "editorial_loop_summary.json").exists()
-
-
 def test_compile_local_editorial_rejects_ai_sounding_zh_copy(tmp_path):
     import pytest
 

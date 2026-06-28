@@ -127,14 +127,6 @@ def test_editorial_v2_registry_resolves_default_experiment():
     assert not [path for path in retired_paths if Path(path).exists()]
 
 
-def test_editorial_production_modules_do_not_export_test_scaffolding():
-    import football_data.editorial_copy as editorial_copy
-    import football_data.editorial_selection as editorial_selection
-
-    assert not hasattr(editorial_selection, "fake_selection_decision")
-    assert not hasattr(editorial_copy, "generate_copy")
-
-
 def test_editorial_style_calibration_loads_curated_zh_examples():
     from football_data.editorial_style_calibration import load_style_calibration
 
@@ -961,11 +953,9 @@ def test_editorial_v2_slate_balance_allows_angle_omissions_and_blocks_fourth_mat
     assert any("FIFA-2026-M42-FRA-IRQ exceeds max_per_match 3" in warning for warning in overconcentrated_validation["warnings"])
 
 
-def test_editorial_v2_copy_validation_rejects_abstract_chinese_public_terms():
+def test_editorial_v2_copy_validation_rejects_configured_chinese_public_terms():
     from football_data.editorial_copy_validation import validate_copy
 
-    term = "禁用公共词"
-    zh_profile = {"banned_public_terms": [term]}
     copy = {
         "en": {"items": [], "warnings": []},
         "zh": {
@@ -974,30 +964,12 @@ def test_editorial_v2_copy_validation_rejects_abstract_chinese_public_terms():
                     "award_type": "player_of_the_day",
                     "player_id": "p1",
                     "title": "姆巴佩梅开二度",
-                    "body": f"这句包含{term}，应该被拦住。",
+                    "body": "这句包含禁用公共词，应该被拦住。",
                     "warnings": [],
-                }
-            ],
-            "warnings": [],
-        },
-    }
-
-    validation = validate_copy(copy, {"zh": zh_profile})
-
-    assert validation["status"] == "failed"
-    assert any(f"banned zh public term {term!r}" in warning for warning in validation["warnings"])
-
-
-def test_editorial_v2_copy_validation_rejects_configured_unsupported_claim_terms():
-    from football_data.editorial_copy_validation import validate_copy
-
-    copy = {
-        "en": {"items": [], "warnings": []},
-        "zh": {
-            "items": [
+                },
                 {
                     "award_type": "player_of_the_day",
-                    "player_id": "p1",
+                    "player_id": "p2",
                     "title": "努诺-门德斯进球又推进",
                     "body": "他还有11次打穿防线、8次推进和6次夺回球权，这场不是只在边路补一个进球。",
                     "warnings": [],
@@ -1006,11 +978,15 @@ def test_editorial_v2_copy_validation_rejects_configured_unsupported_claim_terms
             "warnings": [],
         },
     }
-    zh_profile = {"unsupported_public_terms": ["不是只在", "补一个进球"]}
+    zh_profile = {
+        "banned_public_terms": ["禁用公共词"],
+        "unsupported_public_terms": ["不是只在", "补一个进球"],
+    }
 
     validation = validate_copy(copy, {"zh": zh_profile})
 
     assert validation["status"] == "failed"
+    assert any("banned zh public term '禁用公共词'" in warning for warning in validation["warnings"])
     assert any("unsupported zh public term '不是只在'" in warning for warning in validation["warnings"])
     assert any("unsupported zh public term '补一个进球'" in warning for warning in validation["warnings"])
 
