@@ -146,6 +146,43 @@ def test_editorial_loop_blocks_failed_selection_review(tmp_path):
     assert summary["selection_loop"]["stop_reason"] == "max_selection_rounds_exceeded"
 
 
+def test_editorial_loop_blocks_weak_selection_decision_instead_of_repairing(tmp_path):
+    from football_data.editorial_local import prepare_editorial_packet
+    from football_data.editorial_loop import promote_editorial_loop
+    from football_data.editorial_registry import load_editorial_experiment
+
+    prepare_editorial_packet(
+        match_date="2026-06-22",
+        db_path="data/latest.sqlite",
+        agent_runs_dir=tmp_path / "agent-runs",
+        run_out_path=tmp_path / "editorial-v2-run.json",
+    )
+    audit_dir = tmp_path / "agent-runs" / "2026-06-22"
+    candidate_pool = _load_json(audit_dir / "candidate_pool.json")
+    experiment = load_editorial_experiment()
+    selection = build_test_selection_decision(candidate_pool, experiment)
+    selection["selected"][0]["editorial_reason"] = "en"
+    selection["selected"][0]["evidence_used"] = []
+    selection["selected"][0]["selection_risk"] = "low"
+    review = _passing_selection_review(selection, candidate_pool, experiment)
+    _write_json(audit_dir / "selection_rounds" / "round_1" / "selection_decision.json", selection)
+    _write_json(audit_dir / "selection_rounds" / "round_1" / "selection_review.json", review)
+
+    with pytest.raises(RuntimeError, match="selection loop did not pass"):
+        promote_editorial_loop(
+            match_date="2026-06-22",
+            agent_runs_dir=tmp_path / "agent-runs",
+            max_selection_rounds=1,
+        )
+
+    validation = _load_json(audit_dir / "selection_rounds" / "round_1" / "selection_validation.json")
+    assert validation["status"] == "failed"
+    assert any("editorial_reason is too weak" in warning for warning in validation["warnings"])
+    assert any("evidence_used must include meaningful evidence" in warning for warning in validation["warnings"])
+    assert any("selection_risk is too weak" in warning for warning in validation["warnings"])
+    assert not (audit_dir / "final_selection_decision.json").exists()
+
+
 def _passing_selection_review(
     selection: dict,
     candidate_pool: dict,

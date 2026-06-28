@@ -13,7 +13,7 @@ from football_data.editorial_registry import (
     load_editorial_experiment,
     load_selection_review_profile,
 )
-from football_data.editorial_selection import normalize_selection_decision, repair_selection_decision
+from football_data.editorial_selection import normalize_selection_decision
 from football_data.editorial_style_calibration import load_style_calibration
 from football_data.editorial_validation import validate_selection_decision
 
@@ -158,7 +158,6 @@ def _promote_selection_round(
         saw_round = True
         try:
             decision = normalize_selection_decision(_load_json(round_dir / "selection_decision.json"))
-            decision = repair_selection_decision(decision, candidate_pool)
             selection_validation = validate_selection_decision(decision, candidate_pool, experiment)
             _write_json(round_dir / "selection_validation.json", selection_validation)
             review_payload = build_selection_review_payload(
