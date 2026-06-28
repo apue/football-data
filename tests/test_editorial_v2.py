@@ -152,7 +152,7 @@ def test_editorial_style_calibration_loads_curated_zh_examples():
     )
 
 
-def test_editorial_rankings_include_timeline_only_hat_trick_scorer():
+def test_editorial_rankings_prefer_pmsr_appearance_for_hat_trick_scorer():
     from football_data.editorial_candidates import build_candidate_pool
     from football_data.editorial_rankings import build_editorial_rankings
     from football_data.editorial_registry import load_candidate_pool_config, load_editorial_experiment
@@ -171,9 +171,10 @@ def test_editorial_rankings_include_timeline_only_hat_trick_scorer():
         and player["team"] == "France"
         and player["player_name"] == "Ousmane DEMBELE"
     )
-    assert dembele["player_id"] == "FIFA-2026-M61-NOR-FRA|France|timeline:398680"
-    assert dembele["player_no"] is None
-    assert dembele["data_sources"]["player_identity"] == "fifa_timeline_api"
+    assert dembele["player_id"] == "FIFA-2026-M61-NOR-FRA|France|7"
+    assert dembele["player_no"] == 7
+    assert dembele["position"] == "FW"
+    assert dembele.get("data_sources") is None
     assert dembele["goals"] == 3
     assert dembele["hat_trick"] == 1
     assert dembele["opening_goal"] == 1

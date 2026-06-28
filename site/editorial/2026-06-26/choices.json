@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-06-27T15:51:22+00:00",
-  "compiled_at": "2026-06-27T15:51:22+00:00",
+  "generated_at": "2026-06-28T01:51:49+00:00",
+  "compiled_at": "2026-06-28T01:51:49+00:00",
   "match_date": "2026-06-26",
   "scoring_version": "v0.4",
   "editorial_generation": {
@@ -23,7 +23,7 @@
     },
     "editorial_loop_status": "pass",
     "selection_rounds": 1,
-    "copy_rounds": 2,
+    "copy_rounds": 1,
     "uses_official_assists": true,
     "uses_goal_involvements": true,
     "event_source": "fifa_timeline_api",
@@ -579,7 +579,7 @@
           "射门质量突出"
         ]
       },
-      "selection_reason": "Selected because his bench burst is the day's broadest direct-impact packet: two goals, one assist, a substitute brace, and three shots on target in Senegal's 5-0 win.",
+      "selection_reason": "Selected because two goals and an assist off the bench made him the strongest direct-impact card in Senegal's 5-0 win.",
       "content": {
         "en": {
           "title": "Pape Gueye's bench burst",
@@ -600,15 +600,15 @@
         "en": "Player of the Day",
         "zh": "每日最佳球员"
       },
-      "player_id": "FIFA-2026-M61-NOR-FRA|France|timeline:398680",
+      "player_id": "FIFA-2026-M61-NOR-FRA|France|7",
       "player_name": "Ousmane DEMBELE",
       "team": "France",
       "opponent": "Norway",
       "match_key": "FIFA-2026-M61-NOR-FRA",
       "match_no": 61,
-      "player_no": null,
-      "position": null,
-      "score": 93.41,
+      "player_no": 7,
+      "position": "FW",
+      "score": 121.81,
       "metrics": {
         "shots": 3,
         "on_target": 3,
@@ -631,7 +631,7 @@
           "射门质量突出"
         ]
       },
-      "selection_reason": "Selected because an official-timeline hat-trick with the opening goal is too strong to omit; the PMSR shot log also supports three shots on target.",
+      "selection_reason": "Selected because a first-half hat-trick is an independently clear headline case, now tied to his PMSR appearance row as France #7.",
       "content": {
         "en": {
           "title": "Dembélé's first-half hat-trick",
@@ -680,7 +680,7 @@
           "首开纪录"
         ]
       },
-      "selection_reason": "Selected because he paired a brace with the opening goal in Belgium's 5-1 win, giving the slate another high-volume direct scoring case.",
+      "selection_reason": "Selected because he opened Belgium's scoring and added a second goal inside a dominant 5-1 result.",
       "content": {
         "en": {
           "title": "Trossard opened Belgium's five-goal night",
@@ -732,7 +732,7 @@
           "取得进球"
         ]
       },
-      "selection_reason": "Selected as the cleanest single-swing impact case: the only goal, the match-winning goal, and the 42' winner in Spain's 1-0 result.",
+      "selection_reason": "Selected because he scored the only goal in Spain's 1-0 win, making the impact case cleaner than lower-ranked volume cards.",
       "content": {
         "en": {
           "title": "Baena's only-goal winner",

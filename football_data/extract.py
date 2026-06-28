@@ -374,7 +374,7 @@ def _parse_appearances(
                 appearances.append(appearance)
                 event_markers.extend(markers)
 
-            right = _parse_right_lineup_row(row, right_sub_y)
+            right = _parse_right_lineup_row(row, right_sub_y, rows, row_index)
             if right is not None:
                 appearance, markers = _lineup_row_to_records(
                     match=match,
@@ -679,7 +679,12 @@ def _parse_left_lineup_row(
     }
 
 
-def _parse_right_lineup_row(row: WordRow, substitutes_y: float | None) -> dict[str, object] | None:
+def _parse_right_lineup_row(
+    row: WordRow,
+    substitutes_y: float | None,
+    rows: list[WordRow] | None = None,
+    row_index: int | None = None,
+) -> dict[str, object] | None:
     position: str | None = None
     player_no: int | None = None
     for x0, _y0, _x1, _y1, text in row:
@@ -702,14 +707,7 @@ def _parse_right_lineup_row(row: WordRow, substitutes_y: float | None) -> dict[s
         if not number_tokens:
             return None
         player_no = int(number_tokens[0])
-    name_tokens = [
-        text
-        for x0, _y0, _x1, _y1, text in row
-        if 760 <= x0 < 875
-        and not _is_minute_marker(text)
-        and not re.fullmatch(r"(GK|DF|MF|FW)\d*", text)
-        and not _is_int(text)
-    ]
+    name_tokens = _right_lineup_name_tokens(row, rows, row_index)
     if not name_tokens:
         return None
     event_markers = [
@@ -749,7 +747,7 @@ def _left_lineup_name_tokens(
     row_index: int | None,
 ) -> list[str]:
     if rows is None or row_index is None:
-        return _name_tokens_between(row, 82, 180)
+        return _name_tokens_between(row, 82, 245)
     base_y = _row_y(row)
     tokens: list[str] = []
     for candidate in rows[max(0, row_index - 2) : row_index + 3]:
@@ -757,7 +755,25 @@ def _left_lineup_name_tokens(
             continue
         if candidate is not row and _has_left_lineup_anchor(candidate):
             continue
-        tokens.extend(_name_tokens_between(candidate, 82, 180))
+        tokens.extend(_name_tokens_between(candidate, 82, 245))
+    return tokens
+
+
+def _right_lineup_name_tokens(
+    row: WordRow,
+    rows: list[WordRow] | None,
+    row_index: int | None,
+) -> list[str]:
+    if rows is None or row_index is None:
+        return _name_tokens_between(row, 700, 875)
+    base_y = _row_y(row)
+    tokens: list[str] = []
+    for candidate in rows[max(0, row_index - 2) : row_index + 3]:
+        if abs(_row_y(candidate) - base_y) > 12:
+            continue
+        if candidate is not row and _has_right_lineup_anchor(candidate):
+            continue
+        tokens.extend(_name_tokens_between(candidate, 700, 875))
     return tokens
 
 
@@ -779,6 +795,13 @@ def _has_left_lineup_anchor(row: WordRow) -> bool:
         for x0, _y0, _x1, _y1, text in row
     )
     return has_number and has_position
+
+
+def _has_right_lineup_anchor(row: WordRow) -> bool:
+    for x0, _y0, _x1, _y1, text in row:
+        if 875 <= x0 <= 910 and re.fullmatch(r"(GK|DF|MF|FW)\d*", text):
+            return True
+    return any(895 <= x0 <= 910 and _is_int(text) for x0, _y0, _x1, _y1, text in row)
 
 
 def _section_y(rows: list[WordRow], text: str, x_min: float, x_max: float) -> float | None:
