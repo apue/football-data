@@ -1,0 +1,133 @@
+{
+  "schema_version": 1,
+  "scope": "group_stage",
+  "formation": "4-3-3",
+  "summary": {
+    "en": "A data-led group-stage XI using the current PMSR and FIFA timeline evidence, with a manual sanity check for position balance and goalkeeper context.",
+    "zh": "基于当前 PMSR 与 FIFA 时间线证据选出的数据版小组赛最佳阵容，并对位置平衡和门将语境做了人工校准。"
+  },
+  "lineup": [
+    {
+      "role": {"en": "GK", "zh": "门将"},
+      "player_name": "VOZINHA",
+      "team": "Cabo Verde",
+      "reason": {
+        "en": "Two clean sheets, two goals conceded, 10 saves and a 0-0 against Spain.",
+        "zh": "两场零封、只丢两球，10 次扑救，对 Spain 的 0-0 是关键样本。"
+      }
+    },
+    {
+      "role": {"en": "RB", "zh": "右后卫"},
+      "player_name": "Achraf HAKIMI",
+      "team": "Morocco",
+      "reason": {
+        "en": "A defender with a direct attacking case: 1 goal, 1 assist and heavy progression volume.",
+        "zh": "后卫里进攻参与最硬：1 球 1 助，推进和接应量都很高。"
+      }
+    },
+    {
+      "role": {"en": "CB", "zh": "中卫"},
+      "player_name": "Aymeric LAPORTE",
+      "team": "Spain",
+      "reason": {
+        "en": "Spain conceded none; Laporte added 72 line breaks and steady build-up value.",
+        "zh": "Spain 三场零封，他还有 72 次打穿防线，出球价值稳定。"
+      }
+    },
+    {
+      "role": {"en": "CB", "zh": "中卫"},
+      "player_name": "Andres ANDRADE",
+      "team": "Panama",
+      "reason": {
+        "en": "A defensive-volume pick: 29 possession regains, 15 interruptions and 11 blocks.",
+        "zh": "防守量代表：29 次夺回球权、15 次破坏控球、11 次封堵。"
+      }
+    },
+    {
+      "role": {"en": "LB", "zh": "左后卫"},
+      "player_name": "Ramin REZAEIAN",
+      "team": "IR Iran",
+      "reason": {
+        "en": "Two goals and an assist from the back line, plus repeated recovery goals.",
+        "zh": "后卫线贡献 2 球 1 助，两次进球都带有追分语境。"
+      }
+    },
+    {
+      "role": {"en": "CM", "zh": "中场"},
+      "player_name": "Pedro VITE",
+      "team": "Ecuador",
+      "reason": {
+        "en": "The top all-round midfield profile: 105 receptions, 58 line breaks and defensive work.",
+        "zh": "最完整的中场样本：105 次接球、58 次打穿防线，还有防守贡献。"
+      }
+    },
+    {
+      "role": {"en": "CM", "zh": "中场"},
+      "player_name": "Granit XHAKA",
+      "team": "Switzerland",
+      "reason": {
+        "en": "A control-and-progression pick with 74 completed line breaks across three starts.",
+        "zh": "控场和向前出球代表，三场首发完成 74 次打穿防线。"
+      }
+    },
+    {
+      "role": {"en": "AM", "zh": "前腰"},
+      "player_name": "Ismael SAIBARI",
+      "team": "Morocco",
+      "reason": {
+        "en": "Three goals and constant forward movement gave the midfield a direct scoring edge.",
+        "zh": "3 个进球加大量前插接应，让中场有直接得分点。"
+      }
+    },
+    {
+      "role": {"en": "RW", "zh": "右边锋"},
+      "player_name": "Kylian MBAPPE",
+      "team": "France",
+      "reason": {
+        "en": "Four goals, two assists and the strongest overall attacking score in the pool.",
+        "zh": "4 球 2 助，是前场综合评分最高的球员。"
+      }
+    },
+    {
+      "role": {"en": "ST", "zh": "中锋"},
+      "player_name": "Lionel MESSI",
+      "team": "Argentina",
+      "reason": {
+        "en": "Six goals in the group stage, including a hat-trick and another brace.",
+        "zh": "小组赛 6 球，包括一场帽子戏法和一场梅开二度。"
+      }
+    },
+    {
+      "role": {"en": "LW", "zh": "左边锋"},
+      "player_name": "VINICIUS JUNIOR",
+      "team": "Brazil",
+      "reason": {
+        "en": "Four goals, one assist and elite in-behind receiving across three starts.",
+        "zh": "4 球 1 助，三场首发的前插跑动和边路威胁都很突出。"
+      }
+    }
+  ],
+  "notes": [
+    {
+      "title": {"en": "Goalkeeper call", "zh": "门将取舍"},
+      "body": {
+        "en": "Eloy ROOM led the raw goalkeeper score, but the 1-7 match against Germany was too large a contextual penalty for a Best XI. VOZINHA gives a cleaner balance of pressure, clean sheets and goals conceded.",
+        "zh": "Eloy ROOM 的原始门将分最高，但对 Germany 1-7 这一场在最佳阵容语境下必须降档。VOZINHA 在压力、零封和失球控制之间更平衡。"
+      }
+    },
+    {
+      "title": {"en": "12th man", "zh": "第 12 人"},
+      "body": {
+        "en": "Deniz UNDAV is the super-sub: 3 goals, 2 assists and one huge stoppage-time winner, but no starts kept him just outside the XI.",
+        "zh": "Deniz UNDAV 是超级替补：3 球 2 助，还有关键补时制胜；但 0 次首发让他排在首发阵容之外。"
+      }
+    },
+    {
+      "title": {"en": "Selection frame", "zh": "选择框架"},
+      "body": {
+        "en": "The XI follows the existing v0.4 logic: direct match impact first, attacking threat next, with progression, off-ball, defensive and physical data as supporting evidence.",
+        "zh": "这套阵容沿用现有 v0.4 思路：直接比赛影响优先，其次看进攻威胁，推进、无球、防守和体能作为支撑证据。"
+      }
+    }
+  ]
+}

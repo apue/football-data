@@ -127,6 +127,12 @@ def test_demo_uses_player_first_bilingual_dashboard(tmp_path):
     assert "冲刺次数" in html
     assert "In-Behind Offers" not in html
     assert "身后接应" not in html
+    assert "Group Stage Best XI" in html
+    assert "小组赛最佳阵容" in html
+    assert "VOZINHA" in html
+    assert "Deniz UNDAV" in html
+    assert "super-sub" in html
+    assert "超级替补" in html
 
 
 def test_demo_does_not_show_stale_editorial_cards_as_latest(tmp_path):

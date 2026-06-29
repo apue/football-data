@@ -10,6 +10,9 @@ from typing import Any
 from football_data.flags import format_player, format_team
 
 
+BEST_XI_PATH = Path("config/editorial/group_stage_best_xi.json")
+
+
 SCOPE_SPECS = [
     {
         "id": "group_round_1",
@@ -384,6 +387,7 @@ def build_demo_site(
     finally:
         conn.close()
 
+    best_xi = _load_json(BEST_XI_PATH)
     (out / "index.html").write_text(
         _page(
             coverage=coverage,
@@ -391,6 +395,7 @@ def build_demo_site(
             update_events=update_events,
             latest_editorial=latest_editorial,
             latest_data_date=_latest_match_date(matches),
+            best_xi=best_xi,
             matches=matches,
             leaderboard_payload=_leaderboard_payload(player_records),
         ),
@@ -414,6 +419,7 @@ def _page(
     update_events: dict[str, object],
     latest_editorial: dict[str, object],
     latest_data_date: str | None,
+    best_xi: dict[str, object],
     matches: list[sqlite3.Row],
     leaderboard_payload: dict[str, Any],
 ) -> str:
@@ -487,6 +493,17 @@ def _page(
     .editorial-card .award {{ color: #59677c; font-size: 12px; font-weight: 700; text-transform: uppercase; }}
     .editorial-card aside {{ border-left: 1px solid #e8edf5; padding-left: 16px; }}
     .editorial-card aside strong {{ display: block; font-size: 28px; }}
+    .best-xi-section {{ margin-bottom: 18px; }}
+    .best-xi-card {{ margin-top: 12px; }}
+    .best-xi-layout {{ display: grid; grid-template-columns: minmax(0, 2fr) minmax(260px, 1fr); gap: 16px; align-items: start; margin-top: 14px; }}
+    .best-xi-team {{ display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }}
+    .best-xi-player {{ min-width: 0; border: 1px solid #e2e8f3; border-radius: 8px; padding: 11px; background: #f9fbfe; }}
+    .best-xi-player strong {{ display: block; color: #172033; font-size: 14px; line-height: 1.25; overflow-wrap: anywhere; word-spacing: 2px; }}
+    .best-xi-player .role {{ display: inline-block; margin-bottom: 6px; color: #0f766e; font-size: 11px; font-weight: 800; text-transform: uppercase; }}
+    .best-xi-player p {{ margin-top: 6px; font-size: 12px; line-height: 1.4; }}
+    .best-xi-notes {{ display: grid; gap: 12px; }}
+    .best-xi-note {{ border-left: 3px solid #0f766e; padding-left: 12px; }}
+    .best-xi-note h3 {{ margin-bottom: 4px; font-size: 14px; }}
     .chips {{ display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }}
     .chips span {{ background: #edf2fa; border: 1px solid #dce5f2; border-radius: 999px; padding: 5px 9px; font-size: 12px; color: #35465d; }}
     .summary + .panel {{ margin-top: 16px; }}
@@ -511,6 +528,8 @@ def _page(
       .leaderboard-grid {{ grid-template-columns: 1fr; }}
       .leaderboard-table th:nth-child(1), .leaderboard-table td:nth-child(1) {{ width: 34px; }}
       .leaderboard-table th:nth-child(3), .leaderboard-table td:nth-child(3) {{ width: 74px; }}
+      .best-xi-layout {{ grid-template-columns: 1fr; }}
+      .best-xi-team {{ grid-template-columns: repeat(2, minmax(0, 1fr)); }}
       .editorial-card {{ grid-template-columns: 1fr; }}
       .editorial-card aside {{ border-left: 0; border-top: 1px solid #e8edf5; padding-left: 0; padding-top: 12px; }}
     }}
@@ -555,6 +574,7 @@ def _page(
       <p class="leaderboard-summary" id="leaderboard-summary"></p>
       <div class="leaderboard-grid" id="leaderboard-grid"></div>
     </section>
+    {_best_xi_section(best_xi)}
     <section class="summary">
       <h2>Update Summary</h2>
       {_coverage_metrics(coverage, latest_run)}
@@ -941,6 +961,65 @@ def _coverage_metrics(rows: list[sqlite3.Row], latest_run: dict[str, object]) ->
     )
 
 
+def _best_xi_section(best_xi: dict[str, object]) -> str:
+    lineup = best_xi.get("lineup") if isinstance(best_xi, Mapping) else None
+    if not isinstance(lineup, list) or not lineup:
+        return ""
+    notes = best_xi.get("notes")
+    note_items = notes if isinstance(notes, list) else []
+    formation = html.escape(_format_value(best_xi.get("formation")), quote=False)
+    cards = "".join(
+        _best_xi_player_card(player)
+        for player in lineup
+        if isinstance(player, Mapping)
+    )
+    note_html = "".join(
+        _best_xi_note(note)
+        for note in note_items
+        if isinstance(note, Mapping)
+    )
+    return (
+        '<section class="summary best-xi-section">'
+        '<h2><span data-lang-panel="en">Group Stage Best XI</span><span data-lang-panel="zh">小组赛最佳阵容</span></h2>'
+        f'<p data-lang-panel="en">{html.escape(_localized(best_xi.get("summary"), "en"), quote=False)}</p>'
+        f'<p data-lang-panel="zh">{html.escape(_localized(best_xi.get("summary"), "zh"), quote=False)}</p>'
+        '<div class="panel best-xi-card">'
+        f'<p class="eyebrow"><span data-lang-panel="en">Formation {formation}</span><span data-lang-panel="zh">{formation} 阵型</span></p>'
+        '<div class="best-xi-layout">'
+        f'<div class="best-xi-team">{cards}</div>'
+        f'<div class="best-xi-notes">{note_html}</div>'
+        "</div>"
+        "</div>"
+        "</section>"
+    )
+
+
+def _best_xi_player_card(player: Mapping[str, object]) -> str:
+    team = player.get("team")
+    name = player.get("player_name")
+    return (
+        '<article class="best-xi-player">'
+        f'<span class="role" data-lang-panel="en">{html.escape(_localized(player.get("role"), "en"), quote=False)}</span>'
+        f'<span class="role" data-lang-panel="zh">{html.escape(_localized(player.get("role"), "zh"), quote=False)}</span>'
+        f"<strong>{html.escape(format_player(name, team), quote=False)}</strong>"
+        f"<p>{html.escape(format_team(team), quote=False)}</p>"
+        f'<p data-lang-panel="en">{html.escape(_localized(player.get("reason"), "en"), quote=False)}</p>'
+        f'<p data-lang-panel="zh">{html.escape(_localized(player.get("reason"), "zh"), quote=False)}</p>'
+        "</article>"
+    )
+
+
+def _best_xi_note(note: Mapping[str, object]) -> str:
+    return (
+        '<div class="best-xi-note">'
+        f'<h3 data-lang-panel="en">{html.escape(_localized(note.get("title"), "en"), quote=False)}</h3>'
+        f'<h3 data-lang-panel="zh">{html.escape(_localized(note.get("title"), "zh"), quote=False)}</h3>'
+        f'<p data-lang-panel="en">{html.escape(_localized(note.get("body"), "en"), quote=False)}</p>'
+        f'<p data-lang-panel="zh">{html.escape(_localized(note.get("body"), "zh"), quote=False)}</p>'
+        "</div>"
+    )
+
+
 def _editorial_section(report: dict[str, object], *, latest_data_date: str | None) -> str:
     report_date = str(report.get("match_date") or "") if report else ""
     if latest_data_date and report_date != latest_data_date:
@@ -1089,6 +1168,12 @@ def _nested_value(row: object, *keys: str) -> object:
         else:
             return ""
     return value
+
+
+def _localized(value: object, lang: str) -> str:
+    if isinstance(value, Mapping):
+        return _format_value(value.get(lang) or value.get("en") or "")
+    return _format_value(value)
 
 
 def _format_value(value: object) -> str:
