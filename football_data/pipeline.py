@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import urllib.request
+from collections.abc import Iterable
 from dataclasses import asdict
 from datetime import datetime, timezone
 from pathlib import Path
@@ -9,8 +10,10 @@ from pathlib import Path
 from football_data.database import build_database
 from football_data.discovery import (
     DEFAULT_HUB_URL,
+    DEFAULT_HUB_URLS,
     DiscoveryError,
     discover_hub_sources,
+    normalise_hub_urls,
     source_from_filename,
 )
 from football_data.extract import extract_pdf
@@ -91,9 +94,10 @@ def update_dataset(
     raw_dir: str | Path = "raw",
     db_path: str | Path = "data/latest.sqlite",
     manifests_dir: str | Path = "manifests",
-    hub_url: str = DEFAULT_HUB_URL,
+    hub_urls: str | Iterable[str] = DEFAULT_HUB_URLS,
 ) -> list[ExtractedMatch]:
     generated_at = pipeline_timestamp()
+    resolved_hub_urls = normalise_hub_urls(hub_urls)
     previous_sources = load_previous_sources(manifests_dir)
     discovered_sources: list[DiscoveredSource] = []
     events: dict[str, list[dict[str, object]]] = {
@@ -106,7 +110,7 @@ def update_dataset(
     supplemental: dict[str, object] | None = None
 
     try:
-        discovered_sources = discover_hub_sources(hub_url, discovered_at=generated_at)
+        discovered_sources = discover_hub_sources(resolved_hub_urls, discovered_at=generated_at)
         validate_discovery_regression(discovered_sources, previous_sources)
         events = build_update_events(discovered_sources, previous_sources)
         active_sources = [source for source in discovered_sources if source.active]
@@ -137,6 +141,7 @@ def update_dataset(
             failures=failures,
             supplemental=supplemental,
             manifests_dir=manifests_dir,
+            hub_urls=resolved_hub_urls,
             generated_at=generated_at,
             status="success",
             failure_code=None,
@@ -152,6 +157,7 @@ def update_dataset(
             failures=failures,
             supplemental=supplemental,
             manifests_dir=manifests_dir,
+            hub_urls=resolved_hub_urls,
             generated_at=generated_at,
             status="failed",
             failure_code=exc.failure_code,
@@ -167,6 +173,7 @@ def update_dataset(
             failures=failures,
             supplemental=supplemental,
             manifests_dir=manifests_dir,
+            hub_urls=resolved_hub_urls,
             generated_at=generated_at,
             status="failed",
             failure_code=exc.failure_code,
@@ -210,6 +217,7 @@ def write_manifests(
     downloaded: list[str],
     failures: list[dict[str, object]],
     manifests_dir: str | Path,
+    hub_urls: tuple[str, ...] = DEFAULT_HUB_URLS,
     generated_at: str,
     status: str,
     failure_code: str | None,
@@ -233,7 +241,8 @@ def write_manifests(
         json.dumps(
             {
                 "generated_at": generated_at,
-                "hub_url": DEFAULT_HUB_URL,
+                "hub_url": hub_urls[0] if hub_urls else DEFAULT_HUB_URL,
+                "hub_urls": list(hub_urls),
                 "sources": [asdict(source) for source in discovered_sources],
             },
             indent=2,
@@ -262,7 +271,8 @@ def write_manifests(
                 "generated_at": generated_at,
                 "status": status,
                 "failure_code": failure_code,
-                "hub_url": DEFAULT_HUB_URL,
+                "hub_url": hub_urls[0] if hub_urls else DEFAULT_HUB_URL,
+                "hub_urls": list(hub_urls),
                 "discovered": len(discovered_sources),
                 "active_sources": active_count,
                 "downloaded": len(downloaded),

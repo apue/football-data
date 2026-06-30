@@ -3,6 +3,7 @@ from __future__ import annotations
 import re
 import urllib.parse
 import urllib.request
+from collections.abc import Iterable
 from dataclasses import replace
 from datetime import datetime, timezone
 from html.parser import HTMLParser
@@ -10,12 +11,19 @@ from html.parser import HTMLParser
 from football_data.model import DiscoveredSource
 
 
-DEFAULT_HUB_URL = (
+GROUP_STAGE_HUB_URL = (
     "https://www.fifatrainingcentre.com/en/fifa-world-cup-2026/match-report-hub.php"
 )
+KNOCKOUT_STAGE_HUB_URL = (
+    "https://www.fifatrainingcentre.com/en/fifa-world-cup-2026/"
+    "match-report-hub-knockout-stage.php"
+)
+DEFAULT_HUB_URL = GROUP_STAGE_HUB_URL
+DEFAULT_HUB_URLS = (GROUP_STAGE_HUB_URL, KNOCKOUT_STAGE_HUB_URL)
 DEFAULT_COMPETITION = "fifa-world-cup-2026"
 REPORT_TYPE = "PMSR"
 USER_AGENT = "fifa-pmsr-data/0.1 (+https://github.com/apue/football-data)"
+HubUrlInput = str | Iterable[str]
 
 
 class DiscoveryError(RuntimeError):
@@ -44,19 +52,33 @@ def fetch_hub_html(hub_url: str = DEFAULT_HUB_URL) -> str:
 
 
 def discover_hub_sources(
-    hub_url: str = DEFAULT_HUB_URL,
+    hub_url: HubUrlInput = DEFAULT_HUB_URLS,
     *,
     discovered_at: str | None = None,
 ) -> list[DiscoveredSource]:
-    html = fetch_hub_html(hub_url)
-    sources = parse_hub_sources(
-        html,
-        base_url=hub_url,
-        discovered_at=discovered_at or discovery_timestamp(),
-    )
+    timestamp = discovered_at or discovery_timestamp()
+    sources: list[DiscoveredSource] = []
+    seen_source_urls: set[str] = set()
+    for url in normalise_hub_urls(hub_url):
+        html = fetch_hub_html(url)
+        for source in parse_hub_sources(
+            html,
+            base_url=url,
+            discovered_at=timestamp,
+        ):
+            if source.source_url in seen_source_urls:
+                continue
+            seen_source_urls.add(source.source_url)
+            sources.append(source)
     if not sources:
         raise DiscoveryError("hub_parse_failed", "No PMSR PDF links found on FIFA hub")
     return resolve_active_sources(sources)
+
+
+def normalise_hub_urls(hub_url: HubUrlInput) -> tuple[str, ...]:
+    if isinstance(hub_url, str):
+        return (hub_url,)
+    return tuple(hub_url)
 
 
 def parse_hub_sources(
