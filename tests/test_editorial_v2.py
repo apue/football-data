@@ -833,6 +833,33 @@ def test_editorial_v2_candidate_pool_includes_configured_zh_display_names():
     }
 
 
+def test_editorial_v2_candidate_pool_keeps_late_equalizer_impact_challenger_selectable():
+    from football_data.editorial_candidates import build_candidate_pool
+    from football_data.editorial_rankings import build_editorial_rankings
+    from football_data.editorial_registry import (
+        load_candidate_pool_config,
+        load_editorial_experiment,
+    )
+
+    experiment = load_editorial_experiment()
+    rankings = build_editorial_rankings(
+        "data/latest.sqlite",
+        "2026-06-29",
+        experiment["scoring_config"],
+    )
+    pool = build_candidate_pool(
+        rankings,
+        load_candidate_pool_config(experiment["candidate_pool"]),
+    )
+
+    diop = _candidate(pool, "Issa DIOP")
+
+    assert "impact_pick" in diop["eligible_awards"]
+    assert "impact_story" in diop["pool_reasons"]
+    assert diop["award_contexts"]["impact_pick"]["metrics"]["stoppage_time_goal"] == 1
+    assert diop["award_contexts"]["impact_pick"]["metrics"]["comeback_equalizer"] == 1
+
+
 def test_editorial_v2_selector_input_keeps_audit_progression_guard_fields_out_of_public_selection():
     from football_data.editorial_candidates import build_candidate_pool
     from football_data.editorial_rankings import build_editorial_rankings

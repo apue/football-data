@@ -2,7 +2,7 @@
   "id": "guarded_packet_v2",
   "potd_top_n": 8,
   "role_top_n": 5,
-  "impact_top_n": 5,
+  "impact_top_n": 6,
   "near_miss_count": 8,
   "include_goalkeepers": true,
   "include_hidden_gems": true,
