@@ -1,5 +1,8 @@
+import json
+
 import pytest
 
+from football_data import pipeline as pipeline_module
 from football_data.discovery import parse_hub_sources, resolve_active_sources
 from football_data.model import DiscoveredSource
 from football_data.pipeline import (
@@ -98,3 +101,28 @@ def test_ensure_source_pdfs_ignores_legacy_root_cache(tmp_path, monkeypatch):
     assert downloaded == [source.source_id]
     assert downloaded_paths == [expected_path]
     assert expected_path.read_text(encoding="utf-8").startswith("downloaded")
+
+
+def test_update_dataset_uses_default_stage_hubs(tmp_path, monkeypatch):
+    captured_hub_urls = []
+
+    def fake_discover_hub_sources(hub_urls, *, discovered_at):
+        captured_hub_urls.append(tuple(hub_urls))
+        return []
+
+    monkeypatch.setattr(pipeline_module, "discover_hub_sources", fake_discover_hub_sources)
+
+    with pytest.raises(PipelineError, match="No active PMSR"):
+        pipeline_module.update_dataset(
+            raw_dir=tmp_path / "raw",
+            db_path=tmp_path / "latest.sqlite",
+            manifests_dir=tmp_path / "manifests",
+        )
+
+    assert captured_hub_urls == [tuple(pipeline_module.DEFAULT_HUB_URLS)]
+    latest_run = json.loads((tmp_path / "manifests" / "latest-run.json").read_text())
+    discovered_sources = json.loads(
+        (tmp_path / "manifests" / "discovered-sources.json").read_text()
+    )
+    assert latest_run["hub_urls"] == list(pipeline_module.DEFAULT_HUB_URLS)
+    assert discovered_sources["hub_urls"] == list(pipeline_module.DEFAULT_HUB_URLS)

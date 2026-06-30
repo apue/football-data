@@ -1,6 +1,10 @@
 {
-  "generated_at": "2026-06-29T09:12:28+00:00",
+  "generated_at": "2026-06-30T00:56:04+00:00",
   "hub_url": "https://www.fifatrainingcentre.com/en/fifa-world-cup-2026/match-report-hub.php",
+  "hub_urls": [
+    "https://www.fifatrainingcentre.com/en/fifa-world-cup-2026/match-report-hub.php",
+    "https://www.fifatrainingcentre.com/en/fifa-world-cup-2026/match-report-hub-knockout-stage.php"
+  ],
   "sources": [
     {
       "source_id": "fifa-world-cup-2026-pmsr-m01-mex-rsa-v1",
@@ -12,7 +16,7 @@
       "version": 1,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M01%20MEX%20V%20RSA.pdf",
       "file_name": "PMSR-M01 MEX V RSA.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -26,7 +30,7 @@
       "version": 1,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M02%20KOR%20V%20CZE%20.pdf",
       "file_name": "PMSR-M02 KOR V CZE .pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -40,7 +44,7 @@
       "version": 2,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M03-CAN-V-BIH-V2.pdf",
       "file_name": "PMSR-M03-CAN-V-BIH-V2.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -54,7 +58,7 @@
       "version": 1,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M04-USA-V-PAR.pdf",
       "file_name": "PMSR-M04-USA-V-PAR.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -68,7 +72,7 @@
       "version": 1,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M05-HAI-V-SCO.pdf",
       "file_name": "PMSR-M05-HAI-V-SCO.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -82,7 +86,7 @@
       "version": 1,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M06-AUS-V-TUR.pdf",
       "file_name": "PMSR-M06-AUS-V-TUR.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -96,7 +100,7 @@
       "version": 2,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M07-BRA-V-MAR%20POST-V2.pdf",
       "file_name": "PMSR-M07-BRA-V-MAR POST-V2.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -110,7 +114,7 @@
       "version": 1,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M08-QAT-V-SUI.pdf",
       "file_name": "PMSR-M08-QAT-V-SUI.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -124,7 +128,7 @@
       "version": 1,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M09-CIV-V-ECU.pdf",
       "file_name": "PMSR-M09-CIV-V-ECU.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -138,7 +142,7 @@
       "version": 2,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M10-GER-V-CUW-V2.pdf",
       "file_name": "PMSR-M10-GER-V-CUW-V2.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -152,7 +156,7 @@
       "version": 1,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M11-NED-V-JPN.pdf",
       "file_name": "PMSR-M11-NED-V-JPN.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -166,7 +170,7 @@
       "version": 1,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M12-SWE-V-TUN.pdf",
       "file_name": "PMSR-M12-SWE-V-TUN.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -180,7 +184,7 @@
       "version": 1,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M13-KSA-V-URU.pdf",
       "file_name": "PMSR-M13-KSA-V-URU.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -194,7 +198,7 @@
       "version": 1,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M14-ESP-V-CPV.pdf",
       "file_name": "PMSR-M14-ESP-V-CPV.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -208,7 +212,7 @@
       "version": 1,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M15-IRN-V-NZL.pdf",
       "file_name": "PMSR-M15-IRN-V-NZL.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -222,7 +226,7 @@
       "version": 1,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M16-BEL-V-EGY.pdf",
       "file_name": "PMSR-M16-BEL-V-EGY.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -236,7 +240,7 @@
       "version": 1,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M17-FRA-V-SEN.pdf",
       "file_name": "PMSR-M17-FRA-V-SEN.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -250,7 +254,7 @@
       "version": 1,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M18-IRQ-V-NOR.pdf",
       "file_name": "PMSR-M18-IRQ-V-NOR.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -264,7 +268,7 @@
       "version": 1,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M19-ARG-V-ALG.pdf",
       "file_name": "PMSR-M19-ARG-V-ALG.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -278,7 +282,7 @@
       "version": 3,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M20-AUT-V-JOR-V3.pdf",
       "file_name": "PMSR-M20-AUT-V-JOR-V3.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -292,7 +296,7 @@
       "version": 2,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M21-GHA-V-PAN-V2.pdf",
       "file_name": "PMSR-M21-GHA-V-PAN-V2.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -306,7 +310,7 @@
       "version": 1,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M22-ENG-V-CRO.pdf",
       "file_name": "PMSR-M22-ENG-V-CRO.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -320,7 +324,7 @@
       "version": 1,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M23-POR-V-COD.pdf",
       "file_name": "PMSR-M23-POR-V-COD.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -334,7 +338,7 @@
       "version": 2,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M24-UZB-V-COL-V2.pdf",
       "file_name": "PMSR-M24-UZB-V-COL-V2.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -348,7 +352,7 @@
       "version": 1,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M25-CZE-V-RSA.pdf",
       "file_name": "PMSR-M25-CZE-V-RSA.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -362,7 +366,7 @@
       "version": 1,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M26-SUI-V-BIH.pdf",
       "file_name": "PMSR-M26-SUI-V-BIH.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -376,7 +380,7 @@
       "version": 1,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M27-CAN-V-QAT.pdf",
       "file_name": "PMSR-M27-CAN-V-QAT.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -390,7 +394,7 @@
       "version": 1,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M28-MEX-V-KOR.pdf",
       "file_name": "PMSR-M28-MEX-V-KOR.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -404,7 +408,7 @@
       "version": 1,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M29-BRA-V-HAI.pdf",
       "file_name": "PMSR-M29-BRA-V-HAI.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -418,7 +422,7 @@
       "version": 1,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M30-SCO-V-MAR.pdf",
       "file_name": "PMSR-M30-SCO-V-MAR.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -432,7 +436,7 @@
       "version": 1,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M31-TUR-V-PAR.pdf",
       "file_name": "PMSR-M31-TUR-V-PAR.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -446,7 +450,7 @@
       "version": 1,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M32-USA-V-AUS.pdf",
       "file_name": "PMSR-M32-USA-V-AUS.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -460,7 +464,7 @@
       "version": 1,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M33-GER-V-CIV.pdf",
       "file_name": "PMSR-M33-GER-V-CIV.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -474,7 +478,7 @@
       "version": 1,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M34-ECU-V-CUW.pdf",
       "file_name": "PMSR-M34-ECU-V-CUW.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -488,7 +492,7 @@
       "version": 1,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M35-NED-V-SWE.pdf",
       "file_name": "PMSR-M35-NED-V-SWE.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -502,7 +506,7 @@
       "version": 1,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M36-TUN-V-JPN.pdf",
       "file_name": "PMSR-M36-TUN-V-JPN.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -516,7 +520,7 @@
       "version": 1,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M37-URU-V-CPV.pdf",
       "file_name": "PMSR-M37-URU-V-CPV.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -530,7 +534,7 @@
       "version": 1,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M38-ESP-V-KSA.pdf",
       "file_name": "PMSR-M38-ESP-V-KSA.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -544,7 +548,7 @@
       "version": 1,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M39-BEL-V-IRN.pdf",
       "file_name": "PMSR-M39-BEL-V-IRN.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -558,7 +562,7 @@
       "version": 1,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M40-NZL-V-EGY.pdf",
       "file_name": "PMSR-M40-NZL-V-EGY.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -572,7 +576,7 @@
       "version": 1,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M41-NOR-V-SEN.pdf",
       "file_name": "PMSR-M41-NOR-V-SEN.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -586,7 +590,7 @@
       "version": 1,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M42-FRA-V-IRQ.pdf",
       "file_name": "PMSR-M42-FRA-V-IRQ.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -600,7 +604,7 @@
       "version": 1,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M43-ARG-V-AUT.pdf",
       "file_name": "PMSR-M43-ARG-V-AUT.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -614,7 +618,7 @@
       "version": 1,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M44-JOR-V-ALG.pdf",
       "file_name": "PMSR-M44-JOR-V-ALG.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -628,7 +632,7 @@
       "version": 1,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M45-ENG-V-GHA.pdf",
       "file_name": "PMSR-M45-ENG-V-GHA.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -642,7 +646,7 @@
       "version": 1,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M46-PAN-V-CRO.pdf",
       "file_name": "PMSR-M46-PAN-V-CRO.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -656,7 +660,7 @@
       "version": 1,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M47-POR-V-GHA.pdf",
       "file_name": "PMSR-M47-POR-V-GHA.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -670,7 +674,7 @@
       "version": 2,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M48-COL-V-COD-V2.pdf",
       "file_name": "PMSR-M48-COL-V-COD-V2.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -684,7 +688,7 @@
       "version": 1,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M49-SCO-V-BRA.pdf",
       "file_name": "PMSR-M49-SCO-V-BRA.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -698,7 +702,7 @@
       "version": 1,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M50-MAR-V-HAI.pdf",
       "file_name": "PMSR-M50-MAR-V-HAI.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -712,7 +716,7 @@
       "version": 1,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M51-SUI-V-CAN.pdf",
       "file_name": "PMSR-M51-SUI-V-CAN.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -726,7 +730,7 @@
       "version": 1,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M52-BIH-V-QAT.pdf",
       "file_name": "PMSR-M52-BIH-V-QAT.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -740,7 +744,7 @@
       "version": 1,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M53-CZE-V-MEX.pdf",
       "file_name": "PMSR-M53-CZE-V-MEX.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -754,7 +758,7 @@
       "version": 1,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M54-RSA-V-KOR.pdf",
       "file_name": "PMSR-M54-RSA-V-KOR.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -768,7 +772,7 @@
       "version": 1,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M55-CUW-V-CIV.pdf",
       "file_name": "PMSR-M55-CUW-V-CIV.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -782,7 +786,7 @@
       "version": 1,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M56-ECU-V-GER.pdf",
       "file_name": "PMSR-M56-ECU-V-GER.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -796,7 +800,7 @@
       "version": 1,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M57-JPN-V-SWE.pdf",
       "file_name": "PMSR-M57-JPN-V-SWE.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -810,7 +814,7 @@
       "version": 1,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M58-TUN-V-NED.pdf",
       "file_name": "PMSR-M58-TUN-V-NED.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -824,7 +828,7 @@
       "version": 1,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M59-TUR-v-USA.pdf",
       "file_name": "PMSR-M59-TUR-v-USA.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -838,7 +842,7 @@
       "version": 1,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M60-PAR-V-AUS.pdf",
       "file_name": "PMSR-M60-PAR-V-AUS.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -852,7 +856,7 @@
       "version": 1,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M61-NOR-V-FRA.pdf",
       "file_name": "PMSR-M61-NOR-V-FRA.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -866,7 +870,7 @@
       "version": 1,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M62-SEN-V-IRQ.pdf",
       "file_name": "PMSR-M62-SEN-V-IRQ.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -880,7 +884,7 @@
       "version": 1,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M63-EGY-V-IRN.pdf",
       "file_name": "PMSR-M63-EGY-V-IRN.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -894,7 +898,7 @@
       "version": 1,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M64-NZL-V-BEL.pdf",
       "file_name": "PMSR-M64-NZL-V-BEL.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -908,7 +912,7 @@
       "version": 1,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M65-CPV-V-KSA.pdf",
       "file_name": "PMSR-M65-CPV-V-KSA.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -922,7 +926,7 @@
       "version": 1,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M66-URU-V-ESP.pdf",
       "file_name": "PMSR-M66-URU-V-ESP.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -936,7 +940,7 @@
       "version": 1,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M67-PAN-V-ENG.pdf",
       "file_name": "PMSR-M67-PAN-V-ENG.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -950,7 +954,7 @@
       "version": 1,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M68-CRO-V-GHA.pdf",
       "file_name": "PMSR-M68-CRO-V-GHA.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -964,7 +968,7 @@
       "version": 1,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M69-ALG-V-AUT.pdf",
       "file_name": "PMSR-M69-ALG-V-AUT.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -978,7 +982,7 @@
       "version": 1,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M70-JOR-V-ARG.pdf",
       "file_name": "PMSR-M70-JOR-V-ARG.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -992,7 +996,7 @@
       "version": 1,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M71-COL-V-POR.pdf",
       "file_name": "PMSR-M71-COL-V-POR.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     },
@@ -1006,7 +1010,21 @@
       "version": 1,
       "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M72-COD-V-UZB.pdf",
       "file_name": "PMSR-M72-COD-V-UZB.pdf",
-      "discovered_at": "2026-06-29T09:12:28+00:00",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
+      "active": true,
+      "status": "active"
+    },
+    {
+      "source_id": "fifa-world-cup-2026-pmsr-m73-rsa-can-v1",
+      "competition": "fifa-world-cup-2026",
+      "report_type": "PMSR",
+      "match_no": 73,
+      "home_code": "RSA",
+      "away_code": "CAN",
+      "version": 1,
+      "source_url": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M73-RSA-V-CAN.pdf",
+      "file_name": "PMSR-M73-RSA-V-CAN.pdf",
+      "discovered_at": "2026-06-30T00:56:04+00:00",
       "active": true,
       "status": "active"
     }
