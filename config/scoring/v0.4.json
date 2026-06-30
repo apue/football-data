@@ -27,7 +27,8 @@
       "brace": 8.0,
       "hat_trick": 12.0,
       "substitute_goal": 4.0,
-      "substitute_brace": 8.0
+      "substitute_brace": 8.0,
+      "shootout_penalty_saves": 18.0
     },
     "progressor": {
       "line_breaks_completed": 2.0,
@@ -60,7 +61,8 @@
       "clean_sheet": 8.0,
       "opponent_xg": 12.0,
       "opponent_attempts_on_target": 2.0,
-      "keeper_saved_shots": 2.0
+      "keeper_saved_shots": 2.0,
+      "shootout_penalty_saves": 10.0
     }
   },
   "composite_weights": {

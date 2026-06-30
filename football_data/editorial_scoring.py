@@ -155,6 +155,44 @@ def player_rows_for_date(conn: sqlite3.Connection, match_date: str) -> list[sqli
           from shots
           where outcome like '%Saved%'
           group by match_key, team
+        ),
+        shootout_saved_penalty_totals as (
+          select match_key, keeper_team, count(*) as shootout_penalty_saves
+          from (
+            select
+              e.match_key,
+              case
+                when lower(coalesce(e.event_type_name, '')) = 'goal prevention'
+                  or lower(coalesce(e.description, '')) like 'the goalkeeper of %'
+                then e.team_name
+                when e.team_name = m.home_team then m.away_team
+                when e.team_name = m.away_team then m.home_team
+              end as keeper_team
+            from official_match_events e
+            join matches m using(match_key)
+            where (
+                lower(coalesce(e.event_type_name, '')) like '%shoot-out%'
+                or lower(coalesce(e.event_type_name, '')) like '%shootout%'
+                or lower(coalesce(e.event_type_name, '')) like '%penalty shoot%'
+                or lower(coalesce(e.description, '')) like '%shoot-out%'
+                or lower(coalesce(e.description, '')) like '%shootout%'
+                or lower(coalesce(e.description, '')) like '%penalty shoot%'
+                or (
+                  coalesce(e.period, 0) >= 11
+                  and (
+                    lower(coalesce(e.event_type_name, '')) like '%penalt%'
+                    or lower(coalesce(e.description, '')) like '%penalt%'
+                  )
+                )
+              )
+              and (
+                lower(coalesce(e.event_type_name, '')) like '%saved%'
+                or lower(coalesce(e.description, '')) like '%saved%'
+                or lower(coalesce(e.description, '')) like '%save%'
+              )
+          )
+          where keeper_team is not null
+          group by match_key, keeper_team
         )
         select
           m.match_key,
@@ -175,6 +213,7 @@ def player_rows_for_date(conn: sqlite3.Connection, match_date: str) -> list[sqli
           coalesce(ots.attempts_on_target, 0) as opponent_attempts_on_target,
           case when (case when a.team = m.home_team then m.away_score else m.home_score end) = 0 then 1 else 0 end as clean_sheet,
           coalesce(kss.saved_shots, 0) as keeper_saved_shots,
+          coalesce(sps.shootout_penalty_saves, 0) as shootout_penalty_saves,
           a.team,
           a.player_no,
           a.player_name,
@@ -286,6 +325,9 @@ def player_rows_for_date(conn: sqlite3.Connection, match_date: str) -> list[sqli
         left join saved_shot_totals kss
           on kss.match_key = a.match_key
          and kss.shooting_team = case when a.team = m.home_team then m.away_team else m.home_team end
+        left join shootout_saved_penalty_totals sps
+          on sps.match_key = a.match_key
+         and sps.keeper_team = a.team
         where m.match_date = ?
         """,
         (match_date,),

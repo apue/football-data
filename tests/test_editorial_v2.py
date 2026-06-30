@@ -1,4 +1,6 @@
 import json
+import shutil
+import sqlite3
 from pathlib import Path
 
 from editorial_test_helpers import build_test_copy, build_test_selection_decision
@@ -647,6 +649,107 @@ def test_editorial_v2_goalkeeper_score_is_keeper_only_for_latest_day():
     )
     assert abulaila["position"] == "GK"
     assert abulaila["role_scores"]["goalkeeper"] > 0
+
+
+def test_editorial_v2_shootout_penalty_save_counts_as_goalkeeper_impact(tmp_path):
+    from football_data.editorial_rankings import build_editorial_rankings
+    from football_data.editorial_registry import load_editorial_experiment
+
+    db_path = tmp_path / "latest.sqlite"
+    shutil.copyfile("data/latest.sqlite", db_path)
+    conn = sqlite3.connect(db_path)
+    conn.row_factory = sqlite3.Row
+    try:
+        keeper = conn.execute(
+            """
+            select m.match_key, m.match_date, m.home_team, m.away_team,
+                   a.team, a.player_name
+            from matches m
+            join player_appearances a using(match_key)
+            where m.match_no = 73
+              and a.team = m.home_team
+              and a.position = 'GK'
+              and a.started = 1
+            """
+        ).fetchone()
+        conn.execute(
+            """
+            insert into official_match_events(
+              match_key, fifa_match_id, event_id, event_type, event_type_name,
+              period, match_minute, minute, stoppage_minute, absolute_minute,
+              team_id, team_name, player_id, player_name, related_player_id,
+              home_goals, away_goals, description, raw_json
+            ) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                keeper["match_key"],
+                "synthetic-match",
+                "synthetic-shootout-save",
+                9001,
+                "Penalty shoot-out saved",
+                11,
+                None,
+                None,
+                None,
+                None,
+                "away-team",
+                keeper["away_team"],
+                "shooter",
+                "Synthetic SHOOTER",
+                None,
+                0,
+                1,
+                "Synthetic SHOOTER has their penalty shoot-out kick saved.",
+                "{}",
+            ),
+        )
+        conn.execute(
+            """
+            insert into official_match_events(
+              match_key, fifa_match_id, event_id, event_type, event_type_name,
+              period, match_minute, minute, stoppage_minute, absolute_minute,
+              team_id, team_name, player_id, player_name, related_player_id,
+              home_goals, away_goals, description, raw_json
+            ) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                keeper["match_key"],
+                "synthetic-match",
+                "synthetic-shootout-goal-prevention",
+                57,
+                "Goal Prevention",
+                11,
+                None,
+                None,
+                None,
+                None,
+                "keeper-team",
+                keeper["team"],
+                None,
+                None,
+                None,
+                0,
+                1,
+                f"The goalkeeper of {keeper['team']} pulls off a penalty shoot-out save.",
+                "{}",
+            ),
+        )
+        conn.commit()
+        match_date = keeper["match_date"]
+        keeper_name = keeper["player_name"]
+    finally:
+        conn.close()
+
+    experiment = load_editorial_experiment()
+    rankings = build_editorial_rankings(db_path, match_date, experiment["scoring_config"])
+    player = _player(rankings, keeper_name)
+
+    assert player["shootout_penalty_saves"] == 2
+    assert player["metrics"]["shootout_penalty_saves"] == 2
+    assert player["role_scores"]["impact"] > 0
+    assert player["role_scores"]["goalkeeper"] > 0
+    assert any(component["metric"] == "shootout_penalty_saves" for component in player["score_components"])
+    assert "shoot-out penalty save" in player["evidence_chips"]["en"]
 
 
 def test_editorial_v2_candidate_pool_keeps_role_candidates_audit_only_latest_day():

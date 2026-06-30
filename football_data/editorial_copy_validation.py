@@ -70,7 +70,6 @@ def _zh_title_core_fact_warnings(
     if not choice:
         return []
     title = str(copy_item.get("title") or "")
-    award_type = str(copy_item.get("award_type") or "")
     metrics = choice.get("metrics") if isinstance(choice.get("metrics"), dict) else {}
     warnings: list[str] = []
     goals = int(metrics.get("goals") or 0)

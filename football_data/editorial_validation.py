@@ -125,7 +125,6 @@ def validate_selection_decision(
             for item in selected
             if isinstance(item, dict)
         }
-        selected_potd_ids = {str(item.get("player_id")) for item in selected_potd}
         for item in selected_potd:
             player = selectable.get(str(item.get("player_id")))
             if not player:

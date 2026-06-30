@@ -13,6 +13,7 @@ def choice_metrics(player: dict[str, Any], award_type: str) -> dict[str, int | f
             "opponent_attempts_on_target",
             "opponent_attempts_total",
             "keeper_saved_shots",
+            "shootout_penalty_saves",
         ]
     elif award_type in {"player_of_the_day", "impact_pick"} and has_direct_scoring_case(player):
         metric_names = [
@@ -35,6 +36,7 @@ def choice_metrics(player: dict[str, Any], award_type: str) -> dict[str, int | f
             "only_goal_winner",
             "substitute_goal",
             "substitute_brace",
+            "shootout_penalty_saves",
         ]
     elif award_type == "progression_pick":
         metric_names = [
@@ -101,10 +103,17 @@ def evidence_chips(player: dict[str, Any], award_type: str) -> dict[str, list[st
         if float(player.get("keeper_saved_shots") or 0) >= 5:
             en.append("Saved outcomes in shot log")
             zh.append("射门记录Saved结果较多")
+        if int(player.get("shootout_penalty_saves") or 0) > 0:
+            en.append("shoot-out penalty save")
+            zh.append("点球大战扑救")
         if not en:
             en.append("clean-sheet profile")
             zh.append("零封画像")
         return {"en": en[:4], "zh": zh[:4]}
+
+    if int(player.get("shootout_penalty_saves") or 0) > 0:
+        en.append("shoot-out penalty save")
+        zh.append("点球大战扑救")
 
     if int(player.get("hat_trick") or 0) > 0:
         en.append("hat-trick")
@@ -199,6 +208,7 @@ def has_direct_scoring_case(player: dict[str, Any]) -> bool:
         int(player.get("goals") or 0) > 0
         or int(player.get("assists") or 0) > 0
         or int(player.get("goal_involvements") or 0) > 0
+        or int(player.get("shootout_penalty_saves") or 0) > 0
     )
 
 
