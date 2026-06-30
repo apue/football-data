@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-06-28T11:08:59+00:00",
+  "generated_at": "2026-06-30T09:26:58+00:00",
   "status": "success",
-  "match_date": "2026-06-27",
+  "match_date": "2026-06-29",
   "workflow_variant": "bounded_selection_copy_loop_v1",
   "experiment_id": "bounded_editorial_loop_v1",
   "editor_runtime": "local_codex",
@@ -25,33 +25,23 @@
   "choices": [
     {
       "award_type": "player_of_the_day",
-      "player_name": "Riyad MAHREZ",
-      "team": "Algeria"
-    },
-    {
-      "award_type": "player_of_the_day",
-      "player_name": "Yoane WISSA",
-      "team": "Congo DR"
-    },
-    {
-      "award_type": "player_of_the_day",
-      "player_name": "Fiston MAYELE",
-      "team": "Congo DR"
-    },
-    {
-      "award_type": "player_of_the_day",
-      "player_name": "Jude BELLINGHAM",
-      "team": "England"
+      "player_name": "GABRIEL MARTINELLI",
+      "team": "Brazil"
     },
     {
       "award_type": "impact_pick",
-      "player_name": "Nikola VLASIC",
-      "team": "Croatia"
+      "player_name": "Orlando GILL",
+      "team": "Paraguay"
+    },
+    {
+      "award_type": "player_of_the_day",
+      "player_name": "CASEMIRO",
+      "team": "Brazil"
     },
     {
       "award_type": "impact_pick",
-      "player_name": "Sasa KALAJDZIC",
-      "team": "Austria"
+      "player_name": "Issa DIOP",
+      "team": "Morocco"
     }
   ]
 }
