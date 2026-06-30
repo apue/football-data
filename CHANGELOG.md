@@ -1,5 +1,18 @@
 # Changelog
 
+## 2026-06-30 - Shoot-out Timeline Fields
+
+Added first-class FIFA timeline support for penalty shoot-outs:
+
+- Bumped SQLite schema to version 7.
+- Added match-level FIFA calendar fields for result type, winner team id, and home/away penalty shoot-out scores.
+- Added timeline event order, timestamp, and home/away penalty shoot-out running scores to `official_match_events`.
+- Added structured shoot-out penalty result, miss type, miss-type source, and opposing goalkeeper fields.
+- Parsed penalty-miss taker names from FIFA timeline descriptions.
+- Added deterministic shoot-out miss-type overrides for current FIFA timeline events whose public descriptions overstate goalkeeper saves.
+- Excluded period 11 shoot-out penalty goals from official match `goal_involvements` so shoot-outs do not inflate goals or goal involvement scoring.
+- Updated editorial scoring so shoot-out penalty saves are counted only from structured saved misses and assigned to the specific goalkeeper.
+
 ## 2026-06-23 - Editorial v2 AI Rerank
 
 Rebuilt the Editor's Choices path around an experiment-registry driven AI rerank flow:

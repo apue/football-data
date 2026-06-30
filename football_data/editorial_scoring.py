@@ -157,42 +157,18 @@ def player_rows_for_date(conn: sqlite3.Connection, match_date: str) -> list[sqli
           group by match_key, team
         ),
         shootout_saved_penalty_totals as (
-          select match_key, keeper_team, count(*) as shootout_penalty_saves
-          from (
-            select
-              e.match_key,
-              case
-                when lower(coalesce(e.event_type_name, '')) = 'goal prevention'
-                  or lower(coalesce(e.description, '')) like 'the goalkeeper of %'
-                then e.team_name
-                when e.team_name = m.home_team then m.away_team
-                when e.team_name = m.away_team then m.home_team
-              end as keeper_team
-            from official_match_events e
-            join matches m using(match_key)
-            where (
-                lower(coalesce(e.event_type_name, '')) like '%shoot-out%'
-                or lower(coalesce(e.event_type_name, '')) like '%shootout%'
-                or lower(coalesce(e.event_type_name, '')) like '%penalty shoot%'
-                or lower(coalesce(e.description, '')) like '%shoot-out%'
-                or lower(coalesce(e.description, '')) like '%shootout%'
-                or lower(coalesce(e.description, '')) like '%penalty shoot%'
-                or (
-                  coalesce(e.period, 0) >= 11
-                  and (
-                    lower(coalesce(e.event_type_name, '')) like '%penalt%'
-                    or lower(coalesce(e.description, '')) like '%penalt%'
-                  )
-                )
-              )
-              and (
-                lower(coalesce(e.event_type_name, '')) like '%saved%'
-                or lower(coalesce(e.description, '')) like '%saved%'
-                or lower(coalesce(e.description, '')) like '%save%'
-              )
-          )
-          where keeper_team is not null
-          group by match_key, keeper_team
+          select
+            match_key,
+            penalty_keeper_team_name as keeper_team,
+            upper(penalty_keeper_name) as keeper_name,
+            count(*) as shootout_penalty_saves
+          from official_match_events
+          where period = 11
+            and penalty_result = 'missed'
+            and penalty_miss_type = 'saved'
+            and penalty_keeper_team_name is not null
+            and penalty_keeper_name is not null
+          group by match_key, keeper_team, keeper_name
         )
         select
           m.match_key,
@@ -328,6 +304,7 @@ def player_rows_for_date(conn: sqlite3.Connection, match_date: str) -> list[sqli
         left join shootout_saved_penalty_totals sps
           on sps.match_key = a.match_key
          and sps.keeper_team = a.team
+         and sps.keeper_name = upper(a.player_name)
         where m.match_date = ?
         """,
         (match_date,),

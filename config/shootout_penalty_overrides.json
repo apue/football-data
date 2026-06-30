@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "events": [
+    {
+      "match_key": "FIFA-2026-M74-GER-PAR",
+      "event_id": "27866285",
+      "penalty_miss_type": "saved",
+      "source_url": "https://www.theguardian.com/football/live/2026/jun/29/germany-v-paraguay-world-cup-2026-last-32-live"
+    },
+    {
+      "match_key": "FIFA-2026-M74-GER-PAR",
+      "event_id": "346065072",
+      "penalty_miss_type": "saved",
+      "source_url": "https://www.theguardian.com/football/live/2026/jun/29/germany-v-paraguay-world-cup-2026-last-32-live"
+    },
+    {
+      "match_key": "FIFA-2026-M74-GER-PAR",
+      "event_id": "409758883",
+      "penalty_miss_type": "wide",
+      "source_url": "https://www.theguardian.com/football/live/2026/jun/29/germany-v-paraguay-world-cup-2026-last-32-live"
+    },
+    {
+      "match_key": "FIFA-2026-M74-GER-PAR",
+      "event_id": "532405432",
+      "penalty_miss_type": "saved",
+      "source_url": "https://www.theguardian.com/football/live/2026/jun/29/germany-v-paraguay-world-cup-2026-last-32-live"
+    },
+    {
+      "match_key": "FIFA-2026-M74-GER-PAR",
+      "event_id": "579778745",
+      "penalty_miss_type": "over_bar",
+      "source_url": "https://www.theguardian.com/football/live/2026/jun/29/germany-v-paraguay-world-cup-2026-last-32-live"
+    },
+    {
+      "match_key": "FIFA-2026-M75-NED-MAR",
+      "event_id": "998486287",
+      "penalty_miss_type": "crossbar",
+      "source_url": "https://www.theguardian.com/football/live/2026/jun/29/netherlands-v-morocco-world-cup-2026-live"
+    },
+    {
+      "match_key": "FIFA-2026-M75-NED-MAR",
+      "event_id": "1041253648",
+      "penalty_miss_type": "post",
+      "source_url": "https://www.theguardian.com/football/live/2026/jun/29/netherlands-v-morocco-world-cup-2026-live"
+    },
+    {
+      "match_key": "FIFA-2026-M75-NED-MAR",
+      "event_id": "1258271044",
+      "penalty_miss_type": "wide",
+      "source_url": "https://www.theguardian.com/football/live/2026/jun/29/netherlands-v-morocco-world-cup-2026-live"
+    },
+    {
+      "match_key": "FIFA-2026-M75-NED-MAR",
+      "event_id": "1305750844",
+      "penalty_miss_type": "post",
+      "source_url": "https://www.theguardian.com/football/live/2026/jun/29/netherlands-v-morocco-world-cup-2026-live"
+    },
+    {
+      "match_key": "FIFA-2026-M75-NED-MAR",
+      "event_id": "1379651902",
+      "penalty_miss_type": "saved",
+      "source_url": "https://www.theguardian.com/football/live/2026/jun/29/netherlands-v-morocco-world-cup-2026-live"
+    }
+  ]
+}

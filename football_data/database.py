@@ -7,7 +7,7 @@ from football_data.extract import extraction_timestamp, parser_version
 from football_data.model import ExtractedMatch
 
 
-SCHEMA_VERSION = 5
+SCHEMA_VERSION = 7
 
 
 def build_database(path: str | Path, records: list[ExtractedMatch]) -> None:
@@ -288,6 +288,10 @@ def _create_schema(conn: sqlite3.Connection) -> None:
           fifa_group_id text,
           fifa_home_team_id text,
           fifa_away_team_id text,
+          result_type integer,
+          winner_team_id text,
+          home_penalty_score integer,
+          away_penalty_score integer,
           api_url text,
           fetched_at text not null,
           status text not null,
@@ -299,8 +303,10 @@ def _create_schema(conn: sqlite3.Connection) -> None:
           match_key text not null,
           fifa_match_id text not null,
           event_id text not null,
+          event_order integer,
           event_type integer,
           event_type_name text,
+          event_timestamp text,
           period integer,
           match_minute text,
           minute integer,
@@ -313,6 +319,15 @@ def _create_schema(conn: sqlite3.Connection) -> None:
           related_player_id text,
           home_goals integer,
           away_goals integer,
+          home_penalty_goals integer,
+          away_penalty_goals integer,
+          penalty_result text,
+          penalty_miss_type text,
+          penalty_miss_type_source text,
+          penalty_keeper_player_id text,
+          penalty_keeper_name text,
+          penalty_keeper_team_id text,
+          penalty_keeper_team_name text,
           description text,
           raw_json text not null,
           primary key(match_key, event_id),
@@ -361,7 +376,7 @@ def _create_schema(conn: sqlite3.Connection) -> None:
         [
             ("schema_version", str(SCHEMA_VERSION)),
             ("parser_version", parser_version()),
-            ("fifa_timeline_schema_version", "1"),
+            ("fifa_timeline_schema_version", "3"),
         ],
     )
 
