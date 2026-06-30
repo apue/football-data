@@ -464,6 +464,3 @@ def _editorial_css() -> str:
     @media (max-width: 720px) { .choice-card { grid-template-columns: 1fr; } .choice-card aside { border-left: 0; border-top: 1px solid #e8edf5; padding-left: 0; padding-top: 14px; } }
     @media (max-width: 720px) { .archive-row { grid-template-columns: 1fr; align-items: start; } .badge { justify-self: start; } }
     """
-    pre_review = reports_path / f"{match_date}.pre-review.md"
-    if pre_review.exists():
-        pre_review.unlink()

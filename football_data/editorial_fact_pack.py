@@ -117,13 +117,15 @@ def render_editorial_fact_pack_markdown(fact_pack: dict[str, Any]) -> str:
     for candidate in fact_pack.get("direct_impact_candidates", []):
         lines.append(
             "- #{headline_rank} {player_name} ({team}): {goals}G {assists}A, "
-            "winner={match_winning_goal}, only_goal={only_goal_winner}".format(**candidate)
+            "winner={match_winning_goal}, only_goal={only_goal_winner}, "
+            "shootout_saves={shootout_penalty_saves}".format(**candidate)
         )
     lines.extend(["", "## Goalkeeper Pressure", ""])
     for candidate in fact_pack.get("goalkeeper_pressure_candidates", []):
         lines.append(
             "- {player_name} ({team}): clean_sheet={clean_sheet}, saves={keeper_saved_shots}, "
-            "opp SOT={opponent_attempts_on_target}, opp xG={opponent_xg}".format(**candidate)
+            "shootout_saves={shootout_penalty_saves}, opp SOT={opponent_attempts_on_target}, "
+            "opp xG={opponent_xg}".format(**candidate)
         )
     lines.extend(["", "## Metric-Led High-Rank Candidates", ""])
     for candidate in fact_pack.get("metric_led_high_rank_candidates", []):
@@ -317,6 +319,9 @@ def _candidate_summary(candidate: dict[str, Any]) -> dict[str, Any]:
         ),
         "clean_sheet": int(candidate.get("clean_sheet") or metrics.get("clean_sheet") or 0),
         "keeper_saved_shots": int(candidate.get("keeper_saved_shots") or 0),
+        "shootout_penalty_saves": int(
+            candidate.get("shootout_penalty_saves") or metrics.get("shootout_penalty_saves") or 0
+        ),
         "opponent_xg": candidate.get("opponent_xg"),
         "opponent_attempts_on_target": candidate.get("opponent_attempts_on_target"),
         "opponent_attempts_total": candidate.get("opponent_attempts_total"),
@@ -355,6 +360,7 @@ def _direct_impact_candidates(candidates: list[dict[str, Any]]) -> list[dict[str
         or candidate["assists"] > 0
         or candidate["goal_involvements"] > 0
         or candidate["match_winning_goal"] > 0
+        or candidate.get("shootout_penalty_saves", 0) > 0
     ]
 
 
@@ -367,6 +373,7 @@ def _goalkeeper_pressure_candidates(candidates: list[dict[str, Any]]) -> list[di
             candidate.get("audit_type") == "goalkeeper_watch"
             or "goalkeeper_watch" in candidate.get("eligible_awards", [])
             or int(candidate.get("keeper_saved_shots") or 0) >= 4
+            or int(candidate.get("shootout_penalty_saves") or 0) > 0
             or (
                 int(candidate.get("clean_sheet") or 0) == 1
                 and float(candidate.get("opponent_xg") or 0) >= 1.0

@@ -116,7 +116,7 @@ def test_compile_local_editorial_uses_local_decision_and_copy(tmp_path):
 def test_compile_local_editorial_rejects_ai_sounding_zh_copy(tmp_path):
     import pytest
 
-    from football_data.editorial_local import compile_local_editorial, prepare_editorial_packet
+    from football_data.editorial_local import prepare_editorial_packet
     from football_data.editorial_copy import build_copy_payloads
     from football_data.editorial_loop import promote_editorial_loop
     from football_data.editorial_registry import load_copy_profile, load_editorial_experiment
@@ -148,7 +148,7 @@ def test_compile_local_editorial_rejects_ai_sounding_zh_copy(tmp_path):
 def test_compile_local_editorial_rejects_zh_title_missing_core_fact(tmp_path):
     import pytest
 
-    from football_data.editorial_local import compile_local_editorial, prepare_editorial_packet
+    from football_data.editorial_local import prepare_editorial_packet
     from football_data.editorial_copy import build_copy_payloads
     from football_data.editorial_loop import promote_editorial_loop
     from football_data.editorial_registry import load_editorial_experiment
