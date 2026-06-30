@@ -1,7 +1,27 @@
 {
-  "generated_at": "2026-06-30T05:04:56+00:00",
-  "new_matches": [],
-  "version_updates": [],
+  "generated_at": "2026-06-30T08:03:18+00:00",
+  "new_matches": [
+    {
+      "match_no": 74,
+      "source_id": "fifa-world-cup-2026-pmsr-m74-ger-par-v1"
+    },
+    {
+      "match_no": 75,
+      "source_id": "fifa-world-cup-2026-pmsr-m75-ned-mar-v1"
+    },
+    {
+      "match_no": 76,
+      "source_id": "fifa-world-cup-2026-pmsr-m76-bra-jpn-v1"
+    }
+  ],
+  "version_updates": [
+    {
+      "match_no": 72,
+      "from_version": 1,
+      "to_version": 2,
+      "source_id": "fifa-world-cup-2026-pmsr-m72-cod-uzb-v2"
+    }
+  ],
   "downloaded": [
     "fifa-world-cup-2026-pmsr-m01-mex-rsa-v1",
     "fifa-world-cup-2026-pmsr-m02-kor-cze-v1",
@@ -74,21 +94,24 @@
     "fifa-world-cup-2026-pmsr-m69-alg-aut-v1",
     "fifa-world-cup-2026-pmsr-m70-jor-arg-v1",
     "fifa-world-cup-2026-pmsr-m71-col-por-v1",
-    "fifa-world-cup-2026-pmsr-m72-cod-uzb-v1",
-    "fifa-world-cup-2026-pmsr-m73-rsa-can-v1"
+    "fifa-world-cup-2026-pmsr-m72-cod-uzb-v2",
+    "fifa-world-cup-2026-pmsr-m73-rsa-can-v1",
+    "fifa-world-cup-2026-pmsr-m74-ger-par-v1",
+    "fifa-world-cup-2026-pmsr-m75-ned-mar-v1",
+    "fifa-world-cup-2026-pmsr-m76-bra-jpn-v1"
   ],
   "supplemental": {
     "fifa_timeline": {
-      "generated_at": "2026-06-30T05:06:17+00:00",
+      "generated_at": "2026-06-30T08:04:36+00:00",
       "source": "fifa_timeline_api",
       "status": "success",
-      "matches": 73,
-      "linked_matches": 73,
-      "timeline_matches": 73,
-      "events": 6528,
-      "goals": 204,
-      "assists": 154,
-      "goal_involvements": 204,
+      "matches": 76,
+      "linked_matches": 76,
+      "timeline_matches": 76,
+      "events": 6869,
+      "goals": 223,
+      "assists": 160,
+      "goal_involvements": 223,
       "failures": []
     }
   },
