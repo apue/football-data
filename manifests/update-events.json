@@ -1,7 +1,33 @@
 {
-  "generated_at": "2026-06-30T09:33:27+00:00",
-  "new_matches": [],
-  "version_updates": [],
+  "generated_at": "2026-07-01T08:33:11+00:00",
+  "new_matches": [
+    {
+      "match_no": 77,
+      "source_id": "fifa-world-cup-2026-pmsr-m77-fra-swe-v1"
+    },
+    {
+      "match_no": 78,
+      "source_id": "fifa-world-cup-2026-pmsr-m78-civ-nor-v1"
+    },
+    {
+      "match_no": 79,
+      "source_id": "fifa-world-cup-2026-pmsr-m79-mex-ecu-v1"
+    }
+  ],
+  "version_updates": [
+    {
+      "match_no": 50,
+      "from_version": 1,
+      "to_version": 2,
+      "source_id": "fifa-world-cup-2026-pmsr-m50-mar-hai-v2"
+    },
+    {
+      "match_no": 74,
+      "from_version": 1,
+      "to_version": 2,
+      "source_id": "fifa-world-cup-2026-pmsr-m74-ger-par-v2"
+    }
+  ],
   "downloaded": [
     "fifa-world-cup-2026-pmsr-m01-mex-rsa-v1",
     "fifa-world-cup-2026-pmsr-m02-kor-cze-v1",
@@ -52,7 +78,7 @@
     "fifa-world-cup-2026-pmsr-m47-por-gha-v1",
     "fifa-world-cup-2026-pmsr-m48-col-cod-v2",
     "fifa-world-cup-2026-pmsr-m49-sco-bra-v1",
-    "fifa-world-cup-2026-pmsr-m50-mar-hai-v1",
+    "fifa-world-cup-2026-pmsr-m50-mar-hai-v2",
     "fifa-world-cup-2026-pmsr-m51-sui-can-v1",
     "fifa-world-cup-2026-pmsr-m52-bih-qat-v1",
     "fifa-world-cup-2026-pmsr-m53-cze-mex-v1",
@@ -76,22 +102,25 @@
     "fifa-world-cup-2026-pmsr-m71-col-por-v1",
     "fifa-world-cup-2026-pmsr-m72-cod-uzb-v2",
     "fifa-world-cup-2026-pmsr-m73-rsa-can-v1",
-    "fifa-world-cup-2026-pmsr-m74-ger-par-v1",
+    "fifa-world-cup-2026-pmsr-m74-ger-par-v2",
     "fifa-world-cup-2026-pmsr-m75-ned-mar-v1",
-    "fifa-world-cup-2026-pmsr-m76-bra-jpn-v1"
+    "fifa-world-cup-2026-pmsr-m76-bra-jpn-v1",
+    "fifa-world-cup-2026-pmsr-m77-fra-swe-v1",
+    "fifa-world-cup-2026-pmsr-m78-civ-nor-v1",
+    "fifa-world-cup-2026-pmsr-m79-mex-ecu-v1"
   ],
   "supplemental": {
     "fifa_timeline": {
-      "generated_at": "2026-06-30T09:34:48+00:00",
+      "generated_at": "2026-07-01T08:34:35+00:00",
       "source": "fifa_timeline_api",
       "status": "success",
-      "matches": 76,
-      "linked_matches": 76,
-      "timeline_matches": 76,
-      "events": 6869,
-      "goals": 211,
-      "assists": 160,
-      "goal_involvements": 211,
+      "matches": 79,
+      "linked_matches": 79,
+      "timeline_matches": 79,
+      "events": 7152,
+      "goals": 219,
+      "assists": 168,
+      "goal_involvements": 219,
       "failures": []
     }
   },

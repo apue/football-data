@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-30T09:33:27+00:00",
+  "generated_at": "2026-07-01T08:33:11+00:00",
   "status": "success",
   "failure_code": null,
   "hub_url": "https://www.fifatrainingcentre.com/en/fifa-world-cup-2026/match-report-hub.php",
@@ -7,26 +7,52 @@
     "https://www.fifatrainingcentre.com/en/fifa-world-cup-2026/match-report-hub.php",
     "https://www.fifatrainingcentre.com/en/fifa-world-cup-2026/match-report-hub-knockout-stage.php"
   ],
-  "discovered": 76,
-  "active_sources": 76,
-  "downloaded": 76,
-  "parsed": 76,
-  "matches": 76,
-  "source_documents": 76,
-  "new_matches": [],
-  "version_updates": [],
+  "discovered": 79,
+  "active_sources": 79,
+  "downloaded": 79,
+  "parsed": 79,
+  "matches": 79,
+  "source_documents": 79,
+  "new_matches": [
+    {
+      "match_no": 77,
+      "source_id": "fifa-world-cup-2026-pmsr-m77-fra-swe-v1"
+    },
+    {
+      "match_no": 78,
+      "source_id": "fifa-world-cup-2026-pmsr-m78-civ-nor-v1"
+    },
+    {
+      "match_no": 79,
+      "source_id": "fifa-world-cup-2026-pmsr-m79-mex-ecu-v1"
+    }
+  ],
+  "version_updates": [
+    {
+      "match_no": 50,
+      "from_version": 1,
+      "to_version": 2,
+      "source_id": "fifa-world-cup-2026-pmsr-m50-mar-hai-v2"
+    },
+    {
+      "match_no": 74,
+      "from_version": 1,
+      "to_version": 2,
+      "source_id": "fifa-world-cup-2026-pmsr-m74-ger-par-v2"
+    }
+  ],
   "supplemental": {
     "fifa_timeline": {
-      "generated_at": "2026-06-30T09:34:48+00:00",
+      "generated_at": "2026-07-01T08:34:35+00:00",
       "source": "fifa_timeline_api",
       "status": "success",
-      "matches": 76,
-      "linked_matches": 76,
-      "timeline_matches": 76,
-      "events": 6869,
-      "goals": 211,
-      "assists": 160,
-      "goal_involvements": 211,
+      "matches": 79,
+      "linked_matches": 79,
+      "timeline_matches": 79,
+      "events": 7152,
+      "goals": 219,
+      "assists": 168,
+      "goal_involvements": 219,
       "failures": []
     }
   },
