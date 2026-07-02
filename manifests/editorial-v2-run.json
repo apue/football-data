@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-07-02T07:38:23+00:00",
+  "generated_at": "2026-07-02T08:20:11+00:00",
   "status": "success",
-  "match_date": "2026-06-29",
+  "match_date": "2026-07-01",
   "workflow_variant": "bounded_selection_copy_loop_v1",
   "experiment_id": "bounded_editorial_loop_v1",
   "editor_runtime": "local_codex",
@@ -25,28 +25,28 @@
   "choices": [
     {
       "award_type": "player_of_the_day",
-      "player_name": "GABRIEL MARTINELLI",
-      "team": "Brazil"
-    },
-    {
-      "award_type": "impact_pick",
-      "player_name": "Orlando GILL",
-      "team": "Paraguay"
+      "player_name": "Youri TIELEMANS",
+      "team": "Belgium"
     },
     {
       "award_type": "player_of_the_day",
-      "player_name": "Florian WIRTZ",
-      "team": "Germany"
+      "player_name": "Harry KANE",
+      "team": "England"
     },
     {
       "award_type": "player_of_the_day",
-      "player_name": "CASEMIRO",
-      "team": "Brazil"
+      "player_name": "Habib DIARRA",
+      "team": "Senegal"
     },
     {
       "award_type": "impact_pick",
-      "player_name": "Issa DIOP",
-      "team": "Morocco"
+      "player_name": "Anthony GORDON",
+      "team": "England"
+    },
+    {
+      "award_type": "impact_pick",
+      "player_name": "Folarin BALOGUN",
+      "team": "USA"
     }
   ]
 }

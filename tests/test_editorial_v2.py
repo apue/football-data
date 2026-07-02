@@ -1270,7 +1270,7 @@ def test_editorial_v2_test_copy_is_publishable_static_copy():
     assert "match-winner" in en_item["body"]
     assert "梅开二度" in zh_item["body"]
     assert "制胜球" in zh_item["body"]
-    assert "Erling HAALAND" in zh_item["body"]
+    assert "埃尔林-哈兰德" in zh_item["body"]
 
 
 def test_editorial_v2_rankings_and_candidate_pool_include_audit_context():
