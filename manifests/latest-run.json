@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-01T08:33:11+00:00",
+  "generated_at": "2026-07-02T07:44:48+00:00",
   "status": "success",
   "failure_code": null,
   "hub_url": "https://www.fifatrainingcentre.com/en/fifa-world-cup-2026/match-report-hub.php",
@@ -7,52 +7,39 @@
     "https://www.fifatrainingcentre.com/en/fifa-world-cup-2026/match-report-hub.php",
     "https://www.fifatrainingcentre.com/en/fifa-world-cup-2026/match-report-hub-knockout-stage.php"
   ],
-  "discovered": 79,
-  "active_sources": 79,
-  "downloaded": 79,
-  "parsed": 79,
-  "matches": 79,
-  "source_documents": 79,
+  "discovered": 82,
+  "active_sources": 82,
+  "downloaded": 82,
+  "parsed": 82,
+  "matches": 82,
+  "source_documents": 82,
   "new_matches": [
     {
-      "match_no": 77,
-      "source_id": "fifa-world-cup-2026-pmsr-m77-fra-swe-v1"
+      "match_no": 80,
+      "source_id": "fifa-world-cup-2026-pmsr-m80-eng-cod-v1"
     },
     {
-      "match_no": 78,
-      "source_id": "fifa-world-cup-2026-pmsr-m78-civ-nor-v1"
+      "match_no": 81,
+      "source_id": "fifa-world-cup-2026-pmsr-m81-usa-bih-v1"
     },
     {
-      "match_no": 79,
-      "source_id": "fifa-world-cup-2026-pmsr-m79-mex-ecu-v1"
+      "match_no": 82,
+      "source_id": "fifa-world-cup-2026-pmsr-m82-bel-sen-v1"
     }
   ],
-  "version_updates": [
-    {
-      "match_no": 50,
-      "from_version": 1,
-      "to_version": 2,
-      "source_id": "fifa-world-cup-2026-pmsr-m50-mar-hai-v2"
-    },
-    {
-      "match_no": 74,
-      "from_version": 1,
-      "to_version": 2,
-      "source_id": "fifa-world-cup-2026-pmsr-m74-ger-par-v2"
-    }
-  ],
+  "version_updates": [],
   "supplemental": {
     "fifa_timeline": {
-      "generated_at": "2026-07-01T08:34:35+00:00",
+      "generated_at": "2026-07-02T07:47:01+00:00",
       "source": "fifa_timeline_api",
       "status": "success",
-      "matches": 79,
-      "linked_matches": 79,
-      "timeline_matches": 79,
-      "events": 7152,
-      "goals": 219,
-      "assists": 168,
-      "goal_involvements": 219,
+      "matches": 82,
+      "linked_matches": 82,
+      "timeline_matches": 82,
+      "events": 7443,
+      "goals": 229,
+      "assists": 174,
+      "goal_involvements": 229,
       "failures": []
     }
   },
