@@ -1,0 +1,537 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-07-02T08:17:47+00:00",
+  "compiled_at": "2026-07-02T08:17:47+00:00",
+  "match_date": "2026-06-30",
+  "scoring_version": "v0.4",
+  "editorial_generation": {
+    "workflow_variant": "bounded_selection_copy_loop_v1",
+    "experiment_id": "bounded_editorial_loop_v1",
+    "selection_mode": "bounded_loop_local_editor",
+    "selection_review_profile": "selection_review_v1",
+    "copy_review_profile": "copy_review_v1",
+    "loop_policy": {
+      "selection_max_rounds": 3,
+      "copy_max_rounds": 3,
+      "max_rounds_exceeded_status": "needs_human_review",
+      "promotion_requires": [
+        "selection_loop_pass",
+        "copy_loop_pass",
+        "deterministic_selection_validation_pass",
+        "deterministic_copy_validation_pass"
+      ]
+    },
+    "editorial_loop_status": "pass",
+    "selection_rounds": 1,
+    "copy_rounds": 1,
+    "uses_official_assists": true,
+    "uses_goal_involvements": true,
+    "event_source": "fifa_timeline_api",
+    "event_sources": {
+      "goal_involvements": "fifa_timeline_api"
+    }
+  },
+  "matches": [
+    {
+      "match_key": "FIFA-2026-M77-FRA-SWE",
+      "match_no": 77,
+      "match_date": "2026-06-30",
+      "kickoff_time": "17:00",
+      "stadium": "New York/New Jersey Stadium",
+      "home_team": "France",
+      "away_team": "Sweden",
+      "home_score": 3,
+      "away_score": 0
+    },
+    {
+      "match_key": "FIFA-2026-M78-CIV-NOR",
+      "match_no": 78,
+      "match_date": "2026-06-30",
+      "kickoff_time": "12:00",
+      "stadium": "Dallas Stadium",
+      "home_team": "Côte d'Ivoire",
+      "away_team": "Norway",
+      "home_score": 1,
+      "away_score": 2
+    },
+    {
+      "match_key": "FIFA-2026-M79-MEX-ECU",
+      "match_no": 79,
+      "match_date": "2026-06-30",
+      "kickoff_time": "20:00",
+      "stadium": "Mexico City Stadium",
+      "home_team": "Mexico",
+      "away_team": "Ecuador",
+      "home_score": 2,
+      "away_score": 0
+    }
+  ],
+  "match_flows": {
+    "FIFA-2026-M77-FRA-SWE": {
+      "match_key": "FIFA-2026-M77-FRA-SWE",
+      "match_no": 77,
+      "match_date": "2026-06-30",
+      "home_team": "France",
+      "away_team": "Sweden",
+      "home_score": 3,
+      "away_score": 0,
+      "winner_team": "France",
+      "home_trailing_at_any_point": false,
+      "away_trailing_at_any_point": true,
+      "home_came_from_behind_to_win": false,
+      "away_came_from_behind_to_win": false,
+      "goals": [
+        {
+          "goal_order": 1,
+          "minute": 45,
+          "team": "France",
+          "player_team": "France",
+          "player_name": "Kylian MBAPPE",
+          "own_goal": false,
+          "score_before": "0-0",
+          "score_after": "1-0",
+          "team_score_before": 0,
+          "opponent_score_before": 0,
+          "team_score_after": 1,
+          "opponent_score_after": 0,
+          "tags": [
+            "opening_goal",
+            "go_ahead_goal"
+          ]
+        },
+        {
+          "goal_order": 2,
+          "minute": 53,
+          "team": "France",
+          "player_team": "France",
+          "player_name": "Bradley BARCOLA",
+          "own_goal": false,
+          "score_before": "1-0",
+          "score_after": "2-0",
+          "team_score_before": 1,
+          "opponent_score_before": 0,
+          "team_score_after": 2,
+          "opponent_score_after": 0,
+          "tags": []
+        },
+        {
+          "goal_order": 3,
+          "minute": 74,
+          "team": "France",
+          "player_team": "France",
+          "player_name": "Kylian MBAPPE",
+          "own_goal": false,
+          "score_before": "2-0",
+          "score_after": "3-0",
+          "team_score_before": 2,
+          "opponent_score_before": 0,
+          "team_score_after": 3,
+          "opponent_score_after": 0,
+          "tags": []
+        }
+      ],
+      "decisive_goal": null
+    },
+    "FIFA-2026-M78-CIV-NOR": {
+      "match_key": "FIFA-2026-M78-CIV-NOR",
+      "match_no": 78,
+      "match_date": "2026-06-30",
+      "home_team": "Côte d'Ivoire",
+      "away_team": "Norway",
+      "home_score": 1,
+      "away_score": 2,
+      "winner_team": "Norway",
+      "home_trailing_at_any_point": true,
+      "away_trailing_at_any_point": false,
+      "home_came_from_behind_to_win": false,
+      "away_came_from_behind_to_win": false,
+      "goals": [
+        {
+          "goal_order": 1,
+          "minute": 39,
+          "team": "Norway",
+          "player_team": "Norway",
+          "player_name": "Antonio NUSA",
+          "own_goal": false,
+          "score_before": "0-0",
+          "score_after": "0-1",
+          "team_score_before": 0,
+          "opponent_score_before": 0,
+          "team_score_after": 1,
+          "opponent_score_after": 0,
+          "tags": [
+            "opening_goal",
+            "go_ahead_goal"
+          ]
+        },
+        {
+          "goal_order": 2,
+          "minute": 74,
+          "team": "Côte d'Ivoire",
+          "player_team": "Côte d'Ivoire",
+          "player_name": "Amad DIALLO",
+          "own_goal": false,
+          "score_before": "0-1",
+          "score_after": "1-1",
+          "team_score_before": 0,
+          "opponent_score_before": 1,
+          "team_score_after": 1,
+          "opponent_score_after": 1,
+          "tags": [
+            "equalizer",
+            "comeback_equalizer"
+          ]
+        },
+        {
+          "goal_order": 3,
+          "minute": 86,
+          "team": "Norway",
+          "player_team": "Norway",
+          "player_name": "Erling HAALAND",
+          "own_goal": false,
+          "score_before": "1-1",
+          "score_after": "1-2",
+          "team_score_before": 1,
+          "opponent_score_before": 1,
+          "team_score_after": 2,
+          "opponent_score_after": 1,
+          "tags": [
+            "go_ahead_goal",
+            "match_winning_goal",
+            "late_goal",
+            "late_match_winning_goal"
+          ]
+        }
+      ],
+      "decisive_goal": {
+        "goal_order": 3,
+        "minute": 86,
+        "team": "Norway",
+        "player_team": "Norway",
+        "player_name": "Erling HAALAND",
+        "own_goal": false,
+        "score_before": "1-1",
+        "score_after": "1-2",
+        "team_score_before": 1,
+        "opponent_score_before": 1,
+        "team_score_after": 2,
+        "opponent_score_after": 1,
+        "tags": [
+          "go_ahead_goal",
+          "match_winning_goal",
+          "late_goal",
+          "late_match_winning_goal"
+        ]
+      }
+    },
+    "FIFA-2026-M79-MEX-ECU": {
+      "match_key": "FIFA-2026-M79-MEX-ECU",
+      "match_no": 79,
+      "match_date": "2026-06-30",
+      "home_team": "Mexico",
+      "away_team": "Ecuador",
+      "home_score": 2,
+      "away_score": 0,
+      "winner_team": "Mexico",
+      "home_trailing_at_any_point": false,
+      "away_trailing_at_any_point": true,
+      "home_came_from_behind_to_win": false,
+      "away_came_from_behind_to_win": false,
+      "goals": [
+        {
+          "goal_order": 1,
+          "minute": 22,
+          "team": "Mexico",
+          "player_team": "Mexico",
+          "player_name": "Julian QUINONES",
+          "own_goal": false,
+          "score_before": "0-0",
+          "score_after": "1-0",
+          "team_score_before": 0,
+          "opponent_score_before": 0,
+          "team_score_after": 1,
+          "opponent_score_after": 0,
+          "tags": [
+            "opening_goal",
+            "go_ahead_goal"
+          ]
+        },
+        {
+          "goal_order": 2,
+          "minute": 31,
+          "team": "Mexico",
+          "player_team": "Mexico",
+          "player_name": "Raul JIMENEZ",
+          "own_goal": false,
+          "score_before": "1-0",
+          "score_after": "2-0",
+          "team_score_before": 1,
+          "opponent_score_before": 0,
+          "team_score_after": 2,
+          "opponent_score_after": 0,
+          "tags": []
+        }
+      ],
+      "decisive_goal": null
+    }
+  },
+  "choices": [
+    {
+      "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
+      "award_label": {
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
+      },
+      "player_id": "FIFA-2026-M77-FRA-SWE|France|10",
+      "player_name": "Kylian MBAPPE",
+      "team": "France",
+      "opponent": "Sweden",
+      "match_key": "FIFA-2026-M77-FRA-SWE",
+      "match_no": 77,
+      "player_no": 10,
+      "position": "FW",
+      "score": 121.64,
+      "metrics": {
+        "shots": 5,
+        "on_target": 4,
+        "goals": 2,
+        "goal_involvements": 2,
+        "brace": 1,
+        "opening_goal": 1,
+        "go_ahead_goal": 1
+      },
+      "evidence_chips": {
+        "en": [
+          "brace",
+          "opening goal",
+          "high shot quality"
+        ],
+        "zh": [
+          "梅开二度",
+          "首开纪录",
+          "射门质量突出"
+        ]
+      },
+      "selection_reason": "Kylian Mbappe is the strongest overall card: a brace in France's 3-0 win over Sweden, including the 45' opener and four shots on target.",
+      "content": {
+        "en": {
+          "title": "Mbappe Opens and Finishes France's 3-0",
+          "html": "<p>Kylian Mbappe scored France's opener on 45' and added the third on 74', finishing with five shots and four on target. France's 3-0 win over Sweden started with his first goal and closed with his second.</p>"
+        },
+        "zh": {
+          "title": "姆巴佩梅开二度",
+          "html": "<p>姆巴佩第45分钟首开纪录，第74分钟再进一球，法国3-0瑞典。这场胜利从他的首球开始，又由他的第二球收住。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "impact_pick",
+      "award_types": [
+        "impact_pick"
+      ],
+      "award_label": {
+        "en": "Impact Pick",
+        "zh": "影响力精选"
+      },
+      "player_id": "FIFA-2026-M78-CIV-NOR|Norway|9",
+      "player_name": "Erling HAALAND",
+      "team": "Norway",
+      "opponent": "Côte d'Ivoire",
+      "match_key": "FIFA-2026-M78-CIV-NOR",
+      "match_no": 78,
+      "player_no": 9,
+      "position": "FW",
+      "score": 107.73,
+      "metrics": {
+        "shots": 4,
+        "on_target": 2,
+        "goals": 1,
+        "goal_involvements": 1,
+        "go_ahead_goal": 1,
+        "match_winning_goal": 1,
+        "late_goal": 1,
+        "late_match_winning_goal": 1
+      },
+      "evidence_chips": {
+        "en": [
+          "late winner",
+          "goal scorer"
+        ],
+        "zh": [
+          "补时制胜",
+          "取得进球"
+        ]
+      },
+      "selection_reason": "Erling Haaland owns the clearest late-result swing on the day, scoring Norway's 86' winner after Cote d'Ivoire had equalised at 1-1.",
+      "content": {
+        "en": {
+          "title": "Haaland Wins It at 86'",
+          "html": "<p>Erling Haaland gave Norway the 2-1 win over Cote d'Ivoire, scoring at 86' after the match had been pulled back to 1-1. It is the cleanest late-winner case outside Mbappe's brace.</p>"
+        },
+        "zh": {
+          "title": "哈兰德第86分钟制胜",
+          "html": "<p>哈兰德第86分钟破门，挪威从1-1变成2-1击败科特迪瓦。挪威全场9次射门、4次射正，最后一脚由他收掉。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
+      "award_label": {
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
+      },
+      "player_id": "FIFA-2026-M77-FRA-SWE|France|11",
+      "player_name": "Michael OLISE",
+      "team": "France",
+      "opponent": "Sweden",
+      "match_key": "FIFA-2026-M77-FRA-SWE",
+      "match_no": 77,
+      "player_no": 11,
+      "position": "FW",
+      "score": 95.72,
+      "metrics": {
+        "shots": 6,
+        "on_target": 3,
+        "assists": 2,
+        "goal_involvements": 2
+      },
+      "evidence_chips": {
+        "en": [
+          "multiple assists",
+          "high shot quality"
+        ],
+        "zh": [
+          "多次助攻",
+          "射门质量突出"
+        ]
+      },
+      "selection_reason": "Michael Olise supported the day's best team performance with two official assists, setting up France's second and third goals while adding six shots of his own.",
+      "content": {
+        "en": {
+          "title": "Olise Sets Up Two France Goals",
+          "html": "<p>Michael Olise assisted Bradley Barcola's 53' goal and Mbappe's 74' goal in France's 3-0 win. He also took six shots, three on target, so the two assists were not his only attacking footprint.</p>"
+        },
+        "zh": {
+          "title": "奥利塞两次助攻",
+          "html": "<p>奥利塞先助攻巴尔科拉第53分钟破门，又助攻姆巴佩第74分钟改写比分。法国3-0瑞典，他还自己完成6次射门、3次射正。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
+      "award_label": {
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
+      },
+      "player_id": "FIFA-2026-M79-MEX-ECU|Mexico|16",
+      "player_name": "Julian QUINONES",
+      "team": "Mexico",
+      "opponent": "Ecuador",
+      "match_key": "FIFA-2026-M79-MEX-ECU",
+      "match_no": 79,
+      "player_no": 16,
+      "position": "FW",
+      "score": 58.9,
+      "metrics": {
+        "shots": 1,
+        "on_target": 1,
+        "goals": 1,
+        "assists": 1,
+        "goal_involvements": 2,
+        "opening_goal": 1,
+        "go_ahead_goal": 1
+      },
+      "evidence_chips": {
+        "en": [
+          "opening goal",
+          "goal scorer",
+          "assist"
+        ],
+        "zh": [
+          "首开纪录",
+          "取得进球",
+          "送出助攻"
+        ]
+      },
+      "selection_reason": "Julian Quinones gives Mexico a direct public card: the 22' opener against Ecuador plus the assist for Raul Jimenez's 31' goal in a 2-0 win.",
+      "content": {
+        "en": {
+          "title": "Quinones Starts Mexico's 2-0",
+          "html": "<p>Julian Quinones scored Mexico's 22' opener against Ecuador and assisted Raul Jimenez nine minutes later. That goal-and-assist start gave Mexico both goals in the 2-0 result.</p>"
+        },
+        "zh": {
+          "title": "基尼奥内斯一射一传",
+          "html": "<p>基尼奥内斯第22分钟为墨西哥首开纪录，第31分钟又助攻劳尔-希门尼斯。墨西哥2-0厄瓜多尔，两粒进球都和他有关。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "impact_pick",
+      "award_types": [
+        "impact_pick"
+      ],
+      "award_label": {
+        "en": "Impact Pick",
+        "zh": "影响力精选"
+      },
+      "player_id": "FIFA-2026-M78-CIV-NOR|Côte d'Ivoire|15",
+      "player_name": "Amad DIALLO",
+      "team": "Côte d'Ivoire",
+      "opponent": "Norway",
+      "match_key": "FIFA-2026-M78-CIV-NOR",
+      "match_no": 78,
+      "player_no": 15,
+      "position": "FW",
+      "score": 57.65,
+      "metrics": {
+        "shots": 2,
+        "on_target": 2,
+        "goals": 1,
+        "goal_involvements": 1,
+        "equalizing_goal": 1,
+        "comeback_equalizer": 1,
+        "substitute_goal": 1
+      },
+      "evidence_chips": {
+        "en": [
+          "substitute goal",
+          "comeback equaliser",
+          "equaliser",
+          "goal scorer"
+        ],
+        "zh": [
+          "替补进球",
+          "逆转扳平",
+          "扳平进球",
+          "取得进球"
+        ]
+      },
+      "selection_reason": "Amad Diallo is the losing-side impact pick: a substitute equaliser at 74' that made Cote d'Ivoire-Norway 1-1 before Haaland won it late.",
+      "content": {
+        "en": {
+          "title": "Amad Pulls Cote d'Ivoire Level",
+          "html": "<p>Amad Diallo came on and scored Cote d'Ivoire's 74' equaliser, turning 0-1 into 1-1 before Norway won late. The finish was Cote d'Ivoire's only goal, not the final result-swinging one.</p>"
+        },
+        "zh": {
+          "title": "阿马德替补扳平",
+          "html": "<p>阿马德替补登场后第74分钟破门，科特迪瓦把挪威的领先追成1-1。最后比分是1-2，但这脚扳平是科特迪瓦唯一进球。</p>"
+        }
+      }
+    }
+  ],
+  "selection_validation": {
+    "schema_version": 1,
+    "status": "pass",
+    "warnings": []
+  },
+  "audit": []
+}

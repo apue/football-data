@@ -192,7 +192,7 @@ def _goal_events(
                home_goals, away_goals, description
         from official_match_events
         where match_key in ({_placeholders(match_keys)})
-          and event_type_name in ('Goal!', 'Own goal')
+          and event_type_name in ('Goal!', 'Own goal', 'Penalty Goal')
         order by match_key, absolute_minute, event_id
         """,
         match_keys,

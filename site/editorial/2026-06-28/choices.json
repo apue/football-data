@@ -1,0 +1,263 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-07-02T08:17:47+00:00",
+  "compiled_at": "2026-07-02T08:17:47+00:00",
+  "match_date": "2026-06-28",
+  "scoring_version": "v0.4",
+  "editorial_generation": {
+    "workflow_variant": "bounded_selection_copy_loop_v1",
+    "experiment_id": "bounded_editorial_loop_v1",
+    "selection_mode": "bounded_loop_local_editor",
+    "selection_review_profile": "selection_review_v1",
+    "copy_review_profile": "copy_review_v1",
+    "loop_policy": {
+      "selection_max_rounds": 3,
+      "copy_max_rounds": 3,
+      "max_rounds_exceeded_status": "needs_human_review",
+      "promotion_requires": [
+        "selection_loop_pass",
+        "copy_loop_pass",
+        "deterministic_selection_validation_pass",
+        "deterministic_copy_validation_pass"
+      ]
+    },
+    "editorial_loop_status": "pass",
+    "selection_rounds": 1,
+    "copy_rounds": 1,
+    "uses_official_assists": true,
+    "uses_goal_involvements": true,
+    "event_source": "fifa_timeline_api",
+    "event_sources": {
+      "goal_involvements": "fifa_timeline_api"
+    }
+  },
+  "matches": [
+    {
+      "match_key": "FIFA-2026-M73-RSA-CAN",
+      "match_no": 73,
+      "match_date": "2026-06-28",
+      "kickoff_time": "12:00",
+      "stadium": "Los Angeles Stadium",
+      "home_team": "South Africa",
+      "away_team": "Canada",
+      "home_score": 0,
+      "away_score": 1
+    }
+  ],
+  "match_flows": {
+    "FIFA-2026-M73-RSA-CAN": {
+      "match_key": "FIFA-2026-M73-RSA-CAN",
+      "match_no": 73,
+      "match_date": "2026-06-28",
+      "home_team": "South Africa",
+      "away_team": "Canada",
+      "home_score": 0,
+      "away_score": 1,
+      "winner_team": "Canada",
+      "home_trailing_at_any_point": true,
+      "away_trailing_at_any_point": false,
+      "home_came_from_behind_to_win": false,
+      "away_came_from_behind_to_win": false,
+      "goals": [
+        {
+          "goal_order": 1,
+          "minute": 92,
+          "team": "Canada",
+          "player_team": "Canada",
+          "player_name": "Stephen EUSTAQUIO",
+          "own_goal": false,
+          "score_before": "0-0",
+          "score_after": "0-1",
+          "team_score_before": 0,
+          "opponent_score_before": 0,
+          "team_score_after": 1,
+          "opponent_score_after": 0,
+          "tags": [
+            "opening_goal",
+            "go_ahead_goal",
+            "match_winning_goal",
+            "late_goal",
+            "stoppage_time_goal",
+            "late_match_winning_goal"
+          ]
+        }
+      ],
+      "decisive_goal": {
+        "goal_order": 1,
+        "minute": 92,
+        "team": "Canada",
+        "player_team": "Canada",
+        "player_name": "Stephen EUSTAQUIO",
+        "own_goal": false,
+        "score_before": "0-0",
+        "score_after": "0-1",
+        "team_score_before": 0,
+        "opponent_score_before": 0,
+        "team_score_after": 1,
+        "opponent_score_after": 0,
+        "tags": [
+          "opening_goal",
+          "go_ahead_goal",
+          "match_winning_goal",
+          "late_goal",
+          "stoppage_time_goal",
+          "late_match_winning_goal"
+        ]
+      }
+    }
+  },
+  "choices": [
+    {
+      "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
+      "award_label": {
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
+      },
+      "player_id": "FIFA-2026-M73-RSA-CAN|Canada|7",
+      "player_name": "Stephen EUSTAQUIO",
+      "team": "Canada",
+      "opponent": "South Africa",
+      "match_key": "FIFA-2026-M73-RSA-CAN",
+      "match_no": 73,
+      "player_no": 7,
+      "position": "MF",
+      "score": 127.25,
+      "metrics": {
+        "shots": 2,
+        "on_target": 1,
+        "goals": 1,
+        "goal_involvements": 1,
+        "opening_goal": 1,
+        "go_ahead_goal": 1,
+        "match_winning_goal": 1,
+        "late_goal": 1,
+        "stoppage_time_goal": 1,
+        "late_match_winning_goal": 1,
+        "only_goal_winner": 1
+      },
+      "evidence_chips": {
+        "en": [
+          "only goal",
+          "late winner",
+          "goal scorer"
+        ],
+        "zh": [
+          "全场唯一进球",
+          "补时制胜",
+          "取得进球"
+        ]
+      },
+      "selection_reason": "The day's one clear headline: Stephen Eustaquio scored the only goal, a 90'+2 stoppage-time winner that gave Canada a 1-0 result over South Africa.",
+      "content": {
+        "en": {
+          "title": "Eustaquio Decides It at 90'+2",
+          "html": "<p>Stephen Eustaquio supplied the only goal of South Africa-Canada, scoring in the 90'+2 minute to make it 1-0. Canada had 12 shots and seven on target before his late finish settled the match.</p>"
+        },
+        "zh": {
+          "title": "欧斯塔基奥补时制胜",
+          "html": "<p>欧斯塔基奥第90+2分钟破门，把南非0-0加拿大改成0-1，这也是全场唯一进球。加拿大全场12次射门、7次射正，最后等到他这一脚。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
+      "award_label": {
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
+      },
+      "player_id": "FIFA-2026-M73-RSA-CAN|South Africa|14",
+      "player_name": "Mbekezeli MBOKAZI",
+      "team": "South Africa",
+      "opponent": "Canada",
+      "match_key": "FIFA-2026-M73-RSA-CAN",
+      "match_no": 73,
+      "player_no": 14,
+      "position": "DF",
+      "score": 42.58,
+      "metrics": {
+        "line_breaks_completed": 22,
+        "ball_progressions": 4,
+        "possession_regains": 6,
+        "possession_interrupted": 3,
+        "blocks": 1
+      },
+      "evidence_chips": {
+        "en": [
+          "repeated line breaks"
+        ],
+        "zh": [
+          "持续打穿防线"
+        ]
+      },
+      "selection_reason": "The strongest supplemental card on a one-match day: Mbekezeli Mbokazi ranks second with 22 completed line breaks, four ball progressions and six possession regains despite South Africa losing 0-1.",
+      "content": {
+        "en": {
+          "title": "Mbokazi Carries South Africa's Progression",
+          "html": "<p>Mbekezeli Mbokazi gave South Africa their strongest progression line in a 0-1 loss. He completed 22 line breaks, added four ball progressions and recovered possession six times.</p>"
+        },
+        "zh": {
+          "title": "姆博卡齐22次打穿防线",
+          "html": "<p>姆博卡齐没有进球或助攻，但南非0-1加拿大这场，他完成22次打穿防线、4次推进和6次夺回球权。南非只创造0.16 xG，他的亮点在把球往前送。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
+      "award_label": {
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
+      },
+      "player_id": "FIFA-2026-M73-RSA-CAN|South Africa|13",
+      "player_name": "Sphephelo SITHOLE",
+      "team": "South Africa",
+      "opponent": "Canada",
+      "match_key": "FIFA-2026-M73-RSA-CAN",
+      "match_no": 73,
+      "player_no": 13,
+      "position": "MF",
+      "score": 39.0,
+      "metrics": {
+        "line_breaks_completed": 8,
+        "possession_regains": 10,
+        "possession_interrupted": 4,
+        "blocks": 4
+      },
+      "evidence_chips": {
+        "en": [
+          "between-line presence",
+          "ball-winning profile"
+        ],
+        "zh": [
+          "在防线之间活跃",
+          "夺回球权能力突出"
+        ]
+      },
+      "selection_reason": "The third card keeps to the configured minimum while staying distinct from Mbokazi: Sphephelo Sithole adds 10 regains, four blocks and eight line breaks from South Africa midfield.",
+      "content": {
+        "en": {
+          "title": "Sithole Adds the Ball-Winning Case",
+          "html": "<p>Sphephelo Sithole added the ball-winning layer in the same match: 10 possession regains, four blocks and eight completed line breaks. South Africa only created 0.16 xG, so his work lived away from the scoring column.</p>"
+        },
+        "zh": {
+          "title": "西托莱10次夺回球权",
+          "html": "<p>西托莱同样没有参与进球，他在中场交出10次夺回球权、4次封堵和8次打穿防线。南非整场只1次射正，他的亮点留在夺回球权和打穿防线上。</p>"
+        }
+      }
+    }
+  ],
+  "selection_validation": {
+    "schema_version": 1,
+    "status": "pass",
+    "warnings": []
+  },
+  "audit": []
+}
