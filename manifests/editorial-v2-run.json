@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-06-30T09:26:58+00:00",
+  "generated_at": "2026-07-02T07:38:23+00:00",
   "status": "success",
   "match_date": "2026-06-29",
   "workflow_variant": "bounded_selection_copy_loop_v1",
@@ -32,6 +32,11 @@
       "award_type": "impact_pick",
       "player_name": "Orlando GILL",
       "team": "Paraguay"
+    },
+    {
+      "award_type": "player_of_the_day",
+      "player_name": "Florian WIRTZ",
+      "team": "Germany"
     },
     {
       "award_type": "player_of_the_day",

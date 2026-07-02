@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-06-30T09:26:58+00:00",
-  "compiled_at": "2026-06-30T09:26:58+00:00",
+  "generated_at": "2026-07-02T07:38:23+00:00",
+  "compiled_at": "2026-07-02T07:38:23+00:00",
   "match_date": "2026-06-29",
   "scoring_version": "v0.4",
   "editorial_generation": {
@@ -525,15 +525,15 @@
           "取得进球"
         ]
       },
-      "selection_reason": "Gabriel Martinelli owns the clearest headline: a substitute goal in the fifth minute of stoppage time that completed Brazil's comeback from 0-1 to 2-1. The fact pack tags it as the go-ahead, match-winning, late match-winning comeback goal.",
+      "selection_reason": "Top-ranked card and cleanest headline: he came off the bench and scored Brazil's 90'+5 winner, turning 1-1 into a 2-1 comeback win over Japan.",
       "content": {
         "en": {
-          "title": "Martinelli's stoppage-time winner",
-          "html": "<p>Gabriel Martinelli came off the bench and scored in the fifth minute of stoppage time to give Brazil a 2-1 win over Japan. Brazil had trailed 0-1; his goal completed the comeback.</p>"
+          "title": "Martinelli Wins It in Stoppage Time",
+          "html": "<p>Gabriel Martinelli came off the bench and gave Brazil the last touch that mattered. His 90'+5 goal turned 1-1 into a 2-1 comeback win over Japan, making the substitute finish the cleanest headline of the day.</p>"
         },
         "zh": {
-          "title": "Martinelli 补时制胜",
-          "html": "<p>GABRIEL MARTINELLI 替补出场后在90+5'进球，Brazil 2-1 逆转 Japan。Brazil 先0-1落后，这球后来就是制胜球。</p>"
+          "title": "马丁内利补时制胜",
+          "html": "<p>马丁内利替补登场后在第90+5分钟破门，把巴西和日本的比分从1-1改成2-1。日本先领先，巴西最后靠这脚完成逆转。</p>"
         }
       }
     },
@@ -566,15 +566,58 @@
           "点球大战扑救"
         ]
       },
-      "selection_reason": "Orlando Gill changed the Germany-Paraguay tie through goalkeeping rather than scoring: six saves in regulation and two saves in the shoot-out after Germany produced 21 attempts and 1.25 xG. That is a direct advancement impact case.",
+      "selection_reason": "Paraguay's goalkeeper gives the slate its strongest non-scorer impact: six saves under Germany pressure and two shoot-out penalty saves in the Germany-Paraguay draw context.",
       "content": {
         "en": {
-          "title": "Gill's two shoot-out saves",
-          "html": "<p>Orlando Gill made six saves in the 1-1 draw with Germany, then stopped two penalties in the shoot-out. Germany finished with 21 attempts and six on target, but Paraguay advanced.</p>"
+          "title": "Gill Saves Twice in the Shoot-out",
+          "html": "<p>During the 1-1 match, Orlando Gill made six saves against Germany's six shots on target. He then added two penalty saves in the shoot-out, giving Paraguay's goalkeeper the clearest non-scorer impact on the slate.</p>"
         },
         "zh": {
-          "title": "Gill 点球大战两扑",
-          "html": "<p>Orlando GILL 常规时间有6次扑救，点球大战又扑出两球。Germany 全场21次射门、6次射正，Paraguay 还是从1-1走到点球晋级。</p>"
+          "title": "吉尔点球大战两扑",
+          "html": "<p>吉尔常规比赛面对德国6次射正做出6次扑救，比分最后是1-1。点球大战里他又扑出2球，把门将影响力留到了最后一环。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
+      "award_label": {
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
+      },
+      "player_id": "FIFA-2026-M74-GER-PAR|Germany|17",
+      "player_name": "Florian WIRTZ",
+      "team": "Germany",
+      "opponent": "Paraguay",
+      "match_key": "FIFA-2026-M74-GER-PAR",
+      "match_no": 74,
+      "player_no": 17,
+      "position": "MF",
+      "score": 79.27,
+      "metrics": {
+        "shots": 2,
+        "assists": 1,
+        "goal_involvements": 1
+      },
+      "evidence_chips": {
+        "en": [
+          "assist"
+        ],
+        "zh": [
+          "送出助攻"
+        ]
+      },
+      "selection_reason": "Best Germany outfield alternative after the metric-led Kimmich trap: official assist on Havertz's 54' equaliser plus 16 line breaks, 29 offers received, and 7 ball progressions.",
+      "content": {
+        "en": {
+          "title": "Wirtz Finds Germany's Equaliser",
+          "html": "<p>Florian Wirtz supplied the official assist for Kai Havertz's equaliser, the move that brought Germany back to 1-1 against Paraguay. The support case is his all-round forward play: 16 line breaks and seven ball progressions.</p>"
+        },
+        "zh": {
+          "title": "第54分钟助攻扳平",
+          "html": "<p>维尔茨第54分钟助攻哈弗茨破门，德国把对巴拉圭的比分扳成1-1。他全场还有16次打穿防线，助攻之外仍在持续把球往前送。</p>"
         }
       }
     },
@@ -616,15 +659,15 @@
           "取得进球"
         ]
       },
-      "selection_reason": "Casemiro is the second Brazil card because his 56th-minute equaliser started the comeback before Martinelli finished it. He put both of his shots on target, and the fact pack tags the goal as a comeback equaliser, not a winner.",
+      "selection_reason": "Brazil needed the first turn before Martinelli's winner, and Casemiro supplied it: the 56' equaliser after Japan led, backed by 2 shots on target, 7 regains, and 9 line breaks.",
       "content": {
         "en": {
-          "title": "Casemiro starts the comeback",
-          "html": "<p>Casemiro scored Brazil's 56th-minute equaliser, turning 0-1 into 1-1 before Martinelli later won it. Both of his shots were on target, and his goal gave Brazil the platform for the comeback.</p>"
+          "title": "Casemiro Starts Brazil's Comeback",
+          "html": "<p>Casemiro made Brazil's comeback possible, scoring the 56' equaliser after Japan had gone ahead. It was not the winner, but with two shots on target and seven possession regains, his card has both the scoreboard turn and the midfield work behind it.</p>"
         },
         "zh": {
-          "title": "Casemiro 第56分钟扳平",
-          "html": "<p>CASEMIRO 第56分钟把比分扳成1-1，Brazil 的逆转从这里开始。他两脚射门都射正，后面才有 Martinelli 的补时制胜。</p>"
+          "title": "卡塞米罗第56分钟扳平",
+          "html": "<p>卡塞米罗第56分钟破门，把巴西从0-1追到1-1。巴西最后2-1逆转日本，补时制胜前先有这脚扳平。</p>"
         }
       }
     },
@@ -668,15 +711,15 @@
           "取得进球"
         ]
       },
-      "selection_reason": "Issa Diop gives Morocco the necessary regulation-time impact: a 90+1 equaliser against the Netherlands that took the match from 0-1 to 1-1 before Morocco advanced on penalties. The selection stays within the impact slot because it is a late equalising moment, not a match winner.",
+      "selection_reason": "The strongest Netherlands-Morocco public moment is Diop's 90'+1 equaliser: one shot on target, one goal, and a stoppage-time comeback equaliser that rescued 1-1.",
       "content": {
         "en": {
-          "title": "Diop at 90+1",
-          "html": "<p>Issa Diop scored Morocco's 90+1 equaliser against the Netherlands, moving the match from 0-1 to 1-1. That late goal sent the tie to the shoot-out Morocco won.</p>"
+          "title": "Diop Rescues Morocco at 90'+1",
+          "html": "<p>Issa Diop's one shot on target was the 90'+1 equaliser that pulled Morocco level with the Netherlands. The late goal is the headline, with eight clearances giving his impact pick a defensive base as well.</p>"
         },
         "zh": {
-          "title": "Diop 补时扳平",
-          "html": "<p>Issa DIOP 90+1'把 Morocco 从0-1拉回1-1，Netherlands 的领先没能守到终场。Morocco 最后点球晋级，这粒扳平球先把比赛救回来。</p>"
+          "title": "迪奥普补时扳平",
+          "html": "<p>迪奥普第90+1分钟破门，把摩洛哥从0-1拉回1-1。全场1次射正换来这个补时扳平，比赛最后停在1-1。</p>"
         }
       }
     }

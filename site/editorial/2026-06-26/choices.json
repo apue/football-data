@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-06-28T01:59:36+00:00",
-  "compiled_at": "2026-06-28T01:59:36+00:00",
+  "generated_at": "2026-07-02T07:37:08+00:00",
+  "compiled_at": "2026-07-02T07:37:08+00:00",
   "match_date": "2026-06-26",
   "scoring_version": "v0.4",
   "editorial_generation": {
@@ -579,15 +579,15 @@
           "射门质量突出"
         ]
       },
-      "selection_reason": "Selected because two goals and an assist off the bench made him the strongest direct-impact card in Senegal's 5-0 win.",
+      "selection_reason": "The strongest all-around card in the pool: a substitute brace plus an assist in Senegal's 5-0 win, backed by 15 completed line breaks and a six-shot, three-on-target attacking profile.",
       "content": {
         "en": {
-          "title": "Pape Gueye's bench burst",
-          "html": "<p>Pape Gueye turned Senegal's win into a rout with two goals and an assist, putting three of his six shots on target. His goals moved the score from 2-0 to 4-0 before his assist set up the fifth.</p>"
+          "title": "Pape Gueye's substitute burst",
+          "html": "<p>Gueye gave Senegal's 5-0 win its late surge from the bench. His two goals and one assist made him directly involved in three second-half goals, and his six shots put the volume behind the headline.</p>"
         },
         "zh": {
-          "title": "替补双响和一次助攻",
-          "html": "<p>Pape GUEYE 替补出场后打进两球，还给 Iliman NDIAYE 送出助攻。Senegal 下半场连续拉开比分，5-0 收住这场比赛。</p>"
+          "title": "替补双响加助攻",
+          "html": "<p>替补登场后，他在59分钟和71分钟连进两球，82分钟又送出助攻。塞内加尔5-0赢伊拉克，后三个进球都跟他有关。</p>"
         }
       }
     },
@@ -631,15 +631,15 @@
           "射门质量突出"
         ]
       },
-      "selection_reason": "Selected because a first-half hat-trick is an independently clear headline case, now tied to his PMSR appearance row as France #7.",
+      "selection_reason": "The cleanest headline performance: a first-half hat-trick for France, including the opening go-ahead goal, with every shot on target converted in a 4-1 win.",
       "content": {
         "en": {
-          "title": "Dembélé's first-half hat-trick",
-          "html": "<p>Ousmane Dembélé scored in the 7th, 20th and 32nd minutes, turning three shots on target into three goals. France were 3-1 up by the break and finished Norway off 4-1.</p>"
+          "title": "Dembele's first-half hat-trick",
+          "html": "<p>Dembele made France's 4-1 win feel settled early. He scored the opener at 7' and completed a first-half hat-trick by 32', converting all three of his shots on target.</p>"
         },
         "zh": {
           "title": "上半场帽子戏法",
-          "html": "<p>Ousmane DEMBELE 在 7'、20'、32' 连进三球，三次射正全进。France 半场 3-1 领先，最后 4-1 赢下 Norway。</p>"
+          "html": "<p>他第7分钟首开纪录，20分钟和32分钟再进两球。法国4-1击败挪威，他三次射正全部进球。</p>"
         }
       }
     },
@@ -680,15 +680,15 @@
           "首开纪录"
         ]
       },
-      "selection_reason": "Selected because he opened Belgium's scoring and added a second goal inside a dominant 5-1 result.",
+      "selection_reason": "Belgium had many contributors, but Trossard gave the 5-1 win its shape with the opening goal and a second goal soon after halftime.",
       "content": {
         "en": {
-          "title": "Trossard opened Belgium's five-goal night",
-          "html": "<p>Leandro Trossard opened the scoring against New Zealand and added another goal after halftime. The brace sat inside a seven-shot performance as Belgium won 5-1.</p>"
+          "title": "Trossard opens Belgium's rout",
+          "html": "<p>Trossard gave Belgium control in a 5-1 win over New Zealand. He opened the scoring at 28' and added the 50' goal for 2-0, the brace that shaped the result before the late goals arrived.</p>"
         },
         "zh": {
-          "title": "梅开二度和首开纪录",
-          "html": "<p>Leandro TROSSARD 28' 先打破 0-0，下半场又进一球。Belgium 全场 35 次射门，最后 5-1 赢 New Zealand。</p>"
+          "title": "首开纪录后双响",
+          "html": "<p>他第28分钟为比利时首开纪录，50分钟再进一球。比利时5-1赢新西兰，前两粒进球都由他完成。</p>"
         }
       }
     },
@@ -732,15 +732,15 @@
           "取得进球"
         ]
       },
-      "selection_reason": "Selected because he scored the only goal in Spain's 1-0 win, making the impact case cleaner than lower-ranked volume cards.",
+      "selection_reason": "The best decisive-goal case on the day: Baena scored the only goal of Spain's 1-0 win, turning a low-event match into a clear impact pick.",
       "content": {
         "en": {
-          "title": "Baena's only-goal winner",
-          "html": "<p>Alex Baena scored the only goal in the 42nd minute against Uruguay. Spain had one shot on target, and Baena made it enough for a 1-0 win.</p>"
+          "title": "Baena's 42' winner",
+          "html": "<p>Baena had the cleanest one-goal impact case. His 42' strike was the only goal of Spain's 1-0 win over Uruguay, with Marcos Llorente credited on the assist.</p>"
         },
         "zh": {
-          "title": "42' 制胜球",
-          "html": "<p>Alex BAENA 42' 进球，成了 Uruguay 0-1 Spain 的全场唯一进球。Spain 只射正这一次，但这一下就够用。</p>"
+          "title": "42分钟制胜球",
+          "html": "<p>他第42分钟打进全场唯一进球，西班牙1-0赢乌拉圭。低比分比赛里，这一脚就是最终差距。</p>"
         }
       }
     },
@@ -776,15 +776,15 @@
           "多次助攻"
         ]
       },
-      "selection_reason": "Selected because two official assists on France's first two goals give him a distinct creation case beside Dembele's finishing case.",
+      "selection_reason": "A distinct creator card beside Dembele: Mbappe supplied the official assists on France's first two goals and still carried a strong attacking profile of his own.",
       "content": {
         "en": {
-          "title": "Mbappé's two early assists",
-          "html": "<p>Kylian Mbappé assisted Dembélé's goals in the 7th and 20th minutes, putting France 2-0 up inside the first quarter of the match. He also put two of his own four shots on target.</p>"
+          "title": "Mbappe feeds France's start",
+          "html": "<p>Mbappe's card is the creator's version of France's fast start. He supplied the official assists for Dembele's goals at 7' and 20', and still added four shots of his own in the 4-1 win.</p>"
         },
         "zh": {
-          "title": "两次助攻",
-          "html": "<p>Kylian MBAPPE 先后助攻 Ousmane DEMBELE 的 7' 和 20' 进球。France 20 分钟就到 2-0，他的创造把帽子戏法前两步都接上了。</p>"
+          "title": "开局两次助攻",
+          "html": "<p>他在第7分钟和第20分钟两次送出助攻，法国很快取得2-0。4-1赢挪威的比赛里，前两球都来自他的最后一传。</p>"
         }
       }
     }
