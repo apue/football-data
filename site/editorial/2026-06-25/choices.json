@@ -1,25 +1,29 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-06-27T11:12:12+00:00",
-  "compiled_at": "2026-06-27T11:12:12+00:00",
+  "generated_at": "2026-07-02T07:37:49+00:00",
+  "compiled_at": "2026-07-02T07:37:49+00:00",
   "match_date": "2026-06-25",
   "scoring_version": "v0.4",
   "editorial_generation": {
-    "workflow_variant": "ai_rerank_selection_v1",
-    "experiment_id": "ai_rerank_reader_loop_v5",
-    "selection_mode": "ai_rerank_only",
-    "review_profile": "reader_intuition_loop_v2",
-    "revision_policy": {
-      "mode": "reader_critic_revise_review_loop",
-      "max_revision_rounds": 2,
-      "blocking_review_requires_revision": true,
-      "revision_targets": [
-        "selection_decision",
-        "copy",
-        "review"
+    "workflow_variant": "bounded_selection_copy_loop_v1",
+    "experiment_id": "bounded_editorial_loop_v1",
+    "selection_mode": "bounded_loop_local_editor",
+    "selection_review_profile": "selection_review_v1",
+    "copy_review_profile": "copy_review_v1",
+    "loop_policy": {
+      "selection_max_rounds": 3,
+      "copy_max_rounds": 3,
+      "max_rounds_exceeded_status": "needs_human_review",
+      "promotion_requires": [
+        "selection_loop_pass",
+        "copy_loop_pass",
+        "deterministic_selection_validation_pass",
+        "deterministic_copy_validation_pass"
       ]
     },
-    "editorial_review_status": "pass",
+    "editorial_loop_status": "pass",
+    "selection_rounds": 1,
+    "copy_rounds": 2,
     "uses_official_assists": true,
     "uses_goal_involvements": true,
     "event_source": "fifa_timeline_api",
@@ -572,15 +576,68 @@
           "取得进球"
         ]
       },
-      "selection_reason": "Selected because he came off the bench and scored Türkiye's 90'+8 comeback winner in the 3-2 win over the USA.",
+      "selection_reason": "The strongest card is the stoppage-time intervention that changed the day. Ayhan came off the bench and scored Türkiye's 90'+8 goal from 2-2 to 3-2, a comeback winner and late match-winning goal in the highest-scoring match in the packet.",
       "content": {
         "en": {
-          "title": "Ayhan won it in stoppage time",
-          "html": "<p>Kaan Ayhan came off the bench and scored in the eighth minute of stoppage time, turning 2-2 into Türkiye's 3-2 win over the USA. It was the comeback winner, and his only shot was on target.</p>"
+          "title": "Ayhan's 90'+8 comeback winner",
+          "html": "<p>Ayhan came off the bench and gave Türkiye the final word against USA. His 90'+8 goal broke a 2-2 match and completed a comeback win.</p>"
         },
         "zh": {
-          "title": "卡安-艾汗补时制胜",
-          "html": "<p>卡安-艾汗替补出场，第90+8分钟把2-2改成3-2。土耳其3-2逆转美国，这一脚就是制胜球。</p>"
+          "title": "艾汗90+8分钟制胜",
+          "html": "<p>卡安-艾汗替补登场，90+8分钟在2-2时破门。土耳其就靠这球3-2逆转美国。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
+      "award_label": {
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
+      },
+      "player_id": "FIFA-2026-M59-TUR-USA|USA|14",
+      "player_name": "Sebastian BERHALTER",
+      "team": "USA",
+      "opponent": "Türkiye",
+      "match_key": "FIFA-2026-M59-TUR-USA",
+      "match_no": 59,
+      "player_no": 14,
+      "position": "MF",
+      "score": 96.37,
+      "metrics": {
+        "shots": 1,
+        "on_target": 1,
+        "goals": 1,
+        "assists": 1,
+        "goal_involvements": 2,
+        "equalizing_goal": 1,
+        "comeback_equalizer": 1
+      },
+      "evidence_chips": {
+        "en": [
+          "comeback equaliser",
+          "equaliser",
+          "goal scorer",
+          "assist"
+        ],
+        "zh": [
+          "逆转扳平",
+          "扳平进球",
+          "取得进球",
+          "送出助攻"
+        ]
+      },
+      "selection_reason": "Berhalter keeps a place despite USA losing because his evidence is not just a consolation line. He assisted the 3' opener, scored the 49' equaliser, and added a strong midfield profile with 17 completed line breaks, 23 offers received, and six possession regains.",
+      "content": {
+        "en": {
+          "title": "Berhalter's 1G+1A in defeat",
+          "html": "<p>Berhalter gave USA two of the match's sharpest interventions even in defeat. He assisted the 3' opener and scored the 49' equaliser before Türkiye won 3-2.</p>"
+        },
+        "zh": {
+          "title": "Berhalter一球一助",
+          "html": "<p>Berhalter第3分钟助攻Auston Trusty首开纪录，49分钟又把比分扳成2-2。美国最终2-3输给土耳其，他个人留下1球1助，外加17次打穿防线。</p>"
         }
       }
     },
@@ -624,15 +681,15 @@
           "取得进球"
         ]
       },
-      "selection_reason": "Selected because he scored Ecuador's 77th-minute comeback winner in the 2-1 win over Germany.",
+      "selection_reason": "Plata owns the cleanest non-Ayhan match-winning story. Ecuador trailed Germany after 2', drew level at 9', and Plata scored the 77' goal that made it 2-1, so his card carries both comeback and winner value.",
       "content": {
         "en": {
-          "title": "Plata completed Ecuador's comeback",
-          "html": "<p>Germany scored after two minutes, but Ecuador were level by the ninth and ahead in the 77th through Gonzalo Plata. His goal made it 2-1, the winner in Ecuador's comeback over Germany.</p>"
+          "title": "Plata's 77' comeback winner",
+          "html": "<p>Plata scored in the 77th minute to take Ecuador from 1-1 to 2-1 against Germany. The goal is tagged as the match-winning goal in Ecuador's comeback win.</p>"
         },
         "zh": {
-          "title": "冈萨洛-普拉塔77分钟制胜",
-          "html": "<p>德国第2分钟先进球，厄瓜多尔第9分钟扳平。冈萨洛-普拉塔第77分钟破门，厄瓜多尔2-1赢德国。</p>"
+          "title": "普拉塔77分钟制胜",
+          "html": "<p>冈萨洛-普拉塔第77分钟破门，把厄瓜多尔从1-1带到2-1。厄瓜多尔最终逆转德国，这球就是制胜球。</p>"
         }
       }
     },
@@ -673,15 +730,15 @@
           "首开纪录"
         ]
       },
-      "selection_reason": "Selected because he scored both Côte d'Ivoire goals, including the opener, in the 2-0 win over Curaçao.",
+      "selection_reason": "Pepe gives the slate its clearest multi-goal card. He scored Côte d'Ivoire's 7' opener and 64' second goal in a 2-0 win over Curaçao, putting both of his shots on target and accounting for both team goals.",
       "content": {
         "en": {
-          "title": "Pepe scored twice",
-          "html": "<p>Nicolas Pepe opened Côte d'Ivoire's win over Curaçao in the 7th minute and scored again in the 64th. Two shots, two on target, two goals made the 2-0 result simple to read.</p>"
+          "title": "Pepe's brace sets Côte d'Ivoire clear",
+          "html": "<p>Pepe gave Côte d'Ivoire the early lead and then put the match out of reach. His goals in the 7th and 64th minutes accounted for the full 2-0 margin against Curaçao.</p>"
         },
         "zh": {
-          "title": "尼古拉斯-佩佩梅开二度",
-          "html": "<p>尼古拉斯-佩佩第7分钟首开纪录，第64分钟再进一球。科特迪瓦2-0赢库拉索，他两脚射门都射正也都进了。</p>"
+          "title": "佩佩梅开二度",
+          "html": "<p>尼古拉斯-佩佩第7分钟为科特迪瓦首开纪录，第64分钟又进第二球。科特迪瓦2-0赢库拉索，全队两个进球都在他名下。</p>"
         }
       }
     },
@@ -717,65 +774,15 @@
           "取得进球"
         ]
       },
-      "selection_reason": "Selected because he scored the final goal of the Netherlands' 3-1 win after Tunisia had cut the score to 2-1.",
+      "selection_reason": "Van Hecke is the cutoff card because he combines a direct scoring event with the strongest progression profile in the selectable pool. He scored Netherlands' 62' goal for 3-1, completed 33 line breaks and 128 passes, and did it in a match where Netherlands produced 20 attempts and seven on target.",
       "content": {
         "en": {
-          "title": "Van Hecke restored the margin",
-          "html": "<p>After Tunisia cut the gap to 2-1, Jan Paul van Hecke scored in the 62nd minute to put the Netherlands 3-1 up. That was the last goal of the Dutch win.</p>"
+          "title": "Van Hecke adds a goal and forward passing",
+          "html": "<p>Van Hecke scored the Netherlands' 62' goal to stretch the lead from 2-1 to 3-1 against Tunisia. His wider case comes from moving play on from the back, led by 33 completed line breaks.</p>"
         },
         "zh": {
-          "title": "扬-保罗-范赫克打进第三球",
-          "html": "<p>突尼斯第54分钟追到1-2，扬-保罗-范赫克第62分钟把荷兰领先改成3-1。这个比分保持到终场。</p>"
-        }
-      }
-    },
-    {
-      "award_type": "player_of_the_day",
-      "award_types": [
-        "player_of_the_day"
-      ],
-      "award_label": {
-        "en": "Player of the Day",
-        "zh": "每日最佳球员"
-      },
-      "player_id": "FIFA-2026-M57-JPN-SWE|Sweden|11",
-      "player_name": "Anthony ELANGA",
-      "team": "Sweden",
-      "opponent": "Japan",
-      "match_key": "FIFA-2026-M57-JPN-SWE",
-      "match_no": 57,
-      "player_no": 11,
-      "position": "FW",
-      "score": 64.63,
-      "metrics": {
-        "shots": 2,
-        "on_target": 2,
-        "goals": 1,
-        "goal_involvements": 1,
-        "equalizing_goal": 1,
-        "comeback_equalizer": 1
-      },
-      "evidence_chips": {
-        "en": [
-          "comeback equaliser",
-          "equaliser",
-          "goal scorer"
-        ],
-        "zh": [
-          "逆转扳平",
-          "扳平进球",
-          "取得进球"
-        ]
-      },
-      "selection_reason": "Selected because he scored Sweden's 62nd-minute equaliser in the 1-1 draw with Japan and put both shots on target.",
-      "content": {
-        "en": {
-          "title": "Elanga levelled for Sweden",
-          "html": "<p>Japan led through Daizen Maeda, then Anthony Elanga equalised in the 62nd minute. Sweden left with a 1-1 draw, and Elanga put both of his shots on target.</p>"
-        },
-        "zh": {
-          "title": "安东尼-埃兰加62分钟扳平",
-          "html": "<p>日本第56分钟先进球，安东尼-埃兰加第62分钟扳成1-1。瑞典最后带走平局，他两脚射门都在门框范围内。</p>"
+          "title": "范赫克62分钟破门",
+          "html": "<p>扬-保罗-范赫克第62分钟进球，把荷兰的领先扩大到3-1。荷兰最终3-1赢突尼斯，他作为后卫还完成128次传球和33次打穿防线。</p>"
         }
       }
     }

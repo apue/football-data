@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-06-28T11:08:59+00:00",
-  "compiled_at": "2026-06-28T11:08:59+00:00",
+  "generated_at": "2026-07-02T07:37:08+00:00",
+  "compiled_at": "2026-07-02T07:37:08+00:00",
   "match_date": "2026-06-27",
   "scoring_version": "v0.4",
   "editorial_generation": {
@@ -623,15 +623,15 @@
           "取得领先"
         ]
       },
-      "selection_reason": "Selected because his two goals were the strongest individual event case of the day: a 60' equaliser and a 90'+3 go-ahead goal in Algeria's 3-3 draw with Austria.",
+      "selection_reason": "The strongest overall card in the pool: a brace in a 3-3 match, first pulling Algeria level at 60' and then putting them ahead in stoppage time. The all-around support is also credible, with 11 offers received and 7 completed line breaks behind the direct scoring output.",
       "content": {
         "en": {
-          "title": "Mahrez's late brace",
-          "html": "<p>Riyad Mahrez scored Algeria's 60th-minute equaliser, then put them 3-2 up in stoppage time. Austria answered at 90'+6, so the match finished 3-3, but Mahrez's two goals drove Algeria from 1-2 to 3-2.</p>"
+          "title": "Mahrez's brace survives the late twist",
+          "html": "<p>Mahrez scored twice in Algeria's 3-3 draw with Austria. One brought Algeria back to 2-2; the other made it 3-2 in stoppage time before the final turn of the match.</p>"
         },
         "zh": {
-          "title": "Mahrez 梅开二度",
-          "html": "<p>Riyad MAHREZ 60' 扳成 2-2，90+3' 又让 Algeria 3-2 领先。最后比分是 3-3；他的两球把 Algeria 从 1-2 追到 3-2。</p>"
+          "title": "马赫雷斯梅开二度",
+          "html": "<p>马赫雷斯第60分钟扳成2-2，补时第3分钟又让阿尔及利亚3-2领先。奥地利后来追到3-3，阿尔及利亚后两粒进球都来自他。</p>"
         }
       }
     },
@@ -676,26 +676,26 @@
           "扳平进球"
         ]
       },
-      "selection_reason": "Selected because he scored the 68' equaliser and the 90'+1 third goal as Congo DR turned 0-1 into a 3-1 win over Uzbekistan.",
+      "selection_reason": "A second elite direct-output card: Wissa scored twice in Congo DR's comeback win, including the equaliser that reopened the match and a stoppage-time goal that closed it. His six-shot profile and repeated receiving threat keep this from being only a finishing note.",
       "content": {
         "en": {
-          "title": "Wissa's comeback brace",
-          "html": "<p>Yoane Wissa scored the 68th-minute equaliser and the 90'+1 third goal as Congo DR came back against Uzbekistan. The 3-1 win had his two finishes around Mayele's winner.</p>"
+          "title": "Wissa drives the comeback with a brace",
+          "html": "<p>Wissa scored twice as Congo DR beat Uzbekistan 3-1 from behind. His 68' equaliser reopened the match, and his stoppage-time goal closed the scoring.</p>"
         },
         "zh": {
-          "title": "Wissa 梅开二度",
-          "html": "<p>Yoane WISSA 68' 扳成 1-1，90+1' 又进第三球。Congo DR 从 0-1 追回来，最后 3-1 赢 Uzbekistan。</p>"
+          "title": "维萨梅开二度",
+          "html": "<p>维萨第68分钟为刚果民主共和国扳成1-1，补时第1分钟再进一球。球队最终3-1逆转乌兹别克斯坦，追平和锁定比分都靠他完成。</p>"
         }
       }
     },
     {
-      "award_type": "player_of_the_day",
+      "award_type": "impact_pick",
       "award_types": [
-        "player_of_the_day"
+        "impact_pick"
       ],
       "award_label": {
-        "en": "Player of the Day",
-        "zh": "每日最佳球员"
+        "en": "Impact Pick",
+        "zh": "影响力精选"
       },
       "player_id": "FIFA-2026-M72-COD-UZB|Congo DR|19",
       "player_name": "Fiston MAYELE",
@@ -731,15 +731,15 @@
           "取得进球"
         ]
       },
-      "selection_reason": "Selected because his substitute goal at 78' put Congo DR 2-1 up and stood as the match-winner in the same comeback.",
+      "selection_reason": "The clearest decisive substitute moment of the day. Mayele came on, supplied the 78' goal that turned 1-1 into 2-1, and the packet tags it as both the comeback winner and the match-winning goal.",
       "content": {
         "en": {
-          "title": "Mayele's 78th-minute winner",
-          "html": "<p>Fiston Mayele came off the bench and scored in the 78th minute, taking Congo DR from 1-1 to 2-1. Wissa later added the third, so Mayele's goal remained the winner in a 3-1 comeback.</p>"
+          "title": "Mayele delivers the comeback winner",
+          "html": "<p>Mayele came off the bench and scored the 78' goal that took Congo DR from 1-1 to 2-1 against Uzbekistan. It became the match-winning goal in a 3-1 comeback win.</p>"
         },
         "zh": {
-          "title": "Mayele 78' 制胜",
-          "html": "<p>Fiston MAYELE 替补出场后在 78' 进球，Congo DR 从 1-1 反超到 2-1。后面 Wissa 再进一个，Mayele 这一球成了 3-1 逆转里的制胜球。</p>"
+          "title": "马耶莱第78分钟制胜",
+          "html": "<p>马耶莱替补登场后，第78分钟把1-1变成2-1。刚果民主共和国最后3-1逆转乌兹别克斯坦，这脚进球就是制胜球。</p>"
         }
       }
     },
@@ -782,15 +782,57 @@
           "送出助攻"
         ]
       },
-      "selection_reason": "Selected because he opened England's scoring at 62' and assisted Harry Kane five minutes later in a 2-0 win over Panama.",
+      "selection_reason": "Bellingham gives the slate a clean two-way public case from England's 2-0 win: he opened the scoring and then assisted the second goal. The movement and progression numbers back up the direct goal involvement rather than replacing it.",
       "content": {
         "en": {
-          "title": "Bellingham's goal and assist",
-          "html": "<p>Jude Bellingham opened the scoring in the 62nd minute and assisted Harry Kane five minutes later. England went from 0-0 to 2-0 through those two actions and kept Panama out.</p>"
+          "title": "Bellingham opens it, then sets up the second",
+          "html": "<p>Bellingham gave England the lead at 62' against Panama and assisted Harry Kane five minutes later. That goal-and-assist stretch was the core of England's 2-0 win.</p>"
         },
         "zh": {
-          "title": "Bellingham 一球一助",
-          "html": "<p>Jude BELLINGHAM 62' 先破门，67' 又助攻 Harry KANE。England 5 分钟里从 0-0 到 2-0，最后零封 Panama。</p>"
+          "title": "贝林厄姆传射建功",
+          "html": "<p>贝林厄姆第62分钟为英格兰首开纪录，5分钟后又助攻凯恩破门。英格兰2-0击败巴拿马，他把下半场的两个进球都连了起来。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
+      "award_label": {
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
+      },
+      "player_id": "FIFA-2026-M69-ALG-AUT|Algeria|8",
+      "player_name": "Houssem AOUAR",
+      "team": "Algeria",
+      "opponent": "Austria",
+      "match_key": "FIFA-2026-M69-ALG-AUT",
+      "match_no": 69,
+      "player_no": 8,
+      "position": "MF",
+      "score": 66.44,
+      "metrics": {
+        "assists": 2,
+        "goal_involvements": 2
+      },
+      "evidence_chips": {
+        "en": [
+          "multiple assists"
+        ],
+        "zh": [
+          "多次助攻"
+        ]
+      },
+      "selection_reason": "Aouar is the strongest creator card after the top four: both of Mahrez's major goals, the 60' equaliser and the 90'+3' go-ahead goal, came from his assists. His useful progression profile makes the selection more than a duplicate of Mahrez's scoring card.",
+      "content": {
+        "en": {
+          "title": "Aouar supplies both Mahrez swings",
+          "html": "<p>Aouar assisted Mahrez's 60' equaliser and the stoppage-time goal that put Algeria 3-2 up. In a 3-3 draw, both assists sat at the center of Algeria's comeback push.</p>"
+        },
+        "zh": {
+          "title": "奥亚尔两次助攻",
+          "html": "<p>奥亚尔两次助攻马赫雷斯，一个是第60分钟扳平，一个是补时第3分钟领先。阿尔及利亚最终3-3战平奥地利，后两粒进球都记在他的助攻名下。</p>"
         }
       }
     },
@@ -831,70 +873,15 @@
           "取得进球"
         ]
       },
-      "selection_reason": "Selected because his 83' goal broke a 1-1 match and became Croatia's winner against Ghana.",
+      "selection_reason": "Vlasic earns the second Impact Pick because the public case is simple and decisive: his 83' goal took Croatia from 1-1 to a 2-1 win. Among the lower-ranked direct-impact candidates, this is the cleanest winner tag.",
       "content": {
         "en": {
-          "title": "Vlasic's 83rd-minute winner",
-          "html": "<p>Nikola Vlasic scored in the 83rd minute, ten minutes after Ghana had made it 1-1. Croatia won 2-1, making that goal the match-winner.</p>"
+          "title": "Vlasic lands Croatia's late winner",
+          "html": "<p>Vlasic scored in the 83rd minute, turning 1-1 into Croatia's 2-1 win over Ghana. It is the cleanest kind of Impact Pick: one late goal, and the match goes with it.</p>"
         },
         "zh": {
-          "title": "Vlasic 83' 制胜",
-          "html": "<p>Nikola VLASIC 83' 把 Croatia 再次带到 2-1 领先。Ghana 73' 刚追成 1-1，最后 Croatia 靠这一球赢下来。</p>"
-        }
-      }
-    },
-    {
-      "award_type": "impact_pick",
-      "award_types": [
-        "impact_pick"
-      ],
-      "award_label": {
-        "en": "Impact Pick",
-        "zh": "影响力精选"
-      },
-      "player_id": "FIFA-2026-M69-ALG-AUT|Austria|14",
-      "player_name": "Sasa KALAJDZIC",
-      "team": "Austria",
-      "opponent": "Algeria",
-      "match_key": "FIFA-2026-M69-ALG-AUT",
-      "match_no": 69,
-      "player_no": 14,
-      "position": "FW",
-      "score": 46.91,
-      "metrics": {
-        "shots": 1,
-        "on_target": 1,
-        "goals": 1,
-        "goal_involvements": 1,
-        "equalizing_goal": 1,
-        "late_goal": 1,
-        "stoppage_time_goal": 1,
-        "comeback_equalizer": 1,
-        "substitute_goal": 1
-      },
-      "evidence_chips": {
-        "en": [
-          "substitute goal",
-          "comeback equaliser",
-          "equaliser",
-          "goal scorer"
-        ],
-        "zh": [
-          "替补进球",
-          "逆转扳平",
-          "扳平进球",
-          "取得进球"
-        ]
-      },
-      "selection_reason": "Selected as the sixth card because his 90'+6 substitute equaliser rescued Austria's 3-3 draw and ties Vlasic's impact score, making him the strongest add-card challenger rather than a coverage filler.",
-      "content": {
-        "en": {
-          "title": "Kalajdzic's 90'+6 equaliser",
-          "html": "<p>Sasa Kalajdzic came off the bench and scored at 90'+6, pulling Austria back from 3-2 to 3-3 after Mahrez had put Algeria ahead. One shot on target was enough to rescue the draw.</p>"
-        },
-        "zh": {
-          "title": "Kalajdzic 90+6' 扳平",
-          "html": "<p>Sasa KALAJDZIC 替补出场后在 90+6' 扳成 3-3。Mahrez 90+3' 刚让 Algeria 领先，Austria 最后靠这一球把平局拿回来。</p>"
+          "title": "弗拉希奇第83分钟制胜",
+          "html": "<p>弗拉希奇第83分钟破门，把克罗地亚从1-1带到2-1。这个比分保持到终场，对加纳的胜负就落在这一球上。</p>"
         }
       }
     }

@@ -1,25 +1,29 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-06-27T10:51:09+00:00",
-  "compiled_at": "2026-06-27T10:51:09+00:00",
+  "generated_at": "2026-07-02T07:37:07+00:00",
+  "compiled_at": "2026-07-02T07:37:07+00:00",
   "match_date": "2026-06-24",
   "scoring_version": "v0.4",
   "editorial_generation": {
-    "workflow_variant": "ai_rerank_selection_v1",
-    "experiment_id": "ai_rerank_reader_loop_v5",
-    "selection_mode": "ai_rerank_only",
-    "review_profile": "reader_intuition_loop_v2",
-    "revision_policy": {
-      "mode": "reader_critic_revise_review_loop",
-      "max_revision_rounds": 2,
-      "blocking_review_requires_revision": true,
-      "revision_targets": [
-        "selection_decision",
-        "copy",
-        "review"
+    "workflow_variant": "bounded_selection_copy_loop_v1",
+    "experiment_id": "bounded_editorial_loop_v1",
+    "selection_mode": "bounded_loop_local_editor",
+    "selection_review_profile": "selection_review_v1",
+    "copy_review_profile": "copy_review_v1",
+    "loop_policy": {
+      "selection_max_rounds": 3,
+      "copy_max_rounds": 3,
+      "max_rounds_exceeded_status": "needs_human_review",
+      "promotion_requires": [
+        "selection_loop_pass",
+        "copy_loop_pass",
+        "deterministic_selection_validation_pass",
+        "deterministic_copy_validation_pass"
       ]
     },
-    "editorial_review_status": "pass",
+    "editorial_loop_status": "pass",
+    "selection_rounds": 1,
+    "copy_rounds": 1,
     "uses_official_assists": true,
     "uses_goal_involvements": true,
     "event_source": "fifa_timeline_api",
@@ -610,6 +614,59 @@
         "en": "Player of the Day",
         "zh": "每日最佳球员"
       },
+      "player_id": "FIFA-2026-M50-MAR-HAI|Morocco|2",
+      "player_name": "Achraf HAKIMI",
+      "team": "Morocco",
+      "opponent": "Haiti",
+      "match_key": "FIFA-2026-M50-MAR-HAI",
+      "match_no": 50,
+      "player_no": 2,
+      "position": "DF",
+      "score": 112.07,
+      "metrics": {
+        "shots": 5,
+        "on_target": 3,
+        "goals": 1,
+        "assists": 1,
+        "goal_involvements": 2,
+        "equalizing_goal": 1,
+        "comeback_equalizer": 1
+      },
+      "evidence_chips": {
+        "en": [
+          "comeback equaliser",
+          "equaliser",
+          "goal scorer",
+          "assist"
+        ],
+        "zh": [
+          "逆转扳平",
+          "扳平进球",
+          "取得进球",
+          "送出助攻"
+        ]
+      },
+      "selection_reason": "Best overall case in the public pool. Hakimi scored Morocco's 39' comeback equaliser, assisted the 45'+1 equaliser, and still carried the strongest all-around profile with 14 line breaks, 10 ball progressions, 26 offers received, and five shots.",
+      "content": {
+        "en": {
+          "title": "Hakimi's 1G+1A pushed the comeback",
+          "html": "<p>Hakimi scored the 39' equaliser and assisted the 45'+1 leveller as Morocco beat Haiti 4-2. The case is the comeback driver, not the match-winner.</p>"
+        },
+        "zh": {
+          "title": "哈基米一传一射",
+          "html": "<p>摩洛哥先因乌龙0-1落后，哈基米第39分钟扳平，45+1分钟又送出追成2-2的助攻。4-2逆转里，上半场两次追回比分都跟他有关，外加5脚射门、3次射正。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "impact_pick",
+      "award_types": [
+        "impact_pick"
+      ],
+      "award_label": {
+        "en": "Impact Pick",
+        "zh": "影响力精选"
+      },
       "player_id": "FIFA-2026-M50-MAR-HAI|Morocco|9",
       "player_name": "Soufiane RAHIMI",
       "team": "Morocco",
@@ -645,15 +702,15 @@
           "取得进球"
         ]
       },
-      "selection_reason": "Selected because he came off the bench, scored Morocco's 78th-minute comeback winner, and assisted the fourth goal in the 4-2 win over Haiti.",
+      "selection_reason": "The clearest direct-impact card of the day. Rahimi came on, scored the 78' comeback winner from 2-2, then assisted Morocco's fourth goal, giving him a separate decisive angle from Hakimi's all-around case.",
       "content": {
         "en": {
-          "title": "Rahimi changed Morocco's comeback",
-          "html": "<p>Soufiane Rahimi came off the bench and put Morocco 3-2 up in the 78th minute. He then assisted the fourth goal, turning a tense comeback against Haiti into a 4-2 win.</p>"
+          "title": "Rahimi supplied the late swing",
+          "html": "<p>Rahimi came off the bench and produced 1G+1A, led by the 78' goal that took Morocco from 2-2 to 3-2. That keeps this card on late impact, separate from Hakimi's earlier comeback work.</p>"
         },
         "zh": {
-          "title": "拉希米替补制胜",
-          "html": "<p>拉希米替补出场后，第78分钟把比分改成3-2，随后又助攻第四球。摩洛哥4-2逆转海地，替补席给出的这一下很实在。</p>"
+          "title": "拉希米78分钟制胜",
+          "html": "<p>拉希米替补登场后，第78分钟把2-2变成3-2，这球后来就是摩洛哥的制胜球。第89分钟他又助攻第四球，4-2赢海地的最后两球都跟他有关。</p>"
         }
       }
     },
@@ -696,26 +753,26 @@
           "射门质量突出"
         ]
       },
-      "selection_reason": "Selected because his brace, including the opening goal, made him the clearest attacking case in Brazil's 3-0 win over Scotland.",
+      "selection_reason": "The strongest non-Morocco attacking headline. Vinicius Junior scored twice in Brazil's 3-0 win, opened the scoring after seven minutes, and backed the brace with eight shots and five on target.",
       "content": {
         "en": {
-          "title": "Vinicius Junior scored twice",
-          "html": "<p>Vinicius Junior opened the scoring in the 7th minute and added another in first-half stoppage time. Brazil beat Scotland 3-0, with his eight shots and five on target showing how often he was ending the move.</p>"
+          "title": "Vinicius Junior opened Brazil's brace story",
+          "html": "<p>Vinicius Junior scored twice in Brazil's 3-0 win over Scotland, starting it with the seventh-minute opener. The brace gives this card a clean attacking headline.</p>"
         },
         "zh": {
           "title": "维尼修斯梅开二度",
-          "html": "<p>维尼修斯第7分钟先破门，半场补时又进一个。巴西3-0赢苏格兰，他全场8脚射门、5次射正，门前处理很干净。</p>"
+          "html": "<p>维尼修斯第7分钟为巴西首开纪录，半场补时又进第二球。巴西3-0赢苏格兰，前两球都由他完成，全场8脚射门、5次射正。</p>"
         }
       }
     },
     {
-      "award_type": "player_of_the_day",
+      "award_type": "impact_pick",
       "award_types": [
-        "player_of_the_day"
+        "impact_pick"
       ],
       "award_label": {
-        "en": "Player of the Day",
-        "zh": "每日最佳球员"
+        "en": "Impact Pick",
+        "zh": "影响力精选"
       },
       "player_id": "FIFA-2026-M54-RSA-KOR|South Africa|12",
       "player_name": "Thapelo MASEKO",
@@ -748,15 +805,15 @@
           "取得进球"
         ]
       },
-      "selection_reason": "Selected because he scored the only goal in South Africa's 1-0 win over Korea Republic.",
+      "selection_reason": "A clean one-action result swing. Maseko scored the only goal in South Africa's 1-0 win over Korea Republic, and the 63' winner carries a stronger public case than lower-ranked assist or progression cards.",
       "content": {
         "en": {
-          "title": "Maseko scored the only goal",
-          "html": "<p>Thapelo Maseko scored in the 63rd minute, the only goal in South Africa's 1-0 win over Korea Republic. He took five shots, and the one on target was the one that settled it.</p>"
+          "title": "Maseko made one goal decide it",
+          "html": "<p>Maseko scored the 63' winner in South Africa's 1-0 win over Korea Republic. The only-goal finish gives the impact card a direct result swing.</p>"
         },
         "zh": {
-          "title": "马塞科一球制胜",
-          "html": "<p>马塞科第63分钟破门，南非1-0赢韩国。全场只有这一个进球，他5脚射门里命中的就是这一球。</p>"
+          "title": "马塞科63分钟制胜",
+          "html": "<p>南非和韩国僵到第63分钟，马塞科打进全场唯一进球。南非1-0赢下韩国，他还有5脚射门和8次持球推进。</p>"
         }
       }
     },
@@ -798,63 +855,15 @@
           "送出助攻"
         ]
       },
-      "selection_reason": "Selected because he assisted Switzerland's first goal and then scored the match-winner in the 2-1 win over Canada.",
+      "selection_reason": "The fifth card still has direct substance: Manzambi assisted Switzerland's opener, then scored the 57' match-winner in a 2-1 result, giving him two goal involvements tied directly to the final margin.",
       "content": {
         "en": {
-          "title": "Manzambi had a goal and an assist",
-          "html": "<p>Johan Manzambi assisted Switzerland's first goal just after half-time, then scored the second 11 minutes later. Switzerland won 2-1, so his goal became the match-winner.</p>"
+          "title": "Manzambi paired the assist with the winner",
+          "html": "<p>Manzambi assisted the opener and scored the 57' winner as Switzerland beat Canada 2-1. That direct goal-involvement case is stronger than stretching into thinner progression evidence.</p>"
         },
         "zh": {
-          "title": "曼赞比传射制胜",
-          "html": "<p>曼赞比第46分钟先助攻巴尔加斯，11分钟后自己破门。瑞士2-1赢加拿大，他直接参与两球，第二球后来成了制胜球。</p>"
-        }
-      }
-    },
-    {
-      "award_type": "player_of_the_day",
-      "award_types": [
-        "player_of_the_day"
-      ],
-      "award_label": {
-        "en": "Player of the Day",
-        "zh": "每日最佳球员"
-      },
-      "player_id": "FIFA-2026-M52-BIH-QAT|Bosnia and Herzegovina|19",
-      "player_name": "Kerim ALAJBEGOVIC",
-      "team": "Bosnia and Herzegovina",
-      "opponent": "Qatar",
-      "match_key": "FIFA-2026-M52-BIH-QAT",
-      "match_no": 52,
-      "player_no": 19,
-      "position": "FW",
-      "score": 77.75,
-      "metrics": {
-        "shots": 2,
-        "on_target": 1,
-        "goals": 1,
-        "goal_involvements": 1,
-        "opening_goal": 1,
-        "go_ahead_goal": 1
-      },
-      "evidence_chips": {
-        "en": [
-          "opening goal",
-          "goal scorer"
-        ],
-        "zh": [
-          "首开纪录",
-          "取得进球"
-        ]
-      },
-      "selection_reason": "Selected because he opened the scoring in Bosnia and Herzegovina's 3-1 win and also carried strong attacking progression evidence.",
-      "content": {
-        "en": {
-          "title": "Alajbegovic opened Bosnia's win",
-          "html": "<p>Kerim Alajbegovic scored in the 29th minute to put Bosnia and Herzegovina ahead against Qatar. The goal leads the case, with 14 ball progressions and 11 take-ons adding the attacking work around it.</p>"
-        },
-        "zh": {
-          "title": "阿拉伊贝戈维奇首开纪录",
-          "html": "<p>阿拉伊贝戈维奇第29分钟先进球，波黑3-1赢卡塔尔。进球之外，他还有14次推进、11次持球突破，前场一直在往前顶。</p>"
+          "title": "曼赞比一传一射制胜",
+          "html": "<p>瑞士第46分钟由他的助攻首开纪录，曼赞比第57分钟又自己破门，把比分推到2-0。加拿大后来追回一球，瑞士仍以2-1赢下，这粒第二球成了制胜球。</p>"
         }
       }
     }

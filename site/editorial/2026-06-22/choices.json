@@ -1,25 +1,29 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-06-27T10:49:45+00:00",
-  "compiled_at": "2026-06-27T10:49:45+00:00",
+  "generated_at": "2026-07-02T07:37:07+00:00",
+  "compiled_at": "2026-07-02T07:37:07+00:00",
   "match_date": "2026-06-22",
   "scoring_version": "v0.4",
   "editorial_generation": {
-    "workflow_variant": "ai_rerank_selection_v1",
-    "experiment_id": "ai_rerank_reader_loop_v5",
-    "selection_mode": "ai_rerank_only",
-    "review_profile": "reader_intuition_loop_v2",
-    "revision_policy": {
-      "mode": "reader_critic_revise_review_loop",
-      "max_revision_rounds": 2,
-      "blocking_review_requires_revision": true,
-      "revision_targets": [
-        "selection_decision",
-        "copy",
-        "review"
+    "workflow_variant": "bounded_selection_copy_loop_v1",
+    "experiment_id": "bounded_editorial_loop_v1",
+    "selection_mode": "bounded_loop_local_editor",
+    "selection_review_profile": "selection_review_v1",
+    "copy_review_profile": "copy_review_v1",
+    "loop_policy": {
+      "selection_max_rounds": 3,
+      "copy_max_rounds": 3,
+      "max_rounds_exceeded_status": "needs_human_review",
+      "promotion_requires": [
+        "selection_loop_pass",
+        "copy_loop_pass",
+        "deterministic_selection_validation_pass",
+        "deterministic_copy_validation_pass"
       ]
     },
-    "editorial_review_status": "pass",
+    "editorial_loop_status": "pass",
+    "selection_rounds": 1,
+    "copy_rounds": 2,
     "uses_official_assists": true,
     "uses_goal_involvements": true,
     "event_source": "fifa_timeline_api",
@@ -444,15 +448,15 @@
           "射门质量突出"
         ]
       },
-      "selection_reason": "Selected for two goals for France, including the opener, with three shots on target in a 3-0 win.",
+      "selection_reason": "The strongest card in the pool: a brace that opened France's 3-0 win, backed by the day's highest headline score and a broad forward profile beyond the goals.",
       "content": {
         "en": {
-          "title": "Mbappe took the early grip",
-          "html": "<p>Mbappe put France ahead in the 13th minute and scored again after half-time. Two goals and three shots on target gave France the cleanest attacking lead in a 3-0 win.</p>"
+          "title": "Mbappe's Brace Set France Up",
+          "html": "<p>Mbappe opened France's 3-0 win over Iraq at 14' and added the second at 54'. Eight shots and three on target gave the brace the weight of the day's standout attacking line.</p>"
         },
         "zh": {
           "title": "姆巴佩梅开二度",
-          "html": "<p>姆巴佩第13分钟先进一球，第53分钟又进一个。法国3-0赢伊拉克，他两次射门都在关键阶段改写比分。</p>"
+          "html": "<p>姆巴佩第14分钟为法国首开纪录，第54分钟又把比分扩大到2-0。法国最后3-0击败伊拉克，他在进球之外也不断打穿防线、带球向前。</p>"
         }
       }
     },
@@ -497,65 +501,15 @@
           "射门质量突出"
         ]
       },
-      "selection_reason": "Selected for a brace in Argentina's 2-0 win, with the first goal opening the scoring and the second coming in stoppage time.",
+      "selection_reason": "A clean second headline after Mbappe: two Argentina goals in a 2-0 win, including the opener and a stoppage-time second, with the best on-target volume in the pool.",
       "content": {
         "en": {
-          "title": "Messi finished both ends",
-          "html": "<p>Messi scored in the 37th minute and again in stoppage time. Argentina beat Austria 2-0, and both goals came from him.</p>"
+          "title": "Messi Took Both Argentina Goals",
+          "html": "<p>Messi scored both Argentina goals in the 2-0 win over Austria. The opener came at 38', the second at 90'+5, and his four shots on target made the two-goal line hard to ignore.</p>"
         },
         "zh": {
           "title": "梅西梅开二度",
-          "html": "<p>梅西第37分钟先破门，补时阶段又进一个。阿根廷2-0赢奥地利，两个进球都来自他。</p>"
-        }
-      }
-    },
-    {
-      "award_type": "player_of_the_day",
-      "award_types": [
-        "player_of_the_day"
-      ],
-      "award_label": {
-        "en": "Player of the Day",
-        "zh": "每日最佳球员"
-      },
-      "player_id": "FIFA-2026-M41-NOR-SEN|Norway|9",
-      "player_name": "Erling HAALAND",
-      "team": "Norway",
-      "opponent": "Senegal",
-      "match_key": "FIFA-2026-M41-NOR-SEN",
-      "match_no": 41,
-      "player_no": 9,
-      "position": "FW",
-      "score": 81.66,
-      "metrics": {
-        "shots": 5,
-        "on_target": 3,
-        "goals": 2,
-        "goal_involvements": 2,
-        "brace": 1,
-        "match_winning_goal": 1
-      },
-      "evidence_chips": {
-        "en": [
-          "brace",
-          "match-winning goal",
-          "high shot quality"
-        ],
-        "zh": [
-          "梅开二度",
-          "打入制胜球",
-          "射门质量突出"
-        ]
-      },
-      "selection_reason": "Selected for two goals in Norway's 3-2 win over Senegal, including the eventual match-winning goal.",
-      "content": {
-        "en": {
-          "title": "Haaland gave Norway enough",
-          "html": "<p>Haaland scored in the 47th and 57th minutes, and the second one later counted as the winner. Norway still had to hold on for 3-2, but his two finishes made the difference.</p>"
-        },
-        "zh": {
-          "title": "哈兰德双响制胜",
-          "html": "<p>哈兰德第47分钟、第57分钟各进一球，第二球后来成了制胜球。挪威最后3-2赢下来。</p>"
+          "html": "<p>梅西第38分钟为阿根廷打开局面，补时阶段再进一球。阿根廷2-0赢奥地利，两粒进球都来自他。</p>"
         }
       }
     },
@@ -599,15 +553,114 @@
           "取得进球"
         ]
       },
-      "selection_reason": "Selected because his 81st-minute goal completed Algeria's comeback and turned 1-1 into a 2-1 win.",
+      "selection_reason": "The clearest single-moment impact card: Gouiri scored the 82nd-minute goal that completed Algeria's comeback from 1-0 down and stood as the winner.",
       "content": {
         "en": {
-          "title": "Gouiri hit it on time",
-          "html": "<p>Gouiri changed the score in the 81st minute. Algeria had come from behind to reach 1-1; his finish made it 2-1.</p>"
+          "title": "Gouiri Completed Algeria's Comeback",
+          "html": "<p>Gouiri delivered Algeria's swing moment at 82', turning 1-1 into a 2-1 win over Jordan. Algeria had trailed 1-0, so the late goal completed the comeback.</p>"
         },
         "zh": {
-          "title": "古伊里第81分钟制胜",
-          "html": "<p>第81分钟，古伊里把比分改成2-1。阿尔及利亚从落后追到1-1，再靠这一球反超。</p>"
+          "title": "古伊里第82分钟制胜",
+          "html": "<p>阿尔及利亚先丢一球，古伊里第82分钟把1-1改成2-1。球队就靠这粒进球完成逆转。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "impact_pick",
+      "award_types": [
+        "impact_pick"
+      ],
+      "award_label": {
+        "en": "Impact Pick",
+        "zh": "影响力精选"
+      },
+      "player_id": "FIFA-2026-M41-NOR-SEN|Norway|9",
+      "player_name": "Erling HAALAND",
+      "team": "Norway",
+      "opponent": "Senegal",
+      "match_key": "FIFA-2026-M41-NOR-SEN",
+      "match_no": 41,
+      "player_no": 9,
+      "position": "FW",
+      "score": 81.66,
+      "metrics": {
+        "shots": 5,
+        "on_target": 3,
+        "goals": 2,
+        "goal_involvements": 2,
+        "brace": 1,
+        "match_winning_goal": 1
+      },
+      "evidence_chips": {
+        "en": [
+          "brace",
+          "match-winning goal",
+          "high shot quality"
+        ],
+        "zh": [
+          "梅开二度",
+          "打入制胜球",
+          "射门质量突出"
+        ]
+      },
+      "selection_reason": "A decisive brace in the day's most volatile match: Haaland scored twice for Norway, and the second goal is tagged as the match-winner in a 3-2 result.",
+      "content": {
+        "en": {
+          "title": "Haaland's Second Became the Winner",
+          "html": "<p>Haaland scored twice in Norway's 3-2 win over Senegal, first at 48' and then at 58'. The second made it 3-1 and stood as the winner after Senegal's stoppage-time reply.</p>"
+        },
+        "zh": {
+          "title": "哈兰德双响制胜",
+          "html": "<p>哈兰德第48分钟和第58分钟各进一球，第二球后来成了制胜球。挪威3-2顶住塞内加尔的追分。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
+      "award_label": {
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
+      },
+      "player_id": "FIFA-2026-M41-NOR-SEN|Senegal|18",
+      "player_name": "Ismaila SARR",
+      "team": "Senegal",
+      "opponent": "Norway",
+      "match_key": "FIFA-2026-M41-NOR-SEN",
+      "match_no": 41,
+      "player_no": 18,
+      "position": "FW",
+      "score": 77.81,
+      "metrics": {
+        "shots": 6,
+        "on_target": 3,
+        "goals": 2,
+        "goal_involvements": 2,
+        "brace": 1,
+        "late_goal": 1,
+        "stoppage_time_goal": 1
+      },
+      "evidence_chips": {
+        "en": [
+          "brace",
+          "high shot quality"
+        ],
+        "zh": [
+          "梅开二度",
+          "射门质量突出"
+        ]
+      },
+      "selection_reason": "The strongest losing-side card is still public-worthy: Sarr scored twice, including a stoppage-time goal, and kept Senegal in a 3-2 match that had another selected headliner.",
+      "content": {
+        "en": {
+          "title": "Sarr's Losing-Side Brace",
+          "html": "<p>Sarr scored at 53' and again in stoppage time, yet Senegal still lost 3-2 to Norway. That makes this a losing-side brace: two finishes that narrowed the game but never changed the winner.</p>"
+        },
+        "zh": {
+          "title": "萨尔输球仍双响",
+          "html": "<p>萨尔第53分钟为塞内加尔追回一球，补时阶段又把比分追到3-2。塞内加尔最终2-3输给挪威，这两球没有改掉失利结果。</p>"
         }
       }
     }

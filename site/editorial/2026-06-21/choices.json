@@ -1,25 +1,29 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-06-27T10:51:09+00:00",
-  "compiled_at": "2026-06-27T10:51:09+00:00",
+  "generated_at": "2026-07-02T07:37:07+00:00",
+  "compiled_at": "2026-07-02T07:37:07+00:00",
   "match_date": "2026-06-21",
   "scoring_version": "v0.4",
   "editorial_generation": {
-    "workflow_variant": "ai_rerank_selection_v1",
-    "experiment_id": "ai_rerank_reader_loop_v5",
-    "selection_mode": "ai_rerank_only",
-    "review_profile": "reader_intuition_loop_v2",
-    "revision_policy": {
-      "mode": "reader_critic_revise_review_loop",
-      "max_revision_rounds": 2,
-      "blocking_review_requires_revision": true,
-      "revision_targets": [
-        "selection_decision",
-        "copy",
-        "review"
+    "workflow_variant": "bounded_selection_copy_loop_v1",
+    "experiment_id": "bounded_editorial_loop_v1",
+    "selection_mode": "bounded_loop_local_editor",
+    "selection_review_profile": "selection_review_v1",
+    "copy_review_profile": "copy_review_v1",
+    "loop_policy": {
+      "selection_max_rounds": 3,
+      "copy_max_rounds": 3,
+      "max_rounds_exceeded_status": "needs_human_review",
+      "promotion_requires": [
+        "selection_loop_pass",
+        "copy_loop_pass",
+        "deterministic_selection_validation_pass",
+        "deterministic_copy_validation_pass"
       ]
     },
-    "editorial_review_status": "pass",
+    "editorial_loop_status": "pass",
+    "selection_rounds": 1,
+    "copy_rounds": 1,
     "uses_official_assists": true,
     "uses_goal_involvements": true,
     "event_source": "fifa_timeline_api",
@@ -413,15 +417,15 @@
           "送出助攻"
         ]
       },
-      "selection_reason": "Selected because he scored Egypt's 67th-minute comeback winner against New Zealand and later assisted the third goal in the 3-1 win.",
+      "selection_reason": "Salah is the clearest lead card: he scored the 67' winner from 1-1 and later assisted Egypt's third in a 3-1 comeback. The direct match impact is backed by the day's top headline and impact ranks.",
       "content": {
         "en": {
-          "title": "Salah turned Egypt's comeback",
-          "html": "<p>Mohamed Salah scored Egypt's 67th-minute go-ahead goal, then assisted Trezeguet in the 82nd minute. Egypt came from 1-0 down to beat New Zealand 3-1, so his goal became the winner.</p>"
+          "title": "Salah's 67' winner led Egypt",
+          "html": "<p>Salah supplied the 67' comeback winner, then later assisted Egypt's third in the 3-1 win over New Zealand.</p>"
         },
         "zh": {
-          "title": "萨拉赫逆转制胜",
-          "html": "<p>萨拉赫第67分钟打进反超球，第82分钟又助攻特雷泽盖。埃及从0-1踢到3-1，他的进球后来成了制胜球。</p>"
+          "title": "萨拉赫第67分钟制胜",
+          "html": "<p>埃及从0-1追到1-1后，萨拉赫第67分钟把比分改成2-1，这球后来就是制胜球。第82分钟他又助攻特雷泽盖，埃及3-1完成逆转。</p>"
         }
       }
     },
@@ -463,15 +467,15 @@
           "射门质量突出"
         ]
       },
-      "selection_reason": "Selected because he assisted Spain's opener and then scored twice in the first 24 minutes of the 4-0 win over Saudi Arabia.",
+      "selection_reason": "Oyarzabal was Spain's strongest public case: he assisted the opener and then scored twice before the match was half an hour old in a 4-0 win. Three goal involvements and high shot quality outweigh the fact that his goals were not tagged as winners.",
       "content": {
         "en": {
-          "title": "Oyarzabal had two goals and an assist",
-          "html": "<p>Mikel Oyarzabal set up Spain's 10th-minute opener, then scored in the 21st and 24th minutes. Spain were already three up by then, and finished the 4-0 win over Saudi Arabia from that base.</p>"
+          "title": "Oyarzabal drove Spain's first three",
+          "html": "<p>Oyarzabal assisted Spain's 10' opener and scored the next two goals before the 25-minute mark in a 4-0 win over Saudi Arabia.</p>"
         },
         "zh": {
           "title": "奥亚萨瓦尔梅开二度",
-          "html": "<p>奥亚萨瓦尔第10分钟先助攻亚马尔，随后第21分钟、第24分钟自己连进两球。西班牙4-0赢沙特，前半小时的三个进球都跟他有关。</p>"
+          "html": "<p>奥亚萨瓦尔第10分钟先助攻亚马尔破门，随后第21分钟和第24分钟连进两球。西班牙半小时不到已经3-0领先，最后4-0拿下沙特阿拉伯。</p>"
         }
       }
     },
@@ -516,26 +520,26 @@
           "送出助攻"
         ]
       },
-      "selection_reason": "Selected because he scored Uruguay's equaliser and assisted Agustin Canobbio's go-ahead goal in the 2-2 draw with Cabo Verde.",
+      "selection_reason": "Maxi Araujo gives the Uruguay-Cabo Verde draw its most complete public card: he scored the 44' equaliser from 0-1 and assisted Uruguay's next goal. That two-involvement profile is stronger than a single moment in the same match.",
       "content": {
         "en": {
-          "title": "Araujo was in both Uruguay goals",
-          "html": "<p>Maxi Araujo equalised in the 44th minute, then assisted Agustin Canobbio in first-half stoppage time. Uruguay drew 2-2 with Cabo Verde, and both Uruguay goals ran through him.</p>"
+          "title": "Maxi Araujo equalised and created the next one",
+          "html": "<p>Araujo scored Uruguay's 44' equaliser and assisted the stoppage-time goal that made it 2-1. In a 2-2 draw with Cabo Verde, that was Uruguay's clearest two-involvement profile.</p>"
         },
         "zh": {
-          "title": "马克西-阿劳霍传射",
-          "html": "<p>马克西-阿劳霍第44分钟扳平，半场补时又助攻卡诺比奥反超。乌拉圭最后2-2，他直接参与了两个进球。</p>"
+          "title": "马克西·阿劳霍扳平又助攻",
+          "html": "<p>乌拉圭0-1落后时，马克西·阿劳霍第44分钟把比分追成1-1。上半场补时卡诺比奥的反超进球也来自他的助攻，2-2的平局里，他参与了乌拉圭两个进球。</p>"
         }
       }
     },
     {
-      "award_type": "player_of_the_day",
+      "award_type": "impact_pick",
       "award_types": [
-        "player_of_the_day"
+        "impact_pick"
       ],
       "award_label": {
-        "en": "Player of the Day",
-        "zh": "每日最佳球员"
+        "en": "Impact Pick",
+        "zh": "影响力精选"
       },
       "player_id": "FIFA-2026-M40-NZL-EGY|Egypt|11",
       "player_name": "MOSTAFA ZICO",
@@ -569,15 +573,62 @@
           "送出助攻"
         ]
       },
-      "selection_reason": "Selected because he scored Egypt's 58th-minute equaliser and assisted Salah's winner nine minutes later.",
+      "selection_reason": "Zico earns the impact slot because he changed Egypt's match twice: the 58' equaliser after New Zealand's opener, then the assist for Salah's winner. That is enough for a second Egypt card without stretching to a third.",
       "content": {
         "en": {
-          "title": "Zico linked Egypt's first two goals",
-          "html": "<p>Mostafa Zico scored Egypt's 58th-minute equaliser and assisted Salah's winner nine minutes later. Before Egypt's late third goal, he had already supplied the equaliser and the pass for the lead.</p>"
+          "title": "Zico tied it, then fed Salah",
+          "html": "<p>Zico scored Egypt's 58' equaliser after New Zealand led, then supplied the assist for Salah's 67' goal in the 3-1 comeback.</p>"
         },
         "zh": {
-          "title": "穆斯塔法-齐科扳平又助攻",
-          "html": "<p>穆斯塔法-齐科第58分钟把比分扳成1-1，9分钟后又助攻萨拉赫反超。埃及3-1逆转新西兰，前两粒进球都跟他有关。</p>"
+          "title": "齐科扳平又助攻萨拉赫",
+          "html": "<p>埃及第58分钟还落后一球，齐科接穆罕默德·哈尼助攻扳成1-1。第67分钟，他又助攻萨拉赫打进2-1；埃及最终3-1赢下新西兰，他直接参与了前两个进球。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
+      "award_label": {
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
+      },
+      "player_id": "FIFA-2026-M37-URU-CPV|Uruguay|14",
+      "player_name": "Agustin CANOBBIO",
+      "team": "Uruguay",
+      "opponent": "Cabo Verde",
+      "match_key": "FIFA-2026-M37-URU-CPV",
+      "match_no": 37,
+      "player_no": 14,
+      "position": "MF",
+      "score": 74.08,
+      "metrics": {
+        "shots": 2,
+        "on_target": 1,
+        "goals": 1,
+        "goal_involvements": 1,
+        "go_ahead_goal": 1
+      },
+      "evidence_chips": {
+        "en": [
+          "go-ahead goal",
+          "goal scorer"
+        ],
+        "zh": [
+          "取得领先",
+          "取得进球"
+        ]
+      },
+      "selection_reason": "Canobbio is the cutoff card because he combines a direct go-ahead goal with a strong movement and progression profile. The goal was later cancelled in the 2-2 draw, but his line-breaking and receiving volume make him stronger than the remaining single-moment or metric-only options.",
+      "content": {
+        "en": {
+          "title": "Canobbio paired a goal with line breaks",
+          "html": "<p>Canobbio put Uruguay ahead in first-half stoppage time, then backed the goal with 10 completed line breaks and 16 offers received.</p>"
+        },
+        "zh": {
+          "title": "卡诺比奥补时取得领先",
+          "html": "<p>卡诺比奥在上半场补时为乌拉圭打进2-1，比分后来被佛得角在第61分钟追成2-2。他这场还有10次打穿防线、30次身后接应和16次接球，乌拉圭的推进多次绕到他这里。</p>"
         }
       }
     }
