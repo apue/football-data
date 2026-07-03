@@ -1,6 +1,19 @@
 {
-  "generated_at": "2026-07-02T08:22:54+00:00",
-  "new_matches": [],
+  "generated_at": "2026-07-03T07:41:40+00:00",
+  "new_matches": [
+    {
+      "match_no": 83,
+      "source_id": "fifa-world-cup-2026-pmsr-m83-por-cro-v1"
+    },
+    {
+      "match_no": 84,
+      "source_id": "fifa-world-cup-2026-pmsr-m84-esp-aut-v1"
+    },
+    {
+      "match_no": 85,
+      "source_id": "fifa-world-cup-2026-pmsr-m85-sui-alg-v1"
+    }
+  ],
   "version_updates": [],
   "downloaded": [
     "fifa-world-cup-2026-pmsr-m01-mex-rsa-v1",
@@ -84,20 +97,23 @@
     "fifa-world-cup-2026-pmsr-m79-mex-ecu-v1",
     "fifa-world-cup-2026-pmsr-m80-eng-cod-v1",
     "fifa-world-cup-2026-pmsr-m81-usa-bih-v1",
-    "fifa-world-cup-2026-pmsr-m82-bel-sen-v1"
+    "fifa-world-cup-2026-pmsr-m82-bel-sen-v1",
+    "fifa-world-cup-2026-pmsr-m83-por-cro-v1",
+    "fifa-world-cup-2026-pmsr-m84-esp-aut-v1",
+    "fifa-world-cup-2026-pmsr-m85-sui-alg-v1"
   ],
   "supplemental": {
     "fifa_timeline": {
-      "generated_at": "2026-07-02T08:24:36+00:00",
+      "generated_at": "2026-07-03T07:43:33+00:00",
       "source": "fifa_timeline_api",
       "status": "success",
-      "matches": 82,
-      "linked_matches": 82,
-      "timeline_matches": 82,
-      "events": 7443,
-      "goals": 229,
-      "assists": 174,
-      "goal_involvements": 229,
+      "matches": 85,
+      "linked_matches": 85,
+      "timeline_matches": 85,
+      "events": 7717,
+      "goals": 237,
+      "assists": 179,
+      "goal_involvements": 237,
       "failures": []
     }
   },
