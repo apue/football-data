@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-05T07:40:50+00:00",
+  "generated_at": "2026-07-06T08:42:36+00:00",
   "status": "success",
   "failure_code": null,
   "hub_url": "https://www.fifatrainingcentre.com/en/fifa-world-cup-2026/match-report-hub.php",
@@ -7,35 +7,35 @@
     "https://www.fifatrainingcentre.com/en/fifa-world-cup-2026/match-report-hub.php",
     "https://www.fifatrainingcentre.com/en/fifa-world-cup-2026/match-report-hub-knockout-stage.php"
   ],
-  "discovered": 90,
-  "active_sources": 90,
-  "downloaded": 90,
-  "parsed": 90,
-  "matches": 90,
-  "source_documents": 90,
+  "discovered": 92,
+  "active_sources": 92,
+  "downloaded": 92,
+  "parsed": 92,
+  "matches": 92,
+  "source_documents": 92,
   "new_matches": [
     {
-      "match_no": 89,
-      "source_id": "fifa-world-cup-2026-pmsr-m89-par-fra-v1"
+      "match_no": 91,
+      "source_id": "fifa-world-cup-2026-pmsr-m91-bra-nor-v1"
     },
     {
-      "match_no": 90,
-      "source_id": "fifa-world-cup-2026-pmsr-m90-can-mar-v1"
+      "match_no": 92,
+      "source_id": "fifa-world-cup-2026-pmsr-m92-mex-eng-v1"
     }
   ],
   "version_updates": [],
   "supplemental": {
     "fifa_timeline": {
-      "generated_at": "2026-07-05T07:42:33+00:00",
+      "generated_at": "2026-07-06T08:44:22+00:00",
       "source": "fifa_timeline_api",
       "status": "success",
-      "matches": 90,
-      "linked_matches": 90,
-      "timeline_matches": 90,
-      "events": 8237,
-      "goals": 247,
-      "assists": 188,
-      "goal_involvements": 247,
+      "matches": 92,
+      "linked_matches": 92,
+      "timeline_matches": 92,
+      "events": 8421,
+      "goals": 255,
+      "assists": 192,
+      "goal_involvements": 255,
       "failures": []
     }
   },
