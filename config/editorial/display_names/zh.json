@@ -10,6 +10,10 @@
       "display_name": "阿马德-迪亚洛",
       "short_name": "阿马德"
     },
+    "Achraf HAKIMI": {
+      "display_name": "阿什拉夫-哈基米",
+      "short_name": "哈基米"
+    },
     "Anthony ELANGA": {
       "display_name": "安东尼-埃兰加",
       "short_name": "埃兰加"
@@ -18,9 +22,29 @@
       "display_name": "安东尼-戈登",
       "short_name": "戈登"
     },
+    "Azzedine OUNAHI": {
+      "display_name": "阿泽丁-乌纳希",
+      "short_name": "乌纳希"
+    },
+    "Brahim DIAZ": {
+      "display_name": "布拉欣-迪亚斯",
+      "short_name": "迪亚斯"
+    },
+    "Breel EMBOLO": {
+      "display_name": "布雷尔-恩博洛",
+      "short_name": "恩博洛"
+    },
     "BRUNO FERNANDES": {
       "display_name": "布鲁诺-费尔南德斯",
       "short_name": "B费"
+    },
+    "Charles DE KETELAERE": {
+      "display_name": "夏尔-德凯特拉雷",
+      "short_name": "德凯特拉雷"
+    },
+    "Enzo FERNANDEZ": {
+      "display_name": "恩佐-费尔南德斯",
+      "short_name": "恩佐"
     },
     "Erling HAALAND": {
       "display_name": "埃尔林-哈兰德",
@@ -29,6 +53,10 @@
     "Folarin BALOGUN": {
       "display_name": "弗拉林-巴洛贡",
       "short_name": "巴洛贡"
+    },
+    "GONCALO RAMOS": {
+      "display_name": "贡萨洛-拉莫斯",
+      "short_name": "拉莫斯"
     },
     "Gonzalo PLATA": {
       "display_name": "冈萨洛-普拉塔",
@@ -42,13 +70,29 @@
       "display_name": "哈里-凯恩",
       "short_name": "凯恩"
     },
+    "Hans VANAKEN": {
+      "display_name": "汉斯-瓦纳肯",
+      "short_name": "瓦纳肯"
+    },
+    "Ivan PERISIC": {
+      "display_name": "伊万-佩里西奇",
+      "short_name": "佩里西奇"
+    },
     "Jan Paul VAN HECKE": {
       "display_name": "扬-保罗-范赫克",
       "short_name": "范赫克"
     },
+    "Jhon ARIAS": {
+      "display_name": "约翰-阿里亚斯",
+      "short_name": "阿里亚斯"
+    },
     "Julian QUINONES": {
       "display_name": "胡利安-基尼奥内斯",
       "short_name": "基尼奥内斯"
+    },
+    "Jude BELLINGHAM": {
+      "display_name": "裘德-贝林厄姆",
+      "short_name": "贝林厄姆"
     },
     "Kaan AYHAN": {
       "display_name": "卡安-艾汗",
@@ -58,9 +102,37 @@
       "display_name": "基利安-姆巴佩",
       "short_name": "姆巴佩"
     },
+    "Lionel MESSI": {
+      "display_name": "莱昂内尔-梅西",
+      "short_name": "梅西"
+    },
+    "Lisandro MARTINEZ": {
+      "display_name": "利桑德罗-马丁内斯",
+      "short_name": "利桑德罗"
+    },
+    "Marc CUCURELLA": {
+      "display_name": "马克-库库雷利亚",
+      "short_name": "库库雷利亚"
+    },
+    "Mikel OYARZABAL": {
+      "display_name": "米克尔-奥亚萨瓦尔",
+      "short_name": "奥亚萨瓦尔"
+    },
+    "Mikel MERINO": {
+      "display_name": "米克尔-梅里诺",
+      "short_name": "梅里诺"
+    },
     "Mbekezeli MBOKAZI": {
       "display_name": "姆贝克泽利-姆博卡齐",
       "short_name": "姆博卡齐"
+    },
+    "EMAM ASHOUR": {
+      "display_name": "埃马姆-阿舒尔",
+      "short_name": "阿舒尔"
+    },
+    "SIDNY LOPES CABRAL": {
+      "display_name": "西德尼-洛佩斯-卡布拉尔",
+      "short_name": "西德尼"
     },
     "Michael OLISE": {
       "display_name": "迈克尔-奥利塞",
@@ -73,6 +145,10 @@
     "Sphephelo SITHOLE": {
       "display_name": "斯菲费洛-西托莱",
       "short_name": "西托莱"
+    },
+    "Soufiane RAHIMI": {
+      "display_name": "苏菲安-拉希米",
+      "short_name": "拉希米"
     },
     "Stephen EUSTAQUIO": {
       "display_name": "斯蒂芬-欧斯塔基奥",

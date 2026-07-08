@@ -14,6 +14,10 @@ from football_data.editorial_registry import (
     load_selection_review_profile,
 )
 from football_data.editorial_selection import normalize_selection_decision
+from football_data.editorial_slate import (
+    public_card_count_context,
+    selection_public_card_count,
+)
 from football_data.editorial_style_calibration import load_style_calibration
 from football_data.editorial_validation import validate_selection_decision
 
@@ -316,6 +320,7 @@ def build_selection_review_payload(
         "match_date": candidate_pool.get("match_date"),
         "review_profile": review_profile["id"],
         "selected": selected,
+        "slate_plan": selection_decision.get("slate_plan"),
         "required_unselected_candidate_reviews": required_unselected,
         "required_impact_candidate_reviews": required_impact,
         "card_count_challengers": card_count_challengers,
@@ -562,27 +567,17 @@ def _public_card_count_context(
     selected_count: int,
     candidate_pool: dict[str, Any],
     selection_config: dict[str, Any] | None,
-) -> dict[str, int] | None:
+) -> dict[str, Any] | None:
     if not isinstance(selection_config, dict):
         return None
-    raw_count = selection_config.get("public_card_count")
-    if not isinstance(raw_count, dict):
-        return None
-    min_count = int(raw_count.get("min") or 0)
-    max_count = int(raw_count.get("max") or 0)
-    match_count = len(
-        {
-            str(candidate.get("match_key") or "")
-            for candidate in candidate_pool.get("selectable_candidates", [])
-            if isinstance(candidate, dict) and candidate.get("match_key")
-        }
+    context = public_card_count_context(
+        candidate_pool,
+        selection_config,
+        selected_count=selected_count,
     )
-    return {
-        "selected": selected_count,
-        "min": min(min_count, max_count),
-        "max": max(min_count, max_count),
-        "match_count": match_count,
-    }
+    if context.get("policy") == "none":
+        return None
+    return context
 
 
 def _required_impact_candidate_reviews(
@@ -615,7 +610,9 @@ def _card_count_challengers(
     selected_count: int,
     selection_config: dict[str, Any] | None,
 ) -> list[dict[str, Any]]:
-    public_count = _selection_public_card_count(selection_config)
+    if not isinstance(selection_config, dict):
+        return []
+    public_count = selection_public_card_count(candidate_pool, selection_config)
     if not public_count:
         return []
     _, max_count = public_count
@@ -645,21 +642,6 @@ def _card_count_challengers(
         _review_candidate(candidate, _preferred_public_award(candidate))
         for candidate in ordered[:limit]
     ]
-
-
-def _selection_public_card_count(selection_config: dict[str, Any] | None) -> tuple[int, int] | None:
-    if not isinstance(selection_config, dict):
-        return None
-    raw_count = selection_config.get("public_card_count")
-    if not isinstance(raw_count, dict):
-        return None
-    min_count = int(raw_count.get("min") or 0)
-    max_count = int(raw_count.get("max") or 0)
-    if min_count <= 0 or max_count <= 0:
-        return None
-    if min_count > max_count:
-        min_count, max_count = max_count, min_count
-    return min_count, max_count
 
 
 def _public_awards(candidate: dict[str, Any]) -> list[str]:

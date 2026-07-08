@@ -4,6 +4,7 @@ from collections import Counter
 from typing import Any
 
 from football_data.editorial_constants import PUBLIC_AWARD_TYPES
+from football_data.editorial_slate import selection_public_card_count
 
 
 _WEAK_SELECTION_TEXTS = {
@@ -87,7 +88,7 @@ def validate_selection_decision(
     for award_type, expected_count in award_limits.items():
         if award_counts[award_type] > int(expected_count):
             warnings.append(f"{award_type} exceeds configured award limit")
-    public_card_count = _selection_public_card_count(selection_config)
+    public_card_count = selection_public_card_count(candidate_pool, selection_config)
     if public_card_count:
         min_count, max_count = public_card_count
         if len(selected) < min_count or len(selected) > max_count:
@@ -95,6 +96,8 @@ def validate_selection_decision(
                 "selected public card count "
                 f"{len(selected)} outside public_card_count range {min_count}-{max_count}"
             )
+    if selection_config.get("must_include_slate_plan"):
+        warnings.extend(_slate_plan_warnings(decision, selected, candidate_pool))
 
     slate_constraints = selection_config.get("slate_constraints", {})
     if isinstance(slate_constraints, dict):
@@ -162,19 +165,6 @@ def _selection_award_limits(selection_config: dict[str, Any]) -> dict[str, int]:
     return {str(key): int(value) for key, value in raw_limits.items()}
 
 
-def _selection_public_card_count(selection_config: dict[str, Any]) -> tuple[int, int] | None:
-    raw_count = selection_config.get("public_card_count")
-    if not isinstance(raw_count, dict):
-        return None
-    min_count = int(raw_count.get("min") or 0)
-    max_count = int(raw_count.get("max") or 0)
-    if min_count <= 0 or max_count <= 0:
-        return None
-    if min_count > max_count:
-        min_count, max_count = max_count, min_count
-    return min_count, max_count
-
-
 def _selected_item_content_warnings(
     item: dict[str, Any],
     player_id: str,
@@ -188,6 +178,53 @@ def _selected_item_content_warnings(
         warnings.append(f"{label} evidence_used must include meaningful evidence strings")
     if _weak_selection_text(item.get("selection_risk"), min_chars=20, reject_generic_risk=True):
         warnings.append(f"{label} selection_risk is too weak")
+    return warnings
+
+
+def _slate_plan_warnings(
+    decision: dict[str, Any],
+    selected: list[Any],
+    candidate_pool: dict[str, Any],
+) -> list[str]:
+    slate_plan = decision.get("slate_plan")
+    if not isinstance(slate_plan, dict):
+        return ["selection_decision.slate_plan is required"]
+    warnings: list[str] = []
+    required_text_fields = (
+        "card_count_rationale",
+        "why_not_fewer",
+        "why_not_more",
+    )
+    for field in required_text_fields:
+        if _weak_selection_text(slate_plan.get(field), min_chars=20):
+            warnings.append(f"slate_plan.{field} is too weak")
+    selected_ids = {
+        str(item.get("player_id") or "")
+        for item in selected
+        if isinstance(item, dict) and str(item.get("player_id") or "").strip()
+    }
+    try:
+        final_card_count = int(slate_plan.get("final_card_count"))
+    except (TypeError, ValueError):
+        final_card_count = -1
+    if final_card_count != len(selected):
+        warnings.append("slate_plan.final_card_count must match selected count")
+    try:
+        match_count = int(slate_plan.get("match_count"))
+    except (TypeError, ValueError):
+        match_count = -1
+    expected_match_count = int(candidate_pool.get("match_count") or 0)
+    if expected_match_count and match_count != expected_match_count:
+        warnings.append("slate_plan.match_count must match candidate_pool.match_count")
+    try:
+        recommended = int(slate_plan.get("recommended_card_count"))
+    except (TypeError, ValueError):
+        recommended = 0
+    if recommended <= 0:
+        warnings.append("slate_plan.recommended_card_count must be positive")
+    weakest = str(slate_plan.get("weakest_selected_player_id") or "")
+    if selected_ids and weakest not in selected_ids:
+        warnings.append("slate_plan.weakest_selected_player_id must identify a selected player_id")
     return warnings
 
 

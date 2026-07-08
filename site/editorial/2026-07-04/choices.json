@@ -1,0 +1,338 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-07-08T14:25:16+00:00",
+  "compiled_at": "2026-07-08T14:25:16+00:00",
+  "match_date": "2026-07-04",
+  "scoring_version": "v0.4",
+  "editorial_generation": {
+    "workflow_variant": "bounded_selection_copy_loop_v2",
+    "experiment_id": "bounded_editorial_loop_v2",
+    "selection_mode": "bounded_loop_local_editor",
+    "selection_review_profile": "selection_review_v2",
+    "copy_review_profile": "copy_review_v1",
+    "loop_policy": {
+      "selection_max_rounds": 3,
+      "copy_max_rounds": 3,
+      "max_rounds_exceeded_status": "needs_human_review",
+      "promotion_requires": [
+        "selection_loop_pass",
+        "copy_loop_pass",
+        "deterministic_selection_validation_pass",
+        "deterministic_copy_validation_pass"
+      ]
+    },
+    "editorial_loop_status": "pass",
+    "selection_rounds": 1,
+    "copy_rounds": 1,
+    "uses_official_assists": true,
+    "uses_goal_involvements": true,
+    "event_source": "fifa_timeline_api",
+    "event_sources": {
+      "goal_involvements": "fifa_timeline_api"
+    }
+  },
+  "matches": [
+    {
+      "match_key": "FIFA-2026-M89-PAR-FRA",
+      "match_no": 89,
+      "match_date": "2026-07-04",
+      "kickoff_time": "17:00",
+      "stadium": "Philadelphia Stadium",
+      "home_team": "Paraguay",
+      "away_team": "France",
+      "home_score": 0,
+      "away_score": 1
+    },
+    {
+      "match_key": "FIFA-2026-M90-CAN-MAR",
+      "match_no": 90,
+      "match_date": "2026-07-04",
+      "kickoff_time": "12:00",
+      "stadium": "Houston Stadium",
+      "home_team": "Canada",
+      "away_team": "Morocco",
+      "home_score": 0,
+      "away_score": 3
+    }
+  ],
+  "match_flows": {
+    "FIFA-2026-M89-PAR-FRA": {
+      "match_key": "FIFA-2026-M89-PAR-FRA",
+      "match_no": 89,
+      "match_date": "2026-07-04",
+      "home_team": "Paraguay",
+      "away_team": "France",
+      "home_score": 0,
+      "away_score": 1,
+      "winner_team": "France",
+      "home_trailing_at_any_point": true,
+      "away_trailing_at_any_point": false,
+      "home_came_from_behind_to_win": false,
+      "away_came_from_behind_to_win": false,
+      "goals": [
+        {
+          "goal_order": 1,
+          "minute": 70,
+          "team": "France",
+          "player_team": "France",
+          "player_name": "Kylian MBAPPE",
+          "own_goal": false,
+          "score_before": "0-0",
+          "score_after": "0-1",
+          "team_score_before": 0,
+          "opponent_score_before": 0,
+          "team_score_after": 1,
+          "opponent_score_after": 0,
+          "tags": [
+            "opening_goal",
+            "go_ahead_goal",
+            "match_winning_goal"
+          ]
+        }
+      ],
+      "decisive_goal": {
+        "goal_order": 1,
+        "minute": 70,
+        "team": "France",
+        "player_team": "France",
+        "player_name": "Kylian MBAPPE",
+        "own_goal": false,
+        "score_before": "0-0",
+        "score_after": "0-1",
+        "team_score_before": 0,
+        "opponent_score_before": 0,
+        "team_score_after": 1,
+        "opponent_score_after": 0,
+        "tags": [
+          "opening_goal",
+          "go_ahead_goal",
+          "match_winning_goal"
+        ]
+      }
+    },
+    "FIFA-2026-M90-CAN-MAR": {
+      "match_key": "FIFA-2026-M90-CAN-MAR",
+      "match_no": 90,
+      "match_date": "2026-07-04",
+      "home_team": "Canada",
+      "away_team": "Morocco",
+      "home_score": 0,
+      "away_score": 3,
+      "winner_team": "Morocco",
+      "home_trailing_at_any_point": true,
+      "away_trailing_at_any_point": false,
+      "home_came_from_behind_to_win": false,
+      "away_came_from_behind_to_win": false,
+      "goals": [
+        {
+          "goal_order": 1,
+          "minute": 50,
+          "team": "Morocco",
+          "player_team": "Morocco",
+          "player_name": "Azzedine OUNAHI",
+          "own_goal": false,
+          "score_before": "0-0",
+          "score_after": "0-1",
+          "team_score_before": 0,
+          "opponent_score_before": 0,
+          "team_score_after": 1,
+          "opponent_score_after": 0,
+          "tags": [
+            "opening_goal",
+            "go_ahead_goal"
+          ]
+        },
+        {
+          "goal_order": 2,
+          "minute": 82,
+          "team": "Morocco",
+          "player_team": "Morocco",
+          "player_name": "Azzedine OUNAHI",
+          "own_goal": false,
+          "score_before": "0-1",
+          "score_after": "0-2",
+          "team_score_before": 1,
+          "opponent_score_before": 0,
+          "team_score_after": 2,
+          "opponent_score_after": 0,
+          "tags": [
+            "late_goal"
+          ]
+        },
+        {
+          "goal_order": 3,
+          "minute": 98,
+          "team": "Morocco",
+          "player_team": "Morocco",
+          "player_name": "Soufiane RAHIMI",
+          "own_goal": false,
+          "score_before": "0-2",
+          "score_after": "0-3",
+          "team_score_before": 2,
+          "opponent_score_before": 0,
+          "team_score_after": 3,
+          "opponent_score_after": 0,
+          "tags": [
+            "late_goal",
+            "stoppage_time_goal"
+          ]
+        }
+      ],
+      "decisive_goal": null
+    }
+  },
+  "choices": [
+    {
+      "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
+      "award_label": {
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
+      },
+      "player_id": "FIFA-2026-M89-PAR-FRA|France|10",
+      "player_name": "Kylian MBAPPE",
+      "team": "France",
+      "opponent": "Paraguay",
+      "match_key": "FIFA-2026-M89-PAR-FRA",
+      "match_no": 89,
+      "player_no": 10,
+      "position": "FW",
+      "score": 96.93,
+      "metrics": {
+        "shots": 5,
+        "on_target": 4,
+        "goals": 1,
+        "goal_involvements": 1,
+        "opening_goal": 1,
+        "go_ahead_goal": 1,
+        "match_winning_goal": 1,
+        "only_goal_winner": 1
+      },
+      "evidence_chips": {
+        "en": [
+          "only goal",
+          "match-winning goal",
+          "goal scorer",
+          "high shot quality"
+        ],
+        "zh": [
+          "全场唯一进球",
+          "打入制胜球",
+          "取得进球",
+          "射门质量突出"
+        ]
+      },
+      "selection_reason": "Kylian MBAPPE has a direct public case: only goal, match-winning goal, goal scorer.",
+      "content": {
+        "en": {
+          "title": "Mbappe owns the 1-0",
+          "html": "<p>Kylian Mbappe scored the only goal in France's 1-0 win over Paraguay. With the match decided by one finish, the public case is direct.</p>"
+        },
+        "zh": {
+          "title": "姆巴佩制胜球",
+          "html": "<p>姆巴佩打进全场唯一进球，法国1-0赢巴拉圭。这样的比分不需要绕开进球本身，他就是比赛被改写的地方。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
+      "award_label": {
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
+      },
+      "player_id": "FIFA-2026-M90-CAN-MAR|Morocco|8",
+      "player_name": "Azzedine OUNAHI",
+      "team": "Morocco",
+      "opponent": "Canada",
+      "match_key": "FIFA-2026-M90-CAN-MAR",
+      "match_no": 90,
+      "player_no": 8,
+      "position": "MF",
+      "score": 92.12,
+      "metrics": {
+        "shots": 2,
+        "on_target": 2,
+        "goals": 2,
+        "goal_involvements": 2,
+        "brace": 1,
+        "opening_goal": 1,
+        "go_ahead_goal": 1,
+        "late_goal": 1
+      },
+      "evidence_chips": {
+        "en": [
+          "brace",
+          "opening goal"
+        ],
+        "zh": [
+          "梅开二度",
+          "首开纪录"
+        ]
+      },
+      "selection_reason": "Azzedine OUNAHI has a direct public case: brace, opening goal.",
+      "content": {
+        "en": {
+          "title": "Ounahi scores twice",
+          "html": "<p>Azzedine Ounahi scored twice in Morocco's 5-0 win over Canada, including the opener. On a two-match day, the brace is the cleanest way to represent that blowout.</p>"
+        },
+        "zh": {
+          "title": "奥纳希梅开二度",
+          "html": "<p>奥纳希第8分钟首开纪录，第53分钟再进一球。摩洛哥5-0赢加拿大，他的梅开二度最能代表这场大胜。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "impact_pick",
+      "award_types": [
+        "impact_pick"
+      ],
+      "award_label": {
+        "en": "Impact Pick",
+        "zh": "影响力精选"
+      },
+      "player_id": "FIFA-2026-M90-CAN-MAR|Morocco|10",
+      "player_name": "Brahim DIAZ",
+      "team": "Morocco",
+      "opponent": "Canada",
+      "match_key": "FIFA-2026-M90-CAN-MAR",
+      "match_no": 90,
+      "player_no": 10,
+      "position": "FW",
+      "score": 56.16,
+      "metrics": {
+        "assists": 2,
+        "goal_involvements": 2
+      },
+      "evidence_chips": {
+        "en": [
+          "multiple assists"
+        ],
+        "zh": [
+          "多次助攻"
+        ]
+      },
+      "selection_reason": "Brahim DIAZ has a direct public case: multiple assists.",
+      "content": {
+        "en": {
+          "title": "Brahim sets up two",
+          "html": "<p>Brahim Diaz supplied two assists in Morocco's 5-0 win. With the slate trimmed to three cards, his multiple final passes beat the other supporting cases.</p>"
+        },
+        "zh": {
+          "title": "卜拉欣两次助攻",
+          "html": "<p>卜拉欣两次送出助攻，摩洛哥5个进球里有两次最后一传来自他。两场比赛的精选收窄到3人，他比其他辅助线索更完整。</p>"
+        }
+      }
+    }
+  ],
+  "selection_validation": {
+    "schema_version": 1,
+    "status": "pass",
+    "warnings": []
+  },
+  "audit": []
+}

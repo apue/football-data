@@ -129,6 +129,279 @@ def test_editorial_v2_registry_resolves_default_experiment():
     assert not [path for path in retired_paths if Path(path).exists()]
 
 
+def test_editorial_v2_dynamic_public_card_count_policy():
+    from football_data.editorial_slate import (
+        public_card_count_context,
+        selection_public_card_count,
+    )
+
+    selection_config = {
+        "public_card_count": {
+            "min": 1,
+            "max": 6,
+            "match_count_rules": [
+                {
+                    "min_matches": 1,
+                    "max_matches": 1,
+                    "min": 1,
+                    "recommended": 1,
+                    "max": 2,
+                    "guidance": "One match should normally produce one public card.",
+                },
+                {
+                    "min_matches": 2,
+                    "max_matches": 2,
+                    "min": 2,
+                    "recommended": 3,
+                    "max": 4,
+                    "guidance": "Two matches can support two to four cards.",
+                },
+                {
+                    "min_matches": 3,
+                    "max_matches": 3,
+                    "min": 3,
+                    "recommended": 4,
+                    "max": 5,
+                    "guidance": "Three matches can support three to five cards.",
+                },
+                {
+                    "min_matches": 4,
+                    "min": 3,
+                    "recommended": 4,
+                    "max": 6,
+                    "guidance": "Four or more matches keep the broad slate range.",
+                },
+            ],
+        }
+    }
+
+    one_match_pool = {
+        "match_count": 1,
+        "selectable_candidates": [{"match_key": "m1", "player_id": "a"}],
+    }
+    two_match_pool = {
+        "selectable_candidates": [
+            {"match_key": "m1", "player_id": "a"},
+            {"match_key": "m2", "player_id": "b"},
+        ]
+    }
+    four_match_pool = {
+        "matches": [{"match_key": f"m{i}"} for i in range(4)],
+        "selectable_candidates": [],
+    }
+
+    assert selection_public_card_count(one_match_pool, selection_config) == (1, 2)
+    assert public_card_count_context(one_match_pool, selection_config) == {
+        "selected": 0,
+        "match_count": 1,
+        "min": 1,
+        "recommended": 1,
+        "max": 2,
+        "policy": "match_count_rule",
+        "guidance": "One match should normally produce one public card.",
+    }
+    assert selection_public_card_count(two_match_pool, selection_config) == (2, 4)
+    assert selection_public_card_count(four_match_pool, selection_config) == (3, 6)
+
+
+def test_editorial_candidate_pool_exposes_match_count():
+    from football_data.editorial_candidates import build_candidate_pool
+    from football_data.editorial_rankings import build_editorial_rankings
+    from football_data.editorial_registry import (
+        load_candidate_pool_config,
+        load_editorial_experiment,
+    )
+
+    experiment = load_editorial_experiment()
+    rankings = build_editorial_rankings("data/latest.sqlite", "2026-07-04", experiment["scoring_config"])
+    pool = build_candidate_pool(rankings, load_candidate_pool_config(experiment["candidate_pool"]))
+
+    assert pool["match_count"] == len(rankings["matches"])
+    assert pool["matches"] == [
+        {
+            "match_key": item["match_key"],
+            "match_no": item["match_no"],
+            "home_team": item["home_team"],
+            "away_team": item["away_team"],
+            "home_score": item["home_score"],
+            "away_score": item["away_score"],
+        }
+        for item in rankings["matches"]
+    ]
+
+
+def test_dynamic_public_card_count_validation_accepts_one_card_single_match():
+    from football_data.editorial_validation import validate_selection_decision
+
+    experiment = {
+        "selection": {
+            "public_card_count": {
+                "min": 1,
+                "max": 6,
+                "match_count_rules": [
+                    {"min_matches": 1, "max_matches": 1, "min": 1, "recommended": 1, "max": 2}
+                ],
+            },
+            "award_limits": {"player_of_the_day": 6, "impact_pick": 2},
+        }
+    }
+    candidate_pool = {
+        "match_count": 1,
+        "selectable_candidates": [
+            {
+                "player_id": "p1",
+                "player_name": "Player One",
+                "team": "A",
+                "match_key": "m1",
+                "eligible_awards": ["player_of_the_day"],
+                "headline_rank": 1,
+                "award_contexts": {
+                    "player_of_the_day": {
+                        "evidence_chips": {"en": ["Goal"], "zh": ["进球"]}
+                    }
+                },
+            }
+        ],
+    }
+    decision = {
+        "selected": [
+            {
+                "player_id": "p1",
+                "player_name": "Player One",
+                "team": "A",
+                "award_type": "player_of_the_day",
+                "editorial_reason": "The decisive public case is supported by direct match impact.",
+                "selection_risk": "Low: the one-card slate matches a one-match day.",
+                "evidence_used": ["Goal"],
+            }
+        ],
+        "skipped_higher_ranked": [],
+    }
+
+    assert validate_selection_decision(decision, candidate_pool, experiment)["status"] == "pass"
+
+
+def test_dynamic_experiment_requires_slate_plan_when_configured():
+    from football_data.editorial_validation import validate_selection_decision
+
+    candidate = {
+        "player_id": "p1",
+        "player_name": "Player One",
+        "team": "A",
+        "match_key": "m1",
+        "eligible_awards": ["player_of_the_day"],
+        "headline_rank": 1,
+        "award_contexts": {
+            "player_of_the_day": {
+                "evidence_chips": {"en": ["Goal"], "zh": ["进球"]}
+            }
+        },
+    }
+    experiment = {
+        "selection": {
+            "must_include_slate_plan": True,
+            "public_card_count": {"min": 1, "max": 2},
+            "award_limits": {"player_of_the_day": 6, "impact_pick": 2},
+        }
+    }
+    candidate_pool = {
+        "match_count": 1,
+        "selectable_candidates": [candidate],
+    }
+    decision = {
+        "selected": [
+            {
+                "player_id": "p1",
+                "player_name": "Player One",
+                "team": "A",
+                "award_type": "player_of_the_day",
+                "editorial_reason": "The decisive public case is supported by direct match impact.",
+                "selection_risk": "Low: the one-card slate matches a one-match day.",
+                "evidence_used": ["Goal"],
+            }
+        ],
+        "skipped_higher_ranked": [],
+    }
+
+    missing = validate_selection_decision(decision, candidate_pool, experiment)
+    assert missing["status"] == "failed"
+    assert any("slate_plan" in warning for warning in missing["warnings"])
+
+    with_plan = json.loads(json.dumps(decision))
+    with_plan["slate_plan"] = {
+        "match_count": 1,
+        "recommended_card_count": 1,
+        "final_card_count": 1,
+        "card_count_rationale": "One match, one clear public card.",
+        "why_not_fewer": "The day needs one public Player of the Match card.",
+        "why_not_more": "No second card has an independent public case.",
+        "weakest_selected_player_id": "p1",
+        "strongest_omitted_player_id": "",
+        "strongest_add_card_challenger_player_id": "",
+    }
+    assert validate_selection_decision(with_plan, candidate_pool, experiment)["status"] == "pass"
+
+
+def test_selector_input_includes_public_card_count_context():
+    from football_data.editorial_selection import build_selector_input
+
+    pool = {
+        "match_date": "2026-07-05",
+        "scoring_version": "v0.4",
+        "match_count": 1,
+        "selectable_candidates": [],
+        "audit_candidates": [],
+        "near_misses": [],
+    }
+    experiment = {
+        "workflow_variant": "bounded_selection_copy_loop_v2",
+        "selection": {
+            "public_card_count": {
+                "min": 1,
+                "max": 6,
+                "match_count_rules": [
+                    {"min_matches": 1, "max_matches": 1, "min": 1, "recommended": 1, "max": 2}
+                ],
+            }
+        },
+    }
+
+    selector_input = build_selector_input(pool, experiment)
+
+    assert selector_input["public_card_count_context"]["match_count"] == 1
+    assert selector_input["public_card_count_context"]["recommended"] == 1
+    assert selector_input["public_card_count_context"]["max"] == 2
+
+
+def test_editorial_v2_dynamic_experiment_registry():
+    from football_data.editorial_registry import (
+        load_editorial_experiment,
+        load_selection_review_profile,
+        load_selector_profile,
+    )
+
+    experiment = load_editorial_experiment("bounded_editorial_loop_v2")
+
+    assert experiment["id"] == "bounded_editorial_loop_v2"
+    assert experiment["workflow_variant"] == "bounded_selection_copy_loop_v2"
+    assert experiment["selector_profile"] == "slate_dynamic_editor_v4"
+    assert experiment["selection_review_profile"] == "selection_review_v2"
+    assert experiment["selection"]["public_card_count"]["match_count_rules"][0] == {
+        "min_matches": 1,
+        "max_matches": 1,
+        "min": 1,
+        "recommended": 1,
+        "max": 2,
+        "guidance": "One-match days should normally publish one Player of the Match level card; add a second only for an independently strong public case.",
+    }
+
+    selector = load_selector_profile("slate_dynamic_editor_v4")
+    review = load_selection_review_profile("selection_review_v2")
+    assert any("slate_plan" in item for item in selector["instructions"])
+    assert "slate_plan_verdict" in review["required_slate_assessment_fields"]
+    assert "revision_target" in review["required_slate_assessment_fields"]
+
+
 def test_editorial_style_calibration_loads_curated_zh_examples():
     from football_data.editorial_style_calibration import load_style_calibration
 
@@ -269,12 +542,16 @@ def test_selection_review_validation_requires_objection_coverage():
         review_profile=review_profile,
         selection_config=experiment["selection"],
     )
-    assert review_payload["public_card_count"] == {
+    assert {
+        key: review_payload["public_card_count"][key]
+        for key in ("selected", "min", "max", "match_count")
+    } == {
         "selected": len(decision["selected"]),
         "min": 3,
         "max": 6,
         "match_count": 4,
     }
+    assert review_payload["public_card_count"]["policy"] == "static_range"
 
     selected_reviews = [
         {

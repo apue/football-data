@@ -1,0 +1,494 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-07-08T14:24:41+00:00",
+  "compiled_at": "2026-07-08T14:24:41+00:00",
+  "match_date": "2026-07-02",
+  "scoring_version": "v0.4",
+  "editorial_generation": {
+    "workflow_variant": "bounded_selection_copy_loop_v2",
+    "experiment_id": "bounded_editorial_loop_v2",
+    "selection_mode": "bounded_loop_local_editor",
+    "selection_review_profile": "selection_review_v2",
+    "copy_review_profile": "copy_review_v1",
+    "loop_policy": {
+      "selection_max_rounds": 3,
+      "copy_max_rounds": 3,
+      "max_rounds_exceeded_status": "needs_human_review",
+      "promotion_requires": [
+        "selection_loop_pass",
+        "copy_loop_pass",
+        "deterministic_selection_validation_pass",
+        "deterministic_copy_validation_pass"
+      ]
+    },
+    "editorial_loop_status": "pass",
+    "selection_rounds": 1,
+    "copy_rounds": 1,
+    "uses_official_assists": true,
+    "uses_goal_involvements": true,
+    "event_source": "fifa_timeline_api",
+    "event_sources": {
+      "goal_involvements": "fifa_timeline_api"
+    }
+  },
+  "matches": [
+    {
+      "match_key": "FIFA-2026-M83-POR-CRO",
+      "match_no": 83,
+      "match_date": "2026-07-02",
+      "kickoff_time": "19:00",
+      "stadium": "Toronto Stadium",
+      "home_team": "Portugal",
+      "away_team": "Croatia",
+      "home_score": 2,
+      "away_score": 1
+    },
+    {
+      "match_key": "FIFA-2026-M84-ESP-AUT",
+      "match_no": 84,
+      "match_date": "2026-07-02",
+      "kickoff_time": "12:00",
+      "stadium": "Los Angeles Stadium",
+      "home_team": "Spain",
+      "away_team": "Austria",
+      "home_score": 3,
+      "away_score": 0
+    },
+    {
+      "match_key": "FIFA-2026-M85-SUI-ALG",
+      "match_no": 85,
+      "match_date": "2026-07-02",
+      "kickoff_time": "20:00",
+      "stadium": "BC Place Vancouver",
+      "home_team": "Switzerland",
+      "away_team": "Algeria",
+      "home_score": 2,
+      "away_score": 0
+    }
+  ],
+  "match_flows": {
+    "FIFA-2026-M83-POR-CRO": {
+      "match_key": "FIFA-2026-M83-POR-CRO",
+      "match_no": 83,
+      "match_date": "2026-07-02",
+      "home_team": "Portugal",
+      "away_team": "Croatia",
+      "home_score": 2,
+      "away_score": 1,
+      "winner_team": "Portugal",
+      "home_trailing_at_any_point": true,
+      "away_trailing_at_any_point": true,
+      "home_came_from_behind_to_win": true,
+      "away_came_from_behind_to_win": false,
+      "goals": [
+        {
+          "goal_order": 1,
+          "minute": 53,
+          "team": "Croatia",
+          "player_team": "Croatia",
+          "player_name": "Ivan PERISIC",
+          "own_goal": false,
+          "score_before": "0-0",
+          "score_after": "0-1",
+          "team_score_before": 0,
+          "opponent_score_before": 0,
+          "team_score_after": 1,
+          "opponent_score_after": 0,
+          "tags": [
+            "opening_goal",
+            "go_ahead_goal"
+          ]
+        },
+        {
+          "goal_order": 2,
+          "minute": 68,
+          "team": "Portugal",
+          "player_team": "Portugal",
+          "player_name": "CRISTIANO RONALDO",
+          "own_goal": false,
+          "score_before": "0-1",
+          "score_after": "1-1",
+          "team_score_before": 0,
+          "opponent_score_before": 1,
+          "team_score_after": 1,
+          "opponent_score_after": 1,
+          "tags": [
+            "equalizer",
+            "comeback_equalizer",
+            "team_came_from_behind_goal"
+          ]
+        },
+        {
+          "goal_order": 3,
+          "minute": 94,
+          "team": "Portugal",
+          "player_team": "Portugal",
+          "player_name": "GONCALO RAMOS",
+          "own_goal": false,
+          "score_before": "1-1",
+          "score_after": "2-1",
+          "team_score_before": 1,
+          "opponent_score_before": 1,
+          "team_score_after": 2,
+          "opponent_score_after": 1,
+          "tags": [
+            "go_ahead_goal",
+            "match_winning_goal",
+            "late_goal",
+            "stoppage_time_goal",
+            "late_match_winning_goal",
+            "team_came_from_behind_goal",
+            "comeback_winner"
+          ]
+        }
+      ],
+      "decisive_goal": {
+        "goal_order": 3,
+        "minute": 94,
+        "team": "Portugal",
+        "player_team": "Portugal",
+        "player_name": "GONCALO RAMOS",
+        "own_goal": false,
+        "score_before": "1-1",
+        "score_after": "2-1",
+        "team_score_before": 1,
+        "opponent_score_before": 1,
+        "team_score_after": 2,
+        "opponent_score_after": 1,
+        "tags": [
+          "go_ahead_goal",
+          "match_winning_goal",
+          "late_goal",
+          "stoppage_time_goal",
+          "late_match_winning_goal",
+          "team_came_from_behind_goal",
+          "comeback_winner"
+        ]
+      }
+    },
+    "FIFA-2026-M84-ESP-AUT": {
+      "match_key": "FIFA-2026-M84-ESP-AUT",
+      "match_no": 84,
+      "match_date": "2026-07-02",
+      "home_team": "Spain",
+      "away_team": "Austria",
+      "home_score": 3,
+      "away_score": 0,
+      "winner_team": "Spain",
+      "home_trailing_at_any_point": false,
+      "away_trailing_at_any_point": true,
+      "home_came_from_behind_to_win": false,
+      "away_came_from_behind_to_win": false,
+      "goals": [
+        {
+          "goal_order": 1,
+          "minute": 36,
+          "team": "Spain",
+          "player_team": "Spain",
+          "player_name": "Mikel OYARZABAL",
+          "own_goal": false,
+          "score_before": "0-0",
+          "score_after": "1-0",
+          "team_score_before": 0,
+          "opponent_score_before": 0,
+          "team_score_after": 1,
+          "opponent_score_after": 0,
+          "tags": [
+            "opening_goal",
+            "go_ahead_goal"
+          ]
+        },
+        {
+          "goal_order": 2,
+          "minute": 66,
+          "team": "Spain",
+          "player_team": "Spain",
+          "player_name": "Pedro PORRO",
+          "own_goal": false,
+          "score_before": "1-0",
+          "score_after": "2-0",
+          "team_score_before": 1,
+          "opponent_score_before": 0,
+          "team_score_after": 2,
+          "opponent_score_after": 0,
+          "tags": []
+        },
+        {
+          "goal_order": 3,
+          "minute": 89,
+          "team": "Spain",
+          "player_team": "Spain",
+          "player_name": "Mikel OYARZABAL",
+          "own_goal": false,
+          "score_before": "2-0",
+          "score_after": "3-0",
+          "team_score_before": 2,
+          "opponent_score_before": 0,
+          "team_score_after": 3,
+          "opponent_score_after": 0,
+          "tags": [
+            "late_goal"
+          ]
+        }
+      ],
+      "decisive_goal": null
+    },
+    "FIFA-2026-M85-SUI-ALG": {
+      "match_key": "FIFA-2026-M85-SUI-ALG",
+      "match_no": 85,
+      "match_date": "2026-07-02",
+      "home_team": "Switzerland",
+      "away_team": "Algeria",
+      "home_score": 2,
+      "away_score": 0,
+      "winner_team": "Switzerland",
+      "home_trailing_at_any_point": false,
+      "away_trailing_at_any_point": true,
+      "home_came_from_behind_to_win": false,
+      "away_came_from_behind_to_win": false,
+      "goals": [
+        {
+          "goal_order": 1,
+          "minute": 10,
+          "team": "Switzerland",
+          "player_team": "Switzerland",
+          "player_name": "Breel EMBOLO",
+          "own_goal": false,
+          "score_before": "0-0",
+          "score_after": "1-0",
+          "team_score_before": 0,
+          "opponent_score_before": 0,
+          "team_score_after": 1,
+          "opponent_score_after": 0,
+          "tags": [
+            "opening_goal",
+            "go_ahead_goal"
+          ]
+        },
+        {
+          "goal_order": 2,
+          "minute": 46,
+          "team": "Switzerland",
+          "player_team": "Switzerland",
+          "player_name": "Dan NDOYE",
+          "own_goal": false,
+          "score_before": "1-0",
+          "score_after": "2-0",
+          "team_score_before": 1,
+          "opponent_score_before": 0,
+          "team_score_after": 2,
+          "opponent_score_after": 0,
+          "tags": []
+        }
+      ],
+      "decisive_goal": null
+    }
+  },
+  "choices": [
+    {
+      "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
+      "award_label": {
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
+      },
+      "player_id": "FIFA-2026-M83-POR-CRO|Portugal|9",
+      "player_name": "GONCALO RAMOS",
+      "team": "Portugal",
+      "opponent": "Croatia",
+      "match_key": "FIFA-2026-M83-POR-CRO",
+      "match_no": 83,
+      "player_no": 9,
+      "position": "FW",
+      "score": 128.06,
+      "metrics": {
+        "shots": 2,
+        "on_target": 1,
+        "goals": 1,
+        "goal_involvements": 1,
+        "go_ahead_goal": 1,
+        "match_winning_goal": 1,
+        "late_goal": 1,
+        "stoppage_time_goal": 1,
+        "late_match_winning_goal": 1,
+        "comeback_winner": 1,
+        "substitute_goal": 1
+      },
+      "evidence_chips": {
+        "en": [
+          "substitute goal",
+          "comeback winner",
+          "late winner",
+          "goal scorer"
+        ],
+        "zh": [
+          "替补进球",
+          "逆转制胜",
+          "补时制胜",
+          "取得进球"
+        ]
+      },
+      "selection_reason": "GONCALO RAMOS has a direct public case: substitute goal, comeback winner, late winner.",
+      "content": {
+        "en": {
+          "title": "Ramos in stoppage time",
+          "html": "<p>Goncalo Ramos came off the bench and gave Portugal the final turn of the match. His 90+4 goal broke a 1-1 game after Portugal had trailed Croatia.</p>"
+        },
+        "zh": {
+          "title": "拉莫斯补时制胜",
+          "html": "<p>拉莫斯替补登场，在90+4分钟把1-1改成2-1。葡萄牙先落后再赢回来，这一脚直接决定了比赛。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
+      "award_label": {
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
+      },
+      "player_id": "FIFA-2026-M84-ESP-AUT|Spain|21",
+      "player_name": "Mikel OYARZABAL",
+      "team": "Spain",
+      "opponent": "Austria",
+      "match_key": "FIFA-2026-M84-ESP-AUT",
+      "match_no": 84,
+      "player_no": 21,
+      "position": "FW",
+      "score": 94.42,
+      "metrics": {
+        "shots": 6,
+        "on_target": 4,
+        "goals": 2,
+        "goal_involvements": 2,
+        "brace": 1,
+        "opening_goal": 1,
+        "go_ahead_goal": 1,
+        "late_goal": 1
+      },
+      "evidence_chips": {
+        "en": [
+          "brace",
+          "opening goal",
+          "high shot quality"
+        ],
+        "zh": [
+          "梅开二度",
+          "首开纪录",
+          "射门质量突出"
+        ]
+      },
+      "selection_reason": "Mikel OYARZABAL has a direct public case: brace, opening goal, high shot quality.",
+      "content": {
+        "en": {
+          "title": "Oyarzabal doubles up",
+          "html": "<p>Mikel Oyarzabal scored Spain's first and third goals in a 3-0 win over Austria. Six shots and four on target made the brace feel earned, not accidental.</p>"
+        },
+        "zh": {
+          "title": "奥亚萨瓦尔梅开二度",
+          "html": "<p>奥亚萨瓦尔第36分钟首开纪录，第89分钟再进一球。西班牙3-0赢奥地利，他6次射门、4次射正，进球线索很清楚。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
+      "award_label": {
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
+      },
+      "player_id": "FIFA-2026-M84-ESP-AUT|Spain|24",
+      "player_name": "Marc CUCURELLA",
+      "team": "Spain",
+      "opponent": "Austria",
+      "match_key": "FIFA-2026-M84-ESP-AUT",
+      "match_no": 84,
+      "player_no": 24,
+      "position": "DF",
+      "score": 79.4,
+      "metrics": {
+        "assists": 2,
+        "goal_involvements": 2
+      },
+      "evidence_chips": {
+        "en": [
+          "multiple assists"
+        ],
+        "zh": [
+          "多次助攻"
+        ]
+      },
+      "selection_reason": "Marc CUCURELLA has a direct public case: multiple assists.",
+      "content": {
+        "en": {
+          "title": "Cucurella supplies two",
+          "html": "<p>Marc Cucurella assisted both Oyarzabal goals, including the opener. On a Spain day with plenty of pressure, the two final passes give him a clean public case.</p>"
+        },
+        "zh": {
+          "title": "库库雷利亚两次助攻",
+          "html": "<p>库库雷利亚两次助攻奥亚萨瓦尔破门，第一脚就是首开纪录。西班牙整场压住奥地利，他的最后一传很扎实。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "impact_pick",
+      "award_types": [
+        "impact_pick"
+      ],
+      "award_label": {
+        "en": "Impact Pick",
+        "zh": "影响力精选"
+      },
+      "player_id": "FIFA-2026-M85-SUI-ALG|Switzerland|7",
+      "player_name": "Breel EMBOLO",
+      "team": "Switzerland",
+      "opponent": "Algeria",
+      "match_key": "FIFA-2026-M85-SUI-ALG",
+      "match_no": 85,
+      "player_no": 7,
+      "position": "FW",
+      "score": 45.89,
+      "metrics": {
+        "shots": 2,
+        "on_target": 1,
+        "goals": 1,
+        "goal_involvements": 1,
+        "opening_goal": 1,
+        "go_ahead_goal": 1
+      },
+      "evidence_chips": {
+        "en": [
+          "opening goal",
+          "goal scorer"
+        ],
+        "zh": [
+          "首开纪录",
+          "取得进球"
+        ]
+      },
+      "selection_reason": "Breel EMBOLO has a direct public case: opening goal, goal scorer.",
+      "content": {
+        "en": {
+          "title": "Embolo starts it early",
+          "html": "<p>Breel Embolo put Switzerland ahead after 10 minutes and kept their 2-0 win over Algeria on track. It is the fourth card here, not a forced sixth.</p>"
+        },
+        "zh": {
+          "title": "恩博洛首开纪录",
+          "html": "<p>恩博洛第10分钟为瑞士首开纪录，比赛从那一球开始往瑞士这边走。瑞士最后2-0赢阿尔及利亚，这个开局足够进入精选。</p>"
+        }
+      }
+    }
+  ],
+  "selection_validation": {
+    "schema_version": 1,
+    "status": "pass",
+    "warnings": []
+  },
+  "audit": []
+}

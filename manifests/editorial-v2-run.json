@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-07-02T08:20:11+00:00",
+  "generated_at": "2026-07-08T14:25:55+00:00",
   "status": "success",
-  "match_date": "2026-07-01",
-  "workflow_variant": "bounded_selection_copy_loop_v1",
-  "experiment_id": "bounded_editorial_loop_v1",
+  "match_date": "2026-07-07",
+  "workflow_variant": "bounded_selection_copy_loop_v2",
+  "experiment_id": "bounded_editorial_loop_v2",
   "editor_runtime": "local_codex",
   "scoring_version": "v0.4",
   "selection_validation": {
@@ -25,28 +25,13 @@
   "choices": [
     {
       "award_type": "player_of_the_day",
-      "player_name": "Youri TIELEMANS",
-      "team": "Belgium"
+      "player_name": "Lionel MESSI",
+      "team": "Argentina"
     },
     {
       "award_type": "player_of_the_day",
-      "player_name": "Harry KANE",
-      "team": "England"
-    },
-    {
-      "award_type": "player_of_the_day",
-      "player_name": "Habib DIARRA",
-      "team": "Senegal"
-    },
-    {
-      "award_type": "impact_pick",
-      "player_name": "Anthony GORDON",
-      "team": "England"
-    },
-    {
-      "award_type": "impact_pick",
-      "player_name": "Folarin BALOGUN",
-      "team": "USA"
+      "player_name": "Enzo FERNANDEZ",
+      "team": "Argentina"
     }
   ]
 }

@@ -1,0 +1,393 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-07-08T14:25:46+00:00",
+  "compiled_at": "2026-07-08T14:25:46+00:00",
+  "match_date": "2026-07-06",
+  "scoring_version": "v0.4",
+  "editorial_generation": {
+    "workflow_variant": "bounded_selection_copy_loop_v2",
+    "experiment_id": "bounded_editorial_loop_v2",
+    "selection_mode": "bounded_loop_local_editor",
+    "selection_review_profile": "selection_review_v2",
+    "copy_review_profile": "copy_review_v1",
+    "loop_policy": {
+      "selection_max_rounds": 3,
+      "copy_max_rounds": 3,
+      "max_rounds_exceeded_status": "needs_human_review",
+      "promotion_requires": [
+        "selection_loop_pass",
+        "copy_loop_pass",
+        "deterministic_selection_validation_pass",
+        "deterministic_copy_validation_pass"
+      ]
+    },
+    "editorial_loop_status": "pass",
+    "selection_rounds": 1,
+    "copy_rounds": 1,
+    "uses_official_assists": true,
+    "uses_goal_involvements": true,
+    "event_source": "fifa_timeline_api",
+    "event_sources": {
+      "goal_involvements": "fifa_timeline_api"
+    }
+  },
+  "matches": [
+    {
+      "match_key": "FIFA-2026-M93-POR-ESP",
+      "match_no": 93,
+      "match_date": "2026-07-06",
+      "kickoff_time": "14:00",
+      "stadium": "Dallas Stadium",
+      "home_team": "Portugal",
+      "away_team": "Spain",
+      "home_score": 0,
+      "away_score": 1
+    },
+    {
+      "match_key": "FIFA-2026-M94-USA-BEL",
+      "match_no": 94,
+      "match_date": "2026-07-06",
+      "kickoff_time": "17:00",
+      "stadium": "Seattle Stadium",
+      "home_team": "USA",
+      "away_team": "Belgium",
+      "home_score": 1,
+      "away_score": 4
+    }
+  ],
+  "match_flows": {
+    "FIFA-2026-M93-POR-ESP": {
+      "match_key": "FIFA-2026-M93-POR-ESP",
+      "match_no": 93,
+      "match_date": "2026-07-06",
+      "home_team": "Portugal",
+      "away_team": "Spain",
+      "home_score": 0,
+      "away_score": 1,
+      "winner_team": "Spain",
+      "home_trailing_at_any_point": true,
+      "away_trailing_at_any_point": false,
+      "home_came_from_behind_to_win": false,
+      "away_came_from_behind_to_win": false,
+      "goals": [
+        {
+          "goal_order": 1,
+          "minute": 91,
+          "team": "Spain",
+          "player_team": "Spain",
+          "player_name": "Mikel MERINO",
+          "own_goal": false,
+          "score_before": "0-0",
+          "score_after": "0-1",
+          "team_score_before": 0,
+          "opponent_score_before": 0,
+          "team_score_after": 1,
+          "opponent_score_after": 0,
+          "tags": [
+            "opening_goal",
+            "go_ahead_goal",
+            "match_winning_goal",
+            "late_goal",
+            "stoppage_time_goal",
+            "late_match_winning_goal"
+          ]
+        }
+      ],
+      "decisive_goal": {
+        "goal_order": 1,
+        "minute": 91,
+        "team": "Spain",
+        "player_team": "Spain",
+        "player_name": "Mikel MERINO",
+        "own_goal": false,
+        "score_before": "0-0",
+        "score_after": "0-1",
+        "team_score_before": 0,
+        "opponent_score_before": 0,
+        "team_score_after": 1,
+        "opponent_score_after": 0,
+        "tags": [
+          "opening_goal",
+          "go_ahead_goal",
+          "match_winning_goal",
+          "late_goal",
+          "stoppage_time_goal",
+          "late_match_winning_goal"
+        ]
+      }
+    },
+    "FIFA-2026-M94-USA-BEL": {
+      "match_key": "FIFA-2026-M94-USA-BEL",
+      "match_no": 94,
+      "match_date": "2026-07-06",
+      "home_team": "USA",
+      "away_team": "Belgium",
+      "home_score": 1,
+      "away_score": 4,
+      "winner_team": "Belgium",
+      "home_trailing_at_any_point": true,
+      "away_trailing_at_any_point": false,
+      "home_came_from_behind_to_win": false,
+      "away_came_from_behind_to_win": false,
+      "goals": [
+        {
+          "goal_order": 1,
+          "minute": 0,
+          "team": "Belgium",
+          "player_team": "Belgium",
+          "player_name": "Charles DE KETELAERE",
+          "own_goal": false,
+          "score_before": "0-0",
+          "score_after": "0-1",
+          "team_score_before": 0,
+          "opponent_score_before": 0,
+          "team_score_after": 1,
+          "opponent_score_after": 0,
+          "tags": [
+            "opening_goal",
+            "go_ahead_goal"
+          ]
+        },
+        {
+          "goal_order": 2,
+          "minute": 31,
+          "team": "USA",
+          "player_team": "USA",
+          "player_name": "Malik TILLMAN",
+          "own_goal": false,
+          "score_before": "0-1",
+          "score_after": "1-1",
+          "team_score_before": 0,
+          "opponent_score_before": 1,
+          "team_score_after": 1,
+          "opponent_score_after": 1,
+          "tags": [
+            "equalizer",
+            "comeback_equalizer"
+          ]
+        },
+        {
+          "goal_order": 3,
+          "minute": 33,
+          "team": "Belgium",
+          "player_team": "Belgium",
+          "player_name": "Charles DE KETELAERE",
+          "own_goal": false,
+          "score_before": "1-1",
+          "score_after": "1-2",
+          "team_score_before": 1,
+          "opponent_score_before": 1,
+          "team_score_after": 2,
+          "opponent_score_after": 1,
+          "tags": [
+            "go_ahead_goal"
+          ]
+        },
+        {
+          "goal_order": 4,
+          "minute": 57,
+          "team": "Belgium",
+          "player_team": "Belgium",
+          "player_name": "Hans VANAKEN",
+          "own_goal": false,
+          "score_before": "1-2",
+          "score_after": "1-3",
+          "team_score_before": 2,
+          "opponent_score_before": 1,
+          "team_score_after": 3,
+          "opponent_score_after": 1,
+          "tags": []
+        },
+        {
+          "goal_order": 5,
+          "minute": 93,
+          "team": "Belgium",
+          "player_team": "Belgium",
+          "player_name": "Romelu LUKAKU",
+          "own_goal": false,
+          "score_before": "1-3",
+          "score_after": "1-4",
+          "team_score_before": 3,
+          "opponent_score_before": 1,
+          "team_score_after": 4,
+          "opponent_score_after": 1,
+          "tags": [
+            "late_goal",
+            "stoppage_time_goal"
+          ]
+        }
+      ],
+      "decisive_goal": null
+    }
+  },
+  "choices": [
+    {
+      "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
+      "award_label": {
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
+      },
+      "player_id": "FIFA-2026-M93-POR-ESP|Spain|6",
+      "player_name": "Mikel MERINO",
+      "team": "Spain",
+      "opponent": "Portugal",
+      "match_key": "FIFA-2026-M93-POR-ESP",
+      "match_no": 93,
+      "player_no": 6,
+      "position": "MF",
+      "score": 112.81,
+      "metrics": {
+        "shots": 1,
+        "on_target": 1,
+        "goals": 1,
+        "goal_involvements": 1,
+        "opening_goal": 1,
+        "go_ahead_goal": 1,
+        "match_winning_goal": 1,
+        "late_goal": 1,
+        "stoppage_time_goal": 1,
+        "late_match_winning_goal": 1,
+        "only_goal_winner": 1,
+        "substitute_goal": 1
+      },
+      "evidence_chips": {
+        "en": [
+          "substitute goal",
+          "only goal",
+          "late winner",
+          "goal scorer"
+        ],
+        "zh": [
+          "替补进球",
+          "全场唯一进球",
+          "补时制胜",
+          "取得进球"
+        ]
+      },
+      "selection_reason": "Mikel MERINO has a direct public case: substitute goal, only goal, late winner.",
+      "content": {
+        "en": {
+          "title": "Merino wins it in stoppage time",
+          "html": "<p>Mikel Merino came off the bench and scored in 90+1, the only goal of Spain's 1-0 win over Portugal. On a tight day, that late finish stands alone.</p>"
+        },
+        "zh": {
+          "title": "梅里诺补时制胜",
+          "html": "<p>梅里诺替补登场，90+1分钟打进全场唯一进球。西班牙1-0赢葡萄牙。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
+      "award_label": {
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
+      },
+      "player_id": "FIFA-2026-M94-USA-BEL|Belgium|17",
+      "player_name": "Charles DE KETELAERE",
+      "team": "Belgium",
+      "opponent": "USA",
+      "match_key": "FIFA-2026-M94-USA-BEL",
+      "match_no": 94,
+      "player_no": 17,
+      "position": "FW",
+      "score": 101.45,
+      "metrics": {
+        "shots": 3,
+        "on_target": 3,
+        "goals": 2,
+        "assists": 1,
+        "goal_involvements": 3,
+        "brace": 1,
+        "opening_goal": 1,
+        "go_ahead_goal": 2
+      },
+      "evidence_chips": {
+        "en": [
+          "brace",
+          "opening goal",
+          "assist",
+          "high shot quality"
+        ],
+        "zh": [
+          "梅开二度",
+          "首开纪录",
+          "送出助攻",
+          "射门质量突出"
+        ]
+      },
+      "selection_reason": "Charles DE KETELAERE has a direct public case: brace, opening goal, assist.",
+      "content": {
+        "en": {
+          "title": "De Ketelaere drives Belgium",
+          "html": "<p>Charles De Ketelaere scored in the opening minute, scored again at 33', and assisted Hans Vanaken after halftime. Belgium's 4-1 win over the USA runs through those three goal involvements.</p>"
+        },
+        "zh": {
+          "title": "德凯特拉雷梅开二度",
+          "html": "<p>德凯特拉雷开场就进球，第33分钟再进一球，下半场又助攻瓦纳肯。比利时4-1赢美国，他参与了前三个进球。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "impact_pick",
+      "award_types": [
+        "impact_pick"
+      ],
+      "award_label": {
+        "en": "Impact Pick",
+        "zh": "影响力精选"
+      },
+      "player_id": "FIFA-2026-M94-USA-BEL|Belgium|20",
+      "player_name": "Hans VANAKEN",
+      "team": "Belgium",
+      "opponent": "USA",
+      "match_key": "FIFA-2026-M94-USA-BEL",
+      "match_no": 94,
+      "player_no": 20,
+      "position": "MF",
+      "score": 56.23,
+      "metrics": {
+        "shots": 1,
+        "on_target": 1,
+        "goals": 1,
+        "assists": 1,
+        "goal_involvements": 2,
+        "substitute_goal": 1
+      },
+      "evidence_chips": {
+        "en": [
+          "substitute goal",
+          "goal scorer",
+          "assist"
+        ],
+        "zh": [
+          "替补进球",
+          "取得进球",
+          "送出助攻"
+        ]
+      },
+      "selection_reason": "Hans VANAKEN has a direct public case: substitute goal, goal scorer, assist.",
+      "content": {
+        "en": {
+          "title": "Vanaken changes the second half",
+          "html": "<p>Hans Vanaken came on and added a goal and an assist in Belgium's 4-1 win. With De Ketelaere owning the first half, Vanaken gave the dominant result another clear contributor.</p>"
+        },
+        "zh": {
+          "title": "瓦纳肯替补传射",
+          "html": "<p>瓦纳肯替补出场后完成一传一射：第57分钟进球，补时又助攻卢卡库。比利时4-1拉开比分，他把下半场的优势继续放大。</p>"
+        }
+      }
+    }
+  ],
+  "selection_validation": {
+    "schema_version": 1,
+    "status": "pass",
+    "warnings": []
+  },
+  "audit": []
+}

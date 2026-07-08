@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-02T08:22:54+00:00",
+  "generated_at": "2026-07-08T12:37:13+00:00",
   "status": "success",
   "failure_code": null,
   "hub_url": "https://www.fifatrainingcentre.com/en/fifa-world-cup-2026/match-report-hub.php",
@@ -7,26 +7,58 @@
     "https://www.fifatrainingcentre.com/en/fifa-world-cup-2026/match-report-hub.php",
     "https://www.fifatrainingcentre.com/en/fifa-world-cup-2026/match-report-hub-knockout-stage.php"
   ],
-  "discovered": 82,
-  "active_sources": 82,
-  "downloaded": 82,
-  "parsed": 82,
-  "matches": 82,
-  "source_documents": 82,
-  "new_matches": [],
-  "version_updates": [],
+  "discovered": 96,
+  "active_sources": 96,
+  "downloaded": 7,
+  "parsed": 96,
+  "matches": 96,
+  "source_documents": 96,
+  "new_matches": [
+    {
+      "match_no": 91,
+      "source_id": "fifa-world-cup-2026-pmsr-m91-bra-nor-v1"
+    },
+    {
+      "match_no": 92,
+      "source_id": "fifa-world-cup-2026-pmsr-m92-mex-eng-v1"
+    },
+    {
+      "match_no": 93,
+      "source_id": "fifa-world-cup-2026-pmsr-m93-por-esp-v1"
+    },
+    {
+      "match_no": 94,
+      "source_id": "fifa-world-cup-2026-pmsr-m94-usa-bel-v1"
+    },
+    {
+      "match_no": 95,
+      "source_id": "fifa-world-cup-2026-pmsr-m95-arg-egy-v1"
+    },
+    {
+      "match_no": 96,
+      "source_id": "fifa-world-cup-2026-pmsr-m96-sui-col-v1"
+    }
+  ],
+  "version_updates": [
+    {
+      "match_no": 47,
+      "from_version": 1,
+      "to_version": 2,
+      "source_id": "fifa-world-cup-2026-pmsr-m47-por-uzb-v2"
+    }
+  ],
   "supplemental": {
     "fifa_timeline": {
-      "generated_at": "2026-07-02T08:24:36+00:00",
+      "generated_at": "2026-07-08T12:38:35+00:00",
       "source": "fifa_timeline_api",
       "status": "success",
-      "matches": 82,
-      "linked_matches": 82,
-      "timeline_matches": 82,
-      "events": 7443,
-      "goals": 229,
-      "assists": 174,
-      "goal_involvements": 229,
+      "matches": 96,
+      "linked_matches": 96,
+      "timeline_matches": 96,
+      "events": 8826,
+      "goals": 266,
+      "assists": 202,
+      "goal_involvements": 266,
       "failures": []
     }
   },

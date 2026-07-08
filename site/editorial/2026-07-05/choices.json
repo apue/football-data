@@ -1,0 +1,430 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-07-08T14:25:27+00:00",
+  "compiled_at": "2026-07-08T14:25:27+00:00",
+  "match_date": "2026-07-05",
+  "scoring_version": "v0.4",
+  "editorial_generation": {
+    "workflow_variant": "bounded_selection_copy_loop_v2",
+    "experiment_id": "bounded_editorial_loop_v2",
+    "selection_mode": "bounded_loop_local_editor",
+    "selection_review_profile": "selection_review_v2",
+    "copy_review_profile": "copy_review_v1",
+    "loop_policy": {
+      "selection_max_rounds": 3,
+      "copy_max_rounds": 3,
+      "max_rounds_exceeded_status": "needs_human_review",
+      "promotion_requires": [
+        "selection_loop_pass",
+        "copy_loop_pass",
+        "deterministic_selection_validation_pass",
+        "deterministic_copy_validation_pass"
+      ]
+    },
+    "editorial_loop_status": "pass",
+    "selection_rounds": 1,
+    "copy_rounds": 1,
+    "uses_official_assists": true,
+    "uses_goal_involvements": true,
+    "event_source": "fifa_timeline_api",
+    "event_sources": {
+      "goal_involvements": "fifa_timeline_api"
+    }
+  },
+  "matches": [
+    {
+      "match_key": "FIFA-2026-M91-BRA-NOR",
+      "match_no": 91,
+      "match_date": "2026-07-05",
+      "kickoff_time": "16:00",
+      "stadium": "New York/New Jersey Stadium",
+      "home_team": "Brazil",
+      "away_team": "Norway",
+      "home_score": 1,
+      "away_score": 2
+    },
+    {
+      "match_key": "FIFA-2026-M92-MEX-ENG",
+      "match_no": 92,
+      "match_date": "2026-07-05",
+      "kickoff_time": "19:00",
+      "stadium": "Mexico City Stadium",
+      "home_team": "Mexico",
+      "away_team": "England",
+      "home_score": 2,
+      "away_score": 3
+    }
+  ],
+  "match_flows": {
+    "FIFA-2026-M91-BRA-NOR": {
+      "match_key": "FIFA-2026-M91-BRA-NOR",
+      "match_no": 91,
+      "match_date": "2026-07-05",
+      "home_team": "Brazil",
+      "away_team": "Norway",
+      "home_score": 1,
+      "away_score": 2,
+      "winner_team": "Norway",
+      "home_trailing_at_any_point": true,
+      "away_trailing_at_any_point": false,
+      "home_came_from_behind_to_win": false,
+      "away_came_from_behind_to_win": false,
+      "goals": [
+        {
+          "goal_order": 1,
+          "minute": 79,
+          "team": "Norway",
+          "player_team": "Norway",
+          "player_name": "Erling HAALAND",
+          "own_goal": false,
+          "score_before": "0-0",
+          "score_after": "0-1",
+          "team_score_before": 0,
+          "opponent_score_before": 0,
+          "team_score_after": 1,
+          "opponent_score_after": 0,
+          "tags": [
+            "opening_goal",
+            "go_ahead_goal",
+            "late_goal"
+          ]
+        },
+        {
+          "goal_order": 2,
+          "minute": 90,
+          "team": "Norway",
+          "player_team": "Norway",
+          "player_name": "Erling HAALAND",
+          "own_goal": false,
+          "score_before": "0-1",
+          "score_after": "0-2",
+          "team_score_before": 1,
+          "opponent_score_before": 0,
+          "team_score_after": 2,
+          "opponent_score_after": 0,
+          "tags": [
+            "match_winning_goal",
+            "late_goal",
+            "stoppage_time_goal",
+            "late_match_winning_goal"
+          ]
+        },
+        {
+          "goal_order": 3,
+          "minute": 100,
+          "team": "Brazil",
+          "player_team": "Brazil",
+          "player_name": "NEYMAR JR",
+          "own_goal": false,
+          "score_before": "0-2",
+          "score_after": "1-2",
+          "team_score_before": 0,
+          "opponent_score_before": 2,
+          "team_score_after": 1,
+          "opponent_score_after": 2,
+          "tags": [
+            "late_goal",
+            "stoppage_time_goal"
+          ]
+        }
+      ],
+      "decisive_goal": {
+        "goal_order": 2,
+        "minute": 90,
+        "team": "Norway",
+        "player_team": "Norway",
+        "player_name": "Erling HAALAND",
+        "own_goal": false,
+        "score_before": "0-1",
+        "score_after": "0-2",
+        "team_score_before": 1,
+        "opponent_score_before": 0,
+        "team_score_after": 2,
+        "opponent_score_after": 0,
+        "tags": [
+          "match_winning_goal",
+          "late_goal",
+          "stoppage_time_goal",
+          "late_match_winning_goal"
+        ]
+      }
+    },
+    "FIFA-2026-M92-MEX-ENG": {
+      "match_key": "FIFA-2026-M92-MEX-ENG",
+      "match_no": 92,
+      "match_date": "2026-07-05",
+      "home_team": "Mexico",
+      "away_team": "England",
+      "home_score": 2,
+      "away_score": 3,
+      "winner_team": "England",
+      "home_trailing_at_any_point": true,
+      "away_trailing_at_any_point": false,
+      "home_came_from_behind_to_win": false,
+      "away_came_from_behind_to_win": false,
+      "goals": [
+        {
+          "goal_order": 1,
+          "minute": 36,
+          "team": "England",
+          "player_team": "England",
+          "player_name": "Jude BELLINGHAM",
+          "own_goal": false,
+          "score_before": "0-0",
+          "score_after": "0-1",
+          "team_score_before": 0,
+          "opponent_score_before": 0,
+          "team_score_after": 1,
+          "opponent_score_after": 0,
+          "tags": [
+            "opening_goal",
+            "go_ahead_goal"
+          ]
+        },
+        {
+          "goal_order": 2,
+          "minute": 38,
+          "team": "England",
+          "player_team": "England",
+          "player_name": "Jude BELLINGHAM",
+          "own_goal": false,
+          "score_before": "0-1",
+          "score_after": "0-2",
+          "team_score_before": 1,
+          "opponent_score_before": 0,
+          "team_score_after": 2,
+          "opponent_score_after": 0,
+          "tags": []
+        },
+        {
+          "goal_order": 3,
+          "minute": 42,
+          "team": "Mexico",
+          "player_team": "Mexico",
+          "player_name": "Julian QUINONES",
+          "own_goal": false,
+          "score_before": "0-2",
+          "score_after": "1-2",
+          "team_score_before": 0,
+          "opponent_score_before": 2,
+          "team_score_after": 1,
+          "opponent_score_after": 2,
+          "tags": []
+        },
+        {
+          "goal_order": 4,
+          "minute": 60,
+          "team": "England",
+          "player_team": "England",
+          "player_name": "Harry KANE",
+          "own_goal": false,
+          "score_before": "1-2",
+          "score_after": "1-3",
+          "team_score_before": 2,
+          "opponent_score_before": 1,
+          "team_score_after": 3,
+          "opponent_score_after": 1,
+          "tags": [
+            "match_winning_goal"
+          ]
+        },
+        {
+          "goal_order": 5,
+          "minute": 69,
+          "team": "Mexico",
+          "player_team": "Mexico",
+          "player_name": "Raul JIMENEZ",
+          "own_goal": false,
+          "score_before": "1-3",
+          "score_after": "2-3",
+          "team_score_before": 1,
+          "opponent_score_before": 3,
+          "team_score_after": 2,
+          "opponent_score_after": 3,
+          "tags": []
+        }
+      ],
+      "decisive_goal": {
+        "goal_order": 4,
+        "minute": 60,
+        "team": "England",
+        "player_team": "England",
+        "player_name": "Harry KANE",
+        "own_goal": false,
+        "score_before": "1-2",
+        "score_after": "1-3",
+        "team_score_before": 2,
+        "opponent_score_before": 1,
+        "team_score_after": 3,
+        "opponent_score_after": 1,
+        "tags": [
+          "match_winning_goal"
+        ]
+      }
+    }
+  },
+  "choices": [
+    {
+      "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
+      "award_label": {
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
+      },
+      "player_id": "FIFA-2026-M91-BRA-NOR|Norway|9",
+      "player_name": "Erling HAALAND",
+      "team": "Norway",
+      "opponent": "Brazil",
+      "match_key": "FIFA-2026-M91-BRA-NOR",
+      "match_no": 91,
+      "player_no": 9,
+      "position": "FW",
+      "score": 137.78,
+      "metrics": {
+        "shots": 4,
+        "on_target": 3,
+        "goals": 2,
+        "goal_involvements": 2,
+        "brace": 1,
+        "opening_goal": 1,
+        "go_ahead_goal": 1,
+        "match_winning_goal": 1,
+        "late_goal": 2,
+        "stoppage_time_goal": 1,
+        "late_match_winning_goal": 1
+      },
+      "evidence_chips": {
+        "en": [
+          "brace",
+          "late winner",
+          "high shot quality"
+        ],
+        "zh": [
+          "梅开二度",
+          "补时制胜",
+          "射门质量突出"
+        ]
+      },
+      "selection_reason": "Erling HAALAND has a direct public case: brace, late winner, high shot quality.",
+      "content": {
+        "en": {
+          "title": "Haaland finishes it late",
+          "html": "<p>Erling Haaland scored in the 79th and 90th minutes as Norway beat Brazil 2-1. The second goal became the winner after Brazil's late penalty, so the brace carries the day.</p>"
+        },
+        "zh": {
+          "title": "哈兰德双响制胜",
+          "html": "<p>哈兰德第79分钟首开纪录，90分钟再进一球。巴西补时追回一分后，挪威2-1赢球，这第二脚就是制胜球。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
+      "award_label": {
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
+      },
+      "player_id": "FIFA-2026-M92-MEX-ENG|England|10",
+      "player_name": "Jude BELLINGHAM",
+      "team": "England",
+      "opponent": "Mexico",
+      "match_key": "FIFA-2026-M92-MEX-ENG",
+      "match_no": 92,
+      "player_no": 10,
+      "position": "MF",
+      "score": 88.06,
+      "metrics": {
+        "shots": 3,
+        "on_target": 3,
+        "goals": 2,
+        "goal_involvements": 2,
+        "brace": 1,
+        "opening_goal": 1,
+        "go_ahead_goal": 1
+      },
+      "evidence_chips": {
+        "en": [
+          "brace",
+          "opening goal",
+          "high shot quality"
+        ],
+        "zh": [
+          "梅开二度",
+          "首开纪录",
+          "射门质量突出"
+        ]
+      },
+      "selection_reason": "Jude BELLINGHAM has a direct public case: brace, opening goal, high shot quality.",
+      "content": {
+        "en": {
+          "title": "Bellingham hits twice early",
+          "html": "<p>Jude Bellingham scored in the 36th and 38th minutes, putting England 2-0 up in Mexico. Mexico later closed it to 3-2, so those two early finishes stayed in the final margin.</p>"
+        },
+        "zh": {
+          "title": "贝林厄姆两分钟双响",
+          "html": "<p>贝林厄姆第36分钟、第38分钟连进两球，英格兰很快取得2-0。墨西哥后来追到2-3，英格兰的优势就是从这两脚开始。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "impact_pick",
+      "award_types": [
+        "impact_pick"
+      ],
+      "award_label": {
+        "en": "Impact Pick",
+        "zh": "影响力精选"
+      },
+      "player_id": "FIFA-2026-M92-MEX-ENG|England|9",
+      "player_name": "Harry KANE",
+      "team": "England",
+      "opponent": "Mexico",
+      "match_key": "FIFA-2026-M92-MEX-ENG",
+      "match_no": 92,
+      "player_no": 9,
+      "position": "FW",
+      "score": 62.88,
+      "metrics": {
+        "shots": 1,
+        "on_target": 1,
+        "goals": 1,
+        "assists": 1,
+        "goal_involvements": 2,
+        "match_winning_goal": 1
+      },
+      "evidence_chips": {
+        "en": [
+          "match-winning goal",
+          "goal scorer",
+          "assist"
+        ],
+        "zh": [
+          "打入制胜球",
+          "取得进球",
+          "送出助攻"
+        ]
+      },
+      "selection_reason": "Harry KANE has a direct public case: match-winning goal, goal scorer, assist.",
+      "content": {
+        "en": {
+          "title": "Kane adds the winner",
+          "html": "<p>Harry Kane assisted Bellingham's second goal and converted the 60th-minute penalty that made it 3-1. Mexico pulled one back, so that penalty ended up deciding England's 3-2 win.</p>"
+        },
+        "zh": {
+          "title": "凯恩传射制胜",
+          "html": "<p>凯恩先助攻贝林厄姆打进第二球，60分钟又罚进点球，把比分改成3-1。墨西哥之后追到2-3，这粒点球成了制胜球。</p>"
+        }
+      }
+    }
+  ],
+  "selection_validation": {
+    "schema_version": 1,
+    "status": "pass",
+    "warnings": []
+  },
+  "audit": []
+}

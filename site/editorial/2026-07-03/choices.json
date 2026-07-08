@@ -1,0 +1,623 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-07-08T14:25:04+00:00",
+  "compiled_at": "2026-07-08T14:25:04+00:00",
+  "match_date": "2026-07-03",
+  "scoring_version": "v0.4",
+  "editorial_generation": {
+    "workflow_variant": "bounded_selection_copy_loop_v2",
+    "experiment_id": "bounded_editorial_loop_v2",
+    "selection_mode": "bounded_loop_local_editor",
+    "selection_review_profile": "selection_review_v2",
+    "copy_review_profile": "copy_review_v1",
+    "loop_policy": {
+      "selection_max_rounds": 3,
+      "copy_max_rounds": 3,
+      "max_rounds_exceeded_status": "needs_human_review",
+      "promotion_requires": [
+        "selection_loop_pass",
+        "copy_loop_pass",
+        "deterministic_selection_validation_pass",
+        "deterministic_copy_validation_pass"
+      ]
+    },
+    "editorial_loop_status": "pass",
+    "selection_rounds": 1,
+    "copy_rounds": 1,
+    "uses_official_assists": true,
+    "uses_goal_involvements": true,
+    "event_source": "fifa_timeline_api",
+    "event_sources": {
+      "goal_involvements": "fifa_timeline_api"
+    }
+  },
+  "matches": [
+    {
+      "match_key": "FIFA-2026-M86-ARG-CPV",
+      "match_no": 86,
+      "match_date": "2026-07-03",
+      "kickoff_time": "18:00",
+      "stadium": "Miami Stadium",
+      "home_team": "Argentina",
+      "away_team": "Cabo Verde",
+      "home_score": 3,
+      "away_score": 2
+    },
+    {
+      "match_key": "FIFA-2026-M87-COL-GHA",
+      "match_no": 87,
+      "match_date": "2026-07-03",
+      "kickoff_time": "20:30",
+      "stadium": "Kansas City Stadium",
+      "home_team": "Colombia",
+      "away_team": "Ghana",
+      "home_score": 1,
+      "away_score": 0
+    },
+    {
+      "match_key": "FIFA-2026-M88-AUS-EGY",
+      "match_no": 88,
+      "match_date": "2026-07-03",
+      "kickoff_time": "13:00",
+      "stadium": "Dallas Stadium",
+      "home_team": "Australia",
+      "away_team": "Egypt",
+      "home_score": 1,
+      "away_score": 1
+    }
+  ],
+  "match_flows": {
+    "FIFA-2026-M86-ARG-CPV": {
+      "match_key": "FIFA-2026-M86-ARG-CPV",
+      "match_no": 86,
+      "match_date": "2026-07-03",
+      "home_team": "Argentina",
+      "away_team": "Cabo Verde",
+      "home_score": 3,
+      "away_score": 2,
+      "winner_team": "Argentina",
+      "home_trailing_at_any_point": false,
+      "away_trailing_at_any_point": true,
+      "home_came_from_behind_to_win": false,
+      "away_came_from_behind_to_win": false,
+      "goals": [
+        {
+          "goal_order": 1,
+          "minute": 29,
+          "team": "Argentina",
+          "player_team": "Argentina",
+          "player_name": "Lionel MESSI",
+          "own_goal": false,
+          "score_before": "0-0",
+          "score_after": "1-0",
+          "team_score_before": 0,
+          "opponent_score_before": 0,
+          "team_score_after": 1,
+          "opponent_score_after": 0,
+          "tags": [
+            "opening_goal",
+            "go_ahead_goal"
+          ]
+        },
+        {
+          "goal_order": 2,
+          "minute": 59,
+          "team": "Cabo Verde",
+          "player_team": "Cabo Verde",
+          "player_name": "DEROY DUARTE",
+          "own_goal": false,
+          "score_before": "1-0",
+          "score_after": "1-1",
+          "team_score_before": 0,
+          "opponent_score_before": 1,
+          "team_score_after": 1,
+          "opponent_score_after": 1,
+          "tags": [
+            "equalizer",
+            "comeback_equalizer"
+          ]
+        },
+        {
+          "goal_order": 3,
+          "minute": 92,
+          "team": "Argentina",
+          "player_team": "Argentina",
+          "player_name": "Lisandro MARTINEZ",
+          "own_goal": false,
+          "score_before": "1-1",
+          "score_after": "2-1",
+          "team_score_before": 1,
+          "opponent_score_before": 1,
+          "team_score_after": 2,
+          "opponent_score_after": 1,
+          "tags": [
+            "go_ahead_goal",
+            "late_goal",
+            "stoppage_time_goal"
+          ]
+        },
+        {
+          "goal_order": 4,
+          "minute": 103,
+          "team": "Cabo Verde",
+          "player_team": "Cabo Verde",
+          "player_name": "SIDNY LOPES CABRAL",
+          "own_goal": false,
+          "score_before": "2-1",
+          "score_after": "2-2",
+          "team_score_before": 1,
+          "opponent_score_before": 2,
+          "team_score_after": 2,
+          "opponent_score_after": 2,
+          "tags": [
+            "equalizer",
+            "comeback_equalizer",
+            "late_goal",
+            "stoppage_time_goal"
+          ]
+        },
+        {
+          "goal_order": 5,
+          "minute": 111,
+          "team": "Argentina",
+          "player_team": "Cabo Verde",
+          "player_name": "DINEY BORGES",
+          "own_goal": true,
+          "score_before": "2-2",
+          "score_after": "3-2",
+          "team_score_before": 2,
+          "opponent_score_before": 2,
+          "team_score_after": 3,
+          "opponent_score_after": 2,
+          "tags": [
+            "go_ahead_goal",
+            "match_winning_goal",
+            "late_goal",
+            "stoppage_time_goal",
+            "late_match_winning_goal"
+          ]
+        }
+      ],
+      "decisive_goal": {
+        "goal_order": 5,
+        "minute": 111,
+        "team": "Argentina",
+        "player_team": "Cabo Verde",
+        "player_name": "DINEY BORGES",
+        "own_goal": true,
+        "score_before": "2-2",
+        "score_after": "3-2",
+        "team_score_before": 2,
+        "opponent_score_before": 2,
+        "team_score_after": 3,
+        "opponent_score_after": 2,
+        "tags": [
+          "go_ahead_goal",
+          "match_winning_goal",
+          "late_goal",
+          "stoppage_time_goal",
+          "late_match_winning_goal"
+        ]
+      }
+    },
+    "FIFA-2026-M87-COL-GHA": {
+      "match_key": "FIFA-2026-M87-COL-GHA",
+      "match_no": 87,
+      "match_date": "2026-07-03",
+      "home_team": "Colombia",
+      "away_team": "Ghana",
+      "home_score": 1,
+      "away_score": 0,
+      "winner_team": "Colombia",
+      "home_trailing_at_any_point": false,
+      "away_trailing_at_any_point": true,
+      "home_came_from_behind_to_win": false,
+      "away_came_from_behind_to_win": false,
+      "goals": [
+        {
+          "goal_order": 1,
+          "minute": 14,
+          "team": "Colombia",
+          "player_team": "Colombia",
+          "player_name": "Jhon ARIAS",
+          "own_goal": false,
+          "score_before": "0-0",
+          "score_after": "1-0",
+          "team_score_before": 0,
+          "opponent_score_before": 0,
+          "team_score_after": 1,
+          "opponent_score_after": 0,
+          "tags": [
+            "opening_goal",
+            "go_ahead_goal",
+            "match_winning_goal"
+          ]
+        }
+      ],
+      "decisive_goal": {
+        "goal_order": 1,
+        "minute": 14,
+        "team": "Colombia",
+        "player_team": "Colombia",
+        "player_name": "Jhon ARIAS",
+        "own_goal": false,
+        "score_before": "0-0",
+        "score_after": "1-0",
+        "team_score_before": 0,
+        "opponent_score_before": 0,
+        "team_score_after": 1,
+        "opponent_score_after": 0,
+        "tags": [
+          "opening_goal",
+          "go_ahead_goal",
+          "match_winning_goal"
+        ]
+      }
+    },
+    "FIFA-2026-M88-AUS-EGY": {
+      "match_key": "FIFA-2026-M88-AUS-EGY",
+      "match_no": 88,
+      "match_date": "2026-07-03",
+      "home_team": "Australia",
+      "away_team": "Egypt",
+      "home_score": 1,
+      "away_score": 1,
+      "winner_team": null,
+      "home_trailing_at_any_point": true,
+      "away_trailing_at_any_point": false,
+      "home_came_from_behind_to_win": false,
+      "away_came_from_behind_to_win": false,
+      "goals": [
+        {
+          "goal_order": 1,
+          "minute": 13,
+          "team": "Egypt",
+          "player_team": "Egypt",
+          "player_name": "EMAM ASHOUR",
+          "own_goal": false,
+          "score_before": "0-0",
+          "score_after": "0-1",
+          "team_score_before": 0,
+          "opponent_score_before": 0,
+          "team_score_after": 1,
+          "opponent_score_after": 0,
+          "tags": [
+            "opening_goal",
+            "go_ahead_goal"
+          ]
+        },
+        {
+          "goal_order": 2,
+          "minute": 55,
+          "team": "Australia",
+          "player_team": "Egypt",
+          "player_name": "MOHAMED HANY",
+          "own_goal": true,
+          "score_before": "0-1",
+          "score_after": "1-1",
+          "team_score_before": 0,
+          "opponent_score_before": 1,
+          "team_score_after": 1,
+          "opponent_score_after": 1,
+          "tags": [
+            "equalizer",
+            "comeback_equalizer"
+          ]
+        },
+        {
+          "goal_order": 3,
+          "minute": 0,
+          "team": "Egypt",
+          "player_team": "Egypt",
+          "player_name": "MAHMOUD SABER",
+          "own_goal": false,
+          "score_before": "1-1",
+          "score_after": "1-2",
+          "team_score_before": 1,
+          "opponent_score_before": 1,
+          "team_score_after": 2,
+          "opponent_score_after": 1,
+          "tags": [
+            "go_ahead_goal"
+          ]
+        },
+        {
+          "goal_order": 4,
+          "minute": 0,
+          "team": "Australia",
+          "player_team": "Australia",
+          "player_name": "Jackson IRVINE",
+          "own_goal": false,
+          "score_before": "1-2",
+          "score_after": "2-2",
+          "team_score_before": 1,
+          "opponent_score_before": 2,
+          "team_score_after": 2,
+          "opponent_score_after": 2,
+          "tags": [
+            "equalizer",
+            "comeback_equalizer"
+          ]
+        },
+        {
+          "goal_order": 5,
+          "minute": 0,
+          "team": "Egypt",
+          "player_team": "Egypt",
+          "player_name": "RAMY RABIA",
+          "own_goal": false,
+          "score_before": "2-2",
+          "score_after": "2-3",
+          "team_score_before": 2,
+          "opponent_score_before": 2,
+          "team_score_after": 3,
+          "opponent_score_after": 2,
+          "tags": [
+            "go_ahead_goal"
+          ]
+        },
+        {
+          "goal_order": 6,
+          "minute": 0,
+          "team": "Australia",
+          "player_team": "Australia",
+          "player_name": "Awer MABIL",
+          "own_goal": false,
+          "score_before": "2-3",
+          "score_after": "3-3",
+          "team_score_before": 2,
+          "opponent_score_before": 3,
+          "team_score_after": 3,
+          "opponent_score_after": 3,
+          "tags": [
+            "equalizer",
+            "comeback_equalizer"
+          ]
+        },
+        {
+          "goal_order": 7,
+          "minute": 0,
+          "team": "Egypt",
+          "player_team": "Egypt",
+          "player_name": "MOHAMED SALAH",
+          "own_goal": false,
+          "score_before": "3-3",
+          "score_after": "3-4",
+          "team_score_before": 3,
+          "opponent_score_before": 3,
+          "team_score_after": 4,
+          "opponent_score_after": 3,
+          "tags": [
+            "go_ahead_goal"
+          ]
+        },
+        {
+          "goal_order": 8,
+          "minute": 0,
+          "team": "Egypt",
+          "player_team": "Egypt",
+          "player_name": "HOSSAM ABDELMAGUID",
+          "own_goal": false,
+          "score_before": "3-4",
+          "score_after": "3-5",
+          "team_score_before": 4,
+          "opponent_score_before": 3,
+          "team_score_after": 5,
+          "opponent_score_after": 3,
+          "tags": []
+        }
+      ],
+      "decisive_goal": null
+    }
+  },
+  "choices": [
+    {
+      "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
+      "award_label": {
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
+      },
+      "player_id": "FIFA-2026-M86-ARG-CPV|Argentina|10",
+      "player_name": "Lionel MESSI",
+      "team": "Argentina",
+      "opponent": "Cabo Verde",
+      "match_key": "FIFA-2026-M86-ARG-CPV",
+      "match_no": 86,
+      "player_no": 10,
+      "position": "FW",
+      "score": 93.46,
+      "metrics": {
+        "shots": 9,
+        "on_target": 7,
+        "goals": 1,
+        "goal_involvements": 1,
+        "opening_goal": 1,
+        "go_ahead_goal": 1
+      },
+      "evidence_chips": {
+        "en": [
+          "opening goal",
+          "goal scorer",
+          "high shot quality"
+        ],
+        "zh": [
+          "首开纪录",
+          "取得进球",
+          "射门质量突出"
+        ]
+      },
+      "selection_reason": "Lionel MESSI has a direct public case: opening goal, goal scorer, high shot quality.",
+      "content": {
+        "en": {
+          "title": "Messi opens Argentina's night",
+          "html": "<p>Lionel Messi scored the opener for Argentina and still carried the clearest shot profile in the match. Even on a chaotic 3-2 night, that gives him the headline lane.</p>"
+        },
+        "zh": {
+          "title": "梅西首开纪录",
+          "html": "<p>梅西第29分钟为阿根廷首开纪录，也留下了当天最清楚的射门产出之一。阿根廷3-2赢得很乱，但开场这一球还是把他推到前面。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
+      "award_label": {
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
+      },
+      "player_id": "FIFA-2026-M87-COL-GHA|Colombia|11",
+      "player_name": "Jhon ARIAS",
+      "team": "Colombia",
+      "opponent": "Ghana",
+      "match_key": "FIFA-2026-M87-COL-GHA",
+      "match_no": 87,
+      "player_no": 11,
+      "position": "MF",
+      "score": 89.71,
+      "metrics": {
+        "shots": 1,
+        "on_target": 1,
+        "goals": 1,
+        "goal_involvements": 1,
+        "opening_goal": 1,
+        "go_ahead_goal": 1,
+        "match_winning_goal": 1,
+        "only_goal_winner": 1
+      },
+      "evidence_chips": {
+        "en": [
+          "only goal",
+          "match-winning goal",
+          "goal scorer"
+        ],
+        "zh": [
+          "全场唯一进球",
+          "打入制胜球",
+          "取得进球"
+        ]
+      },
+      "selection_reason": "Jhon ARIAS has a direct public case: only goal, match-winning goal, goal scorer.",
+      "content": {
+        "en": {
+          "title": "Arias decides it alone",
+          "html": "<p>Jhon Arias scored the only goal in Colombia's 1-0 win over Ghana. A single-goal match does not need much decoration when the scorer owns the result.</p>"
+        },
+        "zh": {
+          "title": "阿里亚斯打进制胜球",
+          "html": "<p>阿里亚斯第14分钟进球，哥伦比亚最后1-0赢加纳。全场只有这一球，他的名字自然留在比分上。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
+      "award_label": {
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
+      },
+      "player_id": "FIFA-2026-M88-AUS-EGY|Egypt|8",
+      "player_name": "EMAM ASHOUR",
+      "team": "Egypt",
+      "opponent": "Australia",
+      "match_key": "FIFA-2026-M88-AUS-EGY",
+      "match_no": 88,
+      "player_no": 8,
+      "position": "MF",
+      "score": 87.25,
+      "metrics": {
+        "shots": 5,
+        "on_target": 1,
+        "goals": 1,
+        "goal_involvements": 1,
+        "opening_goal": 1,
+        "go_ahead_goal": 1
+      },
+      "evidence_chips": {
+        "en": [
+          "opening goal",
+          "goal scorer"
+        ],
+        "zh": [
+          "首开纪录",
+          "取得进球"
+        ]
+      },
+      "selection_reason": "EMAM ASHOUR has a direct public case: opening goal, goal scorer.",
+      "content": {
+        "en": {
+          "title": "Ashour strikes first",
+          "html": "<p>Emam Ashour gave Egypt the lead after 13 minutes against Australia. The match later ended 1-1, but the opener still carries one of the day's cleaner public cases.</p>"
+        },
+        "zh": {
+          "title": "埃马姆-阿舒尔首开纪录",
+          "html": "<p>埃马姆-阿舒尔第13分钟为埃及先进一球。澳大利亚后来扳成1-1，但这场的正赛进球线索里，他是最清楚的埃及名字。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
+      "award_label": {
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
+      },
+      "player_id": "FIFA-2026-M86-ARG-CPV|Argentina|6",
+      "player_name": "Lisandro MARTINEZ",
+      "team": "Argentina",
+      "opponent": "Cabo Verde",
+      "match_key": "FIFA-2026-M86-ARG-CPV",
+      "match_no": 86,
+      "player_no": 6,
+      "position": "DF",
+      "score": 81.38,
+      "metrics": {
+        "shots": 1,
+        "on_target": 1,
+        "goals": 1,
+        "assists": 1,
+        "goal_involvements": 2,
+        "go_ahead_goal": 1,
+        "late_goal": 1,
+        "stoppage_time_goal": 1
+      },
+      "evidence_chips": {
+        "en": [
+          "go-ahead goal",
+          "goal scorer",
+          "assist"
+        ],
+        "zh": [
+          "取得领先",
+          "取得进球",
+          "送出助攻"
+        ]
+      },
+      "selection_reason": "Lisandro MARTINEZ has a direct public case: go-ahead goal, goal scorer, assist.",
+      "content": {
+        "en": {
+          "title": "Lisandro adds both ways",
+          "html": "<p>Lisandro Martinez assisted Messi's opener, then scored Argentina's 92nd-minute go-ahead goal. That goal did not become the final winner, but the goal-plus-assist case is stronger than another thin edge card.</p>"
+        },
+        "zh": {
+          "title": "利桑德罗传射建功",
+          "html": "<p>利桑德罗先助攻梅西破门，第92分钟又自己进球让阿根廷2-1领先。这个进球后来不是最终制胜球，但一传一射已经够完整。</p>"
+        }
+      }
+    }
+  ],
+  "selection_validation": {
+    "schema_version": 1,
+    "status": "pass",
+    "warnings": []
+  },
+  "audit": []
+}
