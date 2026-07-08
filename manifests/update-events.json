@@ -1,23 +1,7 @@
 {
-  "generated_at": "2026-07-07T07:54:56+00:00",
-  "new_matches": [
-    {
-      "match_no": 93,
-      "source_id": "fifa-world-cup-2026-pmsr-m93-por-esp-v1"
-    },
-    {
-      "match_no": 94,
-      "source_id": "fifa-world-cup-2026-pmsr-m94-usa-bel-v1"
-    }
-  ],
-  "version_updates": [
-    {
-      "match_no": 47,
-      "from_version": 1,
-      "to_version": 2,
-      "source_id": "fifa-world-cup-2026-pmsr-m47-por-uzb-v2"
-    }
-  ],
+  "generated_at": "2026-07-08T06:40:35+00:00",
+  "new_matches": [],
+  "version_updates": [],
   "downloaded": [
     "fifa-world-cup-2026-pmsr-m01-mex-rsa-v1",
     "fifa-world-cup-2026-pmsr-m02-kor-cze-v1",
@@ -116,7 +100,7 @@
   ],
   "supplemental": {
     "fifa_timeline": {
-      "generated_at": "2026-07-07T07:56:36+00:00",
+      "generated_at": "2026-07-08T06:42:32+00:00",
       "source": "fifa_timeline_api",
       "status": "success",
       "matches": 94,
