@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-16T07:57:37+00:00",
+  "generated_at": "2026-07-16T14:19:56+00:00",
   "status": "success",
   "failure_code": null,
   "hub_url": "https://www.fifatrainingcentre.com/en/fifa-world-cup-2026/match-report-hub.php",
@@ -13,28 +13,11 @@
   "parsed": 102,
   "matches": 102,
   "source_documents": 102,
-  "new_matches": [
-    {
-      "match_no": 99,
-      "source_id": "fifa-world-cup-2026-pmsr-m99-nor-eng-v1"
-    },
-    {
-      "match_no": 100,
-      "source_id": "fifa-world-cup-2026-pmsr-m100-arg-sui-v1"
-    },
-    {
-      "match_no": 101,
-      "source_id": "fifa-world-cup-2026-pmsr-m101-fra-esp-v1"
-    },
-    {
-      "match_no": 102,
-      "source_id": "fifa-world-cup-2026-pmsr-m102-eng-arg-v1"
-    }
-  ],
+  "new_matches": [],
   "version_updates": [],
   "supplemental": {
     "fifa_timeline": {
-      "generated_at": "2026-07-16T08:00:40+00:00",
+      "generated_at": "2026-07-16T14:21:40+00:00",
       "source": "fifa_timeline_api",
       "status": "success",
       "matches": 102,
