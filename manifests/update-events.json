@@ -1,9 +1,21 @@
 {
-  "generated_at": "2026-07-12T06:48:20+00:00",
+  "generated_at": "2026-07-16T07:57:37+00:00",
   "new_matches": [
     {
-      "match_no": 98,
-      "source_id": "fifa-world-cup-2026-pmsr-m98-esp-bel-v1"
+      "match_no": 99,
+      "source_id": "fifa-world-cup-2026-pmsr-m99-nor-eng-v1"
+    },
+    {
+      "match_no": 100,
+      "source_id": "fifa-world-cup-2026-pmsr-m100-arg-sui-v1"
+    },
+    {
+      "match_no": 101,
+      "source_id": "fifa-world-cup-2026-pmsr-m101-fra-esp-v1"
+    },
+    {
+      "match_no": 102,
+      "source_id": "fifa-world-cup-2026-pmsr-m102-eng-arg-v1"
     }
   ],
   "version_updates": [],
@@ -105,20 +117,24 @@
     "fifa-world-cup-2026-pmsr-m95-arg-egy-v1",
     "fifa-world-cup-2026-pmsr-m96-sui-col-v1",
     "fifa-world-cup-2026-pmsr-m97-fra-mar-v1",
-    "fifa-world-cup-2026-pmsr-m98-esp-bel-v1"
+    "fifa-world-cup-2026-pmsr-m98-esp-bel-v1",
+    "fifa-world-cup-2026-pmsr-m99-nor-eng-v1",
+    "fifa-world-cup-2026-pmsr-m100-arg-sui-v1",
+    "fifa-world-cup-2026-pmsr-m101-fra-esp-v1",
+    "fifa-world-cup-2026-pmsr-m102-eng-arg-v1"
   ],
   "supplemental": {
     "fifa_timeline": {
-      "generated_at": "2026-07-12T06:50:08+00:00",
+      "generated_at": "2026-07-16T08:00:40+00:00",
       "source": "fifa_timeline_api",
       "status": "success",
-      "matches": 98,
-      "linked_matches": 98,
-      "timeline_matches": 98,
-      "events": 9011,
-      "goals": 271,
-      "assists": 205,
-      "goal_involvements": 271,
+      "matches": 102,
+      "linked_matches": 102,
+      "timeline_matches": 102,
+      "events": 9425,
+      "goals": 283,
+      "assists": 214,
+      "goal_involvements": 283,
       "failures": []
     }
   },
