@@ -22,6 +22,10 @@
       "display_name": "布鲁诺-费尔南德斯",
       "short_name": "B费"
     },
+    "Enzo FERNANDEZ": {
+      "display_name": "恩佐-费尔南德斯",
+      "short_name": "恩佐"
+    },
     "Erling HAALAND": {
       "display_name": "埃尔林-哈兰德",
       "short_name": "哈兰德"
@@ -57,6 +61,14 @@
     "Kylian MBAPPE": {
       "display_name": "基利安-姆巴佩",
       "short_name": "姆巴佩"
+    },
+    "Lautaro MARTINEZ": {
+      "display_name": "劳塔罗-马丁内斯",
+      "short_name": "劳塔罗"
+    },
+    "Lionel MESSI": {
+      "display_name": "莱昂内尔-梅西",
+      "short_name": "梅西"
     },
     "Mbekezeli MBOKAZI": {
       "display_name": "姆贝克泽利-姆博卡齐",
