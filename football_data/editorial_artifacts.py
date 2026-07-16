@@ -221,7 +221,7 @@ def _uses_goal_involvements(rankings: dict[str, Any]) -> bool:
     event_sources = rankings.get("event_sources")
     if isinstance(event_sources, dict) and event_sources.get("goal_involvements"):
         return event_sources.get("goal_involvements") == "fifa_timeline_api"
-    return str(rankings.get("scoring_version") or "") == "v0.4"
+    return str(rankings.get("scoring_version") or "") in {"v0.4", "v0.5"}
 
 
 def _event_sources(rankings: dict[str, Any], *, uses_goal_involvements: bool) -> dict[str, str]:

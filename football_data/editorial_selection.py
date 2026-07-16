@@ -3,6 +3,8 @@ from __future__ import annotations
 import json
 from typing import Any
 
+from football_data.editorial_slate import public_card_count_context
+
 
 def build_selector_input(
     candidate_pool: dict[str, Any],
@@ -26,6 +28,10 @@ def build_selector_input(
         "schema_version": 1,
         "workflow_variant": experiment["workflow_variant"],
         "selection": experiment["selection"],
+        "public_card_count_context": public_card_count_context(
+            candidate_pool,
+            experiment.get("selection", {}),
+        ),
         "match_date": candidate_pool["match_date"],
         "scoring_version": candidate_pool["scoring_version"],
         "candidate_pool": {

@@ -38,7 +38,10 @@ def build_editorial_rankings(
     try:
         matches = matches_for_date(conn, match_date)
         match_flows = build_match_flows(db_path, match_date=match_date)
-        flow_impacts = player_flow_impacts(match_flows)
+        flow_impacts = player_flow_impacts(
+            match_flows,
+            context_impact=scoring.get("context_impact"),
+        )
         players = [
             _public_player(score_player(row, scoring, flow_impacts=flow_impacts))
             for row in player_rows_for_date(conn, match_date)

@@ -1,0 +1,96 @@
+{
+  "id": "bounded_editorial_loop_v2",
+  "workflow_variant": "bounded_selection_copy_loop_v2",
+  "scoring_config": "config/scoring/v0.5.json",
+  "candidate_pool": "guarded_packet_v2",
+  "selector_profile": "slate_overall_editor_v5",
+  "selection_review_profile": "selection_review_v3",
+  "copy_review_profile": "copy_review_v1",
+  "loop_policy": {
+    "selection_max_rounds": 3,
+    "copy_max_rounds": 3,
+    "max_rounds_exceeded_status": "needs_human_review",
+    "promotion_requires": [
+      "selection_loop_pass",
+      "copy_loop_pass",
+      "deterministic_selection_validation_pass",
+      "deterministic_copy_validation_pass"
+    ]
+  },
+  "copy_profiles": {
+    "zh": "zh_matchnote_light_emotion_v1",
+    "en": "en_plain_v1"
+  },
+  "selection": {
+    "mode": "bounded_loop_local_editor",
+    "strategy": "overall_slate_v1",
+    "public_card_count": {
+      "min": 1,
+      "max": 6,
+      "match_count_rules": [
+        {
+          "min_matches": 1,
+          "max_matches": 1,
+          "min": 1,
+          "recommended": 1,
+          "max": 2,
+          "guidance": "One-match days should normally publish one Player of the Match level card; add a second only for an independently strong public case."
+        },
+        {
+          "min_matches": 2,
+          "max_matches": 2,
+          "min": 2,
+          "recommended": 3,
+          "max": 4,
+          "guidance": "Two-match days should stay compact unless the fourth card is independently strong."
+        },
+        {
+          "min_matches": 3,
+          "max_matches": 3,
+          "min": 3,
+          "recommended": 4,
+          "max": 5,
+          "guidance": "Three-match days can support three to five cards, but the fifth must add clear reader value."
+        },
+        {
+          "min_matches": 4,
+          "min": 3,
+          "recommended": 4,
+          "max": 6,
+          "guidance": "Four or more matches keep the broad slate range; the upper bound is still capacity, not a target."
+        }
+      ]
+    },
+    "award_limits": {
+      "player_of_the_day": 6,
+      "impact_pick": 2
+    },
+    "overall_slate_award_preference": [
+      "player_of_the_day",
+      "impact_pick"
+    ],
+    "slate_constraints": {
+      "max_per_match": 3,
+      "max_per_team": 3
+    },
+    "slate_balance": {
+      "default_max_public_cards_per_match": 2,
+      "award_types_are_angles_not_quotas": true,
+      "angle_awards_can_be_omitted": [
+        "impact_pick"
+      ],
+      "third_card_requires": [
+        "top_five_rank_cluster",
+        "dominant_team_result",
+        "independent_direct_contribution",
+        "strong_supporting_metric_profile",
+        "hat_trick",
+        "late_match_winning_goal"
+      ]
+    },
+    "must_explain_skipped_higher_ranked_candidates": true,
+    "must_include_slate_plan": true
+  },
+  "shuffle_strategy": "name_sorted",
+  "status": "active"
+}

@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-07-16 - Editorial Whole-Match and Impact Separation
+
+Separated full-match performance from decisive-event impact in Editor's Choices:
+
+- Added scoring `v0.5`, which assigns at most one context bonus per goal or assist instead of stacking overlapping opening, go-ahead, winning, late, and comeback tags.
+- Propagated official FIFA timeline assist provenance into deterministic match-flow features, including equalizing and match-winning assist context.
+- Kept Player of the Day on the whole-match headline surface while using the impact role for decisive moments such as late winners.
+- Activated `bounded_editorial_loop_v2` with dynamic card counts, selector profile `slate_overall_editor_v5`, and selection review `selection_review_v3`.
+- Added a deterministic Player of the Day challenger comparison that requires the review verdict to identify both the selected player and a top omitted whole-match challenger.
+- Added semifinal regression cases covering Rodri versus Mikel Oyarzabal and Lionel Messi versus Lautaro Martinez.
+
 ## 2026-06-30 - Shoot-out Timeline Fields
 
 Added first-class FIFA timeline support for penalty shoot-outs:

@@ -282,7 +282,7 @@ def test_extract_lineup_full_names_across_wide_name_columns():
 
 
 def test_extract_lineup_names_ignore_stoppage_time_markers():
-    matches = sorted(RAW_DIR.glob("**/PMSR-M10*.pdf"))
+    matches = sorted(RAW_DIR.glob("**/PMSR-M10-*.pdf"))
     if not matches:
         pytest.skip("M10 PDF is downloaded by the update pipeline")
     record = extract_pdf(matches[-1])

@@ -20,20 +20,20 @@ def test_editorial_v2_registry_resolves_default_experiment():
 
     experiment = load_editorial_experiment()
 
-    assert experiment["id"] == "bounded_editorial_loop_v1"
-    assert experiment["workflow_variant"] == "bounded_selection_copy_loop_v1"
+    assert experiment["id"] == "bounded_editorial_loop_v2"
+    assert experiment["workflow_variant"] == "bounded_selection_copy_loop_v2"
     assert experiment["selection"]["mode"] == "bounded_loop_local_editor"
     assert experiment["candidate_pool"] == "guarded_packet_v2"
-    assert experiment["selector_profile"] == "slate_balanced_editor_v3"
-    assert experiment["selection_review_profile"] == "selection_review_v1"
+    assert experiment["selector_profile"] == "slate_overall_editor_v5"
+    assert experiment["selection_review_profile"] == "selection_review_v3"
     assert experiment["copy_review_profile"] == "copy_review_v1"
     assert experiment["loop_policy"]["selection_max_rounds"] == 3
     assert experiment["loop_policy"]["copy_max_rounds"] == 3
     assert experiment["copy_profiles"]["zh"] == "zh_matchnote_light_emotion_v1"
     assert experiment["selection"]["strategy"] == "overall_slate_v1"
-    assert experiment["selection"]["public_card_count"]["min"] == 3
+    assert experiment["selection"]["public_card_count"]["min"] == 1
     assert experiment["selection"]["public_card_count"]["max"] == 6
-    assert "recommended_by_match_count" not in experiment["selection"]["public_card_count"]
+    assert experiment["selection"]["public_card_count"]["match_count_rules"]
     assert "slots" not in experiment["selection"]
     assert "required_slots" not in experiment["selection"]
     assert "optional_awards" not in experiment["selection"]
@@ -76,8 +76,11 @@ def test_editorial_v2_registry_resolves_default_experiment():
         "alternative_slate_comparison",
         "weakest_selected_card",
         "strongest_omitted_card",
+        "player_of_the_day_challenger_comparison",
         "impact_challenger_comparison",
         "card_count_verdict",
+        "slate_plan_review",
+        "revision_target_clarity",
     ]
     assert selection_review["required_slate_assessment_fields"] == [
         "reader_questions",
@@ -86,9 +89,12 @@ def test_editorial_v2_registry_resolves_default_experiment():
         "strongest_omitted_card",
         "drop_weakest_verdict",
         "replace_weakest_verdict",
+        "player_of_the_day_verdicts",
         "impact_challenger_verdict",
         "add_card_verdict",
         "preferred_card_count",
+        "slate_plan_verdict",
+        "revision_target",
         "revision_decision",
     ]
     assert selection_review["required_unselected_impact_top_n"] == 5
@@ -127,6 +133,279 @@ def test_editorial_v2_registry_resolves_default_experiment():
         "config/editorial/copy_profiles/zh_natural_v1.json",
     ]
     assert not [path for path in retired_paths if Path(path).exists()]
+
+
+def test_editorial_v2_dynamic_public_card_count_policy():
+    from football_data.editorial_slate import (
+        public_card_count_context,
+        selection_public_card_count,
+    )
+
+    selection_config = {
+        "public_card_count": {
+            "min": 1,
+            "max": 6,
+            "match_count_rules": [
+                {
+                    "min_matches": 1,
+                    "max_matches": 1,
+                    "min": 1,
+                    "recommended": 1,
+                    "max": 2,
+                    "guidance": "One match should normally produce one public card.",
+                },
+                {
+                    "min_matches": 2,
+                    "max_matches": 2,
+                    "min": 2,
+                    "recommended": 3,
+                    "max": 4,
+                    "guidance": "Two matches can support two to four cards.",
+                },
+                {
+                    "min_matches": 3,
+                    "max_matches": 3,
+                    "min": 3,
+                    "recommended": 4,
+                    "max": 5,
+                    "guidance": "Three matches can support three to five cards.",
+                },
+                {
+                    "min_matches": 4,
+                    "min": 3,
+                    "recommended": 4,
+                    "max": 6,
+                    "guidance": "Four or more matches keep the broad slate range.",
+                },
+            ],
+        }
+    }
+
+    one_match_pool = {
+        "match_count": 1,
+        "selectable_candidates": [{"match_key": "m1", "player_id": "a"}],
+    }
+    two_match_pool = {
+        "selectable_candidates": [
+            {"match_key": "m1", "player_id": "a"},
+            {"match_key": "m2", "player_id": "b"},
+        ]
+    }
+    four_match_pool = {
+        "matches": [{"match_key": f"m{i}"} for i in range(4)],
+        "selectable_candidates": [],
+    }
+
+    assert selection_public_card_count(one_match_pool, selection_config) == (1, 2)
+    assert public_card_count_context(one_match_pool, selection_config) == {
+        "selected": 0,
+        "match_count": 1,
+        "min": 1,
+        "recommended": 1,
+        "max": 2,
+        "policy": "match_count_rule",
+        "guidance": "One match should normally produce one public card.",
+    }
+    assert selection_public_card_count(two_match_pool, selection_config) == (2, 4)
+    assert selection_public_card_count(four_match_pool, selection_config) == (3, 6)
+
+
+def test_editorial_candidate_pool_exposes_match_count():
+    from football_data.editorial_candidates import build_candidate_pool
+    from football_data.editorial_rankings import build_editorial_rankings
+    from football_data.editorial_registry import (
+        load_candidate_pool_config,
+        load_editorial_experiment,
+    )
+
+    experiment = load_editorial_experiment()
+    rankings = build_editorial_rankings("data/latest.sqlite", "2026-07-04", experiment["scoring_config"])
+    pool = build_candidate_pool(rankings, load_candidate_pool_config(experiment["candidate_pool"]))
+
+    assert pool["match_count"] == len(rankings["matches"])
+    assert pool["matches"] == [
+        {
+            "match_key": item["match_key"],
+            "match_no": item["match_no"],
+            "home_team": item["home_team"],
+            "away_team": item["away_team"],
+            "home_score": item["home_score"],
+            "away_score": item["away_score"],
+        }
+        for item in rankings["matches"]
+    ]
+
+
+def test_dynamic_public_card_count_validation_accepts_one_card_single_match():
+    from football_data.editorial_validation import validate_selection_decision
+
+    experiment = {
+        "selection": {
+            "public_card_count": {
+                "min": 1,
+                "max": 6,
+                "match_count_rules": [
+                    {"min_matches": 1, "max_matches": 1, "min": 1, "recommended": 1, "max": 2}
+                ],
+            },
+            "award_limits": {"player_of_the_day": 6, "impact_pick": 2},
+        }
+    }
+    candidate_pool = {
+        "match_count": 1,
+        "selectable_candidates": [
+            {
+                "player_id": "p1",
+                "player_name": "Player One",
+                "team": "A",
+                "match_key": "m1",
+                "eligible_awards": ["player_of_the_day"],
+                "headline_rank": 1,
+                "award_contexts": {
+                    "player_of_the_day": {
+                        "evidence_chips": {"en": ["Goal"], "zh": ["进球"]}
+                    }
+                },
+            }
+        ],
+    }
+    decision = {
+        "selected": [
+            {
+                "player_id": "p1",
+                "player_name": "Player One",
+                "team": "A",
+                "award_type": "player_of_the_day",
+                "editorial_reason": "The decisive public case is supported by direct match impact.",
+                "selection_risk": "Low: the one-card slate matches a one-match day.",
+                "evidence_used": ["Goal"],
+            }
+        ],
+        "skipped_higher_ranked": [],
+    }
+
+    assert validate_selection_decision(decision, candidate_pool, experiment)["status"] == "pass"
+
+
+def test_dynamic_experiment_requires_slate_plan_when_configured():
+    from football_data.editorial_validation import validate_selection_decision
+
+    candidate = {
+        "player_id": "p1",
+        "player_name": "Player One",
+        "team": "A",
+        "match_key": "m1",
+        "eligible_awards": ["player_of_the_day"],
+        "headline_rank": 1,
+        "award_contexts": {
+            "player_of_the_day": {
+                "evidence_chips": {"en": ["Goal"], "zh": ["进球"]}
+            }
+        },
+    }
+    experiment = {
+        "selection": {
+            "must_include_slate_plan": True,
+            "public_card_count": {"min": 1, "max": 2},
+            "award_limits": {"player_of_the_day": 6, "impact_pick": 2},
+        }
+    }
+    candidate_pool = {
+        "match_count": 1,
+        "selectable_candidates": [candidate],
+    }
+    decision = {
+        "selected": [
+            {
+                "player_id": "p1",
+                "player_name": "Player One",
+                "team": "A",
+                "award_type": "player_of_the_day",
+                "editorial_reason": "The decisive public case is supported by direct match impact.",
+                "selection_risk": "Low: the one-card slate matches a one-match day.",
+                "evidence_used": ["Goal"],
+            }
+        ],
+        "skipped_higher_ranked": [],
+    }
+
+    missing = validate_selection_decision(decision, candidate_pool, experiment)
+    assert missing["status"] == "failed"
+    assert any("slate_plan" in warning for warning in missing["warnings"])
+
+    with_plan = json.loads(json.dumps(decision))
+    with_plan["slate_plan"] = {
+        "match_count": 1,
+        "recommended_card_count": 1,
+        "final_card_count": 1,
+        "card_count_rationale": "One match, one clear public card.",
+        "why_not_fewer": "The day needs one public Player of the Match card.",
+        "why_not_more": "No second card has an independent public case.",
+        "weakest_selected_player_id": "p1",
+        "strongest_omitted_player_id": "",
+        "strongest_add_card_challenger_player_id": "",
+    }
+    assert validate_selection_decision(with_plan, candidate_pool, experiment)["status"] == "pass"
+
+
+def test_selector_input_includes_public_card_count_context():
+    from football_data.editorial_selection import build_selector_input
+
+    pool = {
+        "match_date": "2026-07-05",
+        "scoring_version": "v0.4",
+        "match_count": 1,
+        "selectable_candidates": [],
+        "audit_candidates": [],
+        "near_misses": [],
+    }
+    experiment = {
+        "workflow_variant": "bounded_selection_copy_loop_v2",
+        "selection": {
+            "public_card_count": {
+                "min": 1,
+                "max": 6,
+                "match_count_rules": [
+                    {"min_matches": 1, "max_matches": 1, "min": 1, "recommended": 1, "max": 2}
+                ],
+            }
+        },
+    }
+
+    selector_input = build_selector_input(pool, experiment)
+
+    assert selector_input["public_card_count_context"]["match_count"] == 1
+    assert selector_input["public_card_count_context"]["recommended"] == 1
+    assert selector_input["public_card_count_context"]["max"] == 2
+
+
+def test_editorial_v2_dynamic_experiment_registry():
+    from football_data.editorial_registry import (
+        load_editorial_experiment,
+        load_selection_review_profile,
+        load_selector_profile,
+    )
+
+    experiment = load_editorial_experiment("bounded_editorial_loop_v2")
+
+    assert experiment["id"] == "bounded_editorial_loop_v2"
+    assert experiment["workflow_variant"] == "bounded_selection_copy_loop_v2"
+    assert experiment["selector_profile"] == "slate_overall_editor_v5"
+    assert experiment["selection_review_profile"] == "selection_review_v3"
+    assert experiment["selection"]["public_card_count"]["match_count_rules"][0] == {
+        "min_matches": 1,
+        "max_matches": 1,
+        "min": 1,
+        "recommended": 1,
+        "max": 2,
+        "guidance": "One-match days should normally publish one Player of the Match level card; add a second only for an independently strong public case.",
+    }
+
+    selector = load_selector_profile("slate_overall_editor_v5")
+    review = load_selection_review_profile("selection_review_v3")
+    assert any("slate_plan" in item for item in selector["instructions"])
+    assert "slate_plan_verdict" in review["required_slate_assessment_fields"]
+    assert "revision_target" in review["required_slate_assessment_fields"]
 
 
 def test_editorial_style_calibration_loads_curated_zh_examples():
@@ -192,6 +471,230 @@ def test_editorial_rankings_prefer_pmsr_appearance_for_hat_trick_scorer():
     assert "player_of_the_day" in candidate["eligible_awards"]
     assert candidate["award_contexts"]["player_of_the_day"]["metrics"]["goals"] == 3
     assert candidate["award_contexts"]["player_of_the_day"]["metrics"]["hat_trick"] == 1
+
+
+def test_editorial_v2_separates_whole_match_and_decisive_moment_semi_final_cases():
+    from football_data.editorial_rankings import build_editorial_rankings
+    from football_data.editorial_registry import load_editorial_experiment
+
+    experiment = load_editorial_experiment()
+    assert experiment["scoring_config"] == "config/scoring/v0.5.json"
+
+    spain_rankings = build_editorial_rankings(
+        "data/latest.sqlite",
+        "2026-07-14",
+        experiment["scoring_config"],
+    )
+    rodri = _player(spain_rankings, "RODRI")
+    oyarzabal = _player(spain_rankings, "Mikel OYARZABAL")
+
+    assert rodri["headline_score"] > oyarzabal["headline_score"]
+
+    argentina_rankings = build_editorial_rankings(
+        "data/latest.sqlite",
+        "2026-07-15",
+        experiment["scoring_config"],
+    )
+    messi = _player(argentina_rankings, "Lionel MESSI")
+    lautaro = _player(argentina_rankings, "Lautaro MARTINEZ")
+
+    assert messi["headline_score"] > lautaro["headline_score"]
+    assert lautaro["role_scores"]["impact"] > messi["role_scores"]["impact"]
+    assert messi["assist_context_impact"] > 0
+    assert lautaro["goal_context_impact"] > 0
+
+
+def test_editorial_v2_exposes_assisted_goal_context_to_selection_evidence():
+    from football_data.editorial_candidates import build_candidate_pool
+    from football_data.editorial_rankings import build_editorial_rankings
+    from football_data.editorial_registry import load_candidate_pool_config, load_editorial_experiment
+
+    experiment = load_editorial_experiment()
+    rankings = build_editorial_rankings(
+        "data/latest.sqlite",
+        "2026-07-15",
+        experiment["scoring_config"],
+    )
+    pool = build_candidate_pool(
+        rankings,
+        load_candidate_pool_config(experiment["candidate_pool"]),
+    )
+    messi = _candidate(pool, "Lionel MESSI")
+    metrics = messi["award_contexts"]["player_of_the_day"]["metrics"]
+
+    assert metrics["comeback_equalizer_assist"] == 1
+    assert metrics["late_match_winning_assist"] == 1
+    assert [goal["player_name"] for goal in messi["flow_context"]["assisted_goals"]] == [
+        "Enzo FERNANDEZ",
+        "Lautaro MARTINEZ",
+    ]
+
+
+def test_selection_review_payload_surfaces_whole_match_potd_challenger():
+    from football_data.editorial_candidates import build_candidate_pool
+    from football_data.editorial_loop import build_selection_review_payload
+    from football_data.editorial_rankings import build_editorial_rankings
+    from football_data.editorial_registry import (
+        load_candidate_pool_config,
+        load_editorial_experiment,
+        load_selection_review_profile,
+    )
+
+    experiment = load_editorial_experiment()
+    assert experiment["selection_review_profile"] == "selection_review_v3"
+    rankings = build_editorial_rankings(
+        "data/latest.sqlite",
+        "2026-07-14",
+        experiment["scoring_config"],
+    )
+    pool = build_candidate_pool(
+        rankings,
+        load_candidate_pool_config(experiment["candidate_pool"]),
+    )
+    oyarzabal = _candidate(pool, "Mikel OYARZABAL")
+    selection_decision = {
+        "selected": [
+            {
+                "award_type": "player_of_the_day",
+                "player_id": oyarzabal["player_id"],
+                "player_name": oyarzabal["player_name"],
+            }
+        ]
+    }
+
+    payload = build_selection_review_payload(
+        selection_decision=selection_decision,
+        candidate_pool=pool,
+        selection_validation={"status": "pass", "warnings": []},
+        review_profile=load_selection_review_profile(experiment["selection_review_profile"]),
+        selection_config=experiment["selection"],
+    )
+
+    assert payload["player_of_the_day_review"]["selected"][0]["player_name"] == "Mikel OYARZABAL"
+    assert "RODRI" in {
+        item["player_name"] for item in payload["player_of_the_day_review"]["challengers"]
+    }
+    rodri = next(
+        item
+        for item in payload["player_of_the_day_review"]["challengers"]
+        if item["player_name"] == "RODRI"
+    )
+    assert rodri["role_scores"]["progressor"] > 0
+    assert rodri["score_components"]
+
+
+def test_selection_review_payload_keeps_selected_impact_pick_as_potd_challenger():
+    from football_data.editorial_candidates import build_candidate_pool
+    from football_data.editorial_loop import build_selection_review_payload
+    from football_data.editorial_rankings import build_editorial_rankings
+    from football_data.editorial_registry import (
+        load_candidate_pool_config,
+        load_editorial_experiment,
+        load_selection_review_profile,
+    )
+
+    experiment = load_editorial_experiment()
+    rankings = build_editorial_rankings(
+        "data/latest.sqlite",
+        "2026-07-15",
+        experiment["scoring_config"],
+    )
+    pool = build_candidate_pool(
+        rankings,
+        load_candidate_pool_config(experiment["candidate_pool"]),
+    )
+    messi = _candidate(pool, "Lionel MESSI")
+    lautaro = _candidate(pool, "Lautaro MARTINEZ")
+    selection_decision = {
+        "selected": [
+            {
+                "award_type": "player_of_the_day",
+                "player_id": messi["player_id"],
+                "player_name": messi["player_name"],
+            },
+            {
+                "award_type": "impact_pick",
+                "player_id": lautaro["player_id"],
+                "player_name": lautaro["player_name"],
+            },
+        ]
+    }
+
+    payload = build_selection_review_payload(
+        selection_decision=selection_decision,
+        candidate_pool=pool,
+        selection_validation={"status": "pass", "warnings": []},
+        review_profile=load_selection_review_profile(experiment["selection_review_profile"]),
+        selection_config=experiment["selection"],
+    )
+
+    lautaro_challenger = next(
+        item
+        for item in payload["player_of_the_day_review"]["challengers"]
+        if item["player_name"] == "Lautaro MARTINEZ"
+    )
+    assert lautaro_challenger["role_scores"]
+    assert lautaro_challenger["score_components"]
+
+
+def test_selection_review_requires_a_potd_verdict_for_every_selected_potd():
+    from football_data.editorial_loop import validate_selection_review
+
+    review_profile = {
+        "required_dimensions": [],
+        "required_slate_assessment_fields": ["player_of_the_day_verdicts"],
+    }
+    review_payload = {
+        "selected": [{"player_id": "potd-1"}, {"player_id": "potd-2"}],
+        "player_of_the_day_review": {
+            "selected": [{"player_id": "potd-1"}, {"player_id": "potd-2"}],
+            "challengers": [{"player_id": "challenger-1"}],
+        },
+    }
+    review = {
+        "schema_version": 1,
+        "status": "pass",
+        "reviewed_dimensions": [],
+        "selected_player_reviews": [
+            {"player_id": "potd-1"},
+            {"player_id": "potd-2"},
+        ],
+        "unselected_candidate_reviews": [{"player_id": "challenger-1"}],
+        "slate_assessment": {
+            "alternative_slate_comparison": [
+                {"card_count": 2},
+                {"card_count": 1},
+            ],
+            "weakest_selected_card": {"player_id": "potd-2"},
+            "player_of_the_day_verdicts": [
+                {
+                    "selected_player_id": "potd-1",
+                    "challenger_player_id": "challenger-1",
+                    "decision": "keep",
+                    "reason": "The first selection has the stronger whole-match case.",
+                }
+            ],
+            "revision_decision": "keep",
+        },
+        "blocking_findings": [],
+        "unresolved_objections": [],
+        "revision_summary": "All Player of the Day selections were checked.",
+    }
+
+    validation = validate_selection_review(review, review_profile, review_payload)
+
+    assert validation["status"] == "failed"
+    assert any("potd-2" in warning for warning in validation["warnings"])
+
+    review["slate_assessment"]["player_of_the_day_verdicts"].append(
+        {
+            "selected_player_id": "potd-2",
+            "challenger_player_id": "challenger-1",
+            "decision": "keep",
+            "reason": "The second selection also has a stronger whole-match case.",
+        }
+    )
+    assert validate_selection_review(review, review_profile, review_payload)["status"] == "pass"
 
 
 def test_copy_review_payload_includes_zh_style_calibration_examples():
@@ -269,12 +772,16 @@ def test_selection_review_validation_requires_objection_coverage():
         review_profile=review_profile,
         selection_config=experiment["selection"],
     )
-    assert review_payload["public_card_count"] == {
+    assert {
+        key: review_payload["public_card_count"][key]
+        for key in ("selected", "min", "max", "match_count")
+    } == {
         "selected": len(decision["selected"]),
         "min": 3,
         "max": 6,
         "match_count": 4,
     }
+    assert review_payload["public_card_count"]["policy"] == "match_count_rule"
 
     selected_reviews = [
         {
@@ -295,6 +802,13 @@ def test_selection_review_validation_requires_objection_coverage():
     strongest_omitted_id = _first_review_player_id(review_payload["required_unselected_candidate_reviews"])
     impact_challenger_id = _first_review_player_id(review_payload["required_impact_candidate_reviews"])
     add_challenger_id = _first_review_player_id(review_payload["card_count_challengers"])
+    selected_potd_ids = [
+        item["player_id"]
+        for item in review_payload["player_of_the_day_review"]["selected"]
+    ]
+    potd_challenger_id = _first_review_player_id(
+        review_payload["player_of_the_day_review"]["challengers"]
+    )
     good_review = {
         "schema_version": 1,
         "status": "pass",
@@ -322,6 +836,15 @@ def test_selection_review_validation_requires_objection_coverage():
                 "replacement_player_id": strongest_omitted_id,
                 "reason": "Replacement would not improve the slate.",
             },
+            "player_of_the_day_verdicts": [
+                {
+                    "selected_player_id": selected_potd_id,
+                    "challenger_player_id": potd_challenger_id,
+                    "decision": "keep",
+                    "reason": "The selected whole-match case remains stronger than the top omitted challenger.",
+                }
+                for selected_potd_id in selected_potd_ids
+            ],
             "impact_challenger_verdict": {
                 "player_id": impact_challenger_id,
                 "decision": "omit",
@@ -333,6 +856,14 @@ def test_selection_review_validation_requires_objection_coverage():
                 "reason": "The strongest possible extra card would not improve the current slate.",
             },
             "preferred_card_count": len(decision["selected"]),
+            "slate_plan_verdict": {
+                "decision": "keep",
+                "reason": "The slate plan matches the available public cases.",
+            },
+            "revision_target": {
+                "action": "none",
+                "reason": "No blocking issue remains.",
+            },
             "revision_decision": "keep",
         },
         "selected_player_reviews": selected_reviews,
@@ -345,6 +876,21 @@ def test_selection_review_validation_requires_objection_coverage():
 
     good_validation = validate_selection_review(good_review, review_profile, review_payload)
     assert good_validation["status"] == "pass"
+
+    wrong_potd = json.loads(json.dumps(good_review, ensure_ascii=False))
+    wrong_potd["slate_assessment"]["player_of_the_day_verdicts"][0][
+        "challenger_player_id"
+    ] = "not-a-required-challenger"
+    wrong_potd_validation = validate_selection_review(
+        wrong_potd,
+        review_profile,
+        review_payload,
+    )
+    assert wrong_potd_validation["status"] == "failed"
+    assert any(
+        "player_of_the_day_verdicts" in warning
+        for warning in wrong_potd_validation["warnings"]
+    )
 
     missing_selected = json.loads(json.dumps(good_review, ensure_ascii=False))
     missing_selected["selected_player_reviews"] = missing_selected["selected_player_reviews"][:-1]
@@ -833,7 +1379,7 @@ def test_editorial_v2_candidate_pool_includes_configured_zh_display_names():
     }
 
 
-def test_editorial_v2_candidate_pool_keeps_late_equalizer_impact_challenger_selectable():
+def test_editorial_v2_context_dedupe_keeps_late_equalizer_facts_without_forcing_selection():
     from football_data.editorial_candidates import build_candidate_pool
     from football_data.editorial_rankings import build_editorial_rankings
     from football_data.editorial_registry import (
@@ -852,12 +1398,17 @@ def test_editorial_v2_candidate_pool_keeps_late_equalizer_impact_challenger_sele
         load_candidate_pool_config(experiment["candidate_pool"]),
     )
 
-    diop = _candidate(pool, "Issa DIOP")
+    diop = next(
+        player for player in rankings["players"] if player["player_name"] == "Issa DIOP"
+    )
 
-    assert "impact_pick" in diop["eligible_awards"]
-    assert "impact_story" in diop["pool_reasons"]
-    assert diop["award_contexts"]["impact_pick"]["metrics"]["stoppage_time_goal"] == 1
-    assert diop["award_contexts"]["impact_pick"]["metrics"]["comeback_equalizer"] == 1
+    assert diop["stoppage_time_goal"] == 1
+    assert diop["comeback_equalizer"] == 1
+    assert diop["goal_context_impact"] == 6
+    assert all(
+        candidate["player_name"] != "Issa DIOP"
+        for candidate in pool["selectable_candidates"]
+    )
 
 
 def test_editorial_v2_selector_input_keeps_audit_progression_guard_fields_out_of_public_selection():
@@ -909,8 +1460,8 @@ def test_editorial_v2_potd_context_keeps_off_ball_as_supporting_evidence():
         rankings,
         load_candidate_pool_config(experiment["candidate_pool"]),
     )
-    gouiri = _candidate(pool, "Amine GOUIRI")
-    potd_context = gouiri["award_contexts"]["player_of_the_day"]
+    dembele = _candidate(pool, "Ousmane DEMBELE")
+    potd_context = dembele["award_contexts"]["player_of_the_day"]
 
     assert {"goals", "on_target"} <= set(potd_context["metrics"])
     assert "in_between" not in potd_context["metrics"]
@@ -989,7 +1540,7 @@ def test_editorial_v2_test_selector_prefers_direct_potd_case_and_slate_constrain
     assert [item["player_name"] for item in decision["selected"]][:3] == [
         "Kylian MBAPPE",
         "Lionel MESSI",
-        "Erling HAALAND",
+        "Ousmane DEMBELE",
     ]
     assert 3 <= len(decision["selected"]) <= 6
     assert potd_names == [item["player_name"] for item in decision["selected"]]
@@ -1046,26 +1597,7 @@ def test_editorial_v2_slate_balance_allows_angle_omissions_and_blocks_fourth_mat
         rankings,
         load_candidate_pool_config(experiment["candidate_pool"]),
     )
-    balanced = {
-        "selected": [
-            _selected(_candidate(pool, "Kylian MBAPPE"), "player_of_the_day"),
-            _selected(_candidate(pool, "Lionel MESSI"), "player_of_the_day"),
-            _selected(_candidate(pool, "Erling HAALAND"), "player_of_the_day"),
-            _selected(_candidate(pool, "Amine GOUIRI"), "impact_pick"),
-            _selected(_candidate(pool, "Ismaila SARR"), "player_of_the_day"),
-        ],
-        "skipped_higher_ranked": [
-            {
-                "award_type": "player_of_the_day",
-                "player_id": _candidate(pool, "Amine GOUIRI")["player_id"],
-                "player_name": "Amine GOUIRI",
-                "coarse_rank": 3,
-                "reason": "Gouiri is kept as the impact pick so Haaland's brace and winner can stay in Player of the Day.",
-            }
-        ],
-        "skipped_notable_candidates": [],
-        "warnings": [],
-    }
+    balanced = build_test_selection_decision(pool, experiment)
     overconcentrated = json.loads(json.dumps(balanced, ensure_ascii=False))
     overconcentrated["selected"] = [
         _selected(_candidate(pool, "Kylian MBAPPE"), "player_of_the_day"),
@@ -1294,7 +1826,7 @@ def test_editorial_v2_rankings_and_candidate_pool_include_audit_context():
     )
 
     assert rankings["match_date"] == "2026-06-21"
-    assert rankings["scoring_version"] == "v0.4"
+    assert rankings["scoring_version"] == "v0.5"
     assert rankings["players"]
     assert rankings["rankings"]["headline"]
     first = rankings["rankings"]["headline"][0]
@@ -1470,6 +2002,15 @@ def _review_required_unselected_items(review_payload: dict) -> list[dict]:
                 continue
             seen.add(player_id)
             required.append(item)
+    player_of_the_day_review = review_payload.get("player_of_the_day_review") or {}
+    for item in player_of_the_day_review.get("challengers", []):
+        if not isinstance(item, dict):
+            continue
+        player_id = str(item.get("player_id") or "")
+        if not player_id or player_id in seen:
+            continue
+        seen.add(player_id)
+        required.append(item)
     return required
 
 

@@ -31,8 +31,10 @@ def build_match_flows(
 
 def player_flow_impacts(
     match_flows: dict[str, dict[str, Any]],
-) -> dict[tuple[str, str, str], dict[str, int]]:
-    impacts: dict[tuple[str, str, str], dict[str, int]] = {}
+    *,
+    context_impact: dict[str, Any] | None = None,
+) -> dict[tuple[str, str, str], dict[str, float]]:
+    impacts: dict[tuple[str, str, str], dict[str, float]] = {}
     tag_metric_map = {
         "opening_goal": "opening_goal",
         "equalizer": "equalizing_goal",
@@ -45,17 +47,65 @@ def player_flow_impacts(
         "comeback_equalizer": "comeback_equalizer",
         "comeback_winner": "comeback_winner",
     }
+    assist_metric_map = {
+        "opening_goal": "opening_assist",
+        "equalizer": "equalizing_assist",
+        "go_ahead_goal": "go_ahead_assist",
+        "match_winning_goal": "match_winning_assist",
+        "late_goal": "late_assist",
+        "stoppage_time_goal": "stoppage_time_assist",
+        "late_match_winning_goal": "late_match_winning_assist",
+        "team_came_from_behind_goal": "team_came_from_behind_assist",
+        "comeback_equalizer": "comeback_equalizer_assist",
+        "comeback_winner": "comeback_winner_assist",
+    }
+    empty_impact_metrics = {
+        **{metric: 0.0 for metric in tag_metric_map.values()},
+        **{metric: 0.0 for metric in assist_metric_map.values()},
+        "goal_context_impact": 0.0,
+        "assist_context_impact": 0.0,
+    }
+    context_impact = context_impact or {}
+    tag_weights = {
+        str(tag): float(weight)
+        for tag, weight in (context_impact.get("goal_tag_weights") or {}).items()
+    }
+    assist_scale = float(context_impact.get("assist_scale") or 0.0)
     for match_key, flow in match_flows.items():
         for goal in flow.get("goals", []):
             if goal.get("own_goal"):
                 continue
             key = (str(match_key), str(goal["team"]), str(goal["player_name"]).upper())
-            metrics = impacts.setdefault(key, {metric: 0 for metric in tag_metric_map.values()})
+            metrics = impacts.setdefault(
+                key,
+                dict(empty_impact_metrics),
+            )
             for tag in goal.get("tags", []):
                 metric = tag_metric_map.get(str(tag))
                 if metric:
                     metrics[metric] += 1
+            metrics["goal_context_impact"] += _max_context_value(goal.get("tags", []), tag_weights)
+
+            assister_name = str(goal.get("assister_name") or "").strip()
+            if not assister_name:
+                continue
+            assist_key = (str(match_key), str(goal["team"]), assister_name.upper())
+            assist_metrics = impacts.setdefault(
+                assist_key,
+                dict(empty_impact_metrics),
+            )
+            for tag in goal.get("tags", []):
+                metric = assist_metric_map.get(str(tag))
+                if metric:
+                    assist_metrics[metric] += 1
+            assist_metrics["assist_context_impact"] += (
+                _max_context_value(goal.get("tags", []), tag_weights) * assist_scale
+            )
     return impacts
+
+
+def _max_context_value(tags: list[str], weights: dict[str, float]) -> float:
+    return max((weights.get(str(tag), 0.0) for tag in tags), default=0.0)
 
 
 def _load_matches(
@@ -135,6 +185,15 @@ def _load_official_goal_events(
 ) -> list[dict[str, Any]]:
     if not _table_exists(conn, "official_match_events"):
         return []
+    has_goal_involvements = _table_exists(conn, "goal_involvements")
+    assist_columns = (
+        ", g.assister_player_id, g.assister_name" if has_goal_involvements else ", null as assister_player_id, null as assister_name"
+    )
+    assist_join = (
+        "left join goal_involvements g on g.match_key = e.match_key and g.goal_event_id = e.event_id"
+        if has_goal_involvements
+        else ""
+    )
     where, params = _where_clause(match_date=match_date, match_keys=match_keys, table_alias="m")
     rows = conn.execute(
         f"""
@@ -142,12 +201,15 @@ def _load_official_goal_events(
                e.minute, e.stoppage_minute, e.absolute_minute, e.team_name,
                e.player_name, e.home_goals, e.away_goals, e.description,
                m.home_team, m.away_team
+               {assist_columns}
         from official_match_events e
         join matches m using(match_key)
+        {assist_join}
         {where}
           and lower(coalesce(e.event_type_name, '')) in ('goal!', 'penalty goal', 'own goal')
           and e.home_goals is not null
           and e.away_goals is not null
+          and coalesce(e.period, 0) != 11
         order by e.match_key, e.period, e.absolute_minute, e.event_id
         """,
         params,
@@ -180,6 +242,8 @@ def _load_official_goal_events(
                 "team": scoring_team,
                 "player_team": event_team or scoring_team,
                 "player_name": player_name,
+                "assister_player_id": row["assister_player_id"],
+                "assister_name": str(row["assister_name"] or "").strip(),
                 "minute": int(row["absolute_minute"] or row["minute"] or 0),
                 "own_goal": is_own_goal,
             }
@@ -267,6 +331,8 @@ def _build_match_flow(match: sqlite3.Row, goals: list[dict[str, Any]]) -> dict[s
                 "team": team,
                 "player_team": str(goal.get("player_team") or team),
                 "player_name": str(goal["player_name"]),
+                "assister_player_id": goal.get("assister_player_id"),
+                "assister_name": str(goal.get("assister_name") or ""),
                 "own_goal": bool(goal.get("own_goal")),
                 "score_before": f"{home_before}-{away_before}",
                 "score_after": f"{home_after}-{away_after}",

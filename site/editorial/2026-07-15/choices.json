@@ -1,14 +1,14 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-07-16T08:03:38+00:00",
-  "compiled_at": "2026-07-16T08:03:38+00:00",
+  "generated_at": "2026-07-16T14:16:37+00:00",
+  "compiled_at": "2026-07-16T14:16:37+00:00",
   "match_date": "2026-07-15",
-  "scoring_version": "v0.4",
+  "scoring_version": "v0.5",
   "editorial_generation": {
-    "workflow_variant": "bounded_selection_copy_loop_v1",
-    "experiment_id": "bounded_editorial_loop_v1",
+    "workflow_variant": "bounded_selection_copy_loop_v2",
+    "experiment_id": "bounded_editorial_loop_v2",
     "selection_mode": "bounded_loop_local_editor",
-    "selection_review_profile": "selection_review_v1",
+    "selection_review_profile": "selection_review_v3",
     "copy_review_profile": "copy_review_v1",
     "loop_policy": {
       "selection_max_rounds": 3,
@@ -65,6 +65,8 @@
           "team": "England",
           "player_team": "England",
           "player_name": "Anthony GORDON",
+          "assister_player_id": "492716",
+          "assister_name": "Morgan ROGERS",
           "own_goal": false,
           "score_before": "0-0",
           "score_after": "1-0",
@@ -83,6 +85,8 @@
           "team": "Argentina",
           "player_team": "Argentina",
           "player_name": "Enzo FERNANDEZ",
+          "assister_player_id": "229397",
+          "assister_name": "Lionel MESSI",
           "own_goal": false,
           "score_before": "1-0",
           "score_after": "1-1",
@@ -103,6 +107,8 @@
           "team": "Argentina",
           "player_team": "Argentina",
           "player_name": "Lautaro MARTINEZ",
+          "assister_player_id": "229397",
+          "assister_name": "Lionel MESSI",
           "own_goal": false,
           "score_before": "1-1",
           "score_after": "1-2",
@@ -127,6 +133,8 @@
         "team": "Argentina",
         "player_team": "Argentina",
         "player_name": "Lautaro MARTINEZ",
+        "assister_player_id": "229397",
+        "assister_name": "Lionel MESSI",
         "own_goal": false,
         "score_before": "1-1",
         "score_after": "1-2",
@@ -156,6 +164,62 @@
         "en": "Player of the Day",
         "zh": "每日最佳球员"
       },
+      "player_id": "FIFA-2026-M102-ENG-ARG|Argentina|10",
+      "player_name": "Lionel MESSI",
+      "team": "Argentina",
+      "opponent": "England",
+      "match_key": "FIFA-2026-M102-ENG-ARG",
+      "match_no": 102,
+      "player_no": 10,
+      "position": "FW",
+      "score": 80.28,
+      "metrics": {
+        "shots": 1,
+        "assists": 2,
+        "goal_involvements": 2,
+        "equalizing_assist": 1,
+        "go_ahead_assist": 1,
+        "match_winning_assist": 1,
+        "late_assist": 2,
+        "stoppage_time_assist": 1,
+        "late_match_winning_assist": 1,
+        "team_came_from_behind_assist": 2,
+        "comeback_equalizer_assist": 1,
+        "comeback_winner_assist": 1
+      },
+      "evidence_chips": {
+        "en": [
+          "assist for late winner",
+          "assist for comeback equaliser",
+          "multiple assists"
+        ],
+        "zh": [
+          "助攻补时制胜球",
+          "助攻逆转过程中的扳平球",
+          "多次助攻"
+        ]
+      },
+      "selection_reason": "Messi created both Argentina goals, including the comeback equaliser and the 90+2-minute winner, while adding 15 completed line breaks and 16 ball progressions across the match.",
+      "content": {
+        "en": {
+          "title": "Messi created both Argentina goals",
+          "html": "<p>Messi supplied the final pass for Enzo Fernandez's 85th-minute equaliser and Lautaro Martinez's 90+2 winner. His 15 completed line breaks kept Argentina moving forward between those decisive touches.</p>"
+        },
+        "zh": {
+          "title": "梅西两次助攻",
+          "html": "<p>梅西第85分钟助攻恩佐扳平，又在90+2分钟把劳塔罗的绝杀送到脚下。阿根廷逆转的两粒进球都由他送出最后一传。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "impact_pick",
+      "award_types": [
+        "impact_pick"
+      ],
+      "award_label": {
+        "en": "Impact Pick",
+        "zh": "影响力精选"
+      },
       "player_id": "FIFA-2026-M102-ENG-ARG|Argentina|22",
       "player_name": "Lautaro MARTINEZ",
       "team": "Argentina",
@@ -164,7 +228,7 @@
       "match_no": 102,
       "player_no": 22,
       "position": "FW",
-      "score": 120.14,
+      "score": 26.0,
       "metrics": {
         "shots": 1,
         "on_target": 1,
@@ -192,109 +256,15 @@
           "取得进球"
         ]
       },
-      "selection_reason": "Lautaro Martinez came off the bench and scored the 92nd-minute winner to complete Argentina's 2-1 comeback against England.",
+      "selection_reason": "Lautaro owns the match's sharpest single intervention: he came on as a substitute and converted his only shot in the 90+2nd minute to complete Argentina's comeback.",
       "content": {
         "en": {
-          "title": "Lautaro Wins It in Stoppage Time",
-          "html": "<p>Lautaro Martinez came off the bench and scored at 90'+2 to complete Argentina's 2-1 comeback against England. His only shot was on target and became the winner.</p>"
+          "title": "Lautaro's stoppage-time winner",
+          "html": "<p>Lautaro came off the bench and scored with his only shot at 90+2. Argentina's comeback was complete, and the final place was theirs.</p>"
         },
         "zh": {
-          "title": "劳塔罗第92分钟逆转制胜",
-          "html": "<p>劳塔罗替补登场，第92分钟把比分改写为2-1，阿根廷完成逆转。他本场只有这一次射门，射正后成了制胜球。</p>"
-        }
-      }
-    },
-    {
-      "award_type": "impact_pick",
-      "award_types": [
-        "impact_pick"
-      ],
-      "award_label": {
-        "en": "Impact Pick",
-        "zh": "影响力精选"
-      },
-      "player_id": "FIFA-2026-M102-ENG-ARG|Argentina|24",
-      "player_name": "Enzo FERNANDEZ",
-      "team": "Argentina",
-      "opponent": "England",
-      "match_key": "FIFA-2026-M102-ENG-ARG",
-      "match_no": 102,
-      "player_no": 24,
-      "position": "MF",
-      "score": 99.17,
-      "metrics": {
-        "shots": 4,
-        "on_target": 1,
-        "goals": 1,
-        "goal_involvements": 1,
-        "equalizing_goal": 1,
-        "late_goal": 1,
-        "comeback_equalizer": 1
-      },
-      "evidence_chips": {
-        "en": [
-          "comeback equaliser",
-          "equaliser",
-          "goal scorer"
-        ],
-        "zh": [
-          "逆转扳平",
-          "扳平进球",
-          "取得进球"
-        ]
-      },
-      "selection_reason": "Enzo Fernandez equalised in the 85th minute, beginning Argentina's late recovery from 1-0 down before the 2-1 win.",
-      "content": {
-        "en": {
-          "title": "Enzo Equalises at 85'",
-          "html": "<p>Enzo Fernandez made it 1-1 in the 85th minute after Argentina had trailed England. He took four shots and completed 19 line breaks before the 2-1 comeback was complete.</p>"
-        },
-        "zh": {
-          "title": "恩佐第85分钟扳平",
-          "html": "<p>恩佐第85分钟把比分追成1-1，阿根廷随后在补时阶段完成反超。他本场4次射门，另有19次成功打破防线。</p>"
-        }
-      }
-    },
-    {
-      "award_type": "impact_pick",
-      "award_types": [
-        "impact_pick"
-      ],
-      "award_label": {
-        "en": "Impact Pick",
-        "zh": "影响力精选"
-      },
-      "player_id": "FIFA-2026-M102-ENG-ARG|Argentina|10",
-      "player_name": "Lionel MESSI",
-      "team": "Argentina",
-      "opponent": "England",
-      "match_key": "FIFA-2026-M102-ENG-ARG",
-      "match_no": 102,
-      "player_no": 10,
-      "position": "FW",
-      "score": 76.21,
-      "metrics": {
-        "shots": 1,
-        "assists": 2,
-        "goal_involvements": 2
-      },
-      "evidence_chips": {
-        "en": [
-          "multiple assists"
-        ],
-        "zh": [
-          "多次助攻"
-        ]
-      },
-      "selection_reason": "Lionel Messi supplied the official assists for both Argentina goals, connecting the 85th-minute equaliser and the 92nd-minute winner.",
-      "content": {
-        "en": {
-          "title": "Messi Assists Both Comeback Goals",
-          "html": "<p>Lionel Messi set up Enzo Fernandez's 85th-minute equaliser and Lautaro Martinez's 90+2 winner. Those two official assists connected every Argentina goal in the 2-1 comeback.</p>"
-        },
-        "zh": {
-          "title": "梅西两次助攻",
-          "html": "<p>梅西先在第85分钟助攻恩佐扳平，随后又为劳塔罗送出第92分钟制胜球。阿根廷两粒进球都由他助攻。</p>"
+          "title": "劳塔罗补时绝杀",
+          "html": "<p>劳塔罗替补登场，第90+2分钟用全场唯一一次射门破门。阿根廷从0-1追到2-1，决赛席位就这样到手。</p>"
         }
       }
     }

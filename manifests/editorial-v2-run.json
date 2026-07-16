@@ -1,12 +1,12 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-07-16T08:03:38+00:00",
+  "generated_at": "2026-07-16T14:16:37+00:00",
   "status": "success",
   "match_date": "2026-07-15",
-  "workflow_variant": "bounded_selection_copy_loop_v1",
-  "experiment_id": "bounded_editorial_loop_v1",
+  "workflow_variant": "bounded_selection_copy_loop_v2",
+  "experiment_id": "bounded_editorial_loop_v2",
   "editor_runtime": "local_codex",
-  "scoring_version": "v0.4",
+  "scoring_version": "v0.5",
   "selection_validation": {
     "schema_version": 1,
     "status": "pass",
@@ -25,17 +25,12 @@
   "choices": [
     {
       "award_type": "player_of_the_day",
-      "player_name": "Lautaro MARTINEZ",
-      "team": "Argentina"
-    },
-    {
-      "award_type": "impact_pick",
-      "player_name": "Enzo FERNANDEZ",
-      "team": "Argentina"
-    },
-    {
-      "award_type": "impact_pick",
       "player_name": "Lionel MESSI",
+      "team": "Argentina"
+    },
+    {
+      "award_type": "impact_pick",
+      "player_name": "Lautaro MARTINEZ",
       "team": "Argentina"
     }
   ]
