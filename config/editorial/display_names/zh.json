@@ -22,6 +22,10 @@
       "display_name": "布鲁诺-费尔南德斯",
       "short_name": "B费"
     },
+    "Dani OLMO": {
+      "display_name": "丹尼-奥尔莫",
+      "short_name": "奥尔莫"
+    },
     "Enzo FERNANDEZ": {
       "display_name": "恩佐-费尔南德斯",
       "short_name": "恩佐"
@@ -78,9 +82,17 @@
       "display_name": "迈克尔-奥利塞",
       "short_name": "奥利塞"
     },
+    "Mikel OYARZABAL": {
+      "display_name": "米克尔-奥亚萨瓦尔",
+      "short_name": "奥亚萨瓦尔"
+    },
     "Nicolas PEPE": {
       "display_name": "尼古拉斯-佩佩",
       "short_name": "佩佩"
+    },
+    "Pedro PORRO": {
+      "display_name": "佩德罗-波罗",
+      "short_name": "波罗"
     },
     "Sphephelo SITHOLE": {
       "display_name": "斯菲费洛-西托莱",

@@ -1,0 +1,242 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-07-16T08:40:14+00:00",
+  "compiled_at": "2026-07-16T08:40:14+00:00",
+  "match_date": "2026-07-14",
+  "scoring_version": "v0.4",
+  "editorial_generation": {
+    "workflow_variant": "bounded_selection_copy_loop_v1",
+    "experiment_id": "bounded_editorial_loop_v1",
+    "selection_mode": "bounded_loop_local_editor",
+    "selection_review_profile": "selection_review_v1",
+    "copy_review_profile": "copy_review_v1",
+    "loop_policy": {
+      "selection_max_rounds": 3,
+      "copy_max_rounds": 3,
+      "max_rounds_exceeded_status": "needs_human_review",
+      "promotion_requires": [
+        "selection_loop_pass",
+        "copy_loop_pass",
+        "deterministic_selection_validation_pass",
+        "deterministic_copy_validation_pass"
+      ]
+    },
+    "editorial_loop_status": "pass",
+    "selection_rounds": 1,
+    "copy_rounds": 1,
+    "uses_official_assists": true,
+    "uses_goal_involvements": true,
+    "event_source": "fifa_timeline_api",
+    "event_sources": {
+      "goal_involvements": "fifa_timeline_api"
+    }
+  },
+  "matches": [
+    {
+      "match_key": "FIFA-2026-M101-FRA-ESP",
+      "match_no": 101,
+      "match_date": "2026-07-14",
+      "kickoff_time": "14:00",
+      "stadium": "Dallas Stadium",
+      "home_team": "France",
+      "away_team": "Spain",
+      "home_score": 0,
+      "away_score": 2
+    }
+  ],
+  "match_flows": {
+    "FIFA-2026-M101-FRA-ESP": {
+      "match_key": "FIFA-2026-M101-FRA-ESP",
+      "match_no": 101,
+      "match_date": "2026-07-14",
+      "home_team": "France",
+      "away_team": "Spain",
+      "home_score": 0,
+      "away_score": 2,
+      "winner_team": "Spain",
+      "home_trailing_at_any_point": true,
+      "away_trailing_at_any_point": false,
+      "home_came_from_behind_to_win": false,
+      "away_came_from_behind_to_win": false,
+      "goals": [
+        {
+          "goal_order": 1,
+          "minute": 22,
+          "team": "Spain",
+          "player_team": "Spain",
+          "player_name": "Mikel OYARZABAL",
+          "own_goal": false,
+          "score_before": "0-0",
+          "score_after": "0-1",
+          "team_score_before": 0,
+          "opponent_score_before": 0,
+          "team_score_after": 1,
+          "opponent_score_after": 0,
+          "tags": [
+            "opening_goal",
+            "go_ahead_goal"
+          ]
+        },
+        {
+          "goal_order": 2,
+          "minute": 58,
+          "team": "Spain",
+          "player_team": "Spain",
+          "player_name": "Pedro PORRO",
+          "own_goal": false,
+          "score_before": "0-1",
+          "score_after": "0-2",
+          "team_score_before": 1,
+          "opponent_score_before": 0,
+          "team_score_after": 2,
+          "opponent_score_after": 0,
+          "tags": []
+        }
+      ],
+      "decisive_goal": null
+    }
+  },
+  "choices": [
+    {
+      "award_type": "player_of_the_day",
+      "award_types": [
+        "player_of_the_day"
+      ],
+      "award_label": {
+        "en": "Player of the Day",
+        "zh": "每日最佳球员"
+      },
+      "player_id": "FIFA-2026-M101-FRA-ESP|Spain|21",
+      "player_name": "Mikel OYARZABAL",
+      "team": "Spain",
+      "opponent": "France",
+      "match_key": "FIFA-2026-M101-FRA-ESP",
+      "match_no": 101,
+      "player_no": 21,
+      "position": "FW",
+      "score": 51.41,
+      "metrics": {
+        "shots": 2,
+        "on_target": 1,
+        "goals": 1,
+        "goal_involvements": 1,
+        "opening_goal": 1,
+        "go_ahead_goal": 1
+      },
+      "evidence_chips": {
+        "en": [
+          "opening goal",
+          "goal scorer"
+        ],
+        "zh": [
+          "首开纪录",
+          "取得进球"
+        ]
+      },
+      "selection_reason": "Mikel Oyarzabal opened the scoring in the 22nd minute, putting Spain ahead on the way to a 2-0 win over France.",
+      "content": {
+        "en": {
+          "title": "Oyarzabal Opens the Scoring",
+          "html": "<p>Mikel Oyarzabal put Spain ahead in the 22nd minute against France. His one shot on target became the opening goal in a 2-0 win.</p>"
+        },
+        "zh": {
+          "title": "奥亚萨瓦尔第22分钟首开纪录",
+          "html": "<p>奥亚萨瓦尔第22分钟为西班牙打破僵局，法国此后一直没能扳回一球。西班牙最终2-0赢下比赛。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "impact_pick",
+      "award_types": [
+        "impact_pick"
+      ],
+      "award_label": {
+        "en": "Impact Pick",
+        "zh": "影响力精选"
+      },
+      "player_id": "FIFA-2026-M101-FRA-ESP|Spain|12",
+      "player_name": "Pedro PORRO",
+      "team": "Spain",
+      "opponent": "France",
+      "match_key": "FIFA-2026-M101-FRA-ESP",
+      "match_no": 101,
+      "player_no": 12,
+      "position": "DF",
+      "score": 39.62,
+      "metrics": {
+        "shots": 2,
+        "on_target": 1,
+        "goals": 1,
+        "goal_involvements": 1
+      },
+      "evidence_chips": {
+        "en": [
+          "goal scorer"
+        ],
+        "zh": [
+          "取得进球"
+        ]
+      },
+      "selection_reason": "Pedro Porro scored Spain's second goal in the 58th minute, extending the lead to 2-0 after Dani Olmo's official assist.",
+      "content": {
+        "en": {
+          "title": "Porro Doubles Spain's Lead",
+          "html": "<p>Pedro Porro scored from Dani Olmo's official assist in the 58th minute, moving Spain 2-0 ahead. He finished with two shots and one on target.</p>"
+        },
+        "zh": {
+          "title": "波罗第58分钟扩大比分",
+          "html": "<p>波罗第58分钟接奥尔莫助攻破门，西班牙把比分改写为2-0。他两次射门，一次射正进球。</p>"
+        }
+      }
+    },
+    {
+      "award_type": "impact_pick",
+      "award_types": [
+        "impact_pick"
+      ],
+      "award_label": {
+        "en": "Impact Pick",
+        "zh": "影响力精选"
+      },
+      "player_id": "FIFA-2026-M101-FRA-ESP|Spain|10",
+      "player_name": "Dani OLMO",
+      "team": "Spain",
+      "opponent": "France",
+      "match_key": "FIFA-2026-M101-FRA-ESP",
+      "match_no": 101,
+      "player_no": 10,
+      "position": "FW",
+      "score": 50.02,
+      "metrics": {
+        "shots": 1,
+        "assists": 1,
+        "goal_involvements": 1
+      },
+      "evidence_chips": {
+        "en": [
+          "assist"
+        ],
+        "zh": [
+          "送出助攻"
+        ]
+      },
+      "selection_reason": "Dani Olmo supplied the official assist for Pedro Porro's 58th-minute goal, completing the direct-event chain behind Spain's second goal.",
+      "content": {
+        "en": {
+          "title": "Olmo Creates Spain's Second",
+          "html": "<p>Dani Olmo supplied the official assist for Pedro Porro's 58th-minute goal, taking Spain's lead to 2-0. The score stayed there.</p>"
+        },
+        "zh": {
+          "title": "奥尔莫助攻西班牙第二球",
+          "html": "<p>奥尔莫第58分钟助攻波罗破门，西班牙把领先优势扩大到2-0。比分此后没有再变。</p>"
+        }
+      }
+    }
+  ],
+  "selection_validation": {
+    "schema_version": 1,
+    "status": "pass",
+    "warnings": []
+  },
+  "audit": []
+}
