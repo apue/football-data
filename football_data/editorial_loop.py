@@ -14,6 +14,10 @@ from football_data.editorial_registry import (
     load_selection_review_profile,
 )
 from football_data.editorial_selection import normalize_selection_decision
+from football_data.editorial_slate import (
+    public_card_count_context,
+    selection_public_card_count,
+)
 from football_data.editorial_style_calibration import load_style_calibration
 from football_data.editorial_validation import validate_selection_decision
 
@@ -304,6 +308,12 @@ def build_selection_review_payload(
         selected_ids,
         review_profile,
     )
+    player_of_the_day_review = _player_of_the_day_review(
+        selected=selected,
+        candidate_pool=candidate_pool,
+        selected_ids=selected_ids,
+        review_profile=review_profile,
+    )
     card_count_challengers = _card_count_challengers(
         candidate_pool=candidate_pool,
         selected_ids=selected_ids,
@@ -316,8 +326,10 @@ def build_selection_review_payload(
         "match_date": candidate_pool.get("match_date"),
         "review_profile": review_profile["id"],
         "selected": selected,
+        "slate_plan": selection_decision.get("slate_plan"),
         "required_unselected_candidate_reviews": required_unselected,
         "required_impact_candidate_reviews": required_impact,
+        "player_of_the_day_review": player_of_the_day_review,
         "card_count_challengers": card_count_challengers,
         "audit_candidates": [
             _review_audit_candidate(candidate)
@@ -379,6 +391,29 @@ def validate_selection_review(
     impact_ids = _payload_player_ids(review_payload.get("required_impact_candidate_reviews"))
     if impact_ids and not _card_refers_to_id(slate.get("impact_challenger_verdict"), impact_ids):
         warnings.append("impact_challenger_verdict must identify a required impact challenger player_id")
+    player_of_the_day_review = review_payload.get("player_of_the_day_review")
+    if isinstance(player_of_the_day_review, dict):
+        selected_potd_ids = _payload_player_ids(player_of_the_day_review.get("selected"))
+        potd_challenger_ids = _payload_player_ids(player_of_the_day_review.get("challengers"))
+        if selected_potd_ids and potd_challenger_ids:
+            potd_verdicts = slate.get("player_of_the_day_verdicts")
+            if not isinstance(potd_verdicts, list):
+                potd_verdicts = []
+            reviewed_potd_ids = {
+                str(verdict.get("selected_player_id") or "")
+                for verdict in potd_verdicts
+                if _player_of_the_day_verdict_refers_to(
+                    verdict,
+                    selected_ids=selected_potd_ids,
+                    challenger_ids=potd_challenger_ids,
+                )
+            }
+            for selected_potd_id in sorted(selected_potd_ids - reviewed_potd_ids):
+                warnings.append(
+                    "player_of_the_day_verdicts must include a valid verdict for selected "
+                    f"Player of the Day {selected_potd_id} and a challenger_player_id from "
+                    "player_of_the_day_review"
+                )
     card_count_challengers = review_payload.get("card_count_challengers")
     strongest_add_card_id = _first_payload_player_id(card_count_challengers)
     public_card_count = review_payload.get("public_card_count")
@@ -562,27 +597,17 @@ def _public_card_count_context(
     selected_count: int,
     candidate_pool: dict[str, Any],
     selection_config: dict[str, Any] | None,
-) -> dict[str, int] | None:
+) -> dict[str, Any] | None:
     if not isinstance(selection_config, dict):
         return None
-    raw_count = selection_config.get("public_card_count")
-    if not isinstance(raw_count, dict):
-        return None
-    min_count = int(raw_count.get("min") or 0)
-    max_count = int(raw_count.get("max") or 0)
-    match_count = len(
-        {
-            str(candidate.get("match_key") or "")
-            for candidate in candidate_pool.get("selectable_candidates", [])
-            if isinstance(candidate, dict) and candidate.get("match_key")
-        }
+    context = public_card_count_context(
+        candidate_pool,
+        selection_config,
+        selected_count=selected_count,
     )
-    return {
-        "selected": selected_count,
-        "min": min(min_count, max_count),
-        "max": max(min_count, max_count),
-        "match_count": match_count,
-    }
+    if context.get("policy") == "none":
+        return None
+    return context
 
 
 def _required_impact_candidate_reviews(
@@ -607,6 +632,52 @@ def _required_impact_candidate_reviews(
     ]
 
 
+def _player_of_the_day_review(
+    *,
+    selected: list[dict[str, Any]],
+    candidate_pool: dict[str, Any],
+    selected_ids: set[str],
+    review_profile: dict[str, Any],
+) -> dict[str, list[dict[str, Any]]]:
+    selected_potd = [
+        item
+        for item in selected
+        if str(item.get("award_type") or "") == "player_of_the_day"
+    ]
+    limit = int(review_profile.get("required_player_of_the_day_challenger_count") or 0)
+    if not selected_potd or limit <= 0:
+        return {"selected": selected_potd, "challengers": []}
+    selected_potd_ids = {
+        str(item.get("player_id") or "")
+        for item in selected_potd
+    }
+    challengers = [
+        candidate
+        for candidate in candidate_pool.get("selectable_candidates", [])
+        if isinstance(candidate, dict)
+        and str(candidate.get("player_id") or "") not in selected_potd_ids
+        and (
+            str(candidate.get("player_id") or "") in selected_ids
+            or "player_of_the_day" in candidate.get("eligible_awards", [])
+        )
+    ]
+    ordered = sorted(
+        challengers,
+        key=lambda candidate: (
+            str(candidate.get("player_id") or "") not in selected_ids,
+            int(candidate.get("headline_rank") or 9999),
+            -float(candidate.get("headline_score") or 0),
+        ),
+    )
+    return {
+        "selected": selected_potd,
+        "challengers": [
+            _review_candidate(candidate, "player_of_the_day")
+            for candidate in ordered[:limit]
+        ],
+    }
+
+
 def _card_count_challengers(
     *,
     candidate_pool: dict[str, Any],
@@ -615,7 +686,9 @@ def _card_count_challengers(
     selected_count: int,
     selection_config: dict[str, Any] | None,
 ) -> list[dict[str, Any]]:
-    public_count = _selection_public_card_count(selection_config)
+    if not isinstance(selection_config, dict):
+        return []
+    public_count = selection_public_card_count(candidate_pool, selection_config)
     if not public_count:
         return []
     _, max_count = public_count
@@ -645,21 +718,6 @@ def _card_count_challengers(
         _review_candidate(candidate, _preferred_public_award(candidate))
         for candidate in ordered[:limit]
     ]
-
-
-def _selection_public_card_count(selection_config: dict[str, Any] | None) -> tuple[int, int] | None:
-    if not isinstance(selection_config, dict):
-        return None
-    raw_count = selection_config.get("public_card_count")
-    if not isinstance(raw_count, dict):
-        return None
-    min_count = int(raw_count.get("min") or 0)
-    max_count = int(raw_count.get("max") or 0)
-    if min_count <= 0 or max_count <= 0:
-        return None
-    if min_count > max_count:
-        min_count, max_count = max_count, min_count
-    return min_count, max_count
 
 
 def _public_awards(candidate: dict[str, Any]) -> list[str]:
@@ -738,7 +796,10 @@ def _required_unselected_review_ids(review_payload: dict[str, Any]) -> set[str]:
         "card_count_challengers",
     ):
         ids.update(_payload_player_ids(review_payload.get(key)))
-    return ids
+    player_of_the_day_review = review_payload.get("player_of_the_day_review")
+    if isinstance(player_of_the_day_review, dict):
+        ids.update(_payload_player_ids(player_of_the_day_review.get("challengers")))
+    return ids - _payload_player_ids(review_payload.get("selected"))
 
 
 def _payload_player_ids(value: Any) -> set[str]:
@@ -804,8 +865,12 @@ def _review_candidate(candidate: dict[str, Any], award_type: str) -> dict[str, A
         "headline_rank": candidate.get("headline_rank"),
         "headline_score": candidate.get("headline_score"),
         "eligible_awards": candidate.get("eligible_awards", []),
-        "metrics": active_context.get("metrics", {}),
-        "evidence_chips": active_context.get("evidence_chips", {"en": [], "zh": []}),
+        "metrics": active_context.get("metrics") or candidate.get("metrics", {}),
+        "evidence_chips": active_context.get("evidence_chips")
+        or candidate.get("evidence_chips", {"en": [], "zh": []}),
+        "role_scores": active_context.get("role_scores") or candidate.get("role_scores", {}),
+        "score_components": active_context.get("score_components")
+        or candidate.get("score_components", []),
         "display_names": candidate.get("display_names", {}),
         "data_sources": candidate.get("data_sources", {}),
     }
@@ -846,6 +911,26 @@ def _card_refers_to_id(value: Any, valid_ids: set[str]) -> bool:
         return False
     player_id = str(value.get("player_id") or "")
     return bool(player_id and player_id in valid_ids)
+
+
+def _player_of_the_day_verdict_refers_to(
+    value: Any,
+    *,
+    selected_ids: set[str],
+    challenger_ids: set[str],
+) -> bool:
+    if not isinstance(value, dict):
+        return False
+    selected_player_id = str(value.get("selected_player_id") or "")
+    challenger_player_id = str(value.get("challenger_player_id") or "")
+    decision = str(value.get("decision") or "")
+    reason = str(value.get("reason") or "").strip()
+    return (
+        selected_player_id in selected_ids
+        and challenger_player_id in challenger_ids
+        and decision in {"keep", "replace"}
+        and bool(reason)
+    )
 
 
 def _validation_result(warnings: list[str]) -> dict[str, Any]:

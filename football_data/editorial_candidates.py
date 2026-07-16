@@ -97,11 +97,25 @@ def build_candidate_pool(
         for item in headline
         if str(item.get("player_id")) not in selectable_ids
     ][:near_miss_count]
+    matches = [
+        {
+            "match_key": item.get("match_key"),
+            "match_no": item.get("match_no"),
+            "home_team": item.get("home_team"),
+            "away_team": item.get("away_team"),
+            "home_score": item.get("home_score"),
+            "away_score": item.get("away_score"),
+        }
+        for item in rankings.get("matches", [])
+        if isinstance(item, dict)
+    ]
     return {
         "schema_version": 1,
         "match_date": rankings["match_date"],
         "scoring_version": rankings["scoring_version"],
         "pool_config_id": pool_config["id"],
+        "matches": matches,
+        "match_count": len(matches),
         "selectable_candidates": selectable,
         "audit_candidates": audit_selectable,
         "near_misses": near_misses,

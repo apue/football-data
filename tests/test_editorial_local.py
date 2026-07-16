@@ -56,7 +56,7 @@ def test_inspect_editorial_day_writes_fact_pack_with_reader_traps(tmp_path):
     assert any(goal.get("own_goal_by") == "Australia" for goal in fact_pack["goal_timeline"])
     trap_messages = "\n".join(trap["message"] for trap in fact_pack["candidate_traps"])
     assert "Alex FREEMAN scored" in trap_messages
-    assert "Arda GULER ranks #5 without G/A" in trap_messages
+    assert "Arda GULER ranks #1 without G/A" in trap_messages
     assert [keeper["player_name"] for keeper in fact_pack["goalkeeper_pressure_candidates"]] == [
         "Orlando GILL"
     ]
@@ -88,6 +88,35 @@ def test_inspect_editorial_day_includes_penalty_goals_in_fact_pack(tmp_path):
     )
     assert penalty_goal["event_type"] == "Penalty Goal"
     assert penalty_goal["minute_display"] == "120'+5'"
+
+
+def test_inspect_editorial_day_excludes_shootout_penalty_goals(tmp_path):
+    from football_data.editorial_fact_pack import write_editorial_fact_pack
+    from football_data.editorial_local import prepare_editorial_packet
+
+    prepare_editorial_packet(
+        match_date="2026-07-07",
+        db_path="data/latest.sqlite",
+        agent_runs_dir=tmp_path / "agent-runs",
+        run_out_path=tmp_path / "editorial-v2-run.json",
+    )
+
+    fact_pack = write_editorial_fact_pack(
+        match_date="2026-07-07",
+        db_path="data/latest.sqlite",
+        agent_runs_dir=tmp_path / "agent-runs",
+    )
+
+    shootout_scorers = {
+        "Granit XHAKA",
+        "Luis DIAZ",
+        "Ruben VARGAS",
+        "Juan QUINTERO",
+        "Zeki AMDOUNI",
+        "Jaminton CAMPAZ",
+        "Cedric ITTEN",
+    }
+    assert not any(goal["scorer_name"] in shootout_scorers for goal in fact_pack["goal_timeline"])
 
 
 def test_compile_local_editorial_uses_local_decision_and_copy(tmp_path):
@@ -124,14 +153,14 @@ def test_compile_local_editorial_uses_local_decision_and_copy(tmp_path):
     assert result["status"] == "success"
     assert result["editor_runtime"] == "local_codex"
     assert result["selection_validation"]["status"] == "pass"
-    assert choices["editorial_generation"]["experiment_id"] == "bounded_editorial_loop_v1"
+    assert choices["editorial_generation"]["experiment_id"] == "bounded_editorial_loop_v2"
     assert choices["editorial_generation"]["editorial_loop_status"] == "pass"
     assert choices["editorial_generation"]["selection_rounds"] == 1
     assert choices["editorial_generation"]["copy_rounds"] == 1
     assert [choice["player_name"] for choice in choices["choices"]][:3] == [
         "Kylian MBAPPE",
         "Lionel MESSI",
-        "Erling HAALAND",
+        "Ousmane DEMBELE",
     ]
     assert (audit_dir / "copy_payload.json").exists()
     assert (audit_dir / "selection_validation.json").exists()

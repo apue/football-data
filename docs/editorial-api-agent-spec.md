@@ -137,8 +137,11 @@ card-count rationale.
 `selection_rounds/round_N/selection_review.json` contains status, reviewed
 dimensions, selected-player reviews, reader objections, alternative slate
 comparison, weakest selected card, strongest omitted card, drop/replace
-verdicts, preferred card count, blocking findings, resolved objections,
-unresolved objections, and revision summary.
+verdicts, a Player of the Day whole-match challenger verdict, an impact
+challenger verdict, preferred card count, blocking findings, resolved
+objections, unresolved objections, and revision summary. When a Player of the
+Day challenger exists, the verdict must identify both the selected player and
+the challenger by `player_id`.
 
 ### Copy Round
 

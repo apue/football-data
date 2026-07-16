@@ -71,7 +71,7 @@ def test_editorial_loop_promotes_auditable_rounds_into_canonical_artifacts(tmp_p
     assert result["status"] == "success"
     choices = _load_json(tmp_path / "site" / "editorial" / "2026-06-22" / "choices.json")
     generation = choices["editorial_generation"]
-    assert generation["experiment_id"] == "bounded_editorial_loop_v1"
+    assert generation["experiment_id"] == "bounded_editorial_loop_v2"
     assert generation["editorial_loop_status"] == "pass"
     assert generation["selection_rounds"] == 1
     assert generation["copy_rounds"] == 1
@@ -207,6 +207,13 @@ def _passing_selection_review(
     )
     impact_challenger = _first_player_id(review_payload.get("required_impact_candidate_reviews"))
     add_challenger = _first_player_id(review_payload.get("card_count_challengers"))
+    potd_review = review_payload.get("player_of_the_day_review") or {}
+    selected_potd = [
+        str(item.get("player_id") or "")
+        for item in potd_review.get("selected", [])
+        if isinstance(item, dict) and str(item.get("player_id") or "")
+    ]
+    potd_challenger = _first_player_id(potd_review.get("challengers"))
     return {
         "schema_version": 1,
         "status": "pass",
@@ -244,6 +251,15 @@ def _passing_selection_review(
                 "replacement_player_id": strongest_omitted,
                 "reason": "No replacement improves the slate.",
             },
+            "player_of_the_day_verdicts": [
+                {
+                    "selected_player_id": player_id,
+                    "challenger_player_id": potd_challenger,
+                    "decision": "keep",
+                    "reason": "The whole-match selection was checked against the strongest challenger.",
+                }
+                for player_id in selected_potd
+            ],
             "impact_challenger_verdict": {
                 "player_id": impact_challenger,
                 "decision": "omit",
@@ -255,6 +271,14 @@ def _passing_selection_review(
                 "reason": "Adding the strongest omitted card would not improve the slate.",
             },
             "preferred_card_count": len(selected),
+            "slate_plan_verdict": {
+                "decision": "keep",
+                "reason": "The card-count plan matches the available public cases.",
+            },
+            "revision_target": {
+                "action": "none",
+                "reason": "No blocking selection issue remains.",
+            },
             "revision_decision": "keep",
         },
         "blocking_findings": [],
@@ -286,6 +310,21 @@ def _required_unselected_reviews(review_payload: dict) -> list[dict[str, str]]:
                     "note": "Checked as a required omitted candidate.",
                 }
             )
+    potd_review = review_payload.get("player_of_the_day_review") or {}
+    for item in potd_review.get("challengers", []):
+        if not isinstance(item, dict):
+            continue
+        player_id = str(item.get("player_id") or "")
+        if not player_id or player_id in seen:
+            continue
+        seen.add(player_id)
+        reviews.append(
+            {
+                "player_id": player_id,
+                "status": "omit",
+                "note": "Checked as a required Player of the Day challenger.",
+            }
+        )
     return reviews
 
 

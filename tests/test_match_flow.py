@@ -89,6 +89,19 @@ def test_match_flow_counts_penalty_goals_from_official_timeline():
     assert impacts[("FIFA-2026-M08-QAT-SUI", "Switzerland", "BREEL EMBOLO")]["opening_goal"] == 1
 
 
+def test_match_flow_ignores_shootout_penalty_goals():
+    flows = build_match_flows("data/latest.sqlite", match_date="2026-07-07")
+    flow = flows["FIFA-2026-M96-SUI-COL"]
+
+    assert flow["home_score"] == 0
+    assert flow["away_score"] == 0
+    assert flow["goals"] == []
+
+    impacts = player_flow_impacts(flows)
+    assert ("FIFA-2026-M96-SUI-COL", "Switzerland", "GRANIT XHAKA") not in impacts
+    assert ("FIFA-2026-M96-SUI-COL", "Colombia", "LUIS DIAZ") not in impacts
+
+
 def test_match_flow_orders_first_half_stoppage_before_second_half_goals():
     flows = build_match_flows("data/latest.sqlite", match_date="2026-06-17")
     flow = flows["FIFA-2026-M22-ENG-CRO"]
@@ -107,3 +120,19 @@ def test_match_flow_orders_first_half_stoppage_before_second_half_goals():
 
     bellingham = flow["goals"][4]
     assert "go_ahead_goal" in bellingham["tags"]
+
+
+def test_match_flow_keeps_official_assister_on_each_goal():
+    flows = build_match_flows("data/latest.sqlite", match_date="2026-07-15")
+    flow = flows["FIFA-2026-M102-ENG-ARG"]
+
+    argentina_goals = [goal for goal in flow["goals"] if goal["team"] == "Argentina"]
+
+    assert [goal["player_name"] for goal in argentina_goals] == [
+        "Enzo FERNANDEZ",
+        "Lautaro MARTINEZ",
+    ]
+    assert [goal["assister_name"] for goal in argentina_goals] == [
+        "Lionel MESSI",
+        "Lionel MESSI",
+    ]

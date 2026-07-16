@@ -10,7 +10,7 @@ from football_data.metric_benchmarks import hidden_gem_profile, progression_benc
 
 def load_scoring_config(path: str | Path) -> dict[str, Any]:
     config = json.loads(Path(path).read_text(encoding="utf-8"))
-    if config.get("version") != "v0.4":
+    if config.get("version") not in {"v0.4", "v0.5"}:
         raise ValueError(f"Unsupported scoring config version: {config.get('version')}")
     return config
 
@@ -315,7 +315,7 @@ def score_player(
     row: sqlite3.Row,
     scoring: dict[str, Any],
     *,
-    flow_impacts: dict[tuple[str, str, str], dict[str, int]] | None = None,
+    flow_impacts: dict[tuple[str, str, str], dict[str, float]] | None = None,
 ) -> dict[str, Any]:
     features = row_dict(row)
     if flow_impacts:
@@ -403,6 +403,7 @@ def _player_flow_context(
     if not match_flow:
         return {
             "goals": [],
+            "assisted_goals": [],
             "allowed_claims": {"en": [], "zh": []},
             "team_came_from_behind_to_win": False,
         }
@@ -412,6 +413,11 @@ def _player_flow_context(
         goal
         for goal in match_flow.get("goals", [])
         if str(goal.get("team")) == team and str(goal.get("player_name", "")).upper() == player_name
+    ]
+    assisted_goals = [
+        goal
+        for goal in match_flow.get("goals", [])
+        if str(goal.get("team")) == team and str(goal.get("assister_name", "")).upper() == player_name
     ]
     en_claims: list[str] = []
     zh_claims: list[str] = []
@@ -456,13 +462,33 @@ def _player_flow_context(
         elif "equalizer" in tags:
             _append_unique(en_claims, f"{minute}' equaliser")
             _append_unique(zh_claims, f"{minute}' 扳平")
+    for goal in assisted_goals:
+        tags = {str(tag) for tag in goal.get("tags", [])}
+        minute = int(goal.get("minute") or 0)
+        if "comeback_equalizer" in tags:
+            _append_unique(en_claims, f"assist for {minute}' comeback equaliser")
+            _append_unique(zh_claims, f"助攻{minute}'逆转过程中的扳平球")
+        elif "equalizer" in tags:
+            _append_unique(en_claims, f"assist for {minute}' equaliser")
+            _append_unique(zh_claims, f"助攻{minute}'扳平球")
+        if "late_match_winning_goal" in tags:
+            _append_unique(en_claims, f"assist for {minute}' late winner")
+            _append_unique(zh_claims, f"助攻{minute}'补时制胜球")
+        elif "match_winning_goal" in tags:
+            _append_unique(en_claims, f"assist for {minute}' winner")
+            _append_unique(zh_claims, f"助攻{minute}'制胜球")
     return {
         "match_key": match_flow["match_key"],
         "team_came_from_behind_to_win": team_came_from_behind_to_win,
         "allowed_claims": {"en": en_claims, "zh": zh_claims},
         "goals": goals,
+        "assisted_goals": assisted_goals,
         "decisive_goal": next(
             (goal for goal in goals if "match_winning_goal" in goal.get("tags", [])),
+            None,
+        ),
+        "decisive_assist": next(
+            (goal for goal in assisted_goals if "match_winning_goal" in goal.get("tags", [])),
             None,
         ),
     }

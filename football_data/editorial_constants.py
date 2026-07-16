@@ -3,7 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 
 
-DEFAULT_SCORING_CONFIG = Path("config/scoring/v0.4.json")
+DEFAULT_SCORING_CONFIG = Path("config/scoring/v0.5.json")
 
 
 PUBLIC_AWARD_TYPES = ("player_of_the_day", "impact_pick")

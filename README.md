@@ -79,11 +79,11 @@ python scripts/check_status.py
 
 ## Editor's Choices
 
-Editor's Choices are data-informed editorial picks generated from structured PMSR evidence. They are not official FIFA awards. The production path is local-first: deterministic scoring builds a rich candidate pool, local Codex acts as the editor, and deterministic validation compiles the approved `selection_decision.json`, `copy.json`, and `editorial_review.json` into static site artifacts.
+Editor's Choices are data-informed editorial picks generated from structured PMSR evidence. They are not official FIFA awards. The production path is local-first: deterministic scoring builds a rich candidate pool, local Codex runs bounded selection and copy review loops, and deterministic validation compiles the promoted `selection_decision.json` and `copy.json` into static site artifacts.
 
-The active experiment is resolved from `config/editorial/production.json`. Each experiment pins the scoring config, candidate-pool profile, selector profile, copy profiles, selection slots, and candidate ordering strategy. This keeps experimentation visible without inventing a generic workflow framework.
+The active experiment is resolved from `config/editorial/production.json`. Each experiment pins the scoring config, candidate-pool profile, selector and review profiles, copy profiles, dynamic card-count policy, and candidate ordering strategy. This keeps experimentation visible without inventing a generic workflow framework.
 
-The default scoring config is `config/scoring/v0.4.json`. It keeps the role-style performance scores and adds a structured impact layer for goals and official assists that change the match state and match story: opening goals, equalisers, go-ahead goals, contextual match-winning goals, late goals, stoppage-time goals, late match-winning goals, comeback equalisers, comeback winners, only-goal winners, assists, goal involvements, braces, hat-tricks, and substitute scoring bursts. These features are derived from the PMSR shot table, lineup status, final scoreline, deterministic match-flow reconstruction, and FIFA public match timeline goal-involvement records. Media opinions are not scoring inputs.
+The default scoring config is `config/scoring/v0.5.json`. It separates the whole-match headline surface used for Player of the Day from the decisive-event impact surface used for Impact Pick. Each goal or official assist receives at most one context value—the most important applicable match-state tag—so an action is not rewarded repeatedly for being, for example, go-ahead, match-winning, late, and a comeback winner at the same time. These features are derived from the PMSR shot table, lineup status, final scoreline, deterministic match-flow reconstruction, and FIFA public match timeline goal-involvement records. Media opinions are not scoring inputs.
 
 Prepare the deterministic local handoff packet:
 
@@ -99,11 +99,16 @@ python scripts/inspect_editorial_day.py --date YYYY-MM-DD --json
 
 The fact pack is written under `agent-runs/YYYY-MM-DD/` as `editorial_fact_pack.json` and `editorial_fact_pack.md`. It captures match scores, goal timelines, own goals, official assists, team pressure, goalkeeper checks, direct-impact candidates, high-ranked metric-led candidates, and common reader traps. Use it before writing selection/copy/review; if a needed fact is missing, improve this script rather than relying on one-off SQL.
 
-Then write these local editor artifacts under `agent-runs/YYYY-MM-DD/`:
+Then run bounded selection and copy rounds under `agent-runs/YYYY-MM-DD/`. Each passing round writes its decision or copy plus the corresponding review:
 
-- `selection_decision.json`
-- `copy.json`
-- `editorial_review.json`
+- `selection_rounds/round_N/selection_decision.json` and `selection_review.json`
+- `copy_rounds/round_N/copy.json` and `copy_review.json`
+
+Promote the passing rounds before compilation:
+
+```bash
+python scripts/promote_editorial_loop.py --date YYYY-MM-DD --json
+```
 
 Compile the approved local result:
 
@@ -111,7 +116,7 @@ Compile the approved local result:
 python scripts/compile_local_editorial.py --date YYYY-MM-DD --json
 ```
 
-The compiled frontend artifacts are written to `site/editorial/`, and the homepage is rebuilt with the latest cards. Audit files are written under `agent-runs/YYYY-MM-DD/`, including `rankings.json`, `candidate_pool.json`, `selector_input.json`, `editorial_fact_pack.json`, `editorial_fact_pack.md`, `selection_decision.json`, `selection_validation.json`, `copy_validation.json`, `editorial_review_payload.json`, `editorial_review.json`, `editorial_review_validation.json`, and `run.json`.
+The compiled frontend artifacts are written to `site/editorial/`, and the homepage is rebuilt with the latest cards. Audit files are written under `agent-runs/YYYY-MM-DD/`, including `rankings.json`, `candidate_pool.json`, `selector_input.json`, the editorial fact pack, round-level selection/copy artifacts and validations, `final_selection_decision.json`, `final_copy.json`, canonical promoted `selection_decision.json` and `copy.json`, `editorial_loop_summary.json`, `editorial_loop_validation.json`, and `run.json`.
 
 ## Editorial Automation
 

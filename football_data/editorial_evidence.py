@@ -37,6 +37,16 @@ def choice_metrics(player: dict[str, Any], award_type: str) -> dict[str, int | f
             "substitute_goal",
             "substitute_brace",
             "shootout_penalty_saves",
+            "opening_assist",
+            "equalizing_assist",
+            "go_ahead_assist",
+            "match_winning_assist",
+            "late_assist",
+            "stoppage_time_assist",
+            "late_match_winning_assist",
+            "team_came_from_behind_assist",
+            "comeback_equalizer_assist",
+            "comeback_winner_assist",
         ]
     elif award_type == "progression_pick":
         metric_names = [
@@ -155,6 +165,16 @@ def evidence_chips(player: dict[str, Any], award_type: str) -> dict[str, list[st
     elif int(player.get("equalizing_goal") or 0) > 0:
         en.append("equaliser")
         zh.append("扳平进球")
+
+    if int(player.get("late_match_winning_assist") or 0) > 0:
+        en.append("assist for late winner")
+        zh.append("助攻补时制胜球")
+    elif int(player.get("match_winning_assist") or 0) > 0:
+        en.append("assist for winner")
+        zh.append("助攻制胜球")
+    if int(player.get("comeback_equalizer_assist") or 0) > 0:
+        en.append("assist for comeback equaliser")
+        zh.append("助攻逆转过程中的扳平球")
 
     goals = int(player.get("goals") or 0)
     assists = int(player.get("assists") or 0)

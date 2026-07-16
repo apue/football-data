@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import Any
 
 from football_data.editorial_display_names import player_display_name
+from football_data.editorial_slate import public_card_count_context
 
 
 def build_test_selection_decision(
@@ -56,12 +57,20 @@ def build_test_selection_decision(
         award_counts[award_type] = award_counts.get(award_type, 0) + 1
         _count_slate(candidate, team_counts, match_counts)
     skipped = _skipped_higher_ranked_potd(candidates, selected)
-    return {
+    decision = {
         "selected": selected,
         "skipped_higher_ranked": skipped,
         "skipped_notable_candidates": [],
         "warnings": [],
     }
+    if selection_config.get("must_include_slate_plan"):
+        decision["slate_plan"] = _test_slate_plan(
+            candidate_pool,
+            selection_config,
+            selected,
+            candidates,
+        )
+    return decision
 
 
 def build_test_copy(payload: dict[str, Any]) -> dict[str, Any]:
@@ -107,18 +116,32 @@ def build_passing_test_selection_review(
     ) or _first_player_id((review_payload or {}).get("required_impact_candidate_reviews"))
     impact_challenger = _first_player_id((review_payload or {}).get("required_impact_candidate_reviews"))
     add_challenger = _first_player_id((review_payload or {}).get("card_count_challengers"))
+    potd_review = (review_payload or {}).get("player_of_the_day_review") or {}
+    selected_potd = [
+        str(item.get("player_id") or "")
+        for item in potd_review.get("selected", [])
+        if isinstance(item, dict) and str(item.get("player_id") or "")
+    ]
+    potd_challenger = _first_player_id(potd_review.get("challengers"))
+    reviewed_dimensions = [
+        "selected_card_convincingness",
+        "obvious_omission",
+        "alternative_slate_comparison",
+        "weakest_selected_card",
+        "strongest_omitted_card",
+        "impact_challenger_comparison",
+        "card_count_verdict",
+    ]
+    if review_payload and review_payload.get("review_profile"):
+        from football_data.editorial_registry import load_selection_review_profile
+
+        reviewed_dimensions = load_selection_review_profile(
+            str(review_payload["review_profile"])
+        )["required_dimensions"]
     return {
         "schema_version": 1,
         "status": "pass",
-        "reviewed_dimensions": [
-            "selected_card_convincingness",
-            "obvious_omission",
-            "alternative_slate_comparison",
-            "weakest_selected_card",
-            "strongest_omitted_card",
-            "impact_challenger_comparison",
-            "card_count_verdict",
-        ],
+        "reviewed_dimensions": reviewed_dimensions,
         "selected_player_reviews": [
             {
                 "player_id": item["player_id"],
@@ -152,6 +175,15 @@ def build_passing_test_selection_review(
                 "replacement_player_id": strongest_omitted,
                 "reason": "No replacement improves the slate.",
             },
+            "player_of_the_day_verdicts": [
+                {
+                    "selected_player_id": player_id,
+                    "challenger_player_id": potd_challenger,
+                    "decision": "keep",
+                    "reason": "The selected whole-match case was compared with the strongest challenger.",
+                }
+                for player_id in selected_potd
+            ],
             "impact_challenger_verdict": {
                 "player_id": impact_challenger,
                 "decision": "omit",
@@ -163,6 +195,14 @@ def build_passing_test_selection_review(
                 "reason": "Adding the strongest omitted card would not improve the slate.",
             },
             "preferred_card_count": len(selected),
+            "slate_plan_verdict": {
+                "decision": "keep",
+                "reason": "The card-count plan matches the available public cases.",
+            },
+            "revision_target": {
+                "action": "none",
+                "reason": "No blocking selection issue remains.",
+            },
             "revision_decision": "keep",
         },
         "blocking_findings": [],
@@ -213,6 +253,21 @@ def _required_unselected_reviews(review_payload: dict[str, Any] | None) -> list[
                     "note": "Checked as a required omitted candidate.",
                 }
             )
+    potd_review = (review_payload or {}).get("player_of_the_day_review") or {}
+    for item in potd_review.get("challengers", []):
+        if not isinstance(item, dict):
+            continue
+        player_id = str(item.get("player_id") or "")
+        if not player_id or player_id in seen:
+            continue
+        seen.add(player_id)
+        reviews.append(
+            {
+                "player_id": player_id,
+                "status": "omit",
+                "note": "Checked as a required Player of the Day challenger.",
+            }
+        )
     return reviews
 
 
@@ -286,14 +341,49 @@ def _target_public_card_count(
     public_card_count = selection_config.get("public_card_count")
     if not isinstance(public_card_count, dict):
         return sum(int(value or 0) for value in award_limits.values())
-    min_count = int(public_card_count.get("min") or 0)
-    max_count = int(public_card_count.get("max") or 0)
+    count_context = public_card_count_context(candidate_pool, selection_config)
+    min_count = int(count_context.get("min") or 0)
+    max_count = int(count_context.get("max") or 0)
+    recommended = int(count_context.get("recommended") or 0)
     if min_count <= 0 or max_count <= 0:
         return sum(int(value or 0) for value in award_limits.values())
     if min_count > max_count:
         min_count, max_count = max_count, min_count
     candidate_count = len(candidate_pool.get("selectable_candidates", []))
-    return max(min_count, min(max_count, candidate_count))
+    target = recommended if recommended > 0 else max_count
+    return max(min_count, min(max_count, target, candidate_count))
+
+
+def _test_slate_plan(
+    candidate_pool: dict[str, Any],
+    selection_config: dict[str, Any],
+    selected: list[dict[str, Any]],
+    candidates: list[dict[str, Any]],
+) -> dict[str, Any]:
+    count_context = public_card_count_context(
+        candidate_pool,
+        selection_config,
+        selected_count=len(selected),
+    )
+    selected_ids = {str(item.get("player_id") or "") for item in selected}
+    omitted = [
+        candidate
+        for candidate in sorted(candidates, key=_overall_slate_score, reverse=True)
+        if str(candidate.get("player_id") or "") not in selected_ids
+    ]
+    weakest = selected[-1]["player_id"] if selected else ""
+    strongest_omitted = str((omitted[0] if omitted else {}).get("player_id") or "")
+    return {
+        "match_count": count_context.get("match_count"),
+        "recommended_card_count": count_context.get("recommended"),
+        "final_card_count": len(selected),
+        "card_count_rationale": "The generated test slate follows the configured public card count policy.",
+        "why_not_fewer": "The selected cards are needed to cover the strongest public cases in the test pool.",
+        "why_not_more": "The next omitted candidate is weaker than the selected test slate.",
+        "weakest_selected_player_id": weakest,
+        "strongest_omitted_player_id": strongest_omitted,
+        "strongest_add_card_challenger_player_id": strongest_omitted,
+    }
 
 
 def _overall_slate_score(candidate: dict[str, Any]) -> tuple[float, float, float, float, float]:
