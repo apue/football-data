@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-16T14:19:56+00:00",
+  "generated_at": "2026-07-17T06:30:22+00:00",
   "new_matches": [],
   "version_updates": [],
   "downloaded": [
@@ -108,7 +108,7 @@
   ],
   "supplemental": {
     "fifa_timeline": {
-      "generated_at": "2026-07-16T14:21:40+00:00",
+      "generated_at": "2026-07-17T06:32:18+00:00",
       "source": "fifa_timeline_api",
       "status": "success",
       "matches": 102,
