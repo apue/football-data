@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-18T06:22:17+00:00",
+  "generated_at": "2026-07-19T06:44:38+00:00",
   "status": "success",
   "failure_code": null,
   "hub_url": "https://www.fifatrainingcentre.com/en/fifa-world-cup-2026/match-report-hub.php",
@@ -7,26 +7,31 @@
     "https://www.fifatrainingcentre.com/en/fifa-world-cup-2026/match-report-hub.php",
     "https://www.fifatrainingcentre.com/en/fifa-world-cup-2026/match-report-hub-knockout-stage.php"
   ],
-  "discovered": 102,
-  "active_sources": 102,
-  "downloaded": 102,
-  "parsed": 102,
-  "matches": 102,
-  "source_documents": 102,
-  "new_matches": [],
+  "discovered": 103,
+  "active_sources": 103,
+  "downloaded": 103,
+  "parsed": 103,
+  "matches": 103,
+  "source_documents": 103,
+  "new_matches": [
+    {
+      "match_no": 103,
+      "source_id": "fifa-world-cup-2026-pmsr-m103-fra-eng-v1"
+    }
+  ],
   "version_updates": [],
   "supplemental": {
     "fifa_timeline": {
-      "generated_at": "2026-07-18T06:24:13+00:00",
+      "generated_at": "2026-07-19T06:46:42+00:00",
       "source": "fifa_timeline_api",
       "status": "success",
-      "matches": 102,
-      "linked_matches": 102,
-      "timeline_matches": 102,
-      "events": 9425,
-      "goals": 283,
-      "assists": 214,
-      "goal_involvements": 283,
+      "matches": 103,
+      "linked_matches": 103,
+      "timeline_matches": 103,
+      "events": 9547,
+      "goals": 293,
+      "assists": 221,
+      "goal_involvements": 293,
       "failures": []
     }
   },
